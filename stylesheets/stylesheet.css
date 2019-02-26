@@ -4,13 +4,13 @@
 body {
   padding: 0;
   margin: 0;
-  font-family: "Arimo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Domine', serif;
   font-size: 16px;
-  line-height: 1.8;
-  color: #606c71; }
+  line-height: 2;
+  color: #434343; }
 
 a {
-  color: #1e6bb8;
+  color: #0019ff;
   text-decoration: none; }
   a:hover {
     text-decoration: underline; }
