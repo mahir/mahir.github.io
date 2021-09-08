@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Add your site or application content here -->
+  
+
+  <div id="mynetwork"></div>
+  <div id="content">
+    <div id="contentInner">
+      <div id="closeButton"><button onclick="closeThis()">Close</button></div>
+        <div id="p_pic" class="photo"></div>
+      <h1 id="p_name" class="name"></h1>
+      <div id="p_bio" class="bio"></div>  
+      
+      <div id="p_work" class="work"></div>
+
+      <div class="questions">
+        <h4>What is the Ars Electronica Futurelab for you?</h4>
+        <p id="p_q1"></p>
+        <p></p>
+        <h4>Why and how did you first get in touch with the Futurelab and then join the team?</h4>
+        <p id="p_q2"></p>
+        <p></p>
+        <h4>Which are the projects of the Futurelab, that you consider to have (had) the maximum impact and/or relevance?</h4>
+        <p id="p_q3"></p>
+        <p></p>
+        <h4>What are your wishes to and for the lab in it’s future?</h4>
+        <p id="p_q4"></p>        
+      </div>
+    </div>
+  </div>
+  <div id="title">KALEIDOSCOPE</div>
+  <!-- <div id="subtitle">FL25</div> -->
+  <!-- <p>Kaleidoscope</p> -->
+  <script type="text/javascript" src="js/vendor/vis-network.min.js"></script>
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+  <script type="text/javascript">
+    function closeThis(){
+      document.getElementById("content").style.display = "none"
+    }
+  </script>
+</body>
+
+</html>
