@@ -13,8 +13,9 @@ function draw(csvdata) {
 
     for (var j = 0; j < csvdata.length; j++) {
       let randomNum = Math.random() * 10;
-      if (i!=j && randomNum >= 9.7 ) {
-        edges.push({"from": i, to: j, value: Math.floor(Math.random() * 5)})
+      if (i!=j && randomNum >= 9.8 ) {
+        edges.push({"from": i, to: j, value: Math.floor(Math.random() * 3)})
+        // edges.push({"from": i, to: j, value: .25})
       }
     }
   }
@@ -42,15 +43,15 @@ function draw(csvdata) {
     nodes: {
       shape: "dot",
       font: {
-      size: 18,
+      size: 25,
       color: "#ffffff",
     },
       scaling: {
         customScalingFunction: function (min, max, total, value) {
           return value / total;
         },
-        min: 5,
-        max: 150,
+        min: 1,
+        max: 15,
       },
     },
   };
