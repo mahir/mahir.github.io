@@ -74,7 +74,7 @@ function draw(csvdata) {
       work_url = work_url.replace('.JPG', '.jpeg')
 
       if (pic_url != "") {
-        document.getElementById("p_pic").innerHTML = '<img src=data/'+pic_url+' width="200px">'}
+        document.getElementById("p_pic").innerHTML = '<img src=data/'+pic_url+' width="300px">'}
       else {
         document.getElementById("p_pic").innerHTML = ""
       }
@@ -82,7 +82,7 @@ function draw(csvdata) {
       if (work_url != "") {
         if (work_url.includes(".mp4")){
           console.log(work_url)
-          document.getElementById("p_work").innerHTML = '<video width="320" controls><source src=data/'+work_url+' type="video/mp4"></video>'
+          document.getElementById("p_work").innerHTML = '<video width="480" controls><source src=data/'+work_url+' type="video/mp4"></video>'
         }
         else {
         document.getElementById("p_work").innerHTML = '<img src=data/'+work_url+' width="1000px">'
