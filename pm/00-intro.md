@@ -4,6 +4,8 @@
 
 Columbia University | Spring 2026
 
+https://mahiryavuz.com/pm
+
 ---
 
 <img src="images/00-mahir.png" style="height: 500px">
