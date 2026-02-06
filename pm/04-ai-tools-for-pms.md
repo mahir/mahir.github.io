@@ -37,10 +37,10 @@ The first place most PMs feel AI's impact: making sense of qualitative data.
 **The problem:** You have 10 hours of user interviews. Extracting themes takes days.
 
 **Tools to know:**
-- [**Dovetail**](https://dovetail.com).Purpose-built for UX research. Tag, cluster, and surface themes across interviews. "Ask Dovetail" lets anyone query the research repository in natural language.
-- [**Looppanel**](https://looppanel.com).Auto-generates structured notes organized by discussion guide questions. Produces AI-powered affinity maps across participants.
-- [**Grain**](https://grain.com).Records, transcribes, and clips key moments. Shareable highlights.
-- [**Otter.ai**](https://otter.ai).Fast transcription with speaker identification. Good free tier.
+- [**Dovetail**](https://dovetail.com). \1urpose-built for UX research. Tag, cluster, and surface themes across interviews. "Ask Dovetail" lets anyone query the research repository in natural language.
+- [**Looppanel**](https://looppanel.com). \1uto-generates structured notes organized by discussion guide questions. Produces AI-powered affinity maps across participants.
+- [**Grain**](https://grain.com). \1ecords, transcribes, and clips key moments. Shareable highlights.
+- [**Otter.ai**](https://otter.ai). \1ast transcription with speaker identification. Good free tier.
 
 ---
 
@@ -49,9 +49,9 @@ The first place most PMs feel AI's impact: making sense of qualitative data.
 **The problem:** Thousands of open-text survey responses. Nobody reads them all.
 
 **Tools to know:**
-- [**Notably**](https://notably.ai).AI-powered qualitative analysis. Synthesizes notes, interviews, and survey data.
-- [**Kraftful**](https://www.kraftful.com).Aggregates feedback from 30+ sources (reviews, tickets, surveys). Extracts themes and top feature requests automatically.
-- [**Maze**](https://maze.co).Continuous product discovery with an AI Moderator that conducts user interviews autonomously, generating follow-up questions and bias-free reports.
+- [**Notably**](https://notably.ai). \1I-powered qualitative analysis. Synthesizes notes, interviews, and survey data.
+- [**Kraftful**](https://www.kraftful.com). \1ggregates feedback from 30+ sources (reviews, tickets, surveys). Extracts themes and top feature requests automatically.
+- [**Maze**](https://maze.co). \1ontinuous product discovery with an AI Moderator that conducts user interviews autonomously, generating follow-up questions and bias-free reports.
 
 ---
 
@@ -60,10 +60,10 @@ The first place most PMs feel AI's impact: making sense of qualitative data.
 **The problem:** You have event data but not enough analysts to dig through it.
 
 **Tools to know:**
-- [**FullStory**](https://www.fullstory.com).Session replay with AI-powered insights. Finds friction automatically.
-- [**Hotjar**](https://www.hotjar.com).Heatmaps and recordings with AI summaries of user behavior patterns.
-- [**Sprig**](https://sprig.com).In-product surveys triggered by specific user actions (e.g., cart abandonment). AI analyzes open-ended responses in real time.
-- [**Amplitude**](https://amplitude.com).Ask questions in plain English, get charts. Natural language analytics.
+- [**FullStory**](https://www.fullstory.com). \1ession replay with AI-powered insights. Finds friction automatically.
+- [**Hotjar**](https://www.hotjar.com). \1eatmaps and recordings with AI summaries of user behavior patterns.
+- [**Sprig**](https://sprig.com). \1n-product surveys triggered by specific user actions (e.g., cart abandonment). AI analyzes open-ended responses in real time.
+- [**Amplitude**](https://amplitude.com). \1sk questions in plain English, get charts. Natural language analytics.
 
 ---
 
@@ -72,8 +72,8 @@ The first place most PMs feel AI's impact: making sense of qualitative data.
 **The problem:** Tracking competitors manually is tedious and always out of date.
 
 **Tools to know:**
-- [**Crayon**](https://www.crayon.co).Tracks competitor websites, pricing, messaging changes automatically.
-- [**Klue**](https://klue.com).Competitive intelligence platform. Surfaces battlecards and win/loss insights.
+- [**Crayon**](https://www.crayon.co). \1racks competitor websites, pricing, messaging changes automatically.
+- [**Klue**](https://klue.com). \1ompetitive intelligence platform. Surfaces battlecards and win/loss insights.
 
 ---
 
@@ -92,9 +92,9 @@ PMs write more than almost anyone in the org. AI makes every piece of writing fa
 **The problem:** Blank page syndrome. First drafts take forever.
 
 **Tools to know:**
-- [**Claude**](https://claude.ai).Long-context analysis, nuanced writing, strong at structured documents. Handles entire PRDs and strategy docs.
-- [**Notion AI**](https://www.notion.com/product/ai).Writing assistance inside your existing workspace. Summarize, improve, translate.
-- [**Superwhisper**](https://superwhisper.com).AI voice-to-text for any app. Press a shortcut, dictate, get polished text. Great for capturing ideas fast.
+- [**Claude**](https://claude.ai). \1ong-context analysis, nuanced writing, strong at structured documents. Handles entire PRDs and strategy docs.
+- [**Notion AI**](https://www.notion.com/product/ai). \1riting assistance inside your existing workspace. Summarize, improve, translate.
+- [**Superwhisper**](https://superwhisper.com). \1I voice-to-text for any app. Press a shortcut, dictate, get polished text. Great for capturing ideas fast.
 
 ---
 
@@ -103,7 +103,7 @@ PMs write more than almost anyone in the org. AI makes every piece of writing fa
 General-purpose LLMs work well here, but there are also purpose-built tools.
 
 **Tools to know:**
-- [**ChatPRD**](https://chatprd.ai).AI copilot specifically for PRDs, user stories, and specs. Reviews your drafts like a Chief Product Officer.
+- [**ChatPRD**](https://chatprd.ai). \1I copilot specifically for PRDs, user stories, and specs. Reviews your drafts like a Chief Product Officer.
 
 **Or use any LLM with a good workflow:**
 1. Start with your PRD template
@@ -138,9 +138,9 @@ Be specific. Use metrics where possible.
 **The problem:** You're in 6 meetings a day. Notes are inconsistent or nonexistent.
 
 **Tools to know:**
-- [**Otter.ai**](https://otter.ai).Auto-joins meetings, transcribes, generates summaries and action items.
-- [**Fireflies.ai**](https://fireflies.ai).Similar to Otter. Integrates with CRM and project management tools.
-- [**Granola**](https://www.granola.ai).Lightweight Mac app. Enhances your rough notes with meeting context.
+- [**Otter.ai**](https://otter.ai). \1uto-joins meetings, transcribes, generates summaries and action items.
+- [**Fireflies.ai**](https://fireflies.ai). \1imilar to Otter. Integrates with CRM and project management tools.
+- [**Granola**](https://www.granola.ai). \1ightweight Mac app. Enhances your rough notes with meeting context.
 
 ---
 
@@ -149,9 +149,9 @@ Be specific. Use metrics where possible.
 **The problem:** Information is scattered across docs, Slack, email, and people's heads.
 
 **Tools to know:**
-- [**Notion AI**](https://www.notion.com/product/ai).Search and Q&A across your workspace. Summarize pages, generate content.
-- [**NotebookLM**](https://notebooklm.google.com).Upload docs, papers, or notes. Ask questions across all of them. Generates audio overviews you can listen to.
-- [**Confluence AI**](https://www.atlassian.com/software/confluence).Similar capabilities within the Atlassian ecosystem.
+- [**Notion AI**](https://www.notion.com/product/ai). \1earch and Q&A across your workspace. Summarize pages, generate content.
+- [**NotebookLM**](https://notebooklm.google.com). \1pload docs, papers, or notes. Ask questions across all of them. Generates audio overviews you can listen to.
+- [**Confluence AI**](https://www.atlassian.com/software/confluence). \1imilar capabilities within the Atlassian ecosystem.
 
 ---
 
@@ -170,8 +170,8 @@ This is where AI tools save PMs from dependency on data teams.
 **The problem:** You know what question to ask, but you can't write the query.
 
 **Tools to know:**
-- [**Mode**](https://mode.com).Ask questions in English, get SQL and visualizations.
-- [**Metabase**](https://www.metabase.com).Open-source BI tool with natural language querying. Ask "How many users signed up last week?" and get a chart.
+- [**Mode**](https://mode.com). \1sk questions in English, get SQL and visualizations.
+- [**Metabase**](https://www.metabase.com). \1pen-source BI tool with natural language querying. Ask "How many users signed up last week?" and get a chart.
 
 ---
 
@@ -180,10 +180,10 @@ This is where AI tools save PMs from dependency on data teams.
 **The problem:** Building dashboards takes analyst time. You need answers now.
 
 **Tools to know:**
-- [**Amplitude**](https://amplitude.com).Natural language queries on your product analytics. Predictive audiences identify churn signals and conversion potential.
-- [**Mixpanel**](https://mixpanel.com).AI-assisted funnel analysis and user segmentation.
-- [**PostHog**](https://posthog.com).Open-source all-in-one: analytics, session replay, feature flags, A/B testing. AI natural-language querying. Generous free tier (1M events/month).
-- [**Looker**](https://cloud.google.com/looker).Google's BI tool with AI features for exploration and anomaly detection.
+- [**Amplitude**](https://amplitude.com). \1atural language queries on your product analytics. Predictive audiences identify churn signals and conversion potential.
+- [**Mixpanel**](https://mixpanel.com). \1I-assisted funnel analysis and user segmentation.
+- [**PostHog**](https://posthog.com). \1pen-source all-in-one: analytics, session replay, feature flags, A/B testing. AI natural-language querying. Generous free tier (1M events/month).
+- [**Looker**](https://cloud.google.com/looker). \1oogle's BI tool with AI features for exploration and anomaly detection.
 
 ---
 
@@ -192,8 +192,8 @@ This is where AI tools save PMs from dependency on data teams.
 **The problem:** You live in spreadsheets but complex formulas slow you down.
 
 **Tools to know:**
-- [**Google Sheets**](https://workspace.google.com/products/sheets).Generate formulas, create charts, summarize data with Gemini.
-- [**Excel Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot).Same concept in the Microsoft ecosystem.
+- [**Google Sheets**](https://workspace.google.com/products/sheets). \1enerate formulas, create charts, summarize data with Gemini.
+- [**Excel Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot). \1ame concept in the Microsoft ecosystem.
 
 ---
 
@@ -202,8 +202,8 @@ This is where AI tools save PMs from dependency on data teams.
 **The problem:** You want to test hypotheses rigorously but setting up experiments is complex.
 
 **Tools to know:**
-- [**Statsig**](https://statsig.com).Born from Facebook's internal experimentation infrastructure. AI copilot helps design experiments and surfaces tradeoffs. Free tier includes unlimited feature flags and 2M events/month.
-- [**PostHog**](https://posthog.com).Also covers experimentation alongside its analytics suite. Open-source with generous free tier.
+- [**Statsig**](https://statsig.com). \1orn from Facebook's internal experimentation infrastructure. AI copilot helps design experiments and surfaces tradeoffs. Free tier includes unlimited feature flags and 2M events/month.
+- [**PostHog**](https://posthog.com). \1lso covers experimentation alongside its analytics suite. Open-source with generous free tier.
 
 ---
 
@@ -212,8 +212,8 @@ This is where AI tools save PMs from dependency on data teams.
 **The problem:** You have a CSV and a question. You don't want to wait for an analyst.
 
 **Tools to know:**
-- [**Claude**](https://claude.ai).Upload a CSV, ask questions. Handles complex analysis with reasoning.
-- [**ChatGPT**](https://chatgpt.com).Code Interpreter runs Python on your data. Generates charts and statistical analysis.
+- [**Claude**](https://claude.ai). \1pload a CSV, ask questions. Handles complex analysis with reasoning.
+- [**ChatGPT**](https://chatgpt.com). \1ode Interpreter runs Python on your data. Generates charts and statistical analysis.
 
 ---
 
@@ -242,9 +242,9 @@ AI is collapsing the time between idea and visual artifact.
 **The problem:** You need to communicate a design idea but don't have designer bandwidth.
 
 **Tools to know:**
-- [**Figma**](https://www.figma.com).Generate layouts, auto-populate designs, rename layers intelligently.
-- [**Google Stitch**](https://stitch.withgoogle.com).Formerly Galileo AI (acquired by Google). Generates polished mockups from text, exports production-ready HTML/CSS and Figma files. Best free option (~350 generations/month).
-- [**Uizard**](https://uizard.io).Generates multi-screen clickable prototypes from conversational prompts. Also converts screenshots and hand-drawn sketches into editable designs.
+- [**Figma**](https://www.figma.com). \1enerate layouts, auto-populate designs, rename layers intelligently.
+- [**Google Stitch**](https://stitch.withgoogle.com). \1ormerly Galileo AI (acquired by Google). Generates polished mockups from text, exports production-ready HTML/CSS and Figma files. Best free option (~350 generations/month).
+- [**Uizard**](https://uizard.io). \1enerates multi-screen clickable prototypes from conversational prompts. Also converts screenshots and hand-drawn sketches into editable designs.
 
 ---
 
@@ -253,8 +253,8 @@ AI is collapsing the time between idea and visual artifact.
 **The problem:** You want a visual mockup in minutes, not days.
 
 **Tools to know:**
-- [**v0.dev**](https://v0.dev).Vercel's AI UI generator. Describe what you want, get a working React component. Iterate with natural language.
-- [**Builder.io**](https://www.builder.io).Converts Figma designs into production code. Also generates UIs from prompts and serves as a visual CMS.
+- [**v0.dev**](https://v0.dev). \1ercel's AI UI generator. Describe what you want, get a working React component. Iterate with natural language.
+- [**Builder.io**](https://www.builder.io). \1onverts Figma designs into production code. Also generates UIs from prompts and serves as a visual CMS.
 
 Great for quickly testing visual ideas before involving designers.
 
@@ -265,9 +265,9 @@ Great for quickly testing visual ideas before involving designers.
 **The problem:** You want a clickable, functional prototype, not a static mockup.
 
 **Tools to know:**
-- [**Bolt**](https://bolt.new).Generate full-stack web apps from prompts. Deploy instantly.
-- [**Lovable**](https://lovable.dev).Similar to Bolt. AI-generated apps with real functionality.
-- [**Replit**](https://replit.com).AI-assisted coding environment. Build and deploy from your browser.
+- [**Bolt**](https://bolt.new). \1enerate full-stack web apps from prompts. Deploy instantly.
+- [**Lovable**](https://lovable.dev). \1imilar to Bolt. AI-generated apps with real functionality.
+- [**Replit**](https://replit.com). \1I-assisted coding environment. Build and deploy from your browser.
 
 ---
 
@@ -276,9 +276,9 @@ Great for quickly testing visual ideas before involving designers.
 **The problem:** You need to sketch a flow quickly for a meeting in 20 minutes.
 
 **Tools to know:**
-- [**tldraw**](https://www.tldraw.com).Infinite canvas with AI features. Sketch rough UIs and let AI refine them.
-- [**Whimsical**](https://whimsical.com).Flowcharts and wireframes with AI generation from text descriptions.
-- [**Visily**](https://visily.ai).Built for non-designers. Converts text, screenshots, sketches, and flowcharts into high-fidelity designs. Free forever starter tier.
+- [**tldraw**](https://www.tldraw.com). \1nfinite canvas with AI features. Sketch rough UIs and let AI refine them.
+- [**Whimsical**](https://whimsical.com). \1lowcharts and wireframes with AI generation from text descriptions.
+- [**Visily**](https://visily.ai). \1uilt for non-designers. Converts text, screenshots, sketches, and flowcharts into high-fidelity designs. Free forever starter tier.
 
 ---
 
@@ -297,9 +297,9 @@ The line between "PM who can prototype" and "PM who can build" is blurring.
 **The problem:** You want to build something yourself, but coding is slow.
 
 **Tools to know:**
-- [**Cursor**](https://www.cursor.com).VS Code fork with deep AI integration. Tab-complete entire functions. Chat with your codebase.
-- [**Windsurf**](https://windsurf.com).AI-native editor. Multi-file editing with context awareness.
-- [**GitHub Copilot**](https://github.com/features/copilot).AI pair programmer inside VS Code. Autocompletes code as you type.
+- [**Cursor**](https://www.cursor.com). \1S Code fork with deep AI integration. Tab-complete entire functions. Chat with your codebase.
+- [**Windsurf**](https://windsurf.com). \1I-native editor. Multi-file editing with context awareness.
+- [**GitHub Copilot**](https://github.com/features/copilot). \1I pair programmer inside VS Code. Autocompletes code as you type.
 
 ---
 
@@ -308,9 +308,9 @@ The line between "PM who can prototype" and "PM who can build" is blurring.
 **The problem:** You're stuck on a bug or need to understand unfamiliar code.
 
 **Tools to know:**
-- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code).Command-line AI that reads your codebase, writes code, runs tests. Handles complex multi-file changes.
-- [**Amp**](https://ampcode.com).AI coding agent that works across terminal and editor. Multiple agent modes for different tasks.
-- [**Copilot Chat**](https://github.com/features/copilot).Conversational coding help inside your editor.
+- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code). \1ommand-line AI that reads your codebase, writes code, runs tests. Handles complex multi-file changes.
+- [**Amp**](https://ampcode.com). \1I coding agent that works across terminal and editor. Multiple agent modes for different tasks.
+- [**Copilot Chat**](https://github.com/features/copilot). \1onversational coding help inside your editor.
 
 ---
 
@@ -319,9 +319,9 @@ The line between "PM who can prototype" and "PM who can build" is blurring.
 **The problem:** You want a working app but don't want to write code at all.
 
 **Tools to know:**
-- [**Replit**](https://replit.com).Describe what you want in English, get a deployed app.
-- [**Bolt**](https://bolt.new).Prompt-to-app generation. Full-stack, deployable.
-- [**Lovable**](https://lovable.dev).Same category. Generates polished web apps from descriptions.
+- [**Replit**](https://replit.com). \1escribe what you want in English, get a deployed app.
+- [**Bolt**](https://bolt.new). \1rompt-to-app generation. Full-stack, deployable.
+- [**Lovable**](https://lovable.dev). \1ame category. Generates polished web apps from descriptions.
 
 ---
 
@@ -355,9 +355,9 @@ AI can help you communicate more effectively across the org.
 **The problem:** Making slides takes hours. The content matters; the formatting shouldn't.
 
 **Tools to know:**
-- [**Gamma**](https://gamma.app).Generate presentations from text. Paste your doc, get a polished deck.
-- [**Beautiful.ai**](https://www.beautiful.ai).Smart templates that auto-format as you add content.
-- [**Tome**](https://tome.app).AI-generated presentations with narrative structure.
+- [**Gamma**](https://gamma.app). \1enerate presentations from text. Paste your doc, get a polished deck.
+- [**Beautiful.ai**](https://www.beautiful.ai). \1mart templates that auto-format as you add content.
+- [**Tome**](https://tome.app). \1I-generated presentations with narrative structure.
 
 ---
 
@@ -389,9 +389,9 @@ AI can accelerate strategic thinking, not replace it.
 **The problem:** Roadmap planning involves synthesizing feedback, business goals, and technical constraints. It's slow.
 
 **Tools to know:**
-- [**Productboard**](https://www.productboard.com).AI-assisted feature prioritization. Clusters customer feedback into themes. Links features to demand weighted by customer revenue.
-- [**ProdPad**](https://prodpad.com).AI CoPilot included free on all paid plans. Uses RAG grounded in your product's actual data and history to generate OKRs, roadmap initiatives, and idea descriptions.
-- [**Aha!**](https://www.aha.io).Generates roadmap suggestions based on your strategy and feedback data.
+- [**Productboard**](https://www.productboard.com). \1I-assisted feature prioritization. Clusters customer feedback into themes. Links features to demand weighted by customer revenue.
+- [**ProdPad**](https://prodpad.com). \1I CoPilot included free on all paid plans. Uses RAG grounded in your product's actual data and history to generate OKRs, roadmap initiatives, and idea descriptions.
+- [**Aha!**](https://www.aha.io). \1enerates roadmap suggestions based on your strategy and feedback data.
 
 ---
 
@@ -428,9 +428,9 @@ you're least confident about and why.
 **The problem:** You need to understand a market quickly.
 
 **Tools to know:**
-- [**Perplexity**](https://www.perplexity.ai).AI search with citations. Great for fast, sourced market research.
-- [**Claude**](https://claude.ai).Deep analysis of competitive landscapes with reasoning and web search.
-- [**ChatGPT**](https://chatgpt.com).Similar capabilities for real-time market data with browsing.
+- [**Perplexity**](https://www.perplexity.ai). \1I search with citations. Great for fast, sourced market research.
+- [**Claude**](https://claude.ai). \1eep analysis of competitive landscapes with reasoning and web search.
+- [**ChatGPT**](https://chatgpt.com). \1imilar capabilities for real-time market data with browsing.
 
 ---
 

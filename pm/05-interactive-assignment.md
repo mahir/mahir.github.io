@@ -1,403 +1,121 @@
-# Interactive Assignment: 45-Minute Startup Sprint
+# Interactive Assignment: AI-Powered Startup Sprint
 
-You have 45 minutes to go from zero to a startup concept with a PRD, roadmap, go-to-market plan, and working prototype.
-
----
-
-## The Twist
-
-**You must use AI throughout this exercise.**
-
-This isn't just about building a startup—it's about experiencing how AI changes the PM workflow.
-
-You'll use AI to brainstorm, draft, build, and pressure-test.
+Pick a problem. Write a PRD. Build a prototype. Reflect on how AI shaped your work.
 
 ---
 
-## What You'll Create
+## The Assignment
 
-By the end of this sprint:
+You have **45 minutes** and access to any AI tool you want.
 
-- A clear problem statement and target user
-- A product vision and competitive positioning
-- A one-page PRD
-- A 3-month roadmap
-- A go-to-market narrative
-- A working prototype built with AI
-- A pressure-tested pitch
+By the end, you'll submit three things:
+
+1. **A PRD** for a product that solves a real problem
+2. **A working prototype** built with AI tools
+3. **A short reflection** on how AI helped and where it fell short
 
 ---
 
-## Rules of Engagement
+## The One Rule
 
-1. **AI is required, not optional.** Each section has specific AI prompts.
-2. **You're the PM, not the AI.** AI generates options; you make decisions.
-3. **Timebox ruthlessly.** When time's up, move on.
-4. **Constraints are real.** Treat resource limits as hard constraints.
+**You must use AI throughout.** Not as a nice-to-have — as a core part of your workflow.
+
+Use it to research, brainstorm, draft, critique, and build. How you use it is up to you.
+
+You're the PM. AI is your team. Make the calls.
 
 ---
 
-## Setup
+# Part 1: The PRD
 
-Open your AI tool (Claude, ChatGPT, etc.) in a separate window.
+Find a problem worth solving and write a PRD for it.
 
-**Paste this starter context:**
+---
+
+## Pick a Problem
+
+Choose a domain where you have personal experience — something you have opinions about and understand deeply.
+
+Use AI to explore the space. Ask it what problems exist, who's underserved, what solutions are failing. Challenge its answers with what you actually know.
+
+Then commit to one problem and one target user.
+
+---
+
+## Write the PRD
+
+A good PRD answers these questions:
+
+- **What problem are you solving?** Be specific. Describe it in the user's words.
+- **Who is the target user?** Not a demographic — a person with a behavior and a pain point.
+- **What does the product do?** The core flow in 3-5 steps.
+- **How will you know it's working?** Goals, metrics, targets.
+- **What are you building in v1?** Requirements, user stories, scope.
+- **What are you NOT building?** Just as important.
+- **What could go wrong?** Risks and how you'd handle them.
+
+Use AI to draft, structure, and pressure-test your PRD. Edit it until it reflects your judgment, not just the AI's output.
+
+---
+
+## Suggested AI Prompts
+
+These are starting points. Adapt them or write your own.
 
 ```
-I'm doing a 45-minute startup sprint exercise.
-Help me brainstorm, draft, and pressure-test
-ideas. Be concise—I'm on a timer. Push back
-when my ideas are vague or weak. I want useful
-critique, not cheerleading.
+I'm exploring problems in [domain]. What are
+5 underserved problems that existing solutions
+handle poorly?
+```
+
+```
+Help me draft a one-page PRD for [product].
+Here's what I know: [paste your context].
+Structure it and push back where it's vague.
+```
+
+```
+Review this PRD. What's missing? What assumptions
+am I making? Where would an engineer or designer
+push back?
 ```
 
 ---
 
-# Part 1: Problem Discovery
-*6 minutes*
+# Part 2: The Prototype
+
+Build something real that demonstrates your core idea.
 
 ---
 
-## Choose Your Domain & Angle
+## Pick Your Tool
 
-Pick ONE area where you have **personal experience and strong opinions**:
+Use whatever gets you to a working prototype fastest:
 
-- [ ] Remote work / team collaboration
-- [ ] Personal finance / budgeting
-- [ ] Health & fitness
-- [ ] Learning / education
-- [ ] Creative work (writing, design, music)
-- [ ] Small business operations
-- [ ] Job searching / career development
-- [ ] Other: _____________
+- **Bolt / Lovable** — describe your app, get a deployed prototype
+- **v0.dev** — generate UI components from text
+- **Replit** — AI-assisted coding in your browser
+- **Claude / ChatGPT** — generate code to run locally
 
-**What do you know about this domain that most people don't?**
->
+You can build a landing page, a functional single-screen app, or a clickable multi-screen prototype. Your choice. The goal is something you can show to another person.
 
 ---
 
-## AI Task: Problem Exploration
+# Part 3: Reflection
 
-Ask your AI:
-
-*"I'm exploring problems in [your domain]. What are 5 underserved problems that existing solutions handle poorly? For each, tell me who experiences it most acutely."*
-
-Review the output. Did it surface anything you hadn't considered?
+Step back from the work and think about the process.
 
 ---
 
-## Define Your User & Problem
+## Answer These Questions
 
-**Target user** (one sentence — include a behavior, not just a demographic):
+**Where did AI help the most?** Which parts of the PM workflow got faster or better with AI?
 
-**Bad:** "Young professionals"
+**Where was AI weak or wrong?** What did it generate that you had to fix, override, or throw away?
 
-**Good:** "First-time managers (promoted in last 6 months) at companies with no management training"
+**What required your judgment?** What decisions could only you make — things the AI couldn't do for you?
 
-Your answer:
->
-
----
-
-**What problem keeps them up at night?**
-> Describe it in their words.
-
-**What do they do today? Why does it fail them?**
->
-
----
-
-# Part 2: Product & Competition
-*6 minutes*
-
----
-
-## AI Task: Competitive Landscape
-
-Ask your AI:
-
-*"What are the top 5 existing solutions for [problem] targeting [user]? Include direct competitors, adjacent products, and workarounds. For each, give one strength and one weakness."*
-
----
-
-## Two Alternatives That Matter
-
-| Alternative | Strength | Weakness |
-|-------------|----------|----------|
-| 1. | | |
-| 2. | | |
-
-**Why will users switch to you?**
->
-
----
-
-## AI Task: Solution Ideas
-
-Ask your AI:
-
-*"Given this problem [paste problem] and these competitor weaknesses [paste weaknesses], suggest 3 different product approaches. For each, give a one-liner and core mechanic."*
-
----
-
-## Your Solution & MVP Scope
-
-**Product name:** _____________
-
-**One-liner:**
->
-
-**How it works (3-5 steps):**
-1. User does _______________
-2. Product does _______________
-3. User gets _______________
-
-You have **one engineer for two months**. What's the ONE thing your MVP must do well?
->
-
----
-
-# Part 3: One-Page PRD
-*7 minutes*
-
----
-
-## AI Task: What to Cut
-
-Ask your AI:
-
-*"I'm building [one-liner]. I have one engineer for two months. What features would users expect that I should cut from v1?"*
-
-**Riskiest assumption in your MVP:**
->
-
----
-
-## AI Task: PRD Draft
-
-Ask your AI:
-
-*"Help me draft a one-page PRD for [product name]. Here's what I have: [paste problem, user, solution, MVP scope]. Structure it for me."*
-
-Review and edit the output.
-
----
-
-## PRD: [Product Name]
-
-**Problem Statement**
->
-
-**Target User**
->
-
----
-
-## Goals & Success Metrics
-
-| Goal | Metric | Target |
-|------|--------|--------|
-| | | |
-| | | |
-
----
-
-## Core User Stories
-
-1. As a [user], I want to [action] so that [outcome].
-2. As a [user], I want to [action] so that [outcome].
-3. As a [user], I want to [action] so that [outcome].
-
----
-
-## Requirements & Risks
-
-**Must have:**
--
--
--
-
-**Won't have (v1):**
--
--
-
-**Top risks:**
-
-| Risk | Mitigation |
-|------|------------|
-| | |
-| | |
-
----
-
-# Part 4: 3-Month Roadmap
-*5 minutes*
-
----
-
-## Your Constraints
-
-- **Team:** You + 1 engineer + 1 part-time designer
-- **Budget:** $10k for tools, infrastructure, marketing
-- **Runway:** 3 months to show traction or raise funding
-
----
-
-## Phase 1: Build & Validate (Weeks 1-6)
-
-**Primary goal:** _____________
-
-**What you're building:**
->
-
-**Success metric:** _____________ **Target:** _____________
-
----
-
-## Phase 2: Grow or Pivot (Weeks 7-12)
-
-**Path A: Double down** (if Phase 1 is working)
-- Signal: _____________
-- Next build: _____________
-
-**Path B: Pivot** (if Phase 1 is not working)
-- Signal: _____________
-- What changes: _____________
-
----
-
-## AI Task: Failure Scenarios
-
-Ask your AI:
-
-*"Here's my 3-month plan: [paste phases]. What are the most likely reasons this fails? Give 3 scenarios with early warning signs."*
-
----
-
-# Part 5: Go-to-Market
-*5 minutes*
-
----
-
-## First 100 Users
-
-**Early adopter profile:**
-> Who's desperate enough to try an unproven product?
-
-**Where will you find them?** (2 specific channels)
-1.
-2.
-
----
-
-## AI Task: Hooks
-
-Ask your AI:
-
-*"I'm launching [product] for [early adopter]. Write 3 hooks under 15 words for [channel 1]."*
-
-**Your best hook:**
->
-
----
-
-## Pricing & Positioning
-
-**Model:** Free / Freemium / Paid — **Why?**
->
-
-**Positioning statement:**
-
-> For [target user] who [problem], [product name] is a [category] that [key benefit]. Unlike [alternative], we [differentiator].
-
----
-
-# Part 6: Build a Prototype
-*10 minutes*
-
----
-
-## Make It Real
-
-Use AI coding tools to build a working prototype that demonstrates your core idea.
-
-**Tools you can use:**
-- **Claude / ChatGPT:** Generate code
-- **Cursor / Replit:** AI-assisted coding
-- **v0.dev:** Generate UI components
-- **Bolt / Lovable:** Full app generation
-
----
-
-## AI Task: Prototype
-
-Ask your AI:
-
-*"I need to build a quick prototype of [product]. The core flow is: [paste 3-5 step flow]. Generate a working [web app / landing page / mockup]. Keep it minimal—10 minute build."*
-
----
-
-## Pick One to Build
-
-**Option A: Interactive Landing Page** — Hero with one-liner, visual or demo of core value, email capture for waitlist
-
-**Option B: Functional MVP** — Single-screen app that does the ONE thing. Hardcode what you need to.
-
-**Option C: Clickable Prototype** — 3-5 screens showing user flow. Doesn't need real functionality.
-
----
-
-## Your Prototype
-
-**What you built:**
->
-
-**Link or screenshot:**
->
-
-**What's real vs. faked:**
->
-
----
-
-# Part 7: Pressure Test & Reflection
-*6 minutes*
-
----
-
-## AI Task: Skeptical VC
-
-Paste your entire plan and ask:
-
-*"You're a skeptical VC who's seen 1000 pitches. What are the 3 hardest questions you'd ask? Be ruthless."*
-
----
-
-## The 3 Hardest Questions & Your Answers
-
-1. Q: _____________ A: _____________
-2. Q: _____________ A: _____________
-3. Q: _____________ A: _____________
-
----
-
-## Honest Assessment
-
-**Most likely reason this fails:**
->
-
----
-
-## AI Reflection
-
-**Where AI helped most:**
->
-
-**Where AI was weak or wrong:**
->
-
-**What required your judgment that AI couldn't provide?**
->
+**What would you do differently next time?** How would you change your approach to using AI?
 
 ---
 
@@ -405,55 +123,19 @@ Paste your entire plan and ask:
 
 ---
 
-## Your Deliverable: Pitch Deck + Prototype
+## Your Deliverables
 
-Use an AI presentation tool (Gamma, Beautiful.ai, or similar) to turn your sprint output into a **3-5 slide pitch deck**.
-
-**Slide 1:** Problem & user (who hurts, why)
-
-**Slide 2:** Solution & how it works (one-liner, 3-step flow)
-
-**Slide 3:** MVP scope & key metric (what you're building, how you'll know it's working)
-
-**Slide 4:** Go-to-market (first 100 users, channels, hook)
-
-**Slide 5:** Prototype demo (screenshot or link)
+1. **PRD** — as a doc or PDF
+2. **Prototype** — a deployed link or screenshots
+3. **Reflection** — written answers to the four questions above (a few sentences each is fine)
 
 ---
 
-## Submission Checklist
-
-- [ ] Pitch deck (3-5 slides, PDF or link)
-- [ ] Prototype link (deployed URL or screenshot)
-- [ ] AI reflection (from Part 7 — paste into deck notes or submit separately)
-
----
-
-# What This Exercise Teaches
-
----
-
-## About Startups
-
-- Decisions made quickly can be changed; decisions not made cannot
-- Specificity beats vagueness at every stage
-- A prototype is worth 1000 PRD pages
-- Constraints force creativity
-
----
-
-## About AI as a PM Tool
-
-- AI drafts; you decide
-- AI accelerates brainstorming, structuring, and building
-- AI pressure-tests miss emotional and organizational context
-- Output quality depends on how you prompt
-
----
-
-> You built a startup concept with PRD, roadmap, GTM, and working prototype in 45 minutes.
->
-> The AI didn't make a single decision—you did.
+> The AI didn't make a single decision. You did.
 >
 > That's the job.
 
+---
+
+![Submit your Feedback!](images/qr.png)
+**Please sumbit your feedback!** 

@@ -297,31 +297,41 @@ You don't need to build models, but you should collaborate effectively.
 
 ## The Future of PM
 
-What stays the same? What changes?
+The role won't disappear, but it will compress and transform.
+
+AI is collapsing the "technical feasibility" leg of the PM triangle. When you can prototype a working feature in an afternoon instead of writing a spec and waiting two sprints, everything shifts.
 
 ---
 
-## What Stays the Same
+## How Roles Transform
 
-**User focus:** Technology changes; human needs don't.
+**PMs** evolve from spec-writers into product strategists with execution capability. The ones who survive are strong on customer insight and strategic thinking, not glorified project managers. Fewer PMs, each more impactful.
 
-**Strategic thinking:** AI automates tactics, not strategy.
+**Engineers** shift from feature-building to systems thinking. Architecture, reliability, performance, security. Senior engineers increasingly look like technical product people.
 
-**Cross-functional leadership:** Building products requires coordinating humans.
-
-**Ownership:** Someone needs to own outcomes. AI doesn't take responsibility.
+**Designers** move toward user research and systems design. Visual production gets largely automated.
 
 ---
 
-## What Changes
+## The Product Trio Compresses
 
-**Speed expectations:** When AI does in minutes what took hours, stakeholders expect faster turnaround.
+The traditional PM/Eng/Design trio is becoming a duo or even a solo. Technical founders already use AI to ship entire products alone.
 
-**New skill requirements:** Understanding AI capabilities, evaluating outputs, designing for uncertainty.
+In larger orgs, expect:
+- Fewer, more senior PMs with broader scope
+- "Product Engineers" blending engineering and product thinking (Linear, Vercel, etc.)
+- New roles around AI orchestration: composing agents, evaluating outputs, building reliable workflows
 
-**Time allocation:** Less routine tasks, more judgment-heavy work.
+---
 
-**Product complexity:** AI features are harder to test, explain, and predict.
+## What Gets Harder, Not Easier
+
+- Prioritization under ambiguity
+- Cross-functional alignment and stakeholder management
+- Understanding market dynamics
+- Taste-driven decisions about what the product should *be*
+
+These are irreducibly human. The PM who's great at these was always the valuable one.
 
 ---
 
