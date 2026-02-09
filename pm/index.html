@@ -140,6 +140,7 @@
         html, body {
             height: 100%;
             overflow: hidden;
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -154,6 +155,7 @@
         /* Full Screen Layout */
         .app {
             height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
         }
@@ -181,6 +183,7 @@
             justify-content: center;
             padding: 4rem 6rem;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .slide {
@@ -659,19 +662,78 @@
         /* Responsive */
         @media (max-width: 768px) {
             .slide-container {
-                padding: 2rem;
+                padding: 1.5rem 1.25rem;
+                align-items: flex-start;
+                padding-top: 2rem;
             }
 
             .slide h1 {
-                font-size: 2.25rem;
-            }
-
-            .slide h2 {
                 font-size: 1.75rem;
             }
 
+            .slide h2 {
+                font-size: 1.5rem;
+            }
+
+            .slide h3 {
+                font-size: 1.25rem;
+            }
+
             .slide p, .slide li {
-                font-size: 1.1rem;
+                font-size: 1.05rem;
+            }
+
+            .slide blockquote {
+                font-size: 1.15rem;
+                padding-left: 1.25rem;
+                margin: 1.5rem 0;
+            }
+
+            .slide pre {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .slide pre code {
+                font-size: 0.8rem;
+            }
+
+            .slide table {
+                font-size: 0.95rem;
+            }
+
+            .slide th, .slide td {
+                padding: 0.6rem 0.75rem;
+            }
+
+            .bottom-bar {
+                padding: 0.75rem 1rem;
+            }
+
+            .module-indicator {
+                padding: 0.35rem 0.5rem;
+            }
+
+            .module-title-label {
+                font-size: 0.8rem;
+            }
+
+            .nav-btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            .modal {
+                padding: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .overview-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 0.75rem;
             }
 
             .keyboard-hints,
@@ -885,6 +947,9 @@
             slideContent.offsetHeight;
             slideContent.style.animation = 'fadeIn 0.4s ease';
 
+            // Scroll back to top for long slides
+            slideContent.parentElement.scrollTop = 0;
+
             slideCounter.textContent = `${currentSlideIndex + 1} / ${slides.length}`;
 
             const progressPercent = ((currentSlideIndex + 1) / slides.length) * 100;
@@ -981,6 +1046,32 @@
                     break;
             }
         }
+
+        // Touch swipe navigation
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            const modalOpen = moduleModal.classList.contains('active') || overviewModal.classList.contains('active');
+            if (modalOpen) return;
+
+            const dx = e.changedTouches[0].screenX - touchStartX;
+            const dy = e.changedTouches[0].screenY - touchStartY;
+            const dt = Date.now() - touchStartTime;
+
+            // Only trigger on horizontal swipes (not vertical scrolling)
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 500) {
+                if (dx < 0) nextSlide();
+                else prevSlide();
+            }
+        }, { passive: true });
 
         init();
     </script>
