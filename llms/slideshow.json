@@ -1,0 +1,23 @@
+{
+  "title": "Business Applications of LLMs",
+  "theme": "e",
+  "modules": [
+    { "title": "Title & Introduction", "file": "00-title.md" },
+    { "title": "LLMs at Etsy", "file": "01-etsy-examples.md" },
+    { "title": "Learning Objectives", "file": "02-objectives.md" },
+    { "title": "What Are LLMs?", "file": "03-what-are-llms.md" },
+    { "title": "Brief History of LLMs", "file": "04-llm-history.md" },
+    { "title": "Why LLMs Matter in Business", "file": "05-why-llms-matter.md" },
+    { "title": "Core Business Use Cases", "file": "06-use-cases.md" },
+    { "title": "Prompt Engineering: Foundations", "file": "07-prompt-engineering-intro.md" },
+    { "title": "Prompt Techniques: Reasoning", "file": "08-prompt-techniques-1.md" },
+    { "title": "Prompt Techniques: Refinement", "file": "09-prompt-techniques-2.md" },
+    { "title": "Prompt Techniques: Advanced", "file": "10-prompt-techniques-3.md" },
+    { "title": "Beyond Prompts", "file": "11-beyond-prompts.md" },
+    { "title": "Local LLMs", "file": "12-local-llms.md" },
+    { "title": "Risks and Concerns", "file": "13-risks-and-concerns.md" },
+    { "title": "Emerging Trends", "file": "14-emerging-trends.md" },
+    { "title": "Group Assignment", "file": "15-group-assignment.md" },
+    { "title": "Thank You", "file": "16-thank-you.md" }
+  ]
+}
