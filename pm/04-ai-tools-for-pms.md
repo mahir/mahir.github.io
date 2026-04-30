@@ -1,463 +1,838 @@
 # AI Tools & Applications for PMs
 
-You understand what AI can do conceptually. Now let's talk about what you can actually use today.
+Tools change. Workflows persist.
+
+This module is about how to use AI across the PM job, not memorizing a directory of products.
+
+---
+
+## The Better Question
+
+Not:
+
+> "What AI tools should I use?"
+
+But:
+
+> "What PM job am I trying to do, and what kind of AI help would make it better?"
 
 ---
 
 ## A Note on This Module
 
-AI tools change fast. Products launch, merge, pivot, and die every month.
+AI tools change fast. Products launch, merge, pivot, and disappear every month.
 
-This module is a **snapshot**, not a permanent reference. The specific tools will evolve. The categories and evaluation criteria will last.
+The examples here are a **Spring 2026 snapshot**.
+
+The categories and judgment calls will last longer than any specific tool.
+
+---
+
+## The PM AI Workflow
+
+For any AI tool, ask:
+
+1. **Input:** What context does it need?
+2. **Output:** What artifact should it produce?
+3. **Review:** How will I know if it's right?
+4. **Decision:** What judgment is still mine?
+5. **Integration:** Where does the output go next?
+
+---
+
+# Before You Paste Anything
+
+AI is useful. It is also very easy to misuse.
+
+Start with data boundaries before you start with prompts.
+
+---
+
+## Data Safety Basics
+
+**Usually okay:**
+- Public market data
+- Sanitized examples
+- Generic workflows
+- Your own rough drafts
+
+**Ask first:**
+- Customer interview transcripts
+- Internal strategy docs
+- Roadmaps
+- Product analytics exports
+
+**Do not paste into public tools:**
+- PII
+- Confidential financials
+- Legal documents
+- Source code you are not allowed to share
+- Unreleased plans
+
+---
+
+## Safer Practices
+
+- Use enterprise versions when working with company data
+- Check whether customer data is used for model training
+- Anonymize names, emails, companies, and account IDs
+- Prefer tools that respect permissions and cite source material
+- When in doubt, use synthetic or redacted examples
+
+> AI speed is not worth a trust or compliance incident.
 
 ---
 
 ## How to Evaluate Any AI Tool
 
-Before we dive into categories, here's what to look for:
+Before adopting anything, ask:
 
-1. **Does it solve a real workflow problem?** Not "is it cool?"
-2. **What's the learning curve vs. the time saved?**
-3. **Where does your data go?** (Privacy matters)
-4. **Can you trust the output without heavy editing?**
-5. **What happens when it's wrong?**
-
-Keep these in mind as we go through each category.
+1. Does it solve a real workflow problem?
+2. Does it produce evidence, or just confident text?
+3. Where does the data go?
+4. Does it fit your existing tools?
+5. What happens when it is wrong?
 
 ---
 
-# Research & User Insights
+# Research & Customer Intelligence
 
-The first place most PMs feel AI's impact: making sense of qualitative data.
+This is often where AI creates immediate PM leverage.
+
+Not because it replaces research, but because it helps you process more signal.
 
 ---
 
-## Interview Transcription & Analysis
+## The Job
 
-**The problem:** You have 10 hours of user interviews. Extracting themes takes days.
+You are trying to turn messy customer input into product decisions.
+
+**Common inputs:**
+- Interview transcripts
+- Sales calls
+- Support tickets
+- App reviews
+- NPS comments
+- In-product survey responses
+- Session replays
+
+---
+
+## Research Workflow
+
+1. Collect raw customer input
+2. Transcribe and clean it
+3. Cluster themes
+4. Attach evidence: quotes, clips, accounts, segments
+5. Translate themes into opportunities
+6. Decide what to do next
+
+AI can help with steps 2-5.
+
+You still own step 6.
+
+---
+
+## Research Repository Tools
+
+**Use when:** You have lots of qualitative data and need organizational memory.
 
 **Tools to know:**
-- [**Dovetail**](https://dovetail.com). Purpose-built for UX research. Tag, cluster, and surface themes across interviews. "Ask Dovetail" lets anyone query the research repository in natural language.
-- [**Looppanel**](https://looppanel.com). Auto-generates structured notes organized by discussion guide questions. Produces AI-powered affinity maps across participants.
-- [**Grain**](https://grain.com). Records, transcribes, and clips key moments. Shareable highlights.
-- [**Otter.ai**](https://otter.ai). Fast transcription with speaker identification. Good free tier.
+- [**Dovetail**](https://dovetail.com): research repository, transcripts, tagging, AI search, source-backed themes
+- [**Looppanel**](https://looppanel.com): interview notes organized by discussion guide, AI-assisted synthesis and affinity mapping
+- [**Grain**](https://grain.com): records calls and creates shareable clips
+
+**Look for:** source traceability. If a tool gives you a theme, you should be able to inspect the quote or clip behind it.
 
 ---
 
-## Survey & Feedback Analysis
+## AI-Moderated Research
 
-**The problem:** Thousands of open-text survey responses. Nobody reads them all.
+**Use when:** You need directional learning at scale and do not have enough researcher bandwidth.
 
 **Tools to know:**
-- [**Notably**](https://notably.ai). AI-powered qualitative analysis. Synthesizes notes, interviews, and survey data.
-- [**Kraftful**](https://www.kraftful.com). Aggregates feedback from 30+ sources (reviews, tickets, surveys). Extracts themes and top feature requests automatically.
-- [**Maze**](https://maze.co). Continuous product discovery with an AI Moderator that conducts user interviews autonomously, generating follow-up questions and bias-free reports.
+- [**Maze AI Moderator**](https://maze.co/features/ai-moderated-interviews/): AI-led interviews and follow-up questions
+- [**Kraftful / Amplitude**](https://www.kraftful.com): feedback analysis and AI-assisted surveys
+- [**Sprig**](https://sprig.com): in-product surveys and AI analysis
+
+**Best for:** early discovery, problem validation, concept feedback.
+
+**Be careful with:** sensitive topics, high-stakes research, and anything where moderation quality really matters.
 
 ---
 
-## User Behavior Analytics
+## Voice of Customer at Scale
 
-**The problem:** You have event data but not enough analysts to dig through it.
+**Use when:** Customer feedback is everywhere and nobody has time to read it all.
 
 **Tools to know:**
-- [**FullStory**](https://www.fullstory.com). Session replay with AI-powered insights. Finds friction automatically.
-- [**Hotjar**](https://www.hotjar.com). Heatmaps and recordings with AI summaries of user behavior patterns.
-- [**Sprig**](https://sprig.com). In-product surveys triggered by specific user actions (e.g., cart abandonment). AI analyzes open-ended responses in real time.
-- [**Amplitude**](https://amplitude.com). Ask questions in plain English, get charts. Natural language analytics.
+- [**Productboard AI**](https://www.productboard.com): links customer feedback to feature ideas, summarizes notes, finds themes
+- [**Amplitude + Kraftful**](https://amplitude.com): combines behavioral analytics with voice-of-customer signals
+- [**Dovetail Channels**](https://dovetail.com): classifies high-volume feedback like support tickets, reviews, and surveys
+
+The goal is not "summarize everything."
+
+The goal is to find the signal that should change the roadmap.
 
 ---
 
-## Competitive Intelligence
+## Behavior Analytics + Session Evidence
 
-**The problem:** Tracking competitors manually is tedious and always out of date.
+**Use when:** You know what users did, but not why.
 
 **Tools to know:**
-- [**Crayon**](https://www.crayon.co). Tracks competitor websites, pricing, messaging changes automatically.
-- [**Klue**](https://klue.com). Competitive intelligence platform. Surfaces battlecards and win/loss insights.
+- [**FullStory**](https://www.fullstory.com): session replay and friction detection
+- [**Hotjar**](https://www.hotjar.com): heatmaps, recordings, and feedback summaries
+- [**PostHog**](https://posthog.com): product analytics, replay, feature flags, experiments
+
+Quant tells you where to look.
+
+Qual tells you what it felt like.
 
 ---
 
-> **Start here if:** You spend more than 2 hours a week on research synthesis. The ROI is immediate.
+## Research Guardrail
+
+AI can summarize users.
+
+It cannot be users.
+
+If a finding matters, trace it back to real evidence:
+
+- Who said it?
+- In what context?
+- How often does it appear?
+- Which segment does it affect?
+- What alternative explanation could be true?
 
 ---
 
-# Writing & Documentation
+# Thinking & Writing Partner
 
-PMs write more than almost anyone in the org. AI makes every piece of writing faster.
+PMs write constantly.
+
+AI helps you get from messy thinking to a useful artifact faster.
 
 ---
 
-## AI Writing Assistants
+## The Writing Workflow
 
-**The problem:** Blank page syndrome. First drafts take forever.
+1. Dump rough context
+2. Ask AI to structure it
+3. Ask for critique
+4. Revise with your judgment
+5. Create audience-specific versions
+6. Share the final artifact
+
+The draft is not the work.
+
+The thinking behind the draft is the work.
+
+---
+
+## General AI Assistants
+
+**Use when:** You need flexible thinking, drafting, summarizing, or critique.
 
 **Tools to know:**
-- [**Claude**](https://claude.ai). Long-context analysis, nuanced writing, strong at structured documents. Handles entire PRDs and strategy docs.
-- [**Notion AI**](https://www.notion.com/product/ai). Writing assistance inside your existing workspace. Summarize, improve, translate.
-- [**Superwhisper**](https://superwhisper.com). AI voice-to-text for any app. Press a shortcut, dictate, get polished text. Great for capturing ideas fast.
+- [**ChatGPT**](https://chatgpt.com): strong general assistant, deep research, data analysis, connectors, agents
+- [**Claude**](https://claude.ai): long-context reading, nuanced writing, artifacts, code prototypes
+- [**Gemini**](https://gemini.google.com): Google ecosystem, Deep Research, Canvas, Workspace integration
+- [**NotebookLM**](https://notebooklm.google.com): source-grounded Q&A over uploaded docs
+
+Pick based on context, not brand loyalty.
 
 ---
 
-## PRD & Spec Generation
+## PM-Specific Writing Tools
 
-General-purpose LLMs work well here, but there are also purpose-built tools.
+**Use when:** You want product-specific structure and coaching.
 
 **Tools to know:**
-- [**ChatPRD**](https://chatprd.ai). AI copilot specifically for PRDs, user stories, and specs. Reviews your drafts like a Chief Product Officer.
+- [**ChatPRD**](https://chatprd.ai): PRDs, user stories, CPO-style critique, team templates, integrations
+- [**Notion AI**](https://www.notion.com/product/ai): writing, search, and research inside your workspace
+- [**Confluence AI**](https://www.atlassian.com/software/confluence): useful if your company already lives in Atlassian
 
-**Or use any LLM with a good workflow:**
-1. Start with your PRD template
-2. Feed it context: problem statement, user research, constraints
-3. Ask the AI to draft each section
-4. Edit ruthlessly. the AI gives you structure; you add judgment
+Specialized tools are best when they connect to your team's actual docs, issues, and templates.
 
 ---
 
-### Example Prompt for PRD Generation
+## Meeting Capture
+
+This category is becoming commodity.
+
+**Tools to know:**
+- [**Granola**](https://www.granola.ai): turns rough meeting notes into polished notes
+- [**Otter.ai**](https://otter.ai): transcription, summaries, action items
+- [**Fireflies.ai**](https://fireflies.ai): meeting transcription with CRM and workflow integrations
+
+The real value is not the transcript.
+
+The value is: decisions, open questions, owners, and follow-ups.
+
+---
+
+## PRD Prompt
 
 ```
-Here's context for a new feature:
-[paste problem, user, constraints]
+Here is context for a feature:
+[paste problem, user, research, constraints]
 
-Draft a PRD with these sections:
+Draft a one-page PRD with:
 - Problem statement
 - Target user
-- Goals & success metrics
-- Core user stories (3-5)
-- Requirements (must-have vs nice-to-have)
-- Open questions
+- Goals and success metrics
+- Core user stories
+- V1 requirements
+- Non-goals
 - Risks
+- Open questions
 
-Be specific. Use metrics where possible.
+Then critique the PRD like a skeptical engineering,
+design, and business reviewer.
 ```
 
 ---
 
-## Meeting Notes & Summaries
+## The Edit Pass
 
-**The problem:** You're in 6 meetings a day. Notes are inconsistent or nonexistent.
+After AI drafts, ask:
+
+- What is vague?
+- What assumption is unsupported?
+- What requirement is too broad?
+- What metric could be gamed?
+- What would engineering push back on?
+- What would a user not understand?
+
+This is where the PM earns the artifact.
+
+---
+
+# Knowledge & Deep Research
+
+PMs spend enormous time looking for context.
+
+AI is turning search into synthesis.
+
+---
+
+## When to Use Deep Research
+
+Use deep research when the question requires:
+
+- Multiple sources
+- Current information
+- Citations
+- Market or competitive synthesis
+- Internal docs plus external web context
+- A report you can share or verify
+
+Do not use it for quick facts or simple brainstorming.
+
+---
+
+## Deep Research Tools
 
 **Tools to know:**
-- [**Otter.ai**](https://otter.ai). Auto-joins meetings, transcribes, generates summaries and action items.
-- [**Fireflies.ai**](https://fireflies.ai). Similar to Otter. Integrates with CRM and project management tools.
-- [**Granola**](https://www.granola.ai). Lightweight Mac app. Enhances your rough notes with meeting context.
+- [**ChatGPT Deep Research**](https://openai.com/index/introducing-deep-research/): multi-source research with citations, uploaded files, connected apps
+- [**ChatGPT Agent**](https://help.openai.com/en/articles/11752874-chatgpt-agent): can browse, use tools, work with files, and take actions with user control
+- [**Gemini Deep Research**](https://support.google.com/gemini/answer/15719111): research reports with Google ecosystem integration
+- [**Perplexity**](https://www.perplexity.ai): fast cited answers and market scans
+
+Best use: first-pass synthesis, not final truth.
 
 ---
 
-## Knowledge Management
+## Internal Knowledge Search
 
-**The problem:** Information is scattered across docs, Slack, email, and people's heads.
+**Use when:** The answer exists somewhere in your company, but nobody knows where.
 
 **Tools to know:**
-- [**Notion AI**](https://www.notion.com/product/ai). Search and Q&A across your workspace. Summarize pages, generate content.
-- [**NotebookLM**](https://notebooklm.google.com). Upload docs, papers, or notes. Ask questions across all of them. Generates audio overviews you can listen to.
-- [**Confluence AI**](https://www.atlassian.com/software/confluence). Similar capabilities within the Atlassian ecosystem.
+- [**Notion Enterprise Search**](https://www.notion.com/product/enterprise-search): searches across Notion and connected apps with citations
+- [**ChatGPT Connectors**](https://help.openai.com/en/articles/11487775-connectors-in-chatgpt): connects to tools like Drive, GitHub, SharePoint, and more
+- [**NotebookLM**](https://notebooklm.google.com): useful for a bounded packet of docs, papers, or notes
+
+The killer feature is permissions-aware search with sources.
 
 ---
 
-> **The real value** isn't generating text from scratch. it's going from rough notes to polished output in minutes instead of hours.
+## Source Discipline
+
+For research outputs, require:
+
+- Dates
+- Links
+- Source names
+- Confidence levels
+- What was not found
+- Contradictions across sources
+
+If the answer matters, click the sources.
 
 ---
 
-# Data Analysis & Metrics
+# Data, Metrics & Analytics
 
-This is where AI tools save PMs from dependency on data teams.
+AI can make PMs more self-sufficient with data.
+
+But it also makes it easier to produce confident nonsense.
 
 ---
 
-## Natural Language to SQL
+## Three Levels of AI Analytics
 
-**The problem:** You know what question to ask, but you can't write the query.
+| Level | Use Case | Examples |
+|---|---|---|
+| Ad hoc data | CSV, spreadsheet, quick chart | ChatGPT, Claude, Excel Copilot, Google Sheets |
+| Product analytics | Funnels, retention, cohorts | Mixpanel, Amplitude, PostHog |
+| Data workspace | SQL, notebooks, deeper analysis | Hex, Mode, Looker, Metabase |
+
+Use the right level for the decision.
+
+---
+
+## Ad Hoc Analysis
+
+**Use when:** You have a CSV and need quick exploration.
 
 **Tools to know:**
-- [**Mode**](https://mode.com). Ask questions in English, get SQL and visualizations.
-- [**Metabase**](https://www.metabase.com). Open-source BI tool with natural language querying. Ask "How many users signed up last week?" and get a chart.
+- [**ChatGPT Data Analysis**](https://openai.com/academy/data-analysis/): upload files, clean data, generate charts, explain findings
+- [**Claude**](https://claude.ai): strong at reasoning through messy analysis and producing narrative summaries
+- [**Excel Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot) / [**Google Sheets Gemini**](https://workspace.google.com/products/sheets): useful where the data already lives
+
+Good for exploration.
+
+Not enough for board-slide numbers without validation.
 
 ---
 
-## Dashboard & Insight Generation
+## Product Analytics
 
-**The problem:** Building dashboards takes analyst time. You need answers now.
+**Use when:** You need behavioral answers, not spreadsheet answers.
 
 **Tools to know:**
-- [**Amplitude**](https://amplitude.com). Natural language queries on your product analytics. Predictive audiences identify churn signals and conversion potential.
-- [**Mixpanel**](https://mixpanel.com). AI-assisted funnel analysis and user segmentation.
-- [**PostHog**](https://posthog.com). Open-source all-in-one: analytics, session replay, feature flags, A/B testing. AI natural-language querying. Generous free tier (1M events/month).
-- [**Looker**](https://cloud.google.com/looker). Google's BI tool with AI features for exploration and anomaly detection.
+- [**Mixpanel Spark / MCP**](https://mixpanel.com): natural-language analysis and AI tool connections to product data
+- [**Amplitude Agents**](https://amplitude.com): AI-assisted product analytics and customer intelligence
+- [**PostHog**](https://posthog.com): analytics, session replay, feature flags, experiments, and AI features in one stack
+
+The hard part is not asking the question.
+
+The hard part is trusting the metric definitions.
 
 ---
 
-## Spreadsheet AI
+## Data Workflow
 
-**The problem:** You live in spreadsheets but complex formulas slow you down.
+1. Start with the decision
+2. Define the metric
+3. Check the event taxonomy
+4. Ask the AI for analysis
+5. Inspect the query or method
+6. Validate surprising findings
+7. Translate the insight into a recommendation
+
+AI can help with the middle.
+
+You own the frame and the recommendation.
+
+---
+
+## Analytics Prompt
+
+```
+I am trying to decide whether to invest in
+improving onboarding.
+
+Analyze activation by acquisition channel,
+new vs returning users, and signup cohort.
+
+Before answering, list the metric definitions
+you need and any ambiguity in the data.
+```
+
+---
+
+## Analytics Failure Modes
+
+- Wrong event definition
+- Wrong grain of analysis
+- Correlation treated as causation
+- Small sample size ignored
+- Seasonality ignored
+- Internal/test users included
+- Averages hiding segment differences
+
+AI can accelerate analysis.
+
+It does not eliminate statistical judgment.
+
+---
+
+# Design & Prototype Ladder
+
+AI is collapsing the time between idea and artifact.
+
+That does not mean every artifact is equally useful.
+
+---
+
+## The Prototype Ladder
+
+| Question | Artifact | Examples |
+|---|---|---|
+| Can we explain the flow? | Wireframe or journey | Figma, Miro, Whimsical |
+| Does it look real? | High-fidelity UI | Figma Make, Stitch, v0 |
+| Can users click it? | Interactive prototype | Figma Make, Stitch, Uizard |
+| Can it actually work? | Functional app | Lovable, Bolt, Replit |
+| Can it fit our codebase? | Code change | Codex, Claude Code, Cursor |
+
+Choose the lowest rung that answers the question.
+
+---
+
+## AI Design Tools
+
+**Use when:** You need to explore directions quickly or communicate a concept visually.
 
 **Tools to know:**
-- [**Google Sheets**](https://workspace.google.com/products/sheets). Generate formulas, create charts, summarize data with Gemini.
-- [**Excel Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot). Same concept in the Microsoft ecosystem.
+- [**Figma Make**](https://www.figma.com/make/): prompt-to-app and interactive prototypes inside Figma
+- [**Google Stitch**](https://stitch.withgoogle.com): AI design canvas for high-fidelity UI, prototypes, and exports
+- [**Uizard**](https://uizard.io): text, screenshots, or sketches to editable prototypes
+- [**Whimsical**](https://whimsical.com): quick flows, diagrams, and wireframes
+
+Great for exploration.
+
+Not a substitute for product design craft.
 
 ---
 
-## Experimentation & A/B Testing
+## UI and Frontend Generation
 
-**The problem:** You want to test hypotheses rigorously but setting up experiments is complex.
+**Use when:** You want something polished enough to react to.
 
 **Tools to know:**
-- [**Statsig**](https://statsig.com). Born from Facebook's internal experimentation infrastructure. AI copilot helps design experiments and surfaces tradeoffs. Free tier includes unlimited feature flags and 2M events/month.
-- [**PostHog**](https://posthog.com). Also covers experimentation alongside its analytics suite. Open-source with generous free tier.
+- [**v0**](https://v0.dev): AI-generated apps, landing pages, dashboards, components, Vercel deployment
+- [**Figma Make**](https://www.figma.com/make/): strong when your team already works in Figma
+- [**Builder.io**](https://www.builder.io): useful for design-to-code and visual CMS workflows
+
+Best use: fast visual iteration before you spend engineering or design time.
 
 ---
 
-## Ad-Hoc Analysis
+## Working App Prototypes
 
-**The problem:** You have a CSV and a question. You don't want to wait for an analyst.
+**Use when:** You need users or stakeholders to experience the idea, not just see it.
 
 **Tools to know:**
-- [**Claude**](https://claude.ai). Upload a CSV, ask questions. Handles complex analysis with reasoning.
-- [**ChatGPT**](https://chatgpt.com). Code Interpreter runs Python on your data. Generates charts and statistical analysis.
+- [**Lovable**](https://lovable.dev): PM-friendly app builder from prompts, screenshots, and docs
+- [**Bolt**](https://bolt.new): browser-based full-stack builder with fast deployment
+- [**Replit Agent**](https://replit.com): app builder with hosting, databases, auth, and agentic development
+
+Working prototypes are powerful because they reveal product questions you did not know to ask.
 
 ---
 
-### Ad-Hoc Analysis Workflow
+## Prototype Rules for PMs
 
-1. Export your data as CSV
-2. Upload to Claude or ChatGPT
-3. Ask: "What are the key trends? Any anomalies?"
-4. Follow up with specific questions
-5. Validate surprising findings with your data team
+- Know what you are testing
+- Label what is real vs fake
+- Do not confuse polish with validation
+- Do not promise prototype code as production code
+- Bring engineering in before the prototype becomes the plan
 
----
-
-> **Caution:** AI analysis is a starting point, not a final answer. Always sanity-check numbers before putting them in a deck.
+> A prototype is a learning artifact, not a contract.
 
 ---
 
-# Design & Prototyping
+## Existing Codebase Tools
 
-AI is collapsing the time between idea and visual artifact.
-
----
-
-## AI-Assisted Design
-
-**The problem:** You need to communicate a design idea but don't have designer bandwidth.
+**Use when:** You need to understand or modify real code.
 
 **Tools to know:**
-- [**Figma**](https://www.figma.com). Generate layouts, auto-populate designs, rename layers intelligently.
-- [**Google Stitch**](https://stitch.withgoogle.com). Formerly Galileo AI (acquired by Google). Generates polished mockups from text, exports production-ready HTML/CSS and Figma files. Best free option (~350 generations/month).
-- [**Uizard**](https://uizard.io). Generates multi-screen clickable prototypes from conversational prompts. Also converts screenshots and hand-drawn sketches into editable designs.
+- [**Codex**](https://openai.com/codex): coding agent across app, IDE, terminal, and cloud tasks
+- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code): terminal coding agent for reading, editing, testing
+- [**Cursor**](https://www.cursor.com) / [**Windsurf**](https://windsurf.com): AI-native editors
+- [**GitHub Copilot**](https://github.com/features/copilot): pair programming and code review inside GitHub/VS Code
+- [**Jules**](https://jules.google.com): asynchronous coding agent for GitHub tasks
+
+PMs do not need to become engineers.
+
+But they do need to understand what is now feasible in hours.
 
 ---
 
-## UI Generation from Text
+## When PMs Should Code
 
-**The problem:** You want a visual mockup in minutes, not days.
+**Good reasons:**
+- Internal tools
+- Prototype a workflow
+- Test feasibility
+- Automate your own repetitive work
+- Create a demo to improve discussion
+
+**Bad reasons:**
+- Avoiding engineering collaboration
+- Sneaking work into production
+- Treating generated code as automatically safe
+- Building without understanding the user problem
+
+---
+
+# Building AI Products
+
+Using AI tools is one skill.
+
+Shipping AI inside your product is another.
+
+PMs need to understand both.
+
+---
+
+## What Changes in AI Products
+
+Traditional software usually fails visibly.
+
+AI products often fail softly:
+
+- Confident wrong answer
+- Incomplete answer
+- Unsafe answer
+- Weird edge case
+- Slow response
+- Expensive response
+- Output that is technically correct but unhelpful
+
+That changes how you define quality.
+
+---
+
+## AI Product Metrics
+
+For AI features, track:
+
+- Task success rate
+- Grounding / citation quality
+- Hallucination or factual error rate
+- Escalation or handoff rate
+- User correction rate
+- Latency
+- Cost per successful task
+- Retention after first successful use
+- User trust and satisfaction
+
+You need product metrics and model-quality metrics.
+
+---
+
+## Evaluation Workflow
+
+1. Define what "good" means
+2. Create a set of real or realistic test cases
+3. Compare prompts, models, and workflows
+4. Review failures with humans
+5. Instrument production traces
+6. Turn real failures into future test cases
+7. Monitor cost, latency, and quality over time
+
+This is the AI version of product quality.
+
+---
+
+## Eval and Observability Tools
+
+**Use when:** Your product depends on LLM or agent behavior.
 
 **Tools to know:**
-- [**v0.dev**](https://v0.dev). Vercel's AI UI generator. Describe what you want, get a working React component. Iterate with natural language.
-- [**Builder.io**](https://www.builder.io). Converts Figma designs into production code. Also generates UIs from prompts and serves as a visual CMS.
+- [**Braintrust**](https://www.braintrust.dev): evals, prompt/model comparison, production traces, human review
+- [**Langfuse**](https://langfuse.com): open-source LLM observability, prompt management, evals, tracing
+- [**LangSmith**](https://www.langchain.com/langsmith): agent observability, evals, monitoring, trace analysis
+- [**Arize Phoenix**](https://phoenix.arize.com): open-source LLM tracing, evaluation, clustering, observability
 
-Great for quickly testing visual ideas before involving designers.
+If you cannot evaluate it, you cannot safely scale it.
 
 ---
 
-## Full App Prototyping
+## PM Role in AI Evaluation
 
-**The problem:** You want a clickable, functional prototype. not a static mockup.
+PMs should help define:
+
+- Which user tasks matter
+- What counts as a successful answer
+- Which failures are unacceptable
+- Where human review is required
+- What trade-off is acceptable between quality, speed, and cost
+- What to show the user when AI is uncertain
+
+This is product judgment, not just ML engineering.
+
+---
+
+# Communication & Stakeholder Output
+
+AI can speed up communication.
+
+It cannot decide what story needs to be told.
+
+---
+
+## Presentations
+
+**Use when:** You need a polished first draft or a quick visual narrative.
 
 **Tools to know:**
-- [**Bolt**](https://bolt.new). Generate full-stack web apps from prompts. Deploy instantly.
-- [**Lovable**](https://lovable.dev). Similar to Bolt. AI-generated apps with real functionality.
-- [**Replit**](https://replit.com). AI-assisted coding environment. Build and deploy from your browser.
+- [**Gamma**](https://gamma.app): AI-generated presentations and web-style docs
+- [**Beautiful.ai**](https://www.beautiful.ai): smart templates and auto-formatting
+- [**Canva**](https://www.canva.com): broad design suite with AI presentation features
+- [**PowerPoint Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot): useful inside Microsoft-heavy organizations
+
+Use these for structure and polish.
+
+Do not outsource the argument.
 
 ---
 
-## Wireframing
-
-**The problem:** You need to sketch a flow quickly for a meeting in 20 minutes.
-
-**Tools to know:**
-- [**tldraw**](https://www.tldraw.com). Infinite canvas with AI features. Sketch rough UIs and let AI refine them.
-- [**Whimsical**](https://whimsical.com). Flowcharts and wireframes with AI generation from text descriptions.
-- [**Visily**](https://visily.ai). Built for non-designers. Converts text, screenshots, sketches, and flowcharts into high-fidelity designs. Free forever starter tier.
-
----
-
-> **When to use these:** Early-stage exploration and stakeholder alignment. Not as a replacement for real design work.
-
----
-
-# Coding & Technical Prototyping
-
-The line between "PM who can prototype" and "PM who can build" is blurring.
-
----
-
-## AI Code Editors
-
-**The problem:** You want to build something yourself, but coding is slow.
-
-**Tools to know:**
-- [**Cursor**](https://www.cursor.com). VS Code fork with deep AI integration. Tab-complete entire functions. Chat with your codebase.
-- [**Windsurf**](https://windsurf.com). AI-native editor. Multi-file editing with context awareness.
-- [**GitHub Copilot**](https://github.com/features/copilot). AI pair programmer inside VS Code. Autocompletes code as you type.
-
----
-
-## AI Coding Assistants
-
-**The problem:** You're stuck on a bug or need to understand unfamiliar code.
-
-**Tools to know:**
-- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code). Command-line AI that reads your codebase, writes code, runs tests. Handles complex multi-file changes.
-- [**Amp**](https://ampcode.com). AI coding agent that works across terminal and editor. Multiple agent modes for different tasks.
-- [**Copilot Chat**](https://github.com/features/copilot). Conversational coding help inside your editor.
-
----
-
-## No-Code / Low-Code with AI
-
-**The problem:** You want a working app but don't want to write code at all.
-
-**Tools to know:**
-- [**Replit**](https://replit.com). Describe what you want in English, get a deployed app.
-- [**Bolt**](https://bolt.new). Prompt-to-app generation. Full-stack, deployable.
-- [**Lovable**](https://lovable.dev). Same category. Generates polished web apps from descriptions.
-
----
-
-## When PMs Should (and Shouldn't) Code
-
-**Do code when:**
-- Building internal tools or prototypes
-- Testing feasibility before involving engineering
-- Automating your own repetitive workflows
-- Creating demos for stakeholder buy-in
-
-**Don't code when:**
-- It's going into production (leave that to engineers)
-- You're avoiding a conversation with your eng team
-- The prototype becomes the product (it shouldn't)
-
----
-
-> **The goal isn't to become an engineer.** It's to close the gap between idea and artifact, so you can learn faster.
-
----
-
-# Communication & Stakeholder Management
-
-AI can help you communicate more effectively across the org.
-
----
-
-## Presentation Generation
-
-**The problem:** Making slides takes hours. The content matters; the formatting shouldn't.
-
-**Tools to know:**
-- [**Gamma**](https://gamma.app). Generate presentations from text. Paste your doc, get a polished deck.
-- [**Beautiful.ai**](https://www.beautiful.ai). Smart templates that auto-format as you add content.
-- [**Tome**](https://tome.app). AI-generated presentations with narrative structure.
-
----
-
-## Executive Summaries & Status Updates
-
-**The problem:** Translating detailed work into concise updates for different audiences.
+## Status Updates
 
 **Workflow:**
-1. Write your detailed notes or paste your doc
-2. Ask AI: "Summarize this for an exec audience in 3 bullets. Focus on business impact and decisions needed."
-3. Ask AI: "Now write a version for the engineering team. Focus on technical implications and timeline."
 
-Same information, tailored delivery. Takes 2 minutes.
+1. Paste detailed notes
+2. Ask for a 3-bullet exec version
+3. Ask for an engineering version
+4. Ask for risks, decisions, and asks
+5. Edit to match reality
+
+Same facts, different audience.
+
+That is PM communication.
 
 ---
 
-> **Remember:** AI-generated presentations still need your story. The tool handles layout; you handle narrative.
+## Executive Summary Prompt
+
+```
+Summarize this update for executives.
+
+Format:
+- What changed
+- Why it matters
+- Decision or help needed
+- Risks
+- Next milestone
+
+Use direct language. Do not hide bad news.
+```
 
 ---
 
 # Strategy & Planning
 
-AI can accelerate strategic thinking. not replace it.
+AI can accelerate strategic thinking.
+
+It should not replace strategic thinking.
 
 ---
 
-## Roadmap Tools with AI
+## Roadmap and Discovery Systems
 
-**The problem:** Roadmap planning involves synthesizing feedback, business goals, and technical constraints. It's slow.
+**Use when:** You need to connect feedback, ideas, priorities, and execution.
 
 **Tools to know:**
-- [**Productboard**](https://www.productboard.com). AI-assisted feature prioritization. Clusters customer feedback into themes. Links features to demand weighted by customer revenue.
-- [**ProdPad**](https://prodpad.com). AI CoPilot included free on all paid plans. Uses RAG grounded in your product's actual data and history to generate OKRs, roadmap initiatives, and idea descriptions.
-- [**Aha!**](https://www.aha.io). Generates roadmap suggestions based on your strategy and feedback data.
+- [**Productboard AI**](https://www.productboard.com): insights, themes, specs, roadmap inputs
+- [**Jira Product Discovery / Rovo**](https://www.atlassian.com/software/jira/product-discovery): idea capture, prioritization, Atlassian AI
+- [**Aha!**](https://www.aha.io): roadmaps, strategy, feedback, AI features
+- [**ProdPad**](https://prodpad.com): roadmap planning and AI-assisted product work
+- [**Linear + Productlane**](https://linear.app/integrations/productlane): customer requests, roadmap, and changelog tied to Linear
+
+Best when the AI is grounded in your real product system.
 
 ---
 
 ## Prioritization Assistance
 
-You don't need a specialized tool. Use an LLM.
+You do not need a specialized tool for this.
 
-**Workflow:**
-1. List your candidate features with context
-2. Ask AI to apply RICE or ICE scoring
-3. Challenge the scores. where does the AI's logic break?
-4. Adjust based on your judgment
-5. Use the output as a starting point for team discussion
+Use an LLM to structure the conversation:
 
----
+1. List candidate opportunities
+2. Add reach, impact, confidence, effort
+3. Ask AI to apply RICE or ICE
+4. Ask which inputs are weakest
+5. Challenge the results with your team
 
-### Example Prompt for Prioritization
+Frameworks clarify trade-offs.
 
-```
-Here are 8 features we're considering for Q2.
-For each, I've included reach, impact estimate,
-confidence, and effort.
-
-Apply RICE scoring. Then tell me which scores
-you're least confident about and why.
-
-[paste feature list with context]
-```
+They do not make the decision.
 
 ---
 
-## Competitive Analysis & Market Research
+## Prioritization Prompt
 
-**The problem:** You need to understand a market quickly.
+```
+Here are 8 features we are considering for Q2.
+For each, I included reach, impact, confidence,
+effort, strategic fit, and risks.
+
+Apply RICE scoring.
+
+Then:
+1. Identify the least reliable scores
+2. Name the assumptions driving the ranking
+3. Suggest what evidence would change the decision
+```
+
+---
+
+## Competitive Analysis
 
 **Tools to know:**
-- [**Perplexity**](https://www.perplexity.ai). AI search with citations. Great for fast, sourced market research.
-- [**Claude**](https://claude.ai). Deep analysis of competitive landscapes with reasoning and web search.
-- [**ChatGPT**](https://chatgpt.com). Similar capabilities for real-time market data with browsing.
+- [**Perplexity**](https://www.perplexity.ai): fast cited research and market scans
+- [**ChatGPT Deep Research**](https://openai.com/index/introducing-deep-research/): more structured multi-source reports
+- [**Claude**](https://claude.ai): strong synthesis and strategy memo drafting
+- [**Crayon**](https://www.crayon.co) / [**Klue**](https://klue.com): competitive intelligence platforms
+
+AI is good at synthesizing what is known.
+
+It is weak at predicting what will happen next.
 
 ---
 
-> **AI is excellent at synthesizing** what's already known about a market. It's poor at predicting what will happen next. That's still your job.
+# What I Would Try First
+
+Pick one workflow this week.
+
+Do not adopt ten tools.
 
 ---
 
-## Security & Privacy
+## Starter Workflows
 
-**Never put into public AI tools:** Customer PII, confidential financials, unreleased product plans, proprietary source code, legal documents, or employee data.
+**Research-heavy PM:**
+Dovetail or Maze + ChatGPT/Claude + Notion
 
-**Safer practices:** Anonymize data before uploading, check your company's AI policy, use enterprise tiers that don't train on your data.
+**B2B roadmap PM:**
+Productboard or Jira Product Discovery + ChatPRD + Mixpanel/Amplitude
 
-> **When in doubt, don't paste it.**
+**Prototype-heavy PM:**
+Figma Make or Stitch + v0/Lovable/Bolt + user feedback
+
+**AI product PM:**
+Braintrust or Langfuse + product analytics + human review loop
 
 ---
 
-## Evaluating New AI Tools
+## Adoption Rule
 
-**Before adopting anything, ask:**
+For any new AI tool, run a one-week experiment:
 
-1. Can you name the specific workflow it improves?
-2. Does the demo show your actual use case, or a cherry-picked example?
-3. Where does your data go? Is it used for training?
-4. Does it fit your existing tools, or is it another silo?
+- What workflow did it improve?
+- How much time did it save?
+- What got better?
+- What got worse?
+- What risk did it introduce?
+- Would you keep using it?
 
-**Red flags:** "AI-powered" slapped on a basic feature, demo only works with pre-loaded data, no clear explanation of what the AI does, claims of replacing entire job functions.
+If you cannot answer these, you are collecting tools, not improving work.
 
 ---
 
@@ -467,9 +842,11 @@ you're least confident about and why.
 
 ## The Tools Will Change
 
-Six months from now, some tools on this list will have pivoted or been acquired. New ones will exist that we can't imagine today.
+Six months from now, some tools on this list will have changed dramatically.
 
-That's fine.
+New ones will exist that we cannot imagine today.
+
+That is fine.
 
 ---
 
@@ -477,13 +854,15 @@ That's fine.
 
 What lasts is your ability to:
 
-- Identify where AI genuinely helps vs. where it's theater
-- Evaluate new tools quickly and discard what doesn't work
-- Protect sensitive data while staying productive
-- Know when to trust AI output and when to verify
+- Identify where AI genuinely helps
+- Protect sensitive data
+- Ask better questions
+- Validate outputs
+- Connect artifacts to decisions
+- Know when human judgment matters most
 
 ---
 
-> The PMs who get the most from AI aren't the ones using the most tools.
+> The PMs who get the most from AI are not the ones using the most tools.
 >
-> They're the ones who've mastered the right tools for their specific workflow.
+> They are the ones who use the right tools for the right workflow, and keep their judgment in the loop.
