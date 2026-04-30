@@ -95,7 +95,7 @@ Use whatever gets you to a working prototype fastest:
 - **Bolt / Lovable**: describe your app, get a deployed prototype
 - **v0.dev**: generate UI components from text
 - **Replit**: AI-assisted coding in your browser
-- **Claude / ChatGPT**: generate code to run locally
+- **Claude / Cursor / Codex**: generate code to run locally
 
 You can build a landing page, a functional single-screen app, or a clickable multi-screen prototype. Your choice. The goal is something you can show to another person.
 
@@ -143,7 +143,3 @@ https://mahiryavuz.com/pm**
 **Please sumbit your work to 
 my2952@columbia.edu** 
 
----
-
-![Submit your Feedback!](images/qr.png)
-**Please sumbit your feedback!** 

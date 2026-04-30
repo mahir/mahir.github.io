@@ -1,14 +1,12 @@
 # AI's Impact on Product Management
 
-AI isn't just another technology trend. It's reshaping how products are built, what users expect, and what PMs need to know.
+AI isn't just another technology trend.
+
+It's reshaping how products are built, what users expect, and what PMs need to know.
 
 ---
 
 ## The AI Shift for PMs
-
-Before we dive in, let's be real about what's happening.
-
----
 
 **The hype:** AI will replace PMs. AI will do everything. Every product needs AI.
 
@@ -22,43 +20,33 @@ It won't replace good product thinking, but it will reward PMs who learn to use 
 
 A few things have converged:
 
-1. **AI capabilities have crossed usability thresholds.** LLMs can now do useful things reliably enough to ship to users.
-
+1. **AI capabilities crossed usability thresholds.** LLMs are useful enough to ship to users.
 2. **AI is accessible.** You don't need a PhD or an ML team. APIs exist.
-
----
-
-3. **User expectations are shifting.** After ChatGPT, users expect products to understand them, adapt to them, and help them intelligently.
-
+3. **User expectations shifted.** After ChatGPT, users expect products to understand, adapt, and help intelligently.
 4. **Competitive pressure is real.** If you're not thinking about AI in your product, your competitors are.
 
 ---
 
 ## AI as a PM Tool
 
-AI can make you more effective across your core workflow. We'll cover specific tools in the next module. Here's the high-level picture.
+AI can make you more effective across your core workflow.
+
+**Where it helps most today:**
+- **Research & synthesis:** Find patterns in transcripts and feedback
+- **Writing:** Draft PRDs, specs, updates, and audience-specific comms
+- **Data analysis:** Ask better questions, explore anomalies, summarize findings
+- **Prototyping:** Turn descriptions into mockups, code, and working demos
 
 ---
 
-### Where AI Helps Most Today
+## Where AI Falls Short
 
-- **Research & synthesis**: Upload transcripts, find patterns in minutes instead of days
-- **Writing**: First drafts of PRDs, specs, and comms. Rewriting for different audiences
-- **Data analysis**: Natural language queries, anomaly detection, instant summaries
-- **Prototyping**: Working mockups and code prototypes from descriptions
+- **Strategic judgment:** AI can help you think, but can't tell you what's important
+- **Organizational context:** It doesn't know your company's politics or culture
+- **User intuition:** It hasn't met your users
+- **Accountability:** AI doesn't own outcomes; you do
 
----
-
-### Where AI Falls Short
-
-- **Strategic judgment**: AI can help you think, but can't tell you what's important
-- **Organizational context**: It doesn't know your company's politics or culture
-- **User intuition**: It hasn't met your users
-- **Accountability**: AI doesn't own outcomes; you do
-
----
-
-> Use AI to go faster on the work that's formulaic. Invest the time saved into the work that requires human insight.
+> Use AI to go faster on formulaic work. Invest the time saved into the work that requires human insight.
 
 ---
 
@@ -66,76 +54,65 @@ AI can make you more effective across your core workflow. We'll cover specific t
 
 Beyond individual features, how should you think about AI strategically?
 
+The PM question is not:
+
+> "Can we add AI?"
+
+The PM question is:
+
+> "What user problem becomes meaningfully better because of AI?"
+
 ---
 
 ## Build vs Buy vs Partner
 
-For AI capabilities, you have three paths.
+For AI capabilities, you usually have three paths.
 
----
+| Path | Good When | Watch Out For |
+|---|---|---|
+| **Build** | AI is core to differentiation and you have unique data | Cost, talent, infrastructure, long timelines |
+| **Buy** | AI is a feature, not the whole product | Vendor lock-in, variable costs, less differentiation |
+| **Partner** | Strategic alignment exists and scale matters | Negotiation, dependency, roadmap mismatch |
 
-### Build (Train Your Own Models)
-
-- Full control and differentiation
-- Requires ML expertise, data, infrastructure
-- High cost, long timelines
-
-**Makes sense when:** AI is core to your differentiation, you have unique data
-
----
-
-### Buy (Use AI APIs)
-
-- Fast to implement, no ML expertise needed
-- Vendor lock-in, less differentiation
-- Variable costs, dependency on vendor roadmap
-
-**Makes sense when:** AI is a feature, not the product
-
----
-
-### Partner
-
-- Middle ground on control and investment
-- Requires negotiation and relationship management
-
-**Makes sense when:** Strategic alignment exists, scale matters
-
----
-
-> Most products should start with buy (APIs), then consider build if AI becomes core to differentiation.
+Most products should start with buy, then consider build if AI becomes core to differentiation.
 
 ---
 
 ## Evaluating AI Opportunities
 
-Not everything needs AI. Here's how to evaluate.
+Good candidates for AI:
 
----
-
-### Good Candidates for AI
-
-- Tasks that are tedious and repetitive
+- Tedious, repetitive tasks
 - Decisions requiring lots of information synthesis
 - Personalization at scale
-- Content creation where "good enough" is valuable
-- Anything requiring expensive human expertise
+- Content creation where "good enough" has value
+- Workflows where human expertise is scarce or expensive
+
+The pattern: AI should make a real job faster, better, cheaper, or newly possible.
 
 ---
 
-### Bad Candidates for AI
+## Bad Candidates for AI
 
-- Tasks where errors are unacceptable
-- Simple interactions that work fine with traditional UX
-- Where users want control, not automation
-- Cases where you can't explain or audit AI decisions
-- Features where AI novelty is the only value
+Be skeptical when:
+
+- Errors are unacceptable
+- Traditional UX already works well
+- Users want control, not automation
+- You can't explain or audit AI decisions
+- AI novelty is the only value
+
+Not everything needs AI.
+
+Sometimes a button is better than a chatbot.
 
 ---
 
-### Evaluation Questions
+## Evaluation Questions
 
-1. What problem does AI solve that couldn't be solved otherwise?
+Before adding AI, ask:
+
+1. What problem does AI solve that couldn't be solved well otherwise?
 2. What's the cost of AI being wrong?
 3. Do users want this, or are we just excited about AI?
 4. Can we get the data needed for good performance?
@@ -145,153 +122,154 @@ Not everything needs AI. Here's how to evaluate.
 
 ## Competitive Moats in the AI Era
 
-If everyone has access to the same foundation models, what's defensible?
+If everyone has access to similar foundation models, what's defensible?
+
+Your moat is usually not "we use AI."
+
+Your moat comes from everything around the AI:
+
+- Data
+- Workflow integration
+- Speed and execution
+- Specialized expertise
+- Brand and trust
 
 ---
 
-### Data Moats
+## Data & Workflow Moats
 
-- Unique data improves your AI performance
+**Data moats:**
+- Unique data improves AI performance
 - User-generated data creates flywheel effects
 - Proprietary data sources are hard to replicate
 
----
-
-### Workflow Integration
-
+**Workflow moats:**
 - Deep integration into user workflows is sticky
-- It's not just the AI. It's the context around it
+- Context around the AI matters as much as the AI itself
 - Switching costs compound over time
 
 ---
 
-### Speed and Execution
+## Execution & Trust Moats
 
-- Being first matters less than being best
+**Speed and execution:**
+- Being first matters less than learning fastest
 - Fast iteration with user feedback builds advantage
 - Ship, learn, improve faster than competitors
 
----
-
-### Specialized AI
-
-- Fine-tuned models for your domain
-- Prompt engineering and tooling expertise
-- Human-in-the-loop workflows optimized over time
-
----
-
-### Brand and Trust
-
+**Brand and trust:**
 - Trust is hard to build, easy to lose
 - Responsible AI practices become differentiators
 - Users remember bad AI experiences
 
----
-
-> Moats are harder in the AI era. The technology commoditizes quickly.
->
-> Your defensibility comes from everything *around* the AI: data, integration, trust, execution.
+Moats are harder in the AI era. The technology commoditizes quickly.
 
 ---
 
 ## Skills PMs Need to Develop
 
-What should you learn to PM effectively in the AI era?
+You don't need to become an ML engineer.
+
+But you do need enough fluency to:
+
+- Use AI well in your own workflow
+- Identify good AI product opportunities
+- Collaborate with technical teams
+- Define quality for probabilistic systems
+- Understand risk, cost, and trust trade-offs
 
 ---
 
-## Prompt Engineering Basics
+## Prompting Basics
 
-You don't need to be an expert, but you should understand the fundamentals.
+You don't need to be a prompt engineer.
 
----
+You do need to give AI the same things you would give a smart teammate:
 
-### Context Setting
-
-LLMs perform better with context. Tell it who it is, what it knows, what you want.
-
-```
-You are a product manager reviewing a PRD.
-You have 10 years of experience and are known
-for finding edge cases. Review this PRD and
-identify potential issues.
-```
+- **Context:** role, audience, product, constraints
+- **Specificity:** format, length, tone, success criteria
+- **Examples:** show what good output looks like
+- **Feedback:** critique, revise, and iterate
 
 ---
 
-### Specificity
-
-Vague prompts get vague outputs. Be specific about format, length, style, and content.
+## Example Prompt
 
 ```
-Write a 3-bullet executive summary of this
-document. Each bullet should be one sentence.
-Focus on business impact.
-```
+You are a senior PM reviewing a PRD.
 
----
+Review this draft for:
+- unclear requirements
+- missing edge cases
+- weak success metrics
+- likely engineering or design pushback
+- assumptions that need evidence
 
-### Examples (Few-Shot Prompting)
-
-Show the LLM what you want by giving examples.
-
-```
-Convert these user requests into user stories:
-
-Request: "I want to see my order history"
-User story: "As a customer, I want to view my
-past orders so that I can track my purchases."
-
-Request: "Let me pay with Apple Pay"
-User story: [LLM completes]
+Return the top 5 issues, ordered by risk.
 ```
 
 ---
 
-### Chain of Thought
+## Structured Reasoning
 
-For complex reasoning, ask the LLM to think step by step.
+For complex work, ask the model to structure its reasoning.
 
 ```
-Analyze this competitive landscape. First,
-list the main competitors. Then, for each,
-identify strengths and weaknesses. Finally,
-summarize the opportunities for our product.
+Analyze this competitive landscape.
+
+First, list the main competitors.
+Then compare strengths and weaknesses.
+Then identify underserved user needs.
+Finally, summarize the best opportunities
+for our product.
 ```
 
----
+The goal is not magic words.
 
-## Understanding ML Fundamentals
-
-You don't need to build models, but you should collaborate effectively.
+The goal is better thinking structure.
 
 ---
 
-### Model Types
+## ML Fundamentals for PMs
 
-- **Classification:** Categorizes inputs (spam/not spam)
-- **Regression:** Predicts values (house price)
-- **Generative:** Creates new content (text, images)
-- **Recommendation:** Suggests relevant items
+You don't need to build models, but you should know the basic types.
+
+| Type | What It Does | Example |
+|---|---|---|
+| **Classification** | Categorizes inputs | spam / not spam |
+| **Regression** | Predicts values | house price |
+| **Generative** | Creates new content | text, images, code |
+| **Recommendation** | Suggests relevant items | products, videos, jobs |
 
 ---
 
-### Trade-offs to Understand
+## Trade-offs to Understand
+
+AI product work is full of trade-offs:
 
 - Accuracy vs speed
 - Model size vs cost
 - Customization vs maintenance burden
+- Automation vs user control
 - Accuracy vs explainability
+
+This lets you ask intelligent questions, set reasonable expectations, and avoid impossible requests like "100% accuracy."
 
 ---
 
-### What This Means for PMs
+## AI Product Quality
 
-- You can ask intelligent questions about model performance
-- You can set reasonable expectations
-- You can define success metrics that make sense
-- You can avoid impossible requests ("100% accuracy")
+Traditional products usually fail visibly.
+
+AI products often fail softly:
+
+- Confident wrong answer
+- Incomplete answer
+- Unsafe answer
+- Slow or expensive answer
+- Technically correct but unhelpful output
+
+PMs need to define what "good" means, how failures are detected, and when humans stay in the loop.
 
 ---
 
@@ -299,28 +277,37 @@ You don't need to build models, but you should collaborate effectively.
 
 The role won't disappear, but it will compress and transform.
 
-AI is collapsing the "technical feasibility" leg of the PM triangle. When you can prototype a working feature in an afternoon instead of writing a spec and waiting two sprints, everything shifts.
+AI is collapsing the "technical feasibility" leg of the PM triangle.
+
+When you can prototype a working feature in an afternoon instead of writing a spec and waiting two sprints, everything shifts.
 
 ---
 
 ## How Roles Transform
 
-**PMs** evolve from spec-writers into product strategists with execution capability. The ones who survive are strong on customer insight and strategic thinking, not glorified project managers. Fewer PMs, each more impactful.
+**PMs** evolve from spec-writers into product strategists with execution capability.
 
-**Engineers** shift from feature-building to systems thinking. Architecture, reliability, performance, security. Senior engineers increasingly look like technical product people.
+**Engineers** shift from feature-building toward systems thinking: architecture, reliability, performance, security.
 
-**Designers** move toward user research and systems design. Visual production gets largely automated.
+**Designers** move toward user research, systems design, and judgment about what the experience should be.
+
+The strongest people in each function become more strategic, not less.
 
 ---
 
 ## The Product Trio Compresses
 
-The traditional PM/Eng/Design trio is becoming a duo or even a solo. Technical founders already use AI to ship entire products alone.
+The traditional PM/Eng/Design trio is becoming more fluid.
 
-In larger orgs, expect:
-- Fewer, more senior PMs with broader scope
-- "Product Engineers" blending engineering and product thinking (Linear, Vercel, etc.)
-- New roles around AI orchestration: composing agents, evaluating outputs, building reliable workflows
+In some contexts, one person can now create artifacts that used to require the whole trio:
+
+- Specs
+- Wireframes
+- Prototypes
+- Working demos
+- Analysis
+
+But in larger orgs, alignment and quality still require collaboration.
 
 ---
 
@@ -330,16 +317,23 @@ In larger orgs, expect:
 - Cross-functional alignment and stakeholder management
 - Understanding market dynamics
 - Taste-driven decisions about what the product should *be*
+- Knowing when AI output is good enough
 
-These are irreducibly human. The PM who's great at these was always the valuable one.
+These are irreducibly human.
+
+The PM who's great at these was always the valuable one.
 
 ---
 
 ## Wrapping Up
 
-AI is the biggest shift in product building since the smartphone. It changes what's possible, what users expect, and what skills PMs need.
+AI changes what's possible, what users expect, and what skills PMs need.
 
-But the fundamentals endure. Great products still solve real problems for real people. Great PMs still drive outcomes through influence, not authority.
+But the fundamentals endure.
+
+Great products still solve real problems for real people.
+
+Great PMs still drive outcomes through judgment, influence, and accountability.
 
 ---
 

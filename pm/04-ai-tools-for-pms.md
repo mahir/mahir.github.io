@@ -2,9 +2,9 @@
 
 Tools change. Workflows persist.
 
-This module is not a directory of AI products.
+This is not a directory of AI products.
 
-It is a shortlist of the best tools for the PM jobs that matter most.
+It's a map for choosing the right tool for the PM job in front of you.
 
 ---
 
@@ -16,156 +16,81 @@ Not:
 
 But:
 
-> "What PM job am I trying to do, and what is the best tool for that job?"
+> "What PM workflow am I trying to improve?"
+
+Tools are only useful when they make a real workflow faster, better, or newly possible.
 
 ---
 
-## A Note on This Module
+## The Rule
 
-AI tools change fast. Products launch, merge, pivot, and disappear every month.
+Use the smallest tool that solves the job.
 
-The examples here are a **Spring 2026 snapshot**.
+- Need a draft? Use a general assistant.
+- Need source-grounded synthesis? Use a research tool.
+- Need a prototype? Use a prototyping tool.
+- Need AI quality at scale? Use eval tooling.
 
-The categories will last longer than the specific tools.
-
----
-
-## The Rule for This Module
-
-Each tool gets one primary home.
-
-Some tools can do many things. That does not mean we should mention them everywhere.
-
-For each workflow, we will pick:
-
-- **Best default**
-- **Best alternative when context changes**
-- **What to watch out for**
+Do not collect tools. Improve workflows.
 
 ---
 
 # Before You Paste Anything
 
-AI is useful.
-
-It is also very easy to misuse.
-
-Start with data boundaries before prompts.
-
----
-
-## Data Safety Basics
-
-**Usually okay:**
-- Public market data
-- Sanitized examples
-- Generic workflows
-- Your own rough drafts
-
-**Ask first:**
-- Customer interview transcripts
-- Internal strategy docs
-- Roadmaps
-- Product analytics exports
+AI speed is not worth a trust or compliance incident.
 
 **Do not paste into public tools:**
-- PII
+- Customer PII
 - Confidential financials
 - Legal documents
-- Source code you are not allowed to share
-- Unreleased plans
+- Proprietary source code
+- Unreleased roadmaps
 
----
-
-## Safer Practices
-
-- Use enterprise versions when working with company data
-- Check whether customer data is used for model training
-- Anonymize names, emails, companies, and account IDs
-- Prefer tools that respect permissions and cite source material
-- When in doubt, use synthetic or redacted examples
-
-> AI speed is not worth a trust or compliance incident.
+When in doubt, anonymize or use enterprise tools.
 
 ---
 
 ## The Shortlist
 
-| PM job | Best default |
-|---|---|
-| Research repository | Dovetail |
-| AI-moderated research | Maze |
-| PRDs and product docs | ChatPRD |
-| Long-form thinking and editing | Claude |
-| Deep research | ChatGPT Deep Research |
-| Bounded document Q&A | NotebookLM |
-| CSV/data analysis | ChatGPT Data Analysis |
-| Product analytics | Mixpanel or Amplitude |
-| Design prototype | Figma Make |
-| Frontend UI prototype | v0 |
-| Working app prototype | Lovable |
-| Real codebase changes | Codex |
-| AI product evals | Braintrust |
-| Roadmap system | Productboard Spark |
-| Presentations | Gamma |
+If you remember nothing else, remember this:
 
----
-
-# Research & Customer Intelligence
-
-AI is strongest here when it preserves evidence.
-
-The goal is not prettier summaries.
-
-The goal is better product decisions grounded in customer reality.
+- **Research:** Dovetail, Maze
+- **Writing:** ChatPRD, Claude
+- **Deep research:** ChatGPT Deep Research, NotebookLM
+- **Data:** ChatGPT Data Analysis, Mixpanel or Amplitude
+- **Prototyping:** Figma Make, v0, Lovable
+- **Code:** Codex
+- **AI product quality:** Braintrust
+- **Roadmaps:** Productboard Spark
+- **Slides:** Gamma
 
 ---
 
 ## Research Repository
 
-**Best default: [Dovetail](https://dovetail.com/solutions/research-repository/)**
+**Best default:** [Dovetail](https://dovetail.com/solutions/research-repository/)
 
-Use it when you have interviews, transcripts, notes, clips, and prior studies that need to become shared customer intelligence.
+Use it when you have interviews, notes, clips, transcripts, and prior studies that should become shared customer intelligence.
 
 Why it wins:
 - Built for research workflows
 - Strong evidence traceability
-- Turns prior research into organizational memory
-- Better governance than dumping transcripts into a generic chatbot
-
----
-
-## When Not to Use Dovetail
-
-Dovetail is overkill if:
-
-- You only have a few notes
-- You are doing a one-off class exercise
-- You do not need a shared research repository
-- Your team already has strong research ops elsewhere
-
-For a quick one-off, use a general assistant with sanitized notes.
-
-For real research operations, use a real repository.
+- Useful as organizational memory
 
 ---
 
 ## AI-Moderated Research
 
-**Best default: [Maze AI Moderator](https://maze.co/features/ai-moderated-interviews/)**
+**Best default:** [Maze AI Moderator](https://maze.co/features/ai-moderated-interviews/)
 
-Use it when you need directional qualitative learning at scale.
+Use it for directional learning at scale:
 
-Good for:
 - Concept feedback
-- Early problem discovery
+- Problem discovery
 - Usability follow-ups
 - Learning across time zones
 
-Watch out for:
-- Sensitive topics
-- High-stakes user groups
-- Research where moderator nuance is critical
+Avoid it for sensitive topics or research where moderator nuance is critical.
 
 ---
 
@@ -179,229 +104,135 @@ If a finding matters, trace it back:
 
 - Who said it?
 - In what context?
-- How often does it appear?
-- Which segment does it affect?
-- What alternative explanation could be true?
-
----
-
-# Writing & Product Docs
-
-PMs write constantly.
-
-AI helps you get from messy thinking to a useful artifact faster.
-
-It does not remove the need to think.
+- Which segment?
+- How often?
+- What else could explain it?
 
 ---
 
 ## Product Docs
 
-**Best default: [ChatPRD](https://chatprd.ai)**
+**Best default:** [ChatPRD](https://chatprd.ai)
 
 Use it for:
+
 - PRDs
 - User stories
 - Acceptance criteria
 - Spec critique
-- Product-doc templates
 
-Why it wins:
-- PM-specific workflows
-- Better defaults than a blank chatbot
-- Useful critique modes for product, engineering, and design review
+Why it wins: it is built around PM workflows, not generic blank-page writing.
 
 ---
 
 ## Long-Form Thinking
 
-**Best default: [Claude](https://claude.ai)**
+**Best default:** [Claude](https://claude.ai)
 
-Use it when you need:
-- Nuanced writing
-- Long-context synthesis
+Use it for:
+
 - Strategy memos
 - PRD rewrites
-- Tone and audience adaptation
+- Audience-specific updates
+- Critique and editing
 
-Claude is especially useful when you already know the substance and need help shaping it.
+Claude is strongest when you know the substance and need help shaping the artifact.
 
 ---
 
 ## Workspace Docs
 
-**Best when your team already uses it: [Notion AI](https://www.notion.com/product/ai)**
+**Best when your team already uses it:** [Notion AI](https://www.notion.com/product/ai)
 
 Use it when the source material and final artifact already live in Notion.
 
-Do not adopt Notion AI just because it has AI.
+Don't adopt a workspace tool just because it has AI.
 
-Adopt it if it reduces context switching for your team.
-
----
-
-## PRD Prompt
-
-```
-Here is context for a feature:
-[paste problem, user, research, constraints]
-
-Draft a one-page PRD with:
-- Problem statement
-- Target user
-- Goals and success metrics
-- Core user stories
-- V1 requirements
-- Non-goals
-- Risks
-- Open questions
-
-Then critique it like a skeptical engineering,
-design, and business reviewer.
-```
-
----
-
-## The Edit Pass
-
-After AI drafts, ask:
-
-- What is vague?
-- What assumption is unsupported?
-- What requirement is too broad?
-- What metric could be gamed?
-- What would engineering push back on?
-- What would a user not understand?
-
-This is where the PM earns the artifact.
-
----
-
-# Knowledge & Deep Research
-
-PMs spend enormous time looking for context.
-
-AI is turning search into synthesis.
-
-But "synthesis" is only useful when you can inspect the sources.
+Adopt it when it reduces context switching.
 
 ---
 
 ## Deep Research
 
-**Best default: [ChatGPT Deep Research](https://openai.com/index/introducing-deep-research/)**
+**Best default:** [ChatGPT Deep Research](https://openai.com/index/introducing-deep-research/)
 
 Use it for:
+
 - Market maps
 - Competitive landscapes
 - Vendor comparisons
 - Strategic briefs
-- Multi-source research with citations
 
-Why it wins:
-- Better fit for broad, cited research reports
-- Can combine web sources with uploaded or connected context
-- Produces an artifact you can verify and share
+Best for broad research where citations and source review matter.
 
 ---
 
 ## Bounded Source Q&A
 
-**Best default: [NotebookLM](https://notebooklm.google.com)**
+**Best default:** [NotebookLM](https://notebooklm.google.com)
 
 Use it when you have a fixed packet of sources:
 
-- Research reports
 - PDFs
 - Class readings
-- Meeting notes
+- Research reports
 - Product docs
 
 NotebookLM is not the best general chatbot.
 
-It is excellent when you want answers grounded in a known set of sources.
+It is excellent for grounded answers over known sources.
 
 ---
 
 ## Fast Market Scan
 
-**Best lightweight option: [Perplexity](https://www.perplexity.ai)**
+**Best lightweight option:** [Perplexity](https://www.perplexity.ai)
 
-Use it when:
+Use it when you need a quick cited overview and links to follow.
 
-- You need a quick cited overview
-- You are early in exploration
-- You want links to follow
+Good for early exploration.
 
-Do not use it as the final source of truth for strategic decisions.
-
-Use it to find where to look next.
+Not enough for final strategic decisions.
 
 ---
 
 ## Source Discipline
 
-For research outputs, require:
+For any research output, require:
 
 - Dates
 - Links
 - Source names
-- Confidence levels
+- Confidence level
 - What was not found
-- Contradictions across sources
 
 If the answer matters, click the sources.
 
 ---
 
-# Data, Metrics & Analytics
+## Ad Hoc Data
 
-AI can make PMs more self-sufficient with data.
-
-It can also make bad analysis faster.
-
----
-
-## Ad Hoc Data Analysis
-
-**Best default: [ChatGPT Data Analysis](https://chatgpt.com)**
+**Best default:** [ChatGPT Data Analysis](https://chatgpt.com)
 
 Use it for:
+
 - CSV exploration
 - Quick charts
 - Data cleaning
 - Segment comparisons
-- Finding anomalies
 
-Why it wins:
-- Strong file handling
-- Can run analysis code
-- Good for follow-up questions
+Good for exploration.
 
 Validate before using numbers in a serious deck.
 
 ---
 
-## Spreadsheet Work
-
-**Best default: use the AI inside your existing spreadsheet**
-
-If you live in Excel, use [Excel Copilot](https://www.microsoft.com/en-us/microsoft-365/copilot).
-
-If you live in Google Sheets, use [Gemini in Sheets](https://workspace.google.com/products/sheets).
-
-The best tool is the one closest to where the data already lives.
-
----
-
 ## Product Analytics
 
-**Best default: your product analytics stack**
+**Best default:** your existing product analytics stack.
 
-Choose based on where your event data already lives:
-
-- [**Mixpanel**](https://mixpanel.com): strong for self-serve product analytics and natural-language exploration
-- [**Amplitude**](https://amplitude.com): strong for enterprise product analytics and customer intelligence
+- [**Mixpanel**](https://mixpanel.com): strong for self-serve product analytics
+- [**Amplitude**](https://amplitude.com): strong for enterprise analytics and customer intelligence
 
 Do not move analytics stacks for an AI feature.
 
@@ -409,46 +240,16 @@ Bad event taxonomy beats good AI every time.
 
 ---
 
-## Data Workflow
+## Analytics Guardrails
 
-1. Start with the decision
-2. Define the metric
-3. Check the event taxonomy
-4. Ask AI for analysis
-5. Inspect the query or method
-6. Validate surprising findings
-7. Translate the insight into a recommendation
+Before trusting AI analysis, check:
 
-AI can help with the middle.
-
-You own the frame and the recommendation.
-
----
-
-## Analytics Prompt
-
-```
-I am trying to decide whether to invest in
-improving onboarding.
-
-Analyze activation by acquisition channel,
-new vs returning users, and signup cohort.
-
-Before answering, list the metric definitions
-you need and any ambiguity in the data.
-```
-
----
-
-## Analytics Failure Modes
-
-- Wrong event definition
-- Wrong grain of analysis
-- Correlation treated as causation
-- Small sample size ignored
-- Seasonality ignored
-- Internal/test users included
-- Averages hiding segment differences
+- Metric definition
+- Event taxonomy
+- Sample size
+- Segment differences
+- Internal/test users
+- Correlation vs causation
 
 AI accelerates analysis.
 
@@ -456,23 +257,13 @@ It does not eliminate statistical judgment.
 
 ---
 
-# Design & Prototype Ladder
+## Prototype Ladder
 
-AI is collapsing the time between idea and artifact.
-
-That does not mean every artifact is equally useful.
-
----
-
-## The Prototype Ladder
-
-| Question | Best tool |
-|---|---|
-| Can we explain the flow? | Figma |
-| Can it feel real? | Figma Make |
-| Can we generate a polished frontend? | v0 |
-| Can stakeholders use it? | Lovable |
-| Can it fit our codebase? | Codex |
+- **Explain the flow:** Figma
+- **Make it feel real:** Figma Make
+- **Generate frontend UI:** v0
+- **Build a working app:** Lovable
+- **Change a real codebase:** Codex
 
 Choose the lowest rung that answers the question.
 
@@ -480,49 +271,60 @@ Choose the lowest rung that answers the question.
 
 ## Design Prototype
 
-**Best default: [Figma Make](https://www.figma.com/make/)**
+**Best default:** [Figma Make](https://www.figma.com/make/)
 
-Use it when:
-- Your team already works in Figma
-- Visual fidelity matters
-- You want to start from existing frames or design-system context
-- You need an interactive prototype, not just a static mock
+Use it when visual fidelity matters and your team already works in Figma.
 
 Why it wins:
-- It keeps design work close to the design system
-- It helps PMs and designers explore together
+- Close to design-system context
+- Easy for PMs and designers to explore together
+- Better for product conversations than static screenshots
 
 ---
 
-## Frontend UI Prototype
+## Frontend Prototype
 
-**Best default: [v0](https://v0.dev)**
+**Best default:** [v0](https://v0.dev)
 
-Use it when:
-- You want a polished React-style interface quickly
-- You need a dashboard, landing page, app shell, or component
-- You care about frontend structure, not just visuals
+Use it for:
 
-v0 is best when the question is:
+- Dashboards
+- Landing pages
+- App shells
+- React-style components
 
-> "What could this product experience look and feel like in code?"
+Best when the question is: "What could this experience feel like in code?"
 
 ---
 
 ## Working App Prototype
 
-**Best default: [Lovable](https://lovable.dev)**
+**Best default:** [Lovable](https://lovable.dev)
 
-Use it when:
-- You want a functional app from prompts, screenshots, or docs
-- You need stakeholders to click through a real flow
-- You want to validate the product idea, not the code architecture
+Use it when stakeholders need to click through a real flow.
 
-Good alternative: [Bolt](https://bolt.new) when you want a browser-based builder with strong full-stack momentum.
+Good alternative: [Bolt](https://bolt.new) when you want a browser-based full-stack builder.
+
+Remember: prototype polish is not product validation.
 
 ---
 
-## Prototype Rules for PMs
+## Real Codebase Work
+
+**Best default:** [Codex](https://openai.com/codex)
+
+Use it when you need to:
+
+- Understand an existing codebase
+- Explore a small feature
+- Investigate a bug
+- Run tests and inspect trade-offs
+
+Good alternatives: Cursor for editor-native work, Claude Code for terminal workflows.
+
+---
+
+## Prototype Rules
 
 - Know what you are testing
 - Label what is real vs fake
@@ -534,53 +336,7 @@ Good alternative: [Bolt](https://bolt.new) when you want a browser-based builder
 
 ---
 
-## Real Codebase Work
-
-**Best default: [Codex](https://openai.com/codex)**
-
-Use it when:
-- You need to understand an existing codebase
-- You want a small feature or bug fix explored
-- You want tests run, files changed, and trade-offs explained
-
-Good alternatives:
-- [**Cursor**](https://www.cursor.com): best if you want AI inside your editor
-- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code): strong terminal coding agent
-
-PMs do not need to become engineers.
-
-But they do need to understand what is now feasible in hours.
-
----
-
-## When PMs Should Code
-
-**Good reasons:**
-- Internal tools
-- Prototype a workflow
-- Test feasibility
-- Automate repetitive work
-- Create a demo to improve discussion
-
-**Bad reasons:**
-- Avoiding engineering collaboration
-- Sneaking work into production
-- Treating generated code as automatically safe
-- Building without understanding the user problem
-
----
-
-# Building AI Products
-
-Using AI tools is one skill.
-
-Shipping AI inside your product is another.
-
-PMs need to understand both.
-
----
-
-## What Changes in AI Products
+## What Changes
 
 Traditional software usually fails visibly.
 
@@ -589,166 +345,97 @@ AI products often fail softly:
 - Confident wrong answer
 - Incomplete answer
 - Unsafe answer
-- Weird edge case
-- Slow response
-- Expensive response
+- Slow or expensive answer
 - Technically correct but unhelpful output
 
 That changes how you define quality.
 
 ---
 
-## AI Product Metrics
+## AI Product Quality
 
 For AI features, track:
 
-- Task success rate
-- Grounding / citation quality
+- Task success
 - Factual error rate
-- Escalation or handoff rate
 - User correction rate
+- Escalation rate
 - Latency
 - Cost per successful task
-- Retention after first successful use
-- User trust and satisfaction
+- Trust and satisfaction
 
 You need product metrics and model-quality metrics.
 
 ---
 
-## AI Evaluation
+## Evals & Observability
 
-**Best default: [Braintrust](https://www.braintrust.dev)**
+**Best default:** [Braintrust](https://www.braintrust.dev)
 
-Use it when:
-- AI quality determines product quality
-- You need evals, traces, prompt/model comparisons, and human review
-- You want production failures to become future test cases
+Use it when AI quality determines product quality.
 
-Why it wins:
-- Evals are central, not an afterthought
-- Product and engineering can inspect the same failure evidence
+Good for:
+- Evals
+- Traces
+- Prompt/model comparisons
+- Human review
 
----
-
-## Open-Source Alternative
-
-**Best default if self-hosting matters: [Langfuse](https://langfuse.com)**
-
-Use it when:
-- You need open-source LLM observability
-- You want tracing, prompt management, evals, and cost/latency visibility
-- Your team wants more control over deployment
-
-Braintrust is the cleaner default for teams optimizing AI quality.
-
-Langfuse is the stronger default when open source and self-hosting matter.
+Open-source alternative: [Langfuse](https://langfuse.com).
 
 ---
 
-## PM Role in AI Evaluation
+## PM Role in Evals
 
 PMs should help define:
 
 - Which user tasks matter
-- What counts as a successful answer
+- What success means
 - Which failures are unacceptable
 - Where human review is required
-- What trade-off is acceptable between quality, speed, and cost
-- What to show the user when AI is uncertain
+- What to show when AI is uncertain
 
 This is product judgment, not just ML engineering.
 
 ---
 
-# Roadmaps & Product Systems
+## Roadmap Systems
 
-AI works best when it is grounded in the product system where decisions already happen.
+**Best execution-native default:** [Linear](https://linear.app)
 
-Do not add another disconnected AI workspace unless it clearly improves the work.
+Use it when product, engineering, issues, projects, and customer requests should live in one fast workflow.
 
----
+**Best discovery-heavy default:** [Productboard Spark](https://www.productboard.com/product/spark/)
 
-## Roadmap System
+Use it when feedback synthesis, product strategy, and roadmap decisions need to live together.
 
-**Best default: [Productboard Spark](https://www.productboard.com/product/spark/)**
+**Best Atlassian default:** [Jira Product Discovery + Rovo](https://www.atlassian.com/software/jira/product-discovery)
 
-Use it when:
-- You need feedback analysis, product specs, and roadmap thinking in one PM-oriented system
-- You want AI grounded in product context, customers, and strategy
-- You need discovery signals to connect to roadmap decisions
-
-This is the best fit when PM workflow is the center of gravity.
+Use it when your company already runs on Jira and Confluence.
 
 ---
 
-## Atlassian Organizations
+## Prioritization
 
-**Best default: [Jira Product Discovery + Rovo](https://www.atlassian.com/software/jira/product-discovery)**
-
-Use it when:
-- Your company already runs on Jira and Confluence
-- You need discovery work tied tightly to delivery work
-- You want AI inside existing Atlassian workflows
-
-The best tool is often the one your organization will actually adopt.
-
----
-
-## Prioritization Assistance
-
-You do not need a special tool for prioritization.
+You do not need a special AI tool for prioritization.
 
 Use an LLM to structure the conversation:
 
-1. List candidate opportunities
+1. List opportunities
 2. Add reach, impact, confidence, effort
-3. Ask AI to apply RICE or ICE
-4. Ask which inputs are weakest
-5. Challenge the results with your team
+3. Ask which inputs are weakest
+4. Challenge the result with your team
 
-Frameworks clarify trade-offs.
-
-They do not make the decision.
-
----
-
-## Prioritization Prompt
-
-```
-Here are 8 features we are considering for Q2.
-For each, I included reach, impact, confidence,
-effort, strategic fit, and risks.
-
-Apply RICE scoring.
-
-Then:
-1. Identify the least reliable scores
-2. Name the assumptions driving the ranking
-3. Suggest what evidence would change the decision
-```
-
----
-
-# Communication & Stakeholder Output
-
-AI can speed up communication.
-
-It cannot decide what story needs to be told.
+Frameworks clarify trade-offs. They do not make the decision.
 
 ---
 
 ## Presentations
 
-**Best default: [Gamma](https://gamma.app)**
+**Best default:** [Gamma](https://gamma.app)
 
-Use it when:
-- You need a polished first draft quickly
-- You want to turn a memo or outline into a deck
-- You care more about speed than custom formatting
+Use it when you need a polished first draft quickly.
 
-Best alternative:
-- [**PowerPoint Copilot**](https://www.microsoft.com/en-us/microsoft-365/copilot) if your org lives in Microsoft 365
+Best alternative: PowerPoint Copilot if your org lives in Microsoft 365.
 
 Use these for structure and polish.
 
@@ -763,58 +450,26 @@ Use any strong writing assistant.
 The workflow matters more than the tool:
 
 1. Paste detailed notes
-2. Ask for a 3-bullet exec version
+2. Ask for an exec version
 3. Ask for an engineering version
 4. Ask for risks, decisions, and asks
 5. Edit to match reality
 
 Same facts, different audience.
 
-That is PM communication.
-
----
-
-## Executive Summary Prompt
-
-```
-Summarize this update for executives.
-
-Format:
-- What changed
-- Why it matters
-- Decision or help needed
-- Risks
-- Next milestone
-
-Use direct language. Do not hide bad news.
-```
-
----
-
-# What I Would Try First
-
-Pick one workflow this week.
-
-Do not adopt ten tools.
-
 ---
 
 ## Starter Stacks
 
-**Research-heavy PM:**
-Dovetail + Maze
+**Research-heavy PM:** Dovetail + Maze
 
-**B2B roadmap PM:**
-Productboard Spark + Mixpanel or Amplitude
+**B2B roadmap PM:** Productboard Spark + Mixpanel or Amplitude
 
-**Prototype-heavy PM:**
-Figma Make + v0 + Lovable
+**Prototype-heavy PM:** Figma Make + v0 + Lovable
 
-**AI product PM:**
-Braintrust + product analytics + human review loop
+**AI product PM:** Braintrust + product analytics + human review loop
 
-**Individual PM leveling up:**
-Claude + ChatGPT Deep Research + ChatPRD
+**Individual PM leveling up:** Claude + ChatGPT Deep Research + ChatPRD
 
 ---
 
@@ -822,32 +477,19 @@ Claude + ChatGPT Deep Research + ChatPRD
 
 For any new AI tool, run a one-week experiment:
 
-- What workflow did it improve?
-- How much time did it save?
+- What workflow improved?
+- What got faster?
 - What got better?
 - What got worse?
 - What risk did it introduce?
-- Would you keep using it?
 
 If you cannot answer these, you are collecting tools, not improving work.
 
 ---
 
-# Closing
-
----
-
-## The Tools Will Change
-
-Six months from now, some tools on this list will have changed dramatically.
-
-New ones will exist that we cannot imagine today.
-
-That is fine.
-
----
-
 ## The Judgment Won't
+
+Tools will change every few months.
 
 What lasts is your ability to:
 
@@ -856,10 +498,9 @@ What lasts is your ability to:
 - Ask better questions
 - Validate outputs
 - Connect artifacts to decisions
-- Know when human judgment matters most
 
 ---
 
 > The PMs who get the most from AI are not the ones using the most tools.
 >
-> They are the ones who use the right tool for the right workflow, and keep their judgment in the loop.
+> They use the right tool for the right workflow, and keep their judgment in the loop.

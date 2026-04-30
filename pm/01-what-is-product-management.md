@@ -4,21 +4,21 @@
 
 # What is Product Management?
 
-If you're here, you probably already have some PM experience. So let's skip the "PMs are the CEO of the product" cliché and get into what product management actually looks like when you're doing it well, and at scale.
+If you're here, you probably already have some PM experience.
+
+So let's skip the "PMs are the CEO of the product" cliché and get into what product management actually looks like when you're doing it well, and at scale.
 
 ---
 
-## Definition & Core Purpose
+## Core Purpose
 
-At its core, product management is about **maximizing the value a product creates**: for users, for the business, and ideally for the broader ecosystem.
+Product management is about **maximizing the value a product creates**: for users, for the business, and ideally for the broader ecosystem.
 
-But that simple definition hides enormous complexity.
-
----
-
-> PMs exist because building products requires making thousands of decisions, and someone needs to own the coherence of those decisions over time.
+PMs exist because building products requires making thousands of decisions, and someone needs to own the coherence of those decisions over time.
 
 ---
+
+## The Intersection
 
 Engineering decides *how* to build. Design decides *what it looks like and feels like*. Business decides *what we can afford and sell*.
 
@@ -30,9 +30,9 @@ Product management sits at the intersection, ensuring all of these decisions lad
 
 Every good PM decision balances three perspectives:
 
-1. **User Value**: Does this solve a real problem? Will people actually use it?
-2. **Business Value**: Does this move metrics that matter? Can we capture value from it?
-3. **Feasibility**: Can we actually build this? What are the trade-offs?
+1. **User Value:** Does this solve a real problem? Will people actually use it?
+2. **Business Value:** Does this move metrics that matter? Can we capture value from it?
+3. **Feasibility:** Can we actually build this? What are the trade-offs?
 
 The best PMs don't just balance these. They find solutions that score high on all three. That's the craft.
 
@@ -46,8 +46,6 @@ The best PMs don't just balance these. They find solutions that score high on al
 - **PMs don't make all the decisions.** You facilitate decisions and break ties.
 - **PMs don't need to be technical geniuses or design experts.** But you need to speak both languages fluently.
 
----
-
 > The job is influence, not control. That's what makes it hard.
 
 ---
@@ -56,134 +54,92 @@ The best PMs don't just balance these. They find solutions that score high on al
 
 The same title means wildly different things depending on where you work.
 
----
-
-### Early-Stage Startup (10-50 people)
-
-At this stage, "PM" might not even be a formal role. Founders often play the PM function, or one generalist does everything.
-
-**What PM looks like here:**
-- You're doing customer support to understand users
-- You might write code, design mockups, or run sales calls
-- Strategy is "what do we build this week to not die"
-- Shipping speed matters more than process
-
----
-
-### Early-Stage Startup
-
-**The upside:** Enormous impact, learning, and ownership.
-
-**The downside:** No mentorship, no infrastructure, high chaos.
-
----
-
-### Growth-Stage (50-500 people)
-
-This is where PM becomes a real discipline. You have enough users that intuition alone won't cut it.
-
-**What PM looks like here:**
-- Formal product teams start emerging
-- You're balancing scaling what works vs. finding new growth
-- Data infrastructure is getting built, and you need to use it
-- Cross-functional complexity increases dramatically
-
----
-
-### Growth-Stage
-
-**The upside:** Shape the product culture, still have significant impact.
-
-**The downside:** Growing pains everywhere, processes that don't scale.
-
----
-
-### Enterprise (500+ people)
-
-PM at scale looks completely different. You're one of many PMs, and coordination becomes a primary job function.
-
-**What PM looks like here:**
-- You own a slice of a much larger product
-- Stakeholder management is 40%+ of your job
-- Strategy happens at multiple levels (your area, org, company)
-- Impact comes through influence across many teams
-
----
-
-### Enterprise
-
-**The upside:** Resources, mentorship, complex problems.
-
-**The downside:** Slower pace, more politics, narrower scope.
-
----
-
-## The Stage-Mismatch Problem
-
-One of the most common PM career mistakes is not recognizing that skills don't fully transfer across stages.
-
 A brilliant startup PM might flounder at Google. A polished enterprise PM might struggle at a Series A company.
 
 **Self-awareness question:** What stage are you actually good at? What stage do you enjoy?
 
 ---
 
-## Product Management vs Adjacent Roles
+### Early-Stage Startup
+
+At this stage, "PM" might not even be a formal role. Founders often play the PM function, or one generalist does everything.
+
+**What PM looks like:**
+- Customer support, sales calls, research, prioritization
+- Writing quick specs, maybe making mockups or prototypes
+- Strategy is "what do we build this week to not die"
+- Shipping speed matters more than process
+
+**Upside:** Enormous impact, learning, ownership.
+
+**Downside:** No mentorship, weak infrastructure, high chaos.
+
+---
+
+### Growth-Stage
+
+This is where PM becomes a real discipline. You have enough users that intuition alone won't cut it.
+
+**What PM looks like:**
+- Formal product teams start emerging
+- You're balancing scaling what works vs. finding new growth
+- Data infrastructure is getting built, and you need to use it
+- Cross-functional complexity increases dramatically
+
+**Upside:** Shape the product culture, still have significant impact.
+
+**Downside:** Growing pains everywhere, processes that don't scale.
+
+---
+
+### Enterprise
+
+PM at scale looks completely different. You're one of many PMs, and coordination becomes a primary job function.
+
+**What PM looks like:**
+- You own a slice of a much larger product
+- Stakeholder management is 40%+ of your job
+- Strategy happens at multiple levels: your area, org, company
+- Impact comes through influence across many teams
+
+**Upside:** Resources, mentorship, complex problems.
+
+**Downside:** Slower pace, more politics, narrower scope.
+
+---
+
+## PM vs Adjacent Roles
 
 The org chart is getting crowded. Here's how PM differs from roles that seem similar.
 
----
+| Role | Owns |
+|---|---|
+| **PM** | What we build, why, and whether it works |
+| **PMM** | Positioning, messaging, launch narrative |
+| **TPM** | Execution coordination across teams |
+| **EM** | Engineering team, delivery health, people growth |
+| **Designer** | User experience, interaction, visual/system design |
 
-### PM vs Product Marketing Manager (PMM)
-
-**PM:** What we build and why
-
-**PMM:** How we position, message, and bring it to market
-
-The handoff point varies by company. The key distinction: PMs own the product, PMMs own the narrative.
-
----
-
-### PM vs Technical Program Manager (TPM)
-
-**PM:** What and why
-
-**TPM:** How we coordinate complex execution across teams
-
-TPMs are execution specialists. They don't decide what to build, but they're essential for *how* it gets built when multiple teams are involved.
-
----
-
-### PM vs Engineering Manager (EM)
-
-**PM:** What we build, why, and whether it's working
-
-**EM:** Who builds it, how they grow, and how the team operates
-
-The PM/EM relationship is one of the most important partnerships. You're co-leading the team without either having full authority.
-
----
-
-### PM vs Designer
-
-**Designer:** What the experience looks and feels like, how users interact with it
-
-**PM:** Whether the experience solves the right problem and achieves business goals
-
-Overlap: Both should understand users deeply. Both should care about the full experience.
+Overlap is normal. Confusion is optional.
 
 ---
 
 ## Core Competencies Framework
 
-What do you actually need to be good at? Here's a framework that goes beyond buzzwords.
+What do you actually need to be good at?
+
+1. **Strategic Thinking:** Choosing the right problems
+2. **Execution Excellence:** Getting from idea to shipped product
+3. **Influence & Communication:** Creating alignment without authority
+
+Great PMs are strong enough across all three that teams trust their judgment.
 
 ---
 
 ### Strategic Thinking
 
 - **Vision Translation:** Taking company strategy and translating it to product opportunity
-- **Problem Selection:** Knowing which problems are worth solving (and which aren't)
+- **Problem Selection:** Knowing which problems are worth solving, and which aren't
 - **Trade-off Clarity:** Articulating what you're *not* doing and why
 - **Long-term/Short-term Balance:** Shipping now while investing in the future
 
@@ -209,37 +165,27 @@ What do you actually need to be good at? Here's a framework that goes beyond buz
 
 ## Types of Product Managers
 
-PM isn't one job. It's a family of related roles. Here are the major subspecies.
+PM isn't one job. It's a family of related roles.
 
----
-
-### Growth PM
-
-**Focus:** Acquisition, activation, retention, monetization
-
-**Day-to-day:** Running experiments, analyzing funnels, optimizing flows
-
-**Good fit if:** You love data, can handle lots of small failures, and get energy from optimization.
-
----
-
-### Platform PM
-
-**Focus:** Internal tools, APIs, infrastructure that other teams build on
-
-**Day-to-day:** Understanding developer needs, managing technical complexity, thinking in abstractions
-
-**Good fit if:** You're more technical than average, enjoy infrastructure problems, can handle less visible impact.
+| Type | Focus | Good fit if... |
+|---|---|---|
+| **Growth PM** | Acquisition, activation, retention, monetization | You love data, experiments, and optimization |
+| **Platform PM** | APIs, internal tools, infrastructure | You're technical and enjoy abstraction |
+| **AI/ML PM** | Probabilistic products powered by models | You can manage uncertainty and model behavior |
 
 ---
 
 ### AI/ML PM
 
-**Focus:** Products powered by machine learning and AI capabilities
+Traditional products are deterministic:
 
-**Day-to-day:** Working with data scientists, managing model uncertainty, designing for probabilistic outputs
+> same input → same output
 
-The fundamental difference: traditional products are deterministic (same input → same output). AI products are probabilistic. That changes everything about how you PM.
+AI products are probabilistic:
+
+> same input → possibly different outputs
+
+That changes everything about how you PM: requirements, quality, evaluation, user trust, and launch readiness.
 
 ---
 
@@ -253,25 +199,38 @@ The fundamental difference: traditional products are deterministic (same input �
 **B2C PM:**
 - Millions of users, lower revenue per user
 - Product-led growth, viral mechanics
-- User = buyer (usually)
+- User = buyer, usually
 
 ---
 
 ## What Makes Great PMs Stand Out
 
-After working with hundreds of PMs, here are the patterns that separate good from great.
+After working with hundreds of PMs, here are the patterns that separate good from great:
+
+- They have taste
+- They're intellectually honest
+- They communicate with precision
+- They build trust through follow-through
+- They create clarity from chaos
+- They focus
 
 ---
 
-### They Have Taste
+### Taste & Judgment
 
-Hard to define, but you know it when you see it. Great PMs have strong opinions about what good looks like. Good UX, good strategy, good code.
+Great PMs have strong opinions about what good looks like: good UX, good strategy, good code, good trade-offs.
 
 **How to develop taste:** Use lots of products critically. Ask "why" about everything. Study both successes and failures.
 
+Taste is not decoration.
+
+Taste is judgment under ambiguity.
+
 ---
 
-### They're Intellectually Honest
+### Truth-Seeking
+
+Great PMs are intellectually honest.
 
 They change their minds when evidence warrants it. They admit when they're wrong. They don't fall in love with their own ideas.
 
@@ -279,37 +238,25 @@ They change their minds when evidence warrants it. They admit when they're wrong
 
 ---
 
-### They Communicate with Precision
+### Trust & Communication
 
-They say what they mean. They're clear about certainty vs. speculation. They adjust communication style for the audience.
+Great PMs say what they mean. They're clear about certainty vs. speculation. They adjust communication style for the audience.
 
-**The bar:** After you explain something, does the other person actually understand?
-
----
-
-### They Build Trust Through Follow-Through
-
-They do what they say they'll do. They close loops. They remember the small commitments.
+They also follow through. They do what they say, close loops, and remember the small commitments.
 
 > Great PMs are known for "if they said it'll happen, it'll happen."
 
 ---
 
-### They Create Clarity from Chaos
+### Clarity & Focus
 
-The most valuable PM skill.
+When things are confusing, great PMs structure the problem.
 
-When things are confusing, they structure the problem. When there's conflict, they identify the actual disagreement. When there are too many options, they create a framework for choosing.
+When there's conflict, they identify the actual disagreement.
 
----
+When there are too many options, they create a framework for choosing.
 
-### They Focus
-
-Maybe the most underrated skill.
-
-Great PMs say no constantly. They're not trying to do everything. They're trying to do the right things extremely well.
-
-**The discipline:** What are you *not* working on? Why?
+Then they focus. They say no constantly. They're not trying to do everything. They're trying to do the right things extremely well.
 
 ---
 
@@ -317,10 +264,22 @@ Great PMs say no constantly. They're not trying to do everything. They're trying
 
 Product management is a craft that takes years to master, and the terrain keeps changing.
 
-The fundamentals (user value, business value, execution, influence) stay constant. But how you apply them depends entirely on context.
+The fundamentals stay constant:
+
+- User value
+- Business value
+- Feasibility
+- Execution
+- Influence
+
+But how you apply them depends entirely on context.
 
 ---
 
-The best PMs are learning machines. They reflect on what worked and didn't. They seek feedback actively. They study other PMs and adjacent functions.
+The best PMs are learning machines.
 
-You're already on this path. Now let's talk about how AI is changing all of it.
+They reflect on what worked and didn't. They seek feedback actively. They study other PMs and adjacent functions.
+
+You're already on this path.
+
+Now let's talk about how AI is changing all of it.
