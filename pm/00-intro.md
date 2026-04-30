@@ -1,6 +1,6 @@
 # Product Management with AI
 
-**A practical, interactive session for PDL Students**
+**A practical, interactive session for Graduate Students**
 
 Columbia University | Spring 2026
 
@@ -23,6 +23,8 @@ Working in the industry since 2000
 [**Topos**](https://topos.com) - Co-Founder, CTO
 
 [**Etsy**](https://etsy.com) - Head of Engineering, Search, Recs, Ads
+
+[**AirOps**](https://airops.com) - Head of Engineering
 
 
 ---
