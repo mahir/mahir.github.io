@@ -2,7 +2,7 @@
 
 **A practical, interactive session for Graduate Students**
 
-Columbia University | Spring 2026
+Columbia University | 2026
 
 https://mahiryavuz.com/pm
 
