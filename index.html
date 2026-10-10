@@ -35,6 +35,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--serif);
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow: hidden;
@@ -249,7 +250,8 @@
   'use strict';
 
   const root = document.documentElement;
-  root.classList.replace('no-js', 'js');
+  root.classList.remove('no-js');
+  root.classList.add('js');
   root.classList.add('is-intro');
 
   const $ = (s) => document.querySelector(s);
@@ -597,16 +599,17 @@
     }
   }
 
+  // History is a nicety (back button, #about links); sandboxed frames may refuse it.
   nameBtn.addEventListener('click', () => {
     if (isOpen) return;
-    history.pushState({ about: true }, '', '#about');
-    pushed = true;
+    try { history.pushState({ about: true }, '', '#about'); pushed = true; } catch (err) { pushed = false; }
     setOpen(true);
   });
   function requestClose() {
     if (!isOpen) return;
-    if (pushed) { pushed = false; history.back(); }
-    else { history.replaceState(null, '', location.pathname + location.search); setOpen(false); }
+    if (pushed) { pushed = false; history.back(); return; }
+    try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (err) { /* ignore */ }
+    setOpen(false);
   }
   $('#close').addEventListener('click', requestClose);
   addEventListener('keydown', (e) => { if (e.key === 'Escape') requestClose(); });
