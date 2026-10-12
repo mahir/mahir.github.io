@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mahir Yavuz</title>
-<meta name="description" content="Mahir Yavuz is an engineering leader, data scientist and educator, working with data, AI and media art since 2000.">
-<meta name="theme-color" content="#06070b">
+<meta name="description" content="Mahir Yavuz is an engineering leader, data scientist and educator, working with data since 2000 across AI products, search, recommendations, ads and media art.">
+<meta name="theme-color" content="#08090b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mahir Yavuz">
 <meta property="og:description" content="Engineering leader, data scientist and educator.">
@@ -14,272 +14,154 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
 <style>
-  /* Layout: one full-bleed WebGL field; the name centred over it; the bio slides in as a left column (top sheet on phones). */
+  /* Layout: a quiet text column on the left; the career as a point cloud in the right half (a figure in the flow on phones).
+     Each line of the index is a cluster in the cloud; hovering one draws a hairline callout to it. */
   :root {
-    --bg: #06070b;
-    --ink: #e2e6eb;
-    --dim: rgba(226, 230, 235, .66);
-    --faint: rgba(226, 230, 235, .42);
-    --hair: rgba(226, 230, 235, .13);
-    --line: rgba(226, 230, 235, .4);
-    --accent: #5b8cff;
-    --veil: 6, 7, 11;   /* --bg as rgb channels, for fades */
-    --vignette: .35;
-    --sky: #2a3f8c;     /* current horizon colour; script follows the visitor's local time */
-    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
-    --mono: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    --pad: clamp(16px, 3vw, 36px);
-    --ease: cubic-bezier(.16, 1, .3, 1);
+    --bg: #08090b;
+    --fg: #ececec;
+    --fg-2: #a3a3a3;
+    --fg-3: #7d7d7d;
+    --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --ease: cubic-bezier(.2, .7, .1, 1);
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html { background: var(--bg); }
   body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    overflow: hidden;
-    cursor: crosshair;
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 400 15px/1.6 var(--sans);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   }
-  .is-dragging body { cursor: grabbing; }
-  ::selection { background: var(--accent); color: var(--bg); }
-  a { color: inherit; }
+  ::selection { background: var(--fg); color: var(--bg); }
+  a {
+    color: var(--fg); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .3em;
+    text-decoration-color: rgba(236, 236, 236, .3); transition: text-decoration-color .2s ease;
+  }
+  a:hover, a:focus-visible { text-decoration-color: var(--fg); }
+  :focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; border-radius: 2px; }
 
-  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
-  #gl { touch-action: none; }
-  #overlay { pointer-events: none; z-index: 1; }
-  .vignette {
-    position: fixed; inset: 0; z-index: 1; pointer-events: none;
-    background: radial-gradient(120% 95% at 50% 50%, transparent 58%, rgba(0, 0, 0, var(--vignette)));
+  .page {
+    position: relative; z-index: 1;
+    width: min(34rem, 100%); margin-left: clamp(20px, 9vw, 160px); min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center; padding-block: 10vh;
   }
-
-  /* cluster labels */
-  .tags { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-  .tag {
-    position: absolute; left: 0; top: 0; opacity: 0; white-space: nowrap; will-change: transform, opacity;
-    text-shadow: 0 0 14px var(--bg), 0 0 3px var(--bg);
-  }
-  .tag.left { text-align: right; }
-  .tag-k { display: block; font: 400 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .6em; }
-  .tag-t { display: block; font-stretch: 112%; font-weight: 400; font-size: clamp(1.15rem, 1.7vw, 1.5rem); line-height: 1.05; letter-spacing: -.015em; }
-  .tag-s { display: block; font: 400 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-top: .7em; }
-
-  /* hero */
-  .hero { position: fixed; inset: 0; z-index: 3; display: grid; place-items: center; text-align: center; pointer-events: none; }
-  .hero-inner { position: relative; }
-  .hero-inner::before {
-    content: ""; position: absolute; inset: -40% -12%; z-index: -1;
-    background: radial-gradient(closest-side, rgba(var(--veil), .82), rgba(var(--veil), 0));
-  }
-  h1 { margin: 0; font-weight: 400; }
+  h1 { margin: 0; font: inherit; }
   .name {
-    pointer-events: auto; cursor: pointer;
-    font: inherit; color: inherit; background: none; border: 0; margin: 0; padding: .06em .14em .1em;
-    font-stretch: 125%; font-weight: 300;
-    font-size: clamp(2.5rem, 12.5vw, 8.25rem); line-height: 1; letter-spacing: -.035em; white-space: nowrap;
+    appearance: none; background: none; border: 0; padding: 0; margin: 0; color: inherit; cursor: pointer; text-align: left;
+    font: 500 clamp(1.75rem, 2.3vw, 2.125rem)/1.1 var(--sans); letter-spacing: -.022em;
     -webkit-tap-highlight-color: transparent;
   }
-  .name:focus-visible { outline: 1px solid var(--accent); outline-offset: .1em; border-radius: 4px; }
-  .w { display: inline-block; }
-  .strong { font-weight: 640; }
-  .ch {
-    display: inline-block;
-    transition: transform 1.3s var(--ease), opacity 1.1s ease, filter 1.2s ease;
-    transition-delay: calc(700ms + var(--i) * 45ms);
-  }
-  .is-open .ch {
-    opacity: 0; filter: blur(14px);
-    transform: translate3d(calc(var(--tx, 0px) * (.65 + var(--j) * .35) + var(--j) * 18px),
-                           calc(var(--ty, 0px) * (.8 + var(--j) * .2) + var(--j) * 20px), 0) scale(.92);
-    transition-duration: .95s, .7s, .8s;
-    transition-delay: calc(var(--i) * 26ms);
-  }
-  .is-intro .ch { opacity: 0; filter: blur(14px); transform: translate3d(0, .2em, 0); transition: none; }
+  .lede { margin: .85rem 0 0; max-width: 31em; font-size: 1.0625rem; line-height: 1.55; color: var(--fg-2); text-wrap: pretty; }
+  .cta { margin: 1.3rem 0 0; }
 
-  .hint {
-    margin: 1.6rem 0 0; font: 400 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
-    color: var(--faint); opacity: 0; transition: opacity 1.2s ease 2.4s, color .4s ease;
-  }
-  .hint::before {
-    content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 1em; vertical-align: 1px;
-    border-radius: 50%; background: var(--accent); animation: pulse 2.4s ease-in-out infinite;
-  }
-  .ready .hint { opacity: 1; }
-  .is-open .hint { opacity: 0; transition-delay: 0s; }
-  .hero-inner:has(.name:hover) .hint { color: var(--ink); }
-  @keyframes pulse { 50% { opacity: .25; } }
+  .index { margin-top: 3rem; }
+  .index dl { margin: 0; display: grid; gap: 1.25rem; }
+  .group { display: grid; grid-template-columns: 6.25rem minmax(0, 1fr); column-gap: 1rem; }
+  .index dt { font-size: .8125rem; line-height: 1.6rem; color: var(--fg-3); }
+  .index dt small { display: block; font-size: inherit; line-height: 1.1; }
+  .index dd { margin: 0; }
+  .index ul { list-style: none; margin: 0; padding: 0; }
+  .index li { line-height: 1.6rem; color: var(--fg-2); transition: color .25s ease; }
+  .index li b { margin-right: .4em; font-weight: 500; color: var(--fg); transition: color .25s ease; }
+  .has-active .index li:not(.on), .has-active .index li:not(.on) b { color: var(--fg-3); }
+  .index li.on, .index li.on b { color: var(--fg); }
+  .caption { margin: 2.5rem 0 0; max-width: 28em; font-size: .8125rem; line-height: 1.5; color: var(--fg-3); }
+  .c-touch, .touch .c-hover { display: none; }
+  .touch .c-touch { display: inline; }
 
-  /* corners */
-  .corner {
-    position: fixed; z-index: 4; opacity: 0; transition: opacity .8s ease;
-    font: 400 10.5px/1.7 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint);
-  }
-  .ready .corner { opacity: 1; transition-delay: 1.8s; }
-  .ready .cta.corner { transition-delay: 1.1s, 0s, 0s, 0s; }
-  .is-open .corner { opacity: 0; transition-delay: 0s; pointer-events: none; }
-  .tl { top: calc(var(--pad) + env(safe-area-inset-top)); left: calc(var(--pad) + env(safe-area-inset-left)); }
-  .bl { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); left: calc(var(--pad) + env(safe-area-inset-left)); }
-  .tr { top: calc(var(--pad) + env(safe-area-inset-top) - .55em); right: calc(var(--pad) + env(safe-area-inset-right)); }
-  .br { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); right: calc(var(--pad) + env(safe-area-inset-right)); }
+  .figure { position: fixed; inset: 0; z-index: -1; margin: 0; }
+  #gl { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+  #leaders { position: fixed; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; visibility: hidden; }
 
-  .cta {
-    display: inline-flex; align-items: center; gap: .7em; padding: .8em 1.2em; border-radius: 999px;
-    font: 400 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
-    color: var(--ink); background: rgba(var(--veil), .55); border: 1px solid var(--line);
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-    transition: opacity .8s ease, background-color .25s ease, color .25s ease, border-color .25s ease;
+  @media (min-width: 860px) and (max-height: 820px) {
+    .page { padding-block: 6vh; }
+    .index { margin-top: 2.25rem; }
+    .index dl { gap: .9rem; }
+    .caption { margin-top: 1.6rem; }
   }
-  .cta:hover, .cta:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--bg); outline: none; }
 
-  .sky { display: inline-flex; align-items: center; gap: .75em; }
-  /* a swatch of the sky as it is right now */
-  .sky::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--sky); box-shadow: 0 0 10px var(--sky); }
-  #readout { font-variant-numeric: tabular-nums; }
+  .js .rise { opacity: 0; transform: translateY(6px); animation: rise .9s var(--ease) forwards; animation-delay: calc(120ms + var(--i, 0) * 55ms); }
+  @keyframes rise { to { opacity: 1; transform: none; } }
 
-  /* about */
-  .about {
-    position: fixed; inset: 0; z-index: 5; display: flex;
-    overflow-y: auto; overscroll-behavior: contain; cursor: auto;
-    visibility: hidden; transition: visibility 0s linear 1s;
-  }
-  .is-open .about { visibility: visible; transition-delay: 0s; }
-  .about::before {
-    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity .9s ease;
-    background: linear-gradient(90deg, rgba(var(--veil), .95) 0%, rgba(var(--veil), .72) 38%, rgba(var(--veil), 0) 58%);
-  }
-  .is-open .about::before { opacity: 1; transition-delay: .3s; }
-  /* auto margins centre the column when it fits and let it scroll from the top when it doesn't */
-  .about-inner { position: relative; width: min(36rem, 44vw); margin: auto 0 auto clamp(24px, 8vw, 140px); padding-block: 7vh; }
-  .kicker { margin: 0 0 1.3rem; font: 400 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
-  .about-title {
-    margin: 0 0 1.3rem; font-stretch: 125%; font-weight: 300; font-size: clamp(2.2rem, 3.6vw, 3.4rem);
-    line-height: 1; letter-spacing: -.035em; outline: none;
-  }
-  .about-title strong { font-weight: 640; }
-  .lead {
-    margin: 0 0 1.1rem; font-stretch: 110%; font-weight: 300; font-size: clamp(1.3rem, 1.75vw, 1.6rem);
-    line-height: 1.22; letter-spacing: -.01em; text-wrap: balance;
-  }
-  .body { margin: 0 0 .9rem; max-width: 34em; font-size: clamp(.98rem, 1.05vw, 1.05rem); line-height: 1.6; color: var(--dim); }
-  .facts { margin: 1.6rem 0 1.9rem; border-top: 1px solid var(--hair); }
-  .facts div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1rem; padding: .6rem 0; border-bottom: 1px solid var(--hair); }
-  .facts dt { padding-top: .3em; font: 400 10.5px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
-  .facts dd { margin: 0; font-size: .98rem; line-height: 1.5; }
-  .roles { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; color: var(--dim); }
-  .roles span { color: var(--ink); margin-right: .45em; }
-  .facts a, .links a { text-decoration: none; border-bottom: 1px solid var(--hair); transition: border-color .3s ease; }
-  .facts a:hover, .facts a:focus-visible, .links a:hover, .links a:focus-visible { border-color: var(--accent); }
-  .cta-row { margin: 0 0 1.5rem; }
-  .links { margin: 0; font: 400 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
-  .links a { display: inline-block; padding-bottom: .45em; }
-  .rv {
-    opacity: 0; filter: blur(6px); transform: translate3d(0, 14px, 0);
-    transition: opacity .45s ease, transform .5s var(--ease), filter .45s ease;
-  }
-  .is-open .rv {
-    opacity: 1; filter: none; transform: none;
-    transition-duration: 1s, 1.2s, 1s;
-    transition-delay: calc(950ms + var(--i) * 70ms);
-  }
-  .close {
-    position: fixed; z-index: 2; top: calc(var(--pad) + env(safe-area-inset-top)); right: calc(var(--pad) + env(safe-area-inset-right));
-    padding: .6em .2em; background: none; border: 0; cursor: pointer; color: var(--dim);
-    font: 400 10.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
-    opacity: 0; transition: opacity .4s ease, color .3s ease;
-  }
-  .close:hover, .close:focus-visible { color: var(--ink); }
-  .is-open .close { opacity: 1; transition-delay: 1.4s, 0s; }
-  kbd { font: inherit; margin-left: .7em; padding: .2em .45em; border: 1px solid var(--hair); border-radius: 3px; color: var(--faint); }
-
-  @media (max-width: 899px) {
-    .about::before { display: none; }
-    .about-inner {
-      width: auto; min-height: 100%; margin: 0;
-      padding: 46vh var(--pad) calc(56px + env(safe-area-inset-bottom));
-      padding-top: 46svh;
-      background: linear-gradient(180deg, rgba(var(--veil), 0) 0, rgba(var(--veil), 0) 40svh, rgba(var(--veil), .92) 47svh, var(--bg) 62svh);
+  @media (max-width: 859px) {
+    .page { width: auto; min-height: 0; margin: 0; padding: 12svh 20px 56px; justify-content: flex-start; }
+    .figure {
+      position: relative; inset: auto; z-index: auto; margin: 1.75rem -20px 0; aspect-ratio: 1 / .84;
+      -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent); mask-image: radial-gradient(closest-side, #000 62%, transparent);
     }
-    .facts div { grid-template-columns: minmax(0, 1fr); gap: .3rem; }
-    .close {
-      padding: .8em 1.1em; border-radius: 999px;
-      background: rgba(var(--veil), .72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    }
-    .close kbd { display: none; }
-    .tag { width: max-content; max-width: min(60vw, 22rem); }
-    .tag-s { white-space: normal; }
-  }
-  @media (max-width: 599px) {
-    .tag-s { display: none; }
-    .tl { display: none; }
+    .index { margin-top: 1.75rem; }
+    .group { grid-template-columns: minmax(0, 1fr); }
+    .index dt { margin-bottom: .2rem; line-height: 1.4; }
+    .index dt small { display: inline; margin-left: .35em; }
+    #leaders { display: none; }
   }
 
-  /* no JavaScript: plain, readable page */
-  .no-js body { overflow: auto; cursor: auto; }
-  .no-js canvas, .no-js .vignette, .no-js .hero, .no-js .corner, .no-js .close, .no-js .about::before { display: none; }
-  .no-js .about { position: static; visibility: visible; }
-  .no-js .rv { opacity: 1; filter: none; transform: none; }
-
-  /* no WebGL: keep the interaction, drop the particles */
-  .no-gl body {
-    background: radial-gradient(130% 80% at 50% 118%, #14244c, rgba(20, 36, 76, 0) 70%),
-                radial-gradient(70% 60% at 92% -8%, #1a1238, rgba(26, 18, 56, 0) 70%), var(--bg);
-  }
-  .no-gl canvas, .no-gl .tl, .no-gl .bl { display: none; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ch, .rv, .hint, .corner, .close, .about::before { transition-duration: .01ms !important; transition-delay: 0s !important; }
-    .hint::before { animation: none; }
-  }
+  .no-js .figure, .no-js #leaders, .no-js .caption, .no-gl .figure, .no-gl #leaders, .no-gl .caption { display: none; }
+  @media (prefers-reduced-motion: reduce) { .js .rise { animation: none; opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
-  <canvas id="gl" aria-hidden="true"></canvas>
-  <div class="vignette" aria-hidden="true"></div>
-  <canvas id="overlay" aria-hidden="true"></canvas>
-  <div class="tags" id="tags" aria-hidden="true"></div>
+  <main class="page">
+    <header>
+      <h1 class="rise" style="--i: 0"><button class="name" id="name" type="button" aria-pressed="false">Mahir Yavuz</button></h1>
+      <p class="lede rise" style="--i: 1">Engineering leader, data scientist and educator. Working with data since&nbsp;2000, across AI products, search, recommendations, ads and media&nbsp;art.</p>
+      <p class="cta rise" style="--i: 2"><a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn&nbsp;↗</a></p>
+    </header>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <h1><button id="name" class="name" type="button" aria-label="Mahir Yavuz" aria-expanded="false" aria-controls="about"><span class="w">Mahir</span> <span class="w strong">Yavuz</span></button></h1>
-      <p class="hint" id="hint" aria-hidden="true">Click the name</p>
-    </div>
-  </header>
+    <figure class="figure" id="figure" aria-hidden="true"><canvas id="gl"></canvas></figure>
 
-  <div class="corner tl" aria-hidden="true">Self-portrait in latent space, 2026</div>
-  <div class="corner bl" aria-hidden="true"><div id="how">Move to query · drag to orbit</div><div id="readout">&nbsp;</div></div>
-  <a class="corner tr cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
-  <div class="corner br sky" id="sky" aria-hidden="true">&nbsp;</div>
-
-  <section id="about" class="about" aria-labelledby="about-title">
-    <button id="close" class="close" type="button">Close<kbd>esc</kbd></button>
-    <div class="about-inner">
-      <p class="kicker rv">About</p>
-      <h2 id="about-title" class="about-title rv" tabindex="-1">Mahir <strong>Yavuz</strong></h2>
-      <p class="lead rv">Engineering leader, data scientist and educator, working with data since&nbsp;2000.</p>
-      <p class="cta-row rv"><a class="cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn <span aria-hidden="true">↗</span></a></p>
-      <p class="body rv">Mahir builds the teams and systems behind AI products and search, recommendation and ads platforms. Over two decades his teams have taken on data problems for companies including Nike, PwC, Google and Microsoft.</p>
-      <p class="body rv">His work spans engineering, data visualization and media art, and has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial. He has taught since 2003, most recently at Columbia.</p>
-      <dl class="facts">
-        <div class="rv"><dt>Experience</dt><dd><ul class="roles">
-          <li><span>AirOps</span>Head of Engineering</li>
-          <li><span>Etsy</span>Head of Engineering, Search, Recommendations &amp; Ads</li>
-          <li><span>Topos</span>Co-founder &amp; CTO</li>
-          <li><span>R/GA</span>Director of Data Science</li>
-          <li><span>Ars Electronica Futurelab</span>Senior Researcher, Linz</li>
-        </ul></dd></div>
-        <div class="rv"><dt>Teaching</dt><dd>Columbia University, University of Pennsylvania, Pratt, University of Art and Design Linz. Guest lectures at MIT, NYU and SVA.</dd></div>
-        <div class="rv"><dt>Lectures</dt><dd><a href="https://mahiryavuz.com/llms/">Business Applications of LLMs</a><br><a href="https://mahiryavuz.com/pm/">Product Management with AI</a></dd></div>
-        <div class="rv"><dt>Shown at</dt><dd>Ars Electronica Festival, SIGGRAPH, ISEA, Istanbul Biennial</dd></div>
-        <div class="rv"><dt>Talks</dt><dd>TEDx Istanbul and Vienna, Microsoft Build, Visualized, Fast Company Innovation Festival</dd></div>
+    <section class="index" aria-label="Work, teaching and exhibitions">
+      <dl>
+        <div class="group rise" style="--i: 3">
+          <dt>Work</dt>
+          <dd><ul>
+            <li data-c="0"><b>AirOps</b>Head of Engineering</li>
+            <li data-c="1"><b>Etsy</b>Head of Engineering, Search, Recommendations &amp; Ads</li>
+            <li data-c="2"><b>Topos</b>Co-founder &amp; CTO</li>
+            <li data-c="3"><b>R/GA</b>Director of Data Science</li>
+            <li data-c="4"><b>Ars Electronica Futurelab</b>Senior Researcher</li>
+          </ul></dd>
+        </div>
+        <div class="group rise" style="--i: 4">
+          <dt>Teaching<small>since 2003</small></dt>
+          <dd><ul>
+            <li data-c="5"><b>Columbia University</b></li>
+            <li data-c="6"><b>University of Pennsylvania</b></li>
+            <li data-c="6"><b>Pratt</b>and the University of Art and Design Linz</li>
+            <li data-c="6">Guest lectures at MIT, NYU and SVA</li>
+          </ul></dd>
+        </div>
+        <div class="group rise" style="--i: 5">
+          <dt>Lectures</dt>
+          <dd><ul>
+            <li data-c="5"><a href="https://mahiryavuz.com/llms/">Business Applications of LLMs</a></li>
+            <li data-c="5"><a href="https://mahiryavuz.com/pm/">Product Management with AI</a></li>
+          </ul></dd>
+        </div>
+        <div class="group rise" style="--i: 6">
+          <dt>Shown at</dt>
+          <dd><ul>
+            <li data-c="7">Ars Electronica Festival, SIGGRAPH</li>
+            <li data-c="7">ISEA, Istanbul Biennial</li>
+          </ul></dd>
+        </div>
+        <div class="group rise" style="--i: 7">
+          <dt>Talks</dt>
+          <dd><ul>
+            <li data-c="7">TEDx Istanbul and Vienna, Microsoft Build</li>
+            <li data-c="7">Visualized, Fast Company Innovation Festival</li>
+          </ul></dd>
+        </div>
       </dl>
-      <p class="links rv"><a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn ↗</a></p>
-    </div>
-  </section>
+      <p class="caption rise" style="--i: 8">
+        <span class="c-hover">Each line is a cluster in the cloud. Hover one to find it; hover the name for a portrait.</span>
+        <span class="c-touch">Each line is a cluster in the cloud. Tap one to find it; tap the name for a portrait.</span>
+      </p>
+    </section>
+  </main>
+  <canvas id="leaders" aria-hidden="true"></canvas>
 
 <script>
 (() => {
@@ -288,55 +170,49 @@
   const root = document.documentElement;
   root.classList.remove('no-js');
   root.classList.add('js');
-  root.classList.add('is-intro');
 
   const $ = (s) => document.querySelector(s);
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarse = matchMedia('(pointer: coarse)').matches;
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const wideMQ = matchMedia('(min-width: 860px)');
+  if (!canHover) root.classList.add('touch');
 
-  const nameBtn = $('#name'), hero = $('.hero'), about = $('#about'), aboutTitle = $('#about-title');
-  const glCanvas = $('#gl'), ov = $('#overlay'), ctx = ov.getContext('2d');
-  const readout = $('#readout'), tagsEl = $('#tags');
-
-  if (coarse) {
-    $('#hint').textContent = 'Tap the name';
-    $('#how').textContent = 'Drag to orbit';
-  }
+  const page = $('.page'), nameBtn = $('#name'), figure = $('#figure'), glCanvas = $('#gl');
+  const lc = $('#leaders'), lctx = lc.getContext('2d');
+  const rows = [...document.querySelectorAll('.index li[data-c]')];
 
   // ---------------------------------------------------------------- constants
 
   const TAU = Math.PI * 2;
-  const CAMZ = 6, FOV = 34 * Math.PI / 180, FOCAL = 1 / Math.tan(FOV / 2);
-  const K = 12;                                   // neighbours per query
-  const BG = [6, 7, 11], INK = [226, 230, 235], ACCENT = [91, 140, 255];
-  const BG_RGB = BG.join(','), INK_RGB = INK.join(','), ACC_RGB = ACCENT.join(',');
-  // The black is a night sky that follows the visitor's clock: two soft glows added onto the ink ground,
-  // one rising from below the horizon, a fainter one past the top-right corner.
-  const SKY = [
-    // hour, horizon glow, upper glow (rgb added to the ground)
-    [0, [10, 16, 40], [16, 10, 34]],      // midnight: ink blue, a little violet
-    [5, [10, 18, 44], [14, 12, 36]],
-    [7.5, [6, 34, 54], [18, 22, 58]],     // dawn: teal
-    [12, [14, 32, 80], [10, 26, 66]],     // day: ultramarine
-    [17, [16, 30, 76], [22, 18, 66]],
-    [19.5, [36, 22, 86], [48, 14, 64]],   // dusk: indigo and plum
-    [22, [14, 18, 52], [22, 12, 44]],
-    [24, [10, 16, 40], [16, 10, 34]],
-  ];
+  const CAMZ = 6, FOV = 34 * Math.PI / 180, FOCAL = 1 / Math.tan(FOV / 2), HALF_H = CAMZ / FOCAL;
+  const BG = [8, 9, 11], INK = [214, 219, 226];
 
-  // One cluster per chapter. Positions are hand-placed around a square antiprism; shapes are seeded noise.
+  // One cluster per chapter, in the order the index lists them. Positions hand-placed; shapes are seeded noise.
   const CLUSTERS = [
-    { k: 'Work', t: 'AirOps', s: 'Head of Engineering', c: [1.1, 0.6, 0.05], w: 1.1, sp: 1.0 },
-    { k: 'Work', t: 'Etsy', s: 'Head of Engineering · Search, Recs & Ads', c: [0.8, -0.55, 0.75], w: 1.35, sp: 1.05 },
-    { k: 'Work', t: 'Topos', s: 'Co-founder & CTO', c: [-0.05, 0.7, -1.05], w: 0.95, sp: 0.95 },
-    { k: 'Work', t: 'R/GA', s: 'Director of Data Science', c: [-1.1, 0.45, 0.1], w: 0.9, sp: 0.95 },
-    { k: 'Work', t: 'Ars Electronica Futurelab', s: 'Senior Researcher · Linz', c: [-0.8, -0.65, -0.7], w: 1.0, sp: 1.0 },
-    { k: 'Teaching', t: 'Columbia', s: 'LLMs in business · AI for product', c: [0.75, -0.6, -0.8], w: 0.8, sp: 0.85 },
-    { k: 'Teaching', t: 'Penn', s: 'University of Pennsylvania', c: [0.1, 0.5, 1.05], w: 0.75, sp: 0.85 },
-    { k: 'Shown at', t: 'Festivals & stages', s: 'Ars Electronica · SIGGRAPH · ISEA · TEDx', c: [-0.75, -0.55, 0.8], w: 0.85, sp: 0.9 },
+    { c: [1.1, 0.6, 0.05], w: 1.1, sp: 1.0 },      // AirOps
+    { c: [0.8, -0.55, 0.75], w: 1.35, sp: 1.05 },  // Etsy
+    { c: [-0.05, 0.7, -1.05], w: 0.95, sp: 0.95 }, // Topos
+    { c: [-1.1, 0.45, 0.1], w: 0.9, sp: 0.95 },    // R/GA
+    { c: [-0.8, -0.65, -0.7], w: 1.0, sp: 1.0 },   // Ars Electronica Futurelab
+    { c: [0.75, -0.6, -0.8], w: 0.8, sp: 0.85 },   // Columbia
+    { c: [0.1, 0.5, 1.05], w: 0.75, sp: 0.85 },    // Penn, Pratt, Linz
+    { c: [-0.75, -0.55, 0.8], w: 0.85, sp: 0.9 },  // exhibitions & talks
   ];
   const NC = CLUSTERS.length, FILAMENT = NC, DUST = NC + 1;
   const EDGES = [[4, 3], [3, 2], [2, 1], [1, 0], [5, 6], [6, 3], [5, 0], [7, 4], [7, 6], [7, 1]];
+
+  // The black is a night sky that follows the visitor's clock (two faint glows added onto the ground).
+  const SKY = [
+    // hour, low glow, high glow
+    [0, [6, 10, 24], [10, 6, 20]],
+    [5, [6, 11, 26], [8, 7, 22]],
+    [7.5, [4, 20, 32], [11, 13, 35]],
+    [12, [8, 19, 48], [6, 16, 40]],
+    [17, [10, 18, 46], [13, 11, 40]],
+    [19.5, [22, 13, 52], [29, 8, 38]],
+    [22, [8, 11, 31], [13, 7, 26]],
+    [24, [6, 10, 24], [10, 6, 20]],
+  ];
 
   // ---------------------------------------------------------------- helpers
 
@@ -360,6 +236,7 @@
     return [u, v, [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]]];
   }
 
+
   // Column-major Rx(pitch) * Ry(yaw), matching GLSL mat3.
   function rot(yaw, pitch, m) {
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cx = Math.cos(pitch), sx = Math.sin(pitch);
@@ -373,7 +250,6 @@
     return new Float32Array([FOCAL / aspect, 0, 0, 0, 0, FOCAL, 0, 0, 0, 0, (f + n) / (n - f), -1, 0, 0, 2 * f * n / (n - f), 0]);
   }
 
-  // ---------------------------------------------------------------- scene
 
   // A: cloud position (xyz). R: seed, size, cluster id (FILAMENT, DUST past the clusters), brightness.
   // B: portrait position (xyz, unit square) + tone; tone < 0 marks dust, which stays in the cloud.
@@ -520,9 +396,9 @@
   layout(location = 2) in vec4 aR;
   uniform mat4 uProj;
   uniform mat3 uRotA, uRotB;
-  uniform vec3 uBCenter, uInk, uAccent;
-  uniform vec2 uRes, uQuery;
-  uniform float uBScale, uAScale, uCamZ, uTime, uMix, uIntro, uBurst, uSize, uDpr, uQueryOn, uGain;
+  uniform vec3 uInk;
+  uniform vec2 uShift;
+  uniform float uBScale, uAScale, uCamZ, uTime, uMix, uIntro, uBurst, uSize, uGain, uDim;
   uniform float uHi[${NC}];
   out vec3 vCol;
   out float vK;
@@ -535,45 +411,38 @@
     bool dust = aB.w < 0.;
     vec3 dir = normalize(fract(sin(vec3(s * 127.1, s * 311.7, s * 74.7)) * 43758.5453) - .5 + 1e-3);
 
-    // cloud: slow drift, born from a point during the intro
     vec3 a = aA + .035 * vec3(sin(uTime * .31 + s * 61.), sin(uTime * .27 + s * 17.), sin(uTime * .23 + s * 37.));
     float ti = outQ(clamp(uIntro * 1.6 - s * .6, 0., 1.));
     vec3 pa = uRotA * (mix(dir * .05, a, ti) * uAScale);
-
-    // portrait: relief from tone, gentle breathing
     vec3 pb = dust ? pa * 1.3
-      : uBCenter + uRotB * (aB.xyz * uBScale + .004 * uBScale * vec3(sin(uTime * 1.3 + s * 40.), cos(uTime * 1.1 + s * 23.), 0.));
+      : uRotB * (aB.xyz * uBScale + .004 * uBScale * vec3(sin(uTime * 1.3 + s * 40.), cos(uTime * 1.1 + s * 23.), 0.));
 
-    // staggered morph with a vortex in the middle
     float e = inOut(clamp(uMix * 1.5 - s * .5, 0., 1.));
     vec3 p = mix(pa, pb, e);
-    float burst = sin(3.14159265 * e) * uBurst;
-    vec2 c = uBCenter.xz * e, d = p.xz - c;
-    float ang = burst * (1. + s);
-    p.xz = c + mat2(cos(ang), sin(ang), -sin(ang), cos(ang)) * d;
+    float burst = sin(3.14159265 * e) * uBurst, ang = burst * (1. + s);
+    p.xz = mat2(cos(ang), sin(ang), -sin(ang), cos(ang)) * p.xz;
     p += dir * burst * .3;
 
     vec4 view = vec4(p.xy, p.z - uCamZ, 1.);
     gl_Position = uProj * view;
+    gl_Position.xy += uShift * gl_Position.w;
     float depth = -view.z;
 
-    // the query lights up what it is near
-    vec2 sp = (gl_Position.xy / gl_Position.w * vec2(.5, -.5) + .5) * uRes;
-    float qd = length(sp - uQuery) / uDpr;
-    float glow = uQueryOn * (1. - e) * exp(-qd * qd / 9800.);
     int ci = int(aR.z + .5);
-    float hi = ci < ${NC} ? uHi[min(ci, ${NC - 1})] * (1. - e) : 0.;
+    float self = ci < ${NC} ? uHi[min(ci, ${NC - 1})] : 0.;
+    float on = self * (1. - e);
+    float dim = 1. - .62 * uDim * (1. - self) * (1. - e);
 
     float tone = dust ? 0. : aB.w;
     float size = dust ? aR.y : mix(aR.y, .55 + 1.4 * pow(tone, 1.5), e);
     float bright = dust ? aR.w : mix(aR.w, .25 + .9 * tone, e);
     float fog = clamp((depth - uCamZ + 2.) / 4.2, 0., 1.);
-    bright *= mix(.4, 1., ti) * mix(1.2, .3, fog) * (1. + 1.8 * glow + .7 * hi);
+    bright *= mix(.4, 1., ti) * mix(1.2, .3, fog) * (1. + 1.1 * on) * dim;
 
-    float px = size * uSize * (uCamZ / depth) * (1. + .8 * glow + .3 * hi);
+    float px = size * uSize * (uCamZ / depth) * (1. + .35 * on);
     float cover = min(px / 1.5, 1.);
     gl_PointSize = max(px, 1.5);
-    vCol = mix(uInk, uAccent, clamp(hi * .9 + glow * .2, 0., 1.));
+    vCol = mix(uInk, vec3(1.), on);
     vK = bright * cover * cover * uGain;
   }`;
 
@@ -587,7 +456,6 @@
     o = vec4(vCol * (1. - smoothstep(.5, 1., d)) * vK, 1.);
   }`;
 
-  // Full-screen sky: one triangle, two radial glows, dithered so the gradient never bands.
   const SKY_VS = `#version 300 es
   void main() {
     vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
@@ -596,41 +464,26 @@
 
   const SKY_FS = `#version 300 es
   precision highp float;
-  uniform vec2 uRes;
+  uniform vec2 uRes, uLow;
   uniform vec3 uBase, uGlowA, uGlowB;
   uniform float uTime;
   out vec4 o;
   float hash(vec2 p) { vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }
   void main() {
     vec2 uv = gl_FragCoord.xy / uRes, k = vec2(uRes.x / uRes.y, 1.);
-    vec2 pa = vec2(.5 + .06 * sin(uTime * .027), -.22 + .03 * sin(uTime * .043));
-    vec2 pb = vec2(.9 + .04 * sin(uTime * .024 + 1.), 1.1 + .02 * sin(uTime * .031));
-    float a = 1. - smoothstep(0., 1.25, length((uv - pa) * k));
-    float b = 1. - smoothstep(0., .95, length((uv - pb) * k));
+    vec2 pa = uLow + vec2(.04 * sin(uTime * .027), .03 * sin(uTime * .043));
+    vec2 pb = vec2(.92 + .03 * sin(uTime * .024 + 1.), 1.12);
+    float a = 1. - smoothstep(0., 1.15, length((uv - pa) * k));
+    float b = 1. - smoothstep(0., .9, length((uv - pb) * k));
     vec3 c = uBase + uGlowA * a * a + uGlowB * b * b;
     o = vec4(c + (hash(gl_FragCoord.xy) - .5) * (1.6 / 255.), 1.);
   }`;
 
-  // ---------------------------------------------------------------- state
+  // ---------------------------------------------------------------- scene
 
-  let W = 0, H = 0, dpr = 1, proj, aScale = 1, bScale = 1, bCenter = [0, 0, 0], sizeScale = 1, nameRect;
-  let mix = 0, mixTarget = 0, isOpen = false, pushed = false;
-  let yaw = 0.6, pitch = 0.22, yawVel = 0, yawB = 0, pitchB = 0;
-  let queryOn = 0, active = -1, kms = 0, lastReadout = 0;
-  const AUTO = reduceMotion ? 0 : 0.045;
-  const pointer = { x: 0, y: 0, inside: false };
-  const drag = { on: false, id: -1, x: 0, y: 0, t: 0 };
-  const Q = { x: 0, y: 0 };
-  const rotA = new Float32Array(9), rotB = new Float32Array(9);
-  const hi = new Float32Array(NC), votes = new Int32Array(NC + 2);
-  const bestD = new Float64Array(K), bestI = new Int32Array(K);
-
-  const N = (coarse || screen.width * screen.height < 800000) ? 6000 : 12000;
+  const N = canHover && screen.width * screen.height >= 800000 ? 9000 : 4800;
   const { A, R, nS, cent } = buildScene(N);
   const B = new Float32Array(N * 4);
-  const SX = new Float32Array(nS), SY = new Float32Array(nS);
-  // Only the larger points are searchable "items"; the rest is texture. Keeps neighbours legible in dense clusters.
-  const items = Int32Array.from({ length: nS }, (_, i) => i).filter((i) => R[i * 4 + 1] > 1.1);
 
   // Map cloud → targets top-to-bottom so the morph reads as one motion.
   function assignTargets(T) {
@@ -641,79 +494,10 @@
   }
   assignTargets(sphereTargets(nS));
 
-  // ---------------------------------------------------------------- name, panel, history
-
-  let li = 0;
-  for (const w of nameBtn.querySelectorAll('.w')) {
-    const text = w.textContent;
-    w.textContent = '';
-    for (const c of text) {
-      const s = document.createElement('span');
-      s.className = 'ch';
-      s.textContent = c;
-      s.style.setProperty('--i', li++);
-      s.style.setProperty('--j', (Math.random() * 2 - 1).toFixed(3));
-      w.append(s);
-    }
-  }
-  document.querySelectorAll('.rv').forEach((el, i) => el.style.setProperty('--i', i));
-  about.inert = true;
-
-  function setOpen(open, focus = true) {
-    if (open === isOpen) return;
-    isOpen = open;
-    root.classList.toggle('is-open', open);
-    nameBtn.setAttribute('aria-expanded', String(open));
-    about.inert = !open;
-    hero.inert = open;
-    for (const el of document.querySelectorAll('.tr, .br')) el.inert = open;
-    mixTarget = open ? 1 : 0;
-    if (open) {
-      // letters drift toward where the portrait forms
-      const wide = innerWidth >= 900;
-      nameBtn.style.setProperty('--tx', (wide ? innerWidth * 0.22 : 0) + 'px');
-      nameBtn.style.setProperty('--ty', (wide ? 0 : -innerHeight * 0.22) + 'px');
-      about.scrollTop = 0;
-      if (focus) aboutTitle.focus({ preventScroll: true });
-    } else if (focus) {
-      nameBtn.focus({ preventScroll: true });
-    }
-  }
-
-  // History is a nicety (back button, #about links); sandboxed frames may refuse it.
-  nameBtn.addEventListener('click', () => {
-    if (isOpen) return;
-    try { history.pushState({ about: true }, '', '#about'); pushed = true; } catch (err) { pushed = false; }
-    setOpen(true);
-  });
-  function requestClose() {
-    if (!isOpen) return;
-    if (pushed) { pushed = false; history.back(); return; }
-    try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (err) { /* ignore */ }
-    setOpen(false);
-  }
-  $('#close').addEventListener('click', requestClose);
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') requestClose(); });
-  addEventListener('popstate', () => { pushed = false; setOpen(location.hash === '#about'); });
-
-  // ---------------------------------------------------------------- labels
-
-  const tags = CLUSTERS.map((c) => {
-    const el = document.createElement('div');
-    el.className = 'tag';
-    for (const [cls, text] of [['tag-k', c.k], ['tag-t', c.t], ['tag-s', c.s]]) {
-      const s = document.createElement('span');
-      s.className = cls;
-      s.textContent = text;
-      el.append(s);
-    }
-    tagsEl.append(el);
-    return { el, w: 0, h: 0, x: 0, y: 0, dx: 1, dy: 0, side: 1, placed: false };
-  });
-
   // ---------------------------------------------------------------- WebGL
 
-  let gl = null, U = {}, bufB = null, prog = null, vao = null, skyProg = null, skyVao = null, SU = {};
+  let gl = null, prog = null, vao = null, skyProg = null, skyVao = null, bufB = null;
+  const U = {}, SU = {};
   try {
     gl = glCanvas.getContext('webgl2', { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: 'high-performance' });
     if (gl) {
@@ -732,17 +516,17 @@
         if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
         return p;
       };
+
       skyProg = link(SKY_VS, SKY_FS);
       skyVao = gl.createVertexArray();
       gl.useProgram(skyProg);
-      for (const n of ['uRes', 'uBase', 'uGlowA', 'uGlowB', 'uTime']) SU[n] = gl.getUniformLocation(skyProg, n);
+      for (const n of ['uRes', 'uLow', 'uBase', 'uGlowA', 'uGlowB', 'uTime']) SU[n] = gl.getUniformLocation(skyProg, n);
       gl.uniform3f(SU.uBase, BG[0] / 255, BG[1] / 255, BG[2] / 255);
 
       prog = link(VS, FS);
       gl.useProgram(prog);
-      for (const n of ['uProj', 'uRotA', 'uRotB', 'uBCenter', 'uInk', 'uAccent', 'uRes', 'uQuery', 'uBScale', 'uAScale', 'uCamZ',
-        'uTime', 'uMix', 'uIntro', 'uBurst', 'uSize', 'uDpr', 'uQueryOn', 'uGain', 'uHi']) U[n] = gl.getUniformLocation(prog, n);
-
+      for (const n of ['uProj', 'uRotA', 'uRotB', 'uInk', 'uShift', 'uBScale', 'uAScale', 'uCamZ', 'uTime', 'uMix',
+        'uIntro', 'uBurst', 'uSize', 'uGain', 'uDim', 'uHi']) U[n] = gl.getUniformLocation(prog, n);
       vao = gl.createVertexArray();
       gl.bindVertexArray(vao);
       const attr = (loc, data, size, usage) => {
@@ -756,12 +540,10 @@
       attr(0, A, 3, gl.STATIC_DRAW);
       bufB = attr(1, B, 4, gl.DYNAMIC_DRAW);
       attr(2, R, 4, gl.STATIC_DRAW);
-
       gl.uniform3f(U.uInk, INK[0] / 255, INK[1] / 255, INK[2] / 255);
-      gl.uniform3f(U.uAccent, ACCENT[0] / 255, ACCENT[1] / 255, ACCENT[2] / 255);
       gl.uniform1f(U.uCamZ, CAMZ);
       gl.uniform1f(U.uBurst, reduceMotion ? 0 : 1);
-      gl.uniform1f(U.uGain, N > 8000 ? 0.62 : 0.8);
+      gl.uniform1f(U.uGain, N > 6000 ? 0.72 : 0.86);
       gl.blendFunc(gl.ONE, gl.ONE);   // points add light onto the sky
 
       glCanvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); gl = null; root.classList.add('no-gl'); });
@@ -787,9 +569,8 @@
     img.src = 'profile.jpg';
   }
 
-  // ---------------------------------------------------------------- sky: follows the visitor's local time
+  // ---------------------------------------------------------------- sky
 
-  const skyEl = $('#sky');
   const lerp3 = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
   let skyA = SKY[0][1], skyB = SKY[0][2];
   function updateSky() {
@@ -798,245 +579,230 @@
     while (SKY[k][0] < h) k++;
     const [h0, a0, b0] = SKY[k - 1], [h1, a1, b1] = SKY[k], t = smooth(0, 1, (h - h0) / (h1 - h0));
     skyA = lerp3(a0, a1, t); skyB = lerp3(b0, b1, t);
-    const phase = h < 5 || h >= 21 ? 'Night' : h < 8 ? 'Dawn' : h < 17 ? 'Day' : 'Dusk';
-    skyEl.textContent = `${phase} · ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    root.style.setProperty('--sky', `rgb(${skyA.map((v) => Math.min(255, v * 2.6) | 0).join(',')})`);
   }
-  setInterval(updateSky, 20000);
+  setInterval(updateSky, 30000);
   updateSky();
 
-  // ---------------------------------------------------------------- layout & input
+  // ---------------------------------------------------------------- layout
 
-  function resize() {
-    W = innerWidth; H = innerHeight;
+  let W = 1, H = 1, dpr = 1, wide = false, colRight = 0, proj, shiftX = 0, cx = 0, aScale = 1, bScale = 1, sizeScale = 1;
+  let VW = 1, VH = 1;
+  function layout() {
     dpr = Math.min(devicePixelRatio || 1, 2);
-    for (const c of [glCanvas, ov]) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
+    wide = wideMQ.matches;
+    const r = glCanvas.getBoundingClientRect();
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    VW = innerWidth; VH = innerHeight;
+    glCanvas.width = Math.round(W * dpr); glCanvas.height = Math.round(H * dpr);
+    lc.width = Math.round(VW * dpr); lc.height = Math.round(VH * dpr);
     proj = perspective(W / H);
-    const halfH = CAMZ / FOCAL, halfW = halfH * W / H;
-    aScale = Math.min(1, halfW / 1.35, halfH / 1.75);
-    if (W >= 900) { bCenter = [halfW * 0.5, 0, 0]; bScale = Math.min(halfH * 1.35, halfW * 0.8); }
-    else { bCenter = [0, halfH * 0.5, 0]; bScale = Math.min(halfH * 0.85, halfW * 1.6); }
-    sizeScale = clamp(Math.min(W, H) / 800, 0.8, 1.3);
-    nameRect = $('.hero-inner').getBoundingClientRect();
-    for (const t of tags) t.w = 0;
-    if (!Q.x) { Q.x = W * 0.64; Q.y = H * 0.38; }
+    const pxPerWorld = H / (2 * HALF_H);
+    let regionW = W, regionH = H;
+    if (wide) {
+      colRight = page.getBoundingClientRect().right;
+      regionW = Math.max(240, W - colRight);
+      cx = colRight + regionW / 2;
+    } else {
+      cx = W / 2;
+    }
+    shiftX = (cx - W / 2) / (W / 2);
+    const fit = Math.min(regionW, regionH);
+    aScale = (wide ? Math.min(regionW * 0.44, regionH * 0.38) : fit * 0.43) / (1.65 * pxPerWorld);
+    bScale = (wide ? Math.min(regionW * 0.74, regionH * 0.7) : fit * 0.78) / pxPerWorld;
+    sizeScale = clamp(fit / 700, 0.8, 1.2);
   }
-  addEventListener('resize', resize);
-  resize();
-  document.fonts && document.fonts.ready.then(resize);
+  addEventListener('resize', layout);
+  wideMQ.addEventListener('change', layout);
+  layout();
+  document.fonts && document.fonts.ready.then(layout);
 
-  glCanvas.addEventListener('pointerdown', (e) => {
-    if (isOpen) return;
-    drag.on = true; drag.id = e.pointerId; drag.x = e.clientX; drag.y = e.clientY; drag.t = performance.now();
-    glCanvas.setPointerCapture(e.pointerId);
-    root.classList.add('is-dragging');
-    yawVel = 0;
-    pointer.inside = true; pointer.x = e.clientX; pointer.y = e.clientY;
-  });
+  // ---------------------------------------------------------------- state
+
+  let mix = 0, mixTarget = 0, portraitSticky = false;
+  let yaw = 0.6, pitch = 0.24, yawVel = 0, yawB = 0, pitchB = 0;
+  const AUTO = reduceMotion ? 0 : 0.035;
+  const rotA = new Float32Array(9), rotB = new Float32Array(9), hi = new Float32Array(NC);
+  const pointer = { x: -1, y: -1, inside: false };
+  const drag = { on: false, id: -1, x: 0, y: 0, t: 0 };
+  let active = { c: -1, row: null, source: '' }, leaderT = 0, lastTap = -1e9, figureVisible = true;
+
+  function project(c) {
+    const m = rotA, x = c[0] * aScale, y = c[1] * aScale, z = c[2] * aScale;
+    const k = FOCAL * (H / 2) / (CAMZ - (m[2] * x + m[5] * y + m[8] * z));
+    return [cx + (m[0] * x + m[3] * y + m[6] * z) * k, H / 2 - (m[1] * x + m[4] * y + m[7] * z) * k];
+  }
+
+  function setActive(c, source, row) {
+    if (mixTarget > 0) c = -1;
+    if (c === active.c && row === active.row) { active.source = source; return; }
+    active = { c, row: c >= 0 ? (row || rows.find((r) => +r.dataset.c === c)) : null, source };
+    leaderT = 0;
+    root.classList.toggle('has-active', c >= 0);
+    for (const r of rows) r.classList.toggle('on', c >= 0 && +r.dataset.c === c);
+  }
+
+  // rows → clusters
+  for (const r of rows) {
+    const c = +r.dataset.c;
+    r.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') setActive(c, 'row', r); });
+    r.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && active.row === r) setActive(-1, ''); });
+    r.addEventListener('focusin', () => setActive(c, 'row', r));
+    r.addEventListener('focusout', () => { if (active.row === r) setActive(-1, ''); });
+    r.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      lastTap = performance.now();
+      setActive(active.c === c && active.row === r ? -1 : c, 'tap', r);
+    });
+  }
+
+  // the name → portrait
+  function setPortrait(on) {
+    mixTarget = on ? 1 : 0;
+    nameBtn.setAttribute('aria-pressed', String(on));
+    if (on) setActive(-1, '');
+  }
+  nameBtn.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') setPortrait(true); });
+  nameBtn.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') setPortrait(portraitSticky); });
+  nameBtn.addEventListener('click', () => { portraitSticky = !portraitSticky; setPortrait(portraitSticky); });
+
+  // the cloud → rows, and drag to orbit
   addEventListener('pointermove', (e) => {
     pointer.x = e.clientX; pointer.y = e.clientY;
-    if (e.pointerType === 'mouse') pointer.inside = true;
     if (drag.on && e.pointerId === drag.id) {
-      const now = performance.now(), dts = Math.max(1, now - drag.t) / 1000;
-      const dyaw = (e.clientX - drag.x) * 0.006;
+      const now = performance.now(), dts = Math.max(1, now - drag.t) / 1000, dyaw = (e.clientX - drag.x) * 0.006;
       yaw += dyaw;
       pitch = clamp(pitch + (e.clientY - drag.y) * 0.004, -0.7, 0.9);
       yawVel = clamp(yawVel * 0.6 + (dyaw / dts) * 0.4, -3, 3);
       drag.x = e.clientX; drag.y = e.clientY; drag.t = now;
     }
   }, { passive: true });
+  glCanvas.addEventListener('pointerdown', (e) => {
+    drag.on = true; drag.id = e.pointerId; drag.x = e.clientX; drag.y = e.clientY; drag.t = performance.now();
+    yawVel = 0;
+  });
   const endDrag = (e) => {
     if (!drag.on || e.pointerId !== drag.id) return;
     drag.on = false;
     if (performance.now() - drag.t > 90) yawVel = 0;
-    root.classList.remove('is-dragging');
-    if (e.pointerType !== 'mouse') pointer.inside = false;
   };
   addEventListener('pointerup', endDrag);
   addEventListener('pointercancel', endDrag);
-  root.addEventListener('mouseleave', () => { pointer.inside = false; });
+  glCanvas.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') pointer.inside = true; });
+  glCanvas.addEventListener('pointerleave', () => { pointer.inside = false; if (active.source === 'canvas') setActive(-1, ''); });
 
-  // ---------------------------------------------------------------- k-NN on the projected cloud
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((es) => { figureVisible = es[0].isIntersecting; }).observe(figure);
+  }
 
-  // Mirrors the vertex shader's drift + rotation + projection for searchable points.
-  function knn(qx, qy, time) {
-    bestD.fill(Infinity); bestI.fill(-1);
-    const m = rotA, hw = W / 2, hh = H / 2, f = FOCAL * hh;
-    for (let n = 0; n < items.length; n++) {
-      const i = items[n], i3 = i * 3, s = R[i * 4];
-      const x = (A[i3] + 0.035 * Math.sin(time * 0.31 + s * 61)) * aScale;
-      const y = (A[i3 + 1] + 0.035 * Math.sin(time * 0.27 + s * 17)) * aScale;
-      const z = (A[i3 + 2] + 0.035 * Math.sin(time * 0.23 + s * 37)) * aScale;
-      const k = f / (CAMZ - (m[2] * x + m[5] * y + m[8] * z));
-      const px = hw + (m[0] * x + m[3] * y + m[6] * z) * k;
-      const py = hh - (m[1] * x + m[4] * y + m[7] * z) * k;
-      SX[i] = px; SY[i] = py;
-      const dx = px - qx, dy = py - qy, d2 = dx * dx + dy * dy;
-      if (d2 < bestD[K - 1]) {
-        let j = K - 1;
-        while (j > 0 && bestD[j - 1] > d2) { bestD[j] = bestD[j - 1]; bestI[j] = bestI[j - 1]; j--; }
-        bestD[j] = d2; bestI[j] = i;
-      }
+  // ---------------------------------------------------------------- leaders: hairline from a row to its cluster
+
+  function rowAnchor(row) {
+    const range = document.createRange();
+    range.selectNodeContents(row);
+    const rects = range.getClientRects(), r = rects[rects.length - 1] || row.getBoundingClientRect();
+    return [r.right + 10, r.top + r.height / 2];
+  }
+
+  // Fades out from the last row it pointed at; the layer is hidden whenever there is nothing on it.
+  let lastLead = null, leaderShown = false;
+  function drawLeader(alpha, t) {
+    if (active.c >= 0 && active.row && active.source !== 'tour') lastLead = { c: active.c, row: active.row };
+    const show = wide && alpha >= 0.01 && lastLead;
+    if (!show) {
+      if (leaderShown) { lctx.clearRect(0, 0, lc.width, lc.height); lc.style.visibility = 'hidden'; leaderShown = false; }
+      return;
     }
-  }
-
-  function projectCentroid(c) {
-    const m = rotA, hh = H / 2, x = c[0] * aScale, y = c[1] * aScale, z = c[2] * aScale;
-    const k = FOCAL * hh / (CAMZ - (m[2] * x + m[5] * y + m[8] * z));
-    return [W / 2 + (m[0] * x + m[3] * y + m[6] * z) * k, hh - (m[1] * x + m[4] * y + m[7] * z) * k];
-  }
-
-  // ---------------------------------------------------------------- overlay
-
-  function drawOverlay(alpha) {
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    if (alpha < 0.004 || bestI[0] < 0) return;
-    const qx = Q.x, qy = Q.y;
-    ctx.lineWidth = 0.75;
-
-    // search radius = distance to the k-th neighbour
-    ctx.setLineDash([2, 4]);
-    ctx.strokeStyle = `rgba(${INK_RGB},${0.2 * alpha})`;
-    ctx.beginPath(); ctx.arc(qx, qy, Math.sqrt(bestD[K - 1]), 0, TAU); ctx.stroke();
-    ctx.setLineDash([]);
-
-    for (let j = K - 1; j >= 0; j--) {
-      const i = bestI[j];
-      if (i < 0) continue;
-      const a = alpha * (0.75 - 0.45 * j / (K - 1));
-      ctx.strokeStyle = `rgba(${INK_RGB},${a})`;
-      const dx = SX[i] - qx, dy = SY[i] - qy, d = Math.hypot(dx, dy) || 1;
-      ctx.beginPath();
-      if (d > 9) { ctx.moveTo(qx + dx / d * 6, qy + dy / d * 6); ctx.lineTo(SX[i] - dx / d * 3.4, SY[i] - dy / d * 3.4); }
-      ctx.moveTo(SX[i] + 3.4, SY[i]);
-      ctx.arc(SX[i], SY[i], 3.4, 0, TAU);
-      ctx.stroke();
+    if (!leaderShown) { lc.style.visibility = 'visible'; leaderShown = true; }
+    lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    lctx.clearRect(0, 0, VW, VH);
+    const [x0, y0] = rowAnchor(lastLead.row), [sx, sy] = project(cent[lastLead.c]);
+    const r0 = glCanvas.getBoundingClientRect(), px = sx + r0.left, py = sy + r0.top;
+    const xe = Math.max(x0 + 16, colRight + 28);
+    const pts = [[x0, y0], [xe, y0], [px, py]];
+    const segs = [Math.hypot(xe - x0, 0), Math.hypot(px - xe, py - y0)], total = segs[0] + segs[1];
+    let left = total * t;
+    lctx.strokeStyle = `rgba(236,236,236,${0.5 * alpha})`;
+    lctx.lineWidth = 1;
+    lctx.beginPath();
+    lctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 0; i < 2 && left > 0; i++) {
+      const f = Math.min(1, left / (segs[i] || 1)), [ax, ay] = pts[i], [bx, by] = pts[i + 1];
+      lctx.lineTo(ax + (bx - ax) * f, ay + (by - ay) * f);
+      left -= segs[i];
     }
-
-    // crosshair, haloed so it reads over a lit cluster
-    const cross = () => {
-      ctx.beginPath();
-      ctx.moveTo(qx - 8, qy); ctx.lineTo(qx - 3, qy); ctx.moveTo(qx + 3, qy); ctx.lineTo(qx + 8, qy);
-      ctx.moveTo(qx, qy - 8); ctx.lineTo(qx, qy - 3); ctx.moveTo(qx, qy + 3); ctx.lineTo(qx, qy + 8);
-      ctx.stroke();
-    };
-    ctx.lineWidth = 3.5; ctx.strokeStyle = `rgba(${BG_RGB},${0.7 * alpha})`; cross();
-    ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${INK_RGB},${alpha})`; cross();
-  }
-
-  function placeTags(alpha, dt) {
-    const pad = 20, k = 1 - Math.exp(-dt * 10);
-    tags.forEach((t, c) => {
-      const a = hi[c] * alpha;
-      if (a < 0.004) {
-        if (t.placed) { t.el.style.opacity = '0'; t.placed = false; }
-        return;
-      }
-      if (!t.w) { t.w = t.el.offsetWidth; t.h = t.el.offsetHeight; }
-      const [sx, sy] = projectCentroid(cent[c]);
-      // sit on the far side of the cluster from the query, so its lines never cross the label
-      let dx = sx - Q.x, dy = sy - Q.y, dl = Math.hypot(dx, dy);
-      if (dl < 8) { dx = sx - W / 2; dy = sy - H / 2; dl = Math.hypot(dx, dy) || 1; }
-      if (!t.placed) { t.dx = dx / dl; t.dy = dy / dl; }
-      t.dx += (dx / dl - t.dx) * k * 0.4; t.dy += (dy / dl - t.dy) * k * 0.4;
-      const dn = Math.hypot(t.dx, t.dy) || 1;
-      let ax = sx + t.dx / dn * 80, ay = sy + t.dy / dn * 80;
-      let side = t.side;
-      if (t.dx / dn > 0.3) side = 1; else if (t.dx / dn < -0.3) side = -1;
-      if (side > 0 && ax + t.w > W - pad) side = -1;
-      if (side < 0 && ax - t.w < pad) side = 1;
-      ax = clamp(ax, pad, W - pad);
-      const x0 = side > 0 ? ax : ax - t.w, x1 = x0 + t.w;
-      // never cover the query itself
-      if (Q.x > x0 - 24 && Q.x < x1 + 24 && Math.abs(Q.y - ay) < t.h / 2 + 24) {
-        ay = Q.y + (ay < Q.y ? -1 : 1) * (t.h / 2 + 36);
-      }
-      ay = clamp(ay, pad + 30 + t.h / 2, H - pad - 44 - t.h / 2);
-      // keep clear of the name and hint
-      const r = nameRect;
-      if (x1 > r.left - 16 && x0 < r.right + 16 && ay + t.h / 2 > r.top - 12 && ay - t.h / 2 < r.bottom + 12) {
-        ay = sy < H / 2 ? r.top - 12 - t.h / 2 : r.bottom + 12 + t.h / 2;
-      }
-      if (!t.placed || side !== t.side) { t.x = ax; t.y = ay; } else { t.x += (ax - t.x) * k; t.y += (ay - t.y) * k; }
-      t.side = side;
-      t.placed = true;
-      t.el.classList.toggle('left', side < 0);
-      t.el.style.transform = `translate3d(${t.x.toFixed(1)}px,${t.y.toFixed(1)}px,0) translate(${side < 0 ? -100 : 0}%,-50%)`;
-      t.el.style.opacity = a.toFixed(3);
-
-      // leader from the cluster's centre to its label
-      ctx.strokeStyle = `rgba(${ACC_RGB},${0.55 * a})`;
-      ctx.lineWidth = 0.75;
-      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(t.x - side * 8, t.y); ctx.stroke();
-      ctx.fillStyle = `rgba(${ACC_RGB},${a})`;
-      ctx.beginPath(); ctx.arc(sx, sy, 2, 0, TAU); ctx.fill();
-    });
+    lctx.stroke();
+    if (t > 0.98) {
+      lctx.fillStyle = `rgba(236,236,236,${0.9 * alpha})`;
+      lctx.beginPath(); lctx.arc(px, py, 2.25, 0, TAU); lctx.fill();
+      lctx.strokeStyle = `rgba(236,236,236,${0.28 * alpha})`;
+      lctx.beginPath(); lctx.arc(px, py, 9, 0, TAU); lctx.stroke();
+    }
   }
 
   // ---------------------------------------------------------------- loop
 
   const t0 = performance.now();
-  let last = t0;
+  let last = t0, tourAt = t0 + 2600, tourC = -1, leaderAlpha = 0;
 
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     const time = ((now - t0) / 1000) % 10000;
-    const intro = reduceMotion ? 1 : Math.min(1, time / 2.6);
+    const intro = reduceMotion ? 1 : Math.min(1, time / 2.2);
 
-    const rate = reduceMotion ? 3 : (mixTarget > mix ? 1 / 2.6 : 1 / 2.2);
+    const rate = reduceMotion ? 3 : (mixTarget > mix ? 1 / 1.7 : 1 / 1.5);
     mix = mixTarget > mix ? Math.min(mixTarget, mix + dt * rate) : Math.max(mixTarget, mix - dt * rate);
-
 
     if (!drag.on) {
       yawVel += (AUTO - yawVel) * (1 - Math.exp(-dt * 1.2));
-      pitch += (0.22 - pitch) * (1 - Math.exp(-dt * 0.4));
+      pitch += (0.24 - pitch) * (1 - Math.exp(-dt * 0.4));
     }
     yaw += yawVel * dt;
     rot(yaw, pitch, rotA);
 
-    // the portrait turns toward the cursor, or sways on its own
-    let tyaw = 0, tpitch = 0;
-    if (pointer.inside && !coarse) { tyaw = (pointer.x / W - 0.5) * 0.55; tpitch = (pointer.y / H - 0.5) * 0.3; }
-    else if (!reduceMotion) { tyaw = Math.sin(time * 0.35) * 0.18; tpitch = Math.sin(time * 0.27) * 0.06; }
+    let ty = 0, tp = 0;
+    if (canHover && pointer.x >= 0) { ty = (pointer.x / VW - 0.5) * 0.5; tp = (pointer.y / VH - 0.5) * 0.25; }
+    else if (!reduceMotion) { ty = Math.sin(time * 0.35) * 0.16; tp = Math.sin(time * 0.27) * 0.05; }
     const kb = 1 - Math.exp(-dt * 3);
-    yawB += (tyaw - yawB) * kb; pitchB += (tpitch - pitchB) * kb;
+    yawB += (ty - yawB) * kb; pitchB += (tp - pitchB) * kb;
     rot(yawB, pitchB, rotB);
 
-    // the query: your cursor, or a slow wander when you're not around
-    const following = pointer.inside;
-    const tx = following ? pointer.x : W * (0.5 + 0.36 * Math.sin(time * 0.21 + 1.1) * Math.cos(time * 0.067));
-    const ty = following ? pointer.y : H * (0.5 + 0.3 * Math.sin(time * 0.163 + 0.3) * Math.cos(time * 0.109 + 1.7));
-    const kq = 1 - Math.exp(-dt * (following ? 16 : 1.4));
-    Q.x += (tx - Q.x) * kq; Q.y += (ty - Q.y) * kq;
-    const showQuery = !isOpen && (following || !reduceMotion);
-    queryOn += ((showQuery ? 1 : 0) - queryOn) * (1 - Math.exp(-dt * 4));
-    const ovAlpha = queryOn * (1 - smooth(0, 0.3, mix)) * smooth(0.7, 1, intro);
-
-    if (ovAlpha > 0.002) {
-      const t1 = performance.now();
-      knn(Q.x, Q.y, time);
-      kms = kms ? kms * 0.92 + (performance.now() - t1) * 0.08 : performance.now() - t1;
-      votes.fill(0);
-      for (let j = 0; j < K; j++) if (bestI[j] >= 0) votes[R[bestI[j] * 4 + 2] | 0]++;
-      let best = -1, bv = 0;
-      for (let c = 0; c < NC; c++) if (votes[c] > bv) { bv = votes[c]; best = c; }
-      const near = Math.sqrt(bestD[0]) < 70;
-      if (!(active >= 0 && near && votes[active] >= K * 0.4)) active = near && bv >= K * 0.5 ? best : -1;
-    } else {
-      active = -1;
+    // hovering the cloud finds the nearest cluster
+    if (canHover && wide && pointer.inside && !drag.on && mixTarget === 0 && active.source !== 'row') {
+      const r0 = glCanvas.getBoundingClientRect();
+      let best = -1, bd = 120;
+      for (let c = 0; c < NC; c++) {
+        const [sx, sy] = project(cent[c]), d = Math.hypot(sx + r0.left - pointer.x, sy + r0.top - pointer.y);
+        if (d < bd) { bd = d; best = c; }
+      }
+      if (best !== active.c) setActive(best, best >= 0 ? 'canvas' : '');
     }
-    // labels arrive gently and leave quickly, so two never linger on top of each other
-    const kIn = 1 - Math.exp(-dt * 5), kOut = 1 - Math.exp(-dt * 13);
-    for (let c = 0; c < NC; c++) hi[c] += c === active ? (1 - hi[c]) * kIn : -hi[c] * kOut;
 
-    if (gl) {
+    // on touch screens, walk through the clusters while the figure is in view and nobody is tapping
+    if (!canHover && intro >= 1 && mixTarget === 0 && figureVisible && now - lastTap > 8000 && now > tourAt) {
+      tourC = (tourC + 1) % NC;
+      setActive(tourC, 'tour');
+      tourAt = now + 2600;
+    }
+
+    const kIn = 1 - Math.exp(-dt * 6), kOut = 1 - Math.exp(-dt * 10);
+    let dim = 0;
+    for (let c = 0; c < NC; c++) {
+      hi[c] += c === active.c ? (1 - hi[c]) * kIn : -hi[c] * kOut;
+      dim = Math.max(dim, hi[c]);
+    }
+    leaderT = Math.min(1, leaderT + dt / 0.32);
+    const leading = active.c >= 0 && active.source !== 'tour';
+    leaderAlpha += ((leading ? 1 : 0) - leaderAlpha) * (leading ? kIn : kOut);
+    drawLeader(leaderAlpha, reduceMotion ? 1 : 1 - Math.pow(1 - leaderT, 3));
+
+    if (gl && (figureVisible || wide)) {
       gl.viewport(0, 0, glCanvas.width, glCanvas.height);
       gl.disable(gl.BLEND);
       gl.useProgram(skyProg);
       gl.bindVertexArray(skyVao);
       gl.uniform2f(SU.uRes, glCanvas.width, glCanvas.height);
+      gl.uniform2f(SU.uLow, cx / W, wide ? -0.2 : -0.35);
       gl.uniform3f(SU.uGlowA, skyA[0] / 255, skyA[1] / 255, skyA[2] / 255);
       gl.uniform3f(SU.uGlowB, skyB[0] / 255, skyB[1] / 255, skyB[2] / 255);
       gl.uniform1f(SU.uTime, reduceMotion ? 0 : time);
@@ -1048,38 +814,20 @@
       gl.uniformMatrix4fv(U.uProj, false, proj);
       gl.uniformMatrix3fv(U.uRotA, false, rotA);
       gl.uniformMatrix3fv(U.uRotB, false, rotB);
-      gl.uniform3fv(U.uBCenter, bCenter);
-      gl.uniform2f(U.uRes, glCanvas.width, glCanvas.height);
-      gl.uniform2f(U.uQuery, Q.x * dpr, Q.y * dpr);
+      gl.uniform2f(U.uShift, shiftX, 0);
       gl.uniform1f(U.uBScale, bScale);
       gl.uniform1f(U.uAScale, aScale);
       gl.uniform1f(U.uTime, time);
       gl.uniform1f(U.uMix, mix);
       gl.uniform1f(U.uIntro, intro);
       gl.uniform1f(U.uSize, dpr * sizeScale);
-      gl.uniform1f(U.uDpr, dpr);
-      gl.uniform1f(U.uQueryOn, queryOn);
+      gl.uniform1f(U.uDim, dim);
       gl.uniform1fv(U.uHi, hi);
       gl.drawArrays(gl.POINTS, 0, N);
-
-      drawOverlay(ovAlpha);
-      placeTags(ovAlpha, dt);
-
-      if (now - lastReadout > 300 && kms) {
-        lastReadout = now;
-        readout.textContent = `k-NN · k=${K} · n=${items.length.toLocaleString('en-US')} · ${kms.toFixed(2)} ms`;
-      }
     }
     requestAnimationFrame(frame);
   }
-
-  if (location.hash === '#about') setOpen(true, false);
-  requestAnimationFrame((now) => {
-    last = now;
-    requestAnimationFrame(() => root.classList.remove('is-intro'));
-    root.classList.add('ready');
-    frame(now);
-  });
+  requestAnimationFrame((now) => { last = now; frame(now); });
 })();
 </script>
 </body>
