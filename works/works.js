@@ -7,7 +7,7 @@ window.Works = (() => {
 
   const list = [
     { n: 1, title: 'Self-portrait in latent space', date: '2026-10-26' },
-    { n: 2, title: 'Self-portrait in type', date: '2026-10-27' },
+    { n: 2, title: 'Self-portrait in type', date: '2026-10-26' },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
