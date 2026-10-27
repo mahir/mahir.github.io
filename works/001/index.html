@@ -4,14 +4,88 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mahir Yavuz · Self-portrait in latent space</title>
-<meta name="description" content="Mahir Yavuz is a product and engineering leader and educator, working with data since 1998.">
+<meta name="description" content="Self-portrait in latent space (No. 001): Mahir Yavuz, product and engineering leader and educator, as an interactive cloud of points that gathers into his portrait.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/001/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
 <meta name="theme-color" content="#06070b">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Mahir Yavuz · Self-portrait in latent space">
-<meta property="og:description" content="Product and engineering leader, educator.">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="Self-portrait in latent space · Mahir Yavuz">
+<meta property="og:description" content="No. 001: a career as a cloud of points that gathers into a face.">
 <meta property="og:url" content="https://mahiryavuz.com/works/001/">
-<meta property="og:image" content="https://mahiryavuz.com/profile.jpg">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://mahiryavuz.com/works/001/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The name Mahir Yavuz over a night-blue cloud of points">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mahiryavuz.com/#website",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mahiryavuz.com/#person",
+      "name": "Mahir Yavuz",
+      "url": "https://mahiryavuz.com/",
+      "image": "https://mahiryavuz.com/profile.jpg",
+      "description": "Product and engineering leader and educator, working with data since 1998.",
+      "jobTitle": "Head of Engineering",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AirOps"
+      },
+      "knowsAbout": [
+        "AI products",
+        "Search",
+        "Recommendation systems",
+        "Advertising platforms",
+        "Data science",
+        "Machine learning",
+        "Product management",
+        "Data visualization",
+        "Media art"
+      ],
+      "sameAs": [
+        "https://mahir.substack.com/",
+        "https://bsky.app/profile/mahiryavuz.bsky.social",
+        "https://x.com/mahir_nyc",
+        "https://www.linkedin.com/in/mahiryavuz/"
+      ]
+    },
+    {
+      "@type": "VisualArtwork",
+      "@id": "https://mahiryavuz.com/works/001/#work",
+      "name": "Self-portrait in latent space",
+      "url": "https://mahiryavuz.com/works/001/",
+      "datePublished": "2026-10-26",
+      "creator": {
+        "@id": "https://mahiryavuz.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://mahiryavuz.com/works/#page"
+      },
+      "image": "https://mahiryavuz.com/works/001/og.jpg",
+      "description": "A career as a cloud of points that searches itself under the cursor and gathers into a face when the name is clicked.",
+      "artMedium": "Interactive WebGL"
+    }
+  ]
+}
+</script>
+<!-- /gen:ld -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=swap" rel="stylesheet">
@@ -126,10 +200,10 @@
   .bl { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); left: calc(var(--pad) + env(safe-area-inset-left)); }
   .tr { top: calc(var(--pad) + env(safe-area-inset-top) - .55em); right: calc(var(--pad) + env(safe-area-inset-right)); }
   .br { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); right: calc(var(--pad) + env(safe-area-inset-right)); }
-  /* the work's label doubles as the way to the other works */
-  a.tl { text-decoration: none; transition: opacity .8s ease, color .25s ease; }
-  a.tl span { display: block; }
-  a.tl:hover, a.tl:focus-visible { color: var(--ink); outline: none; }
+  /* the way back to the other works: a pill like LinkedIn's, with the work's label under it */
+  .works-nav { top: calc(var(--pad) + env(safe-area-inset-top) - .55em); display: grid; justify-items: start; gap: 1.1em; }
+  .ready .works-nav { transition-delay: 1.1s; }
+  .works-nav .label { padding-left: 1.35em; }
 
   .cta {
     display: inline-flex; align-items: center; gap: .7em; padding: .8em 1.2em; border-radius: 999px;
@@ -219,7 +293,7 @@
   }
   @media (max-width: 599px) {
     .tag-s { display: none; }
-    .tl { display: none; }
+    .works-nav .label { display: none; }
   }
 
   /* no JavaScript: plain, readable page */
@@ -233,7 +307,7 @@
     background: radial-gradient(130% 80% at 50% 118%, #14244c, rgba(20, 36, 76, 0) 70%),
                 radial-gradient(70% 60% at 92% -8%, #1a1238, rgba(26, 18, 56, 0) 70%), var(--bg);
   }
-  .no-gl canvas, .no-gl .tl, .no-gl .bl { display: none; }
+  .no-gl canvas, .no-gl .works-nav .label, .no-gl .bl { display: none; }
 
   @media (prefers-reduced-motion: reduce) {
     .ch, .rv, .hint, .corner, .close, .about::before { transition-duration: .01ms !important; transition-delay: 0s !important; }
@@ -254,7 +328,10 @@
     </div>
   </header>
 
-  <a class="corner tl" href="/works/"><span>No. 001 · Self-portrait in latent space, 2026</span><span>All works&nbsp;→</span></a>
+  <nav class="corner tl works-nav" aria-label="Works">
+    <a class="cta" href="/works/"><span aria-hidden="true">←</span> All works</a>
+    <span class="label">No. 001 · Self-portrait in latent space, 2026</span>
+  </nav>
   <div class="corner bl" aria-hidden="true"><div id="how">Move to query · drag to orbit</div><div id="readout">&nbsp;</div></div>
   <a class="corner tr cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
   <div class="corner br sky" id="sky" aria-hidden="true">&nbsp;</div>

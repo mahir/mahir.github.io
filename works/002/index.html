@@ -4,14 +4,88 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mahir Yavuz · Self-portrait in type</title>
-<meta name="description" content="Mahir Yavuz is a product and engineering leader and educator, working with data since 1998.">
+<meta name="description" content="Self-portrait in type (No. 002): the homepage of Mahir Yavuz, product and engineering leader and educator, as a letterpress print with his portrait set in the page’s own text.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/002/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
 <meta name="theme-color" content="#f1ece2">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Mahir Yavuz · Self-portrait in type">
-<meta property="og:description" content="Product and engineering leader, educator.">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="Self-portrait in type · Mahir Yavuz">
+<meta property="og:description" content="No. 002: the old homepage as a letterpress print, the portrait set in its own text.">
 <meta property="og:url" content="https://mahiryavuz.com/works/002/">
-<meta property="og:image" content="https://mahiryavuz.com/profile.jpg">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://mahiryavuz.com/works/002/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A portrait of Mahir Yavuz set in type on a round ink plate, beside his name">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mahiryavuz.com/#website",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mahiryavuz.com/#person",
+      "name": "Mahir Yavuz",
+      "url": "https://mahiryavuz.com/",
+      "image": "https://mahiryavuz.com/profile.jpg",
+      "description": "Product and engineering leader and educator, working with data since 1998.",
+      "jobTitle": "Head of Engineering",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AirOps"
+      },
+      "knowsAbout": [
+        "AI products",
+        "Search",
+        "Recommendation systems",
+        "Advertising platforms",
+        "Data science",
+        "Machine learning",
+        "Product management",
+        "Data visualization",
+        "Media art"
+      ],
+      "sameAs": [
+        "https://mahir.substack.com/",
+        "https://bsky.app/profile/mahiryavuz.bsky.social",
+        "https://x.com/mahir_nyc",
+        "https://www.linkedin.com/in/mahiryavuz/"
+      ]
+    },
+    {
+      "@type": "VisualArtwork",
+      "@id": "https://mahiryavuz.com/works/002/#work",
+      "name": "Self-portrait in type",
+      "url": "https://mahiryavuz.com/works/002/",
+      "datePublished": "2026-10-26",
+      "creator": {
+        "@id": "https://mahiryavuz.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://mahiryavuz.com/works/#page"
+      },
+      "image": "https://mahiryavuz.com/works/002/og.jpg",
+      "description": "The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.",
+      "artMedium": "Interactive canvas and type"
+    }
+  ]
+}
+</script>
+<!-- /gen:ld -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&display=swap" rel="stylesheet">
@@ -49,11 +123,19 @@
   a:hover, a:focus-visible { text-decoration-color: var(--red); color: var(--red); }
   :focus-visible { outline: 1px solid var(--red); outline-offset: 4px; border-radius: 2px; }
 
-  .label {
+  /* the way back to the other works: an inked pill, with the work's label beside it */
+  .nav {
     position: fixed; z-index: 5; top: calc(var(--pad) + env(safe-area-inset-top)); left: calc(var(--pad) + env(safe-area-inset-left));
-    font-size: .7rem; font-weight: 500; line-height: 1.7; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--faint);
+    display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem;
   }
-  .label span { display: block; }
+  .back {
+    display: inline-flex; align-items: center; gap: .55em; padding: .62em 1.15em .52em; border: 1px solid var(--ink); border-radius: 999px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    font-size: .72rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase;
+    transition: background-color .25s ease, border-color .25s ease, color .25s ease;
+  }
+  .back:hover, .back:focus-visible { background: var(--red); border-color: var(--red); color: var(--paper); outline: none; }
+  .nav .label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
 
   .page {
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 34rem); column-gap: clamp(40px, 6vw, 112px);
@@ -119,7 +201,7 @@
 
   @media (max-width: 899px) {
     :root { --plate: min(calc(100vw - 72px), 480px); }
-    .label { position: static; display: block; padding: calc(var(--pad) + env(safe-area-inset-top)) 24px 0; }
+    .nav { position: static; padding: calc(var(--pad) + env(safe-area-inset-top)) 24px 0; }
     .page { display: block; padding: 2.8rem 24px calc(var(--pad) * 2); }
     .figure { position: static; margin: 0 auto 3.2rem; width: var(--plate); }
     .box::before { top: -22px; left: -22px; }
@@ -135,7 +217,10 @@
 </style>
 </head>
 <body>
-  <a class="label" href="/works/"><span>No. 002 · Self-portrait in type, 2026</span><span>All works&nbsp;→</span></a>
+  <nav class="nav" aria-label="Works">
+    <a class="back" href="/works/"><span aria-hidden="true">←</span> All works</a>
+    <span class="label">No. 002 · Self-portrait in type, 2026</span>
+  </nav>
 
   <main class="page">
     <figure class="figure" id="figure">
