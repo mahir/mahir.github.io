@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahir Yavuz</title>
+<meta name="description" content="Mahir Yavuz is an engineering leader, data scientist and educator, working with data, AI and media art since 2000.">
+<meta name="theme-color" content="#06070b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mahir Yavuz">
+<meta property="og:description" content="Engineering leader, data scientist and educator.">
+<meta property="og:url" content="https://mahiryavuz.com/">
+<meta property="og:image" content="https://mahiryavuz.com/profile.jpg">
+<meta name="twitter:card" content="summary">
+<script src="/works/works.js"></script>
+<script>
+  // The homepage is whichever work is up today. Hand over before anything paints, keeping ?query and #about along.
+  (() => {
+    const w = window.Works && Works.current(Works.today());
+    if (!w) return;
+    document.documentElement.style.visibility = 'hidden';
+    location.replace(Works.url(w) + location.search + location.hash);
+  })();
+</script>
+<style>
+  /* Only seen without JavaScript, or if the schedule fails to load. */
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 24px;
+    background: #06070b; color: #e2e6eb; font: 16px/1.6 "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 32rem; }
+  h1 { margin: 0 0 .5rem; font-size: 2rem; font-weight: 500; letter-spacing: -.02em; }
+  p { margin: 0 0 1.5rem; color: rgba(226, 230, 235, .66); }
+  nav { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+  a { color: inherit; text-underline-offset: .25em; text-decoration-color: rgba(226, 230, 235, .4); }
+  a:hover { text-decoration-color: currentColor; }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Mahir Yavuz</h1>
+    <p>Engineering leader, data scientist and educator, working with data since&nbsp;2000.</p>
+    <nav>
+      <a href="/works/">Works</a>
+      <a href="https://mahir.substack.com/" rel="me">Substack</a>
+      <a href="https://bsky.app/profile/mahiryavuz.bsky.social" rel="me">Bluesky</a>
+      <a href="https://x.com/mahir_nyc" rel="me">X</a>
+      <a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn</a>
+    </nav>
+  </main>
+</body>
+</html>
