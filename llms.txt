@@ -1,6 +1,6 @@
 # Mahir Yavuz
 
-> Product and engineering leader and educator, working with data since 1998. Head of Engineering at AirOps. This site shows a new artwork some days; the homepage is always the latest one, and every work keeps its own page.
+> Product and engineering leader, educator and advisor, working with data since 1998. Head of Engineering at AirOps. This site shows a new artwork some days; the homepage is always the latest one, and every work keeps its own page.
 
 Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.
 
