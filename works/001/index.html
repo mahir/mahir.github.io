@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mahir Yavuz</title>
+<title>Mahir Yavuz · Self-portrait in latent space</title>
 <meta name="description" content="Mahir Yavuz is an engineering leader, data scientist and educator, working with data, AI and media art since 2000.">
 <meta name="theme-color" content="#06070b">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Mahir Yavuz">
+<meta property="og:title" content="Mahir Yavuz · Self-portrait in latent space">
 <meta property="og:description" content="Engineering leader, data scientist and educator.">
-<meta property="og:url" content="https://mahiryavuz.com/">
+<meta property="og:url" content="https://mahiryavuz.com/works/001/">
 <meta property="og:image" content="https://mahiryavuz.com/profile.jpg">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,6 +126,10 @@
   .bl { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); left: calc(var(--pad) + env(safe-area-inset-left)); }
   .tr { top: calc(var(--pad) + env(safe-area-inset-top) - .55em); right: calc(var(--pad) + env(safe-area-inset-right)); }
   .br { bottom: calc(var(--pad) + env(safe-area-inset-bottom)); right: calc(var(--pad) + env(safe-area-inset-right)); }
+  /* the work's label doubles as the way to the other works */
+  a.tl { text-decoration: none; transition: opacity .8s ease, color .25s ease; }
+  a.tl span { display: block; }
+  a.tl:hover, a.tl:focus-visible { color: var(--ink); outline: none; }
 
   .cta {
     display: inline-flex; align-items: center; gap: .7em; padding: .8em 1.2em; border-radius: 999px;
@@ -175,7 +179,7 @@
   .facts a, .links a { text-decoration: none; border-bottom: 1px solid var(--hair); transition: border-color .3s ease; }
   .facts a:hover, .facts a:focus-visible, .links a:hover, .links a:focus-visible { border-color: var(--accent); }
   .cta-row { margin: 0 0 1.5rem; }
-  .links { margin: 0; font: 400 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+  .links { margin: 0; display: flex; flex-wrap: wrap; gap: .5em 1.6em; font: 400 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
   .links a { display: inline-block; padding-bottom: .45em; }
   .rv {
     opacity: 0; filter: blur(6px); transform: translate3d(0, 14px, 0);
@@ -250,7 +254,7 @@
     </div>
   </header>
 
-  <div class="corner tl" aria-hidden="true">Self-portrait in latent space, 2026</div>
+  <a class="corner tl" href="/works/"><span>No. 001 · Self-portrait in latent space, 2026</span><span>All works&nbsp;→</span></a>
   <div class="corner bl" aria-hidden="true"><div id="how">Move to query · drag to orbit</div><div id="readout">&nbsp;</div></div>
   <a class="corner tr cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
   <div class="corner br sky" id="sky" aria-hidden="true">&nbsp;</div>
@@ -277,7 +281,13 @@
         <div class="rv"><dt>Shown at</dt><dd>Ars Electronica Festival, SIGGRAPH, ISEA, Istanbul Biennial</dd></div>
         <div class="rv"><dt>Talks</dt><dd>TEDx Istanbul and Vienna, Microsoft Build, Visualized, Fast Company Innovation Festival</dd></div>
       </dl>
-      <p class="links rv"><a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn ↗</a></p>
+      <p class="links rv">
+        <a href="/works/">All works →</a>
+        <a href="https://mahir.substack.com/" rel="me">Substack ↗</a>
+        <a href="https://bsky.app/profile/mahiryavuz.bsky.social" rel="me">Bluesky ↗</a>
+        <a href="https://x.com/mahir_nyc" rel="me">X ↗</a>
+        <a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn ↗</a>
+      </p>
     </div>
   </section>
 
@@ -784,7 +794,7 @@
         }
       } catch (err) { console.warn('portrait unavailable, keeping the sphere:', err); }
     };
-    img.src = 'profile.jpg';
+    img.src = '/profile.jpg';
   }
 
   // ---------------------------------------------------------------- sky: follows the visitor's local time
