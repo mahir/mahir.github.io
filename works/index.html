@@ -4,14 +4,103 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Works · Mahir Yavuz</title>
-<meta name="description" content="Works by Mahir Yavuz. A new piece some days; the homepage always shows the latest.">
+<meta name="description" content="Artworks by Mahir Yavuz, a new one some days; the homepage always shows the latest. Product and engineering leader and educator, working with data since 1998.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
 <meta name="theme-color" content="#06070b">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Mahir Yavuz">
 <meta property="og:title" content="Works · Mahir Yavuz">
-<meta property="og:description" content="A new piece some days; the homepage always shows the latest.">
+<meta property="og:description" content="A new artwork some days; the homepage always shows the latest.">
 <meta property="og:url" content="https://mahiryavuz.com/works/">
-<meta property="og:image" content="https://mahiryavuz.com/profile.jpg">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://mahiryavuz.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mahir Yavuz, with his portrait set in type on a round ink plate">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mahiryavuz.com/#website",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://mahiryavuz.com/works/#page",
+      "url": "https://mahiryavuz.com/works/",
+      "name": "Works",
+      "description": "Artworks by Mahir Yavuz, a new one some days. The homepage always shows the latest.",
+      "isPartOf": {
+        "@id": "https://mahiryavuz.com/#website"
+      },
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      },
+      "dateModified": "2026-10-26",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://mahiryavuz.com/works/002/",
+            "name": "Self-portrait in type"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://mahiryavuz.com/works/001/",
+            "name": "Self-portrait in latent space"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mahiryavuz.com/#person",
+      "name": "Mahir Yavuz",
+      "url": "https://mahiryavuz.com/",
+      "image": "https://mahiryavuz.com/profile.jpg",
+      "description": "Product and engineering leader and educator, working with data since 1998.",
+      "jobTitle": "Head of Engineering",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AirOps"
+      },
+      "knowsAbout": [
+        "AI products",
+        "Search",
+        "Recommendation systems",
+        "Advertising platforms",
+        "Data science",
+        "Machine learning",
+        "Product management",
+        "Data visualization",
+        "Media art"
+      ],
+      "sameAs": [
+        "https://mahir.substack.com/",
+        "https://bsky.app/profile/mahiryavuz.bsky.social",
+        "https://x.com/mahir_nyc",
+        "https://www.linkedin.com/in/mahiryavuz/"
+      ]
+    }
+  ]
+}
+</script>
+<!-- /gen:ld -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=swap" rel="stylesheet">
@@ -77,6 +166,7 @@
   footer { margin-top: clamp(3rem, 8vw, 5.5rem); display: grid; gap: 1.6rem; }
   .about { margin: 0; max-width: 32em; color: var(--dim); }
   .about strong { color: var(--ink); font-weight: 500; }
+  .bio-text { margin: -.6rem 0 0; max-width: 38em; font-size: .92rem; line-height: 1.65; color: var(--faint); text-wrap: pretty; }
   .row { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); column-gap: 1rem; }
   .row dt { color: var(--faint); }
   .row dd { margin: 0; display: flex; flex-wrap: wrap; gap: .3rem 1.4rem; }
@@ -101,11 +191,18 @@
       <p class="preview mono" id="preview" hidden></p>
     </header>
 
-    <ol class="list" id="list" reversed></ol>
-    <noscript><p class="empty">The list needs JavaScript. The homepage shows the latest work.</p></noscript>
+    <ol class="list" id="list" reversed>
+      <!-- gen:works -->
+      <li><a href="/works/002/"><span class="n mono">No. 002</span><span class="t">Self-portrait in type</span><time class="d mono" datetime="2026-10-26">26 Oct 2026</time></a></li>
+      <li><a href="/works/001/"><span class="n mono">No. 001</span><span class="t">Self-portrait in latent space</span><time class="d mono" datetime="2026-10-26">26 Oct 2026</time></a></li>
+      <!-- /gen:works -->
+    </ol>
 
     <footer>
       <p class="about"><strong>Mahir Yavuz</strong> is a product and engineering leader and educator, working with data since&nbsp;1998.</p>
+      <!-- gen:bio -->
+      <p class="bio-text">Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.</p>
+      <!-- /gen:bio -->
       <dl>
         <div class="row mono"><dt>Elsewhere</dt><dd>
           <a href="https://mahir.substack.com/" rel="me">Substack ↗</a>
@@ -137,7 +234,8 @@
     return e;
   };
 
-  list.append(...live.slice().reverse().map((w) => {
+  // the page arrives with a plain list for crawlers; the live one replaces it, with today's work marked
+  list.replaceChildren(...live.slice().reverse().map((w) => {
     const li = el('li'), a = el('a');
     a.href = Works.url(w);
     const t = el('span', 't', w.title);

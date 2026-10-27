@@ -2,12 +2,20 @@
 // The homepage shows the newest work whose date has arrived in the visitor's time zone, so a work dated
 // in the future goes up by itself that day, and a day without a new work keeps the last one.
 // Preview any day by adding ?on=YYYY-MM-DD to the homepage or the index.
+// `medium` and `about` describe the work to search engines and AI assistants; after editing the list,
+// run `python3 works/_build.py` to refresh the sitemap, llms.txt and the pages' structured data.
 window.Works = (() => {
   'use strict';
 
   const list = [
-    { n: 1, title: 'Self-portrait in latent space', date: '2026-10-26' },
-    { n: 2, title: 'Self-portrait in type', date: '2026-10-26' },
+    {
+      n: 1, title: 'Self-portrait in latent space', date: '2026-10-26', medium: 'Interactive WebGL',
+      about: 'A career as a cloud of points that searches itself under the cursor and gathers into a face when the name is clicked.',
+    },
+    {
+      n: 2, title: 'Self-portrait in type', date: '2026-10-26', medium: 'Interactive canvas and type',
+      about: 'The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
