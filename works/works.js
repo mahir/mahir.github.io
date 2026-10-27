@@ -16,6 +16,10 @@ window.Works = (() => {
       n: 2, title: 'Self-portrait in type', date: '2026-10-26', medium: 'Interactive canvas and type',
       about: 'The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.',
     },
+    {
+      n: 3, title: 'Manhattan sundial', date: '2026-10-27', medium: 'Interactive WebGL and live solar data',
+      about: 'An abstract model of Manhattan lit by the sun where it stands over New York at this minute; drag through the day and the year, or jump to the next Manhattanhenge.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');

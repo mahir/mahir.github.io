@@ -1,0 +1,1333 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mahir Yavuz · Manhattan sundial</title>
+<meta name="description" content="Manhattan sundial (No. 003) by Mahir Yavuz: an abstract model of Manhattan lit by the sun where it stands over New York right now. Drag through the day and the year, or jump to the next Manhattanhenge.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/003/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
+<meta name="theme-color" content="#0d0c10">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="Manhattan sundial · Mahir Yavuz">
+<meta property="og:description" content="No. 003: a model of Manhattan lit by the sun over New York right now, down to the minute.">
+<meta property="og:url" content="https://mahiryavuz.com/works/003/">
+<meta property="og:image" content="https://mahiryavuz.com/works/003/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A plaster-white model of Manhattan at sunset, the sun setting straight down the cross streets">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mahiryavuz.com/#website",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mahiryavuz.com/#person",
+      "name": "Mahir Yavuz",
+      "url": "https://mahiryavuz.com/",
+      "image": "https://mahiryavuz.com/profile.jpg",
+      "description": "Product and engineering leader, educator and advisor, working with data since 1998.",
+      "jobTitle": "Head of Engineering",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AirOps"
+      },
+      "knowsAbout": [
+        "AI products",
+        "Search",
+        "Recommendation systems",
+        "Advertising platforms",
+        "Data science",
+        "Machine learning",
+        "Product management",
+        "Data visualization",
+        "Media art"
+      ],
+      "sameAs": [
+        "https://mahir.substack.com/",
+        "https://bsky.app/profile/mahiryavuz.bsky.social",
+        "https://x.com/mahir_nyc",
+        "https://www.linkedin.com/in/mahiryavuz/"
+      ]
+    },
+    {
+      "@type": "VisualArtwork",
+      "@id": "https://mahiryavuz.com/works/003/#work",
+      "name": "Manhattan sundial",
+      "url": "https://mahiryavuz.com/works/003/",
+      "datePublished": "2026-10-27",
+      "creator": {
+        "@id": "https://mahiryavuz.com/#person"
+      },
+      "isPartOf": {
+        "@id": "https://mahiryavuz.com/works/#page"
+      },
+      "image": "https://mahiryavuz.com/works/003/og.jpg",
+      "description": "An abstract model of Manhattan lit by the sun where it stands over New York at this minute; drag through the day and the year, or jump to the next Manhattanhenge.",
+      "artMedium": "Interactive WebGL and live solar data"
+    }
+  ]
+}
+</script>
+<!-- /gen:ld -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* One dark frame around a model whose light changes with the hour: the type sits on scrims, never on panels.
+     Archivo for what you read at a glance (the time, the title), Plex Mono for the measurements. */
+  :root {
+    --night: #0d0c10;
+    --plaster: #f1eae1;
+    --dust: rgba(241, 234, 225, .7);
+    --faint: rgba(241, 234, 225, .46);
+    --ember: #ffb57f;
+    --hair: rgba(241, 234, 225, .24);
+    --veil: rgba(13, 12, 16, .42);
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --pad: clamp(16px, 2.4vw, 32px);
+    color-scheme: dark;
+  }
+  html, body { margin: 0; height: 100%; background: var(--night); color: var(--plaster); }
+  body { font: 400 13px/1.5 var(--mono); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
+  #scene:active { cursor: grabbing; }
+  .still { position: fixed; inset: 0; display: none; }
+  .still img { width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+
+  .hud {
+    position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
+    padding: calc(var(--pad) + env(safe-area-inset-top)) calc(var(--pad) + env(safe-area-inset-right))
+             calc(var(--pad) + env(safe-area-inset-bottom)) calc(var(--pad) + env(safe-area-inset-left));
+    pointer-events: none; text-shadow: 0 1px 14px rgba(13, 12, 16, .55);
+  }
+  /* scrims keep the type legible over a bright noon sky and the dark river alike */
+  .hud::before, .hud::after { content: ""; position: fixed; left: 0; right: 0; z-index: -1; pointer-events: none; }
+  .hud::before { top: 0; height: 11rem; background: linear-gradient(rgba(13, 12, 16, .5), transparent); }
+  .hud::after { bottom: 0; height: 24rem; background: linear-gradient(transparent, rgba(13, 12, 16, .66)); }
+  .hud a, .hud button, .hud [role="slider"] { pointer-events: auto; }
+
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .works-nav { display: grid; justify-items: start; gap: .9em; }
+  .pill, .back {
+    display: inline-flex; align-items: center; gap: .5em; padding: 9px 14px; white-space: nowrap;
+    font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+    color: var(--plaster); background: var(--veil); border: 1px solid var(--hair); border-radius: 999px; cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); text-shadow: none;
+    transition: border-color .2s ease, background .2s ease, color .2s ease;
+  }
+  .pill:hover, .back:hover { border-color: var(--plaster); }
+  .pill:focus-visible, .back:focus-visible, [role="slider"]:focus-visible { outline: 1px solid var(--ember); outline-offset: 4px; }
+  .back { background: var(--plaster); color: var(--night); border-color: var(--plaster); }
+  .back:hover { background: var(--ember); border-color: var(--ember); }
+  .label { margin: 0; padding-left: 1.2em; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--dust); }
+
+  .views { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .narrow { display: none; }
+  .pill[aria-pressed="true"] { border-color: var(--ember); color: var(--ember); }
+
+  .henge {
+    position: fixed; left: 0; right: 0; top: 24%; display: grid; justify-items: center; gap: 8px; padding: 0 var(--pad);
+    text-align: center; pointer-events: none; opacity: 0; transform: translateY(8px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .henge.show { opacity: 1; transform: none; }
+  .henge .kicker { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--plaster); }
+  .henge .title {
+    font: 300 clamp(40px, 7.5vw, 104px)/1 var(--sans); font-stretch: 112%; letter-spacing: -.01em; color: var(--ember);
+    text-shadow: 0 0 40px rgba(255, 140, 70, .35);
+  }
+
+  .clock { display: grid; gap: 14px; width: min(780px, 100%); }
+  .clock p { margin: 0; }
+  .state { display: flex; align-items: center; gap: .6em; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 10px var(--ember); }
+  .live .dot { animation: pulse 2.4s ease-in-out infinite; }
+  .clock:not(.live) .dot { background: transparent; border: 1px solid var(--ember); box-shadow: none; width: 5px; height: 5px; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  .time { display: flex; align-items: baseline; gap: .18em; font: 300 clamp(48px, 7.4vw, 96px)/.9 var(--sans); font-stretch: 112%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .time .ampm { font-size: .36em; letter-spacing: 0; }
+  .time .zone { margin-left: .5em; font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--faint); }
+  .meta { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 12.5px; color: var(--dust); }
+  .meta .grid-line { color: var(--plaster); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill.now[aria-pressed="true"] { border-color: var(--ember); color: var(--ember); }
+  .pill .soft { color: var(--faint); text-transform: none; letter-spacing: .04em; }
+
+  .tracks { display: grid; gap: 4px; }
+  .track { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); align-items: center; column-gap: 12px; }
+  .track .name { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+  .rail { position: relative; height: 30px; cursor: pointer; touch-action: none; }
+  .rail canvas { position: absolute; left: 0; right: 0; top: 12px; width: 100%; height: 6px; border-radius: 3px; }
+  .rail .marks { position: absolute; inset: 0; pointer-events: none; }
+  .rail .mark { position: absolute; top: 4px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 8px rgba(255, 181, 127, .7); }
+  .rail .today { position: absolute; top: 20px; width: 1px; height: 6px; background: var(--plaster); }
+  .rail .thumb {
+    position: absolute; top: 6px; width: 2px; height: 18px; margin-left: -1px; border-radius: 1px; background: var(--plaster);
+    box-shadow: 0 0 0 3px rgba(13, 12, 16, .45);
+  }
+  .scale { grid-column: 2; display: flex; justify-content: space-between; margin-top: -4px; font-size: 10px; letter-spacing: .08em; color: var(--faint); }
+
+  .about { position: absolute; }
+
+  /* without WebGL, or before the scene is ready: a still of the model; the clock still works */
+  .no-gl #scene { display: none; }
+  .no-gl .still { display: block; }
+  .no-gl .views { display: none; }
+  .no-js .hud .clock, .no-js .views { display: none; }
+  .no-js .still { display: block; }
+  .no-js .about { position: static; width: auto; height: auto; clip-path: none; white-space: normal; max-width: 34rem; margin: 0; }
+  .no-js .about h1 { font: 300 clamp(32px, 5vw, 56px)/1 var(--sans); font-stretch: 112%; margin: 0 0 .4em; }
+  .no-js .about p { font-size: 13px; line-height: 1.6; color: var(--dust); margin: 0; }
+
+  .hud > .top, .clock, .henge { transition: opacity 1.4s ease; }
+  .js:not(.ready) .hud > .top, .js:not(.ready) .clock { opacity: 0; }
+
+  @media (max-width: 640px) {
+    .label, .wide { display: none; }
+    .narrow { display: inline; }
+    .views .pill { padding: 8px 10px; letter-spacing: .1em; }
+    .clock { gap: 10px; }
+    .meta { font-size: 11.5px; gap: 2px 14px; }
+    .track { grid-template-columns: 2.8rem minmax(0, 1fr); column-gap: 8px; }
+    .actions .pill { padding: 8px 11px; letter-spacing: .1em; }
+    .hud::after { height: 30rem; }
+  }
+  @media (max-height: 560px) and (min-width: 641px) {
+    .time { font-size: 44px; }
+    .clock { gap: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .henge, .hud > .top, .clock { transition: none; }
+    .live .dot { animation: none; }
+  }
+</style>
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<figure class="still" aria-hidden="true"><img src="/works/003/still.jpg" alt=""></figure>
+
+<div class="hud">
+  <div class="top">
+    <nav class="works-nav" aria-label="Works">
+      <a class="back" href="/works/"><span aria-hidden="true">←</span> All works</a>
+      <p class="label">No. 003 · Manhattan sundial, 2026</p>
+    </nav>
+    <div class="views" role="group" aria-label="View">
+      <button class="pill" type="button" data-view="above" aria-pressed="true">Above</button>
+      <button class="pill" type="button" data-view="plan" aria-pressed="false">Plan</button>
+      <button class="pill" type="button" data-view="street" aria-pressed="false"><span class="wide">42nd Street</span><span class="narrow">42nd St</span></button>
+    </div>
+  </div>
+
+  <div class="henge" id="henge" aria-live="polite">
+    <span class="kicker">The sun is in line with the streets</span>
+    <span class="title">Manhattanhenge</span>
+  </div>
+
+  <section class="about sr-only" aria-labelledby="title">
+    <h1 id="title">Manhattan sundial</h1>
+    <p>No. 003 by Mahir Yavuz. An abstract model of Manhattan, lit by the sun where it stands over New York right now and
+      throwing the shadows the towers would throw. Drag through the day and the year to turn them. The street grid is
+      set 29° east of true north, so on a few days a year the sun rises or sets straight down the cross streets:
+      Manhattanhenge, in late May and mid-July at sunset, and in early December and January at sunrise.</p>
+  </section>
+
+  <section class="clock live" id="clock" aria-label="Time in New York">
+    <p class="state"><span class="dot" aria-hidden="true"></span><span id="state">Now in New York</span></p>
+    <p class="time" aria-live="off"><span id="hm">–:––</span><span class="ampm" id="ampm"></span><span class="zone" id="zone"></span></p>
+    <p class="meta"><span id="date"></span><span id="sun"></span><span class="grid-line" id="grid"></span></p>
+    <div class="actions">
+      <button class="pill now" id="now" type="button" aria-pressed="true">Now</button>
+      <button class="pill" id="play" type="button">Play the day</button>
+      <button class="pill" id="next" type="button">Next Manhattanhenge <span class="soft" id="next-date"></span></button>
+    </div>
+    <div class="tracks">
+      <div class="track">
+        <span class="name" id="day-name">Day</span>
+        <div class="rail" id="day" role="slider" tabindex="0" aria-labelledby="day-name" aria-valuemin="0" aria-valuemax="1439">
+          <canvas></canvas><span class="thumb"></span>
+        </div>
+        <div class="scale" aria-hidden="true"><span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+      </div>
+      <div class="track">
+        <span class="name" id="year-name">Year</span>
+        <div class="rail" id="year" role="slider" tabindex="0" aria-labelledby="year-name" aria-valuemin="1" aria-valuemax="365">
+          <canvas></canvas><div class="marks"></div><span class="thumb"></span>
+        </div>
+        <div class="scale" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+</script>
+
+<script type="module">
+import { sunAt, nyClock, nyMoment, minutesOfDay, gridBearing, offGrid, sunrise, sunset, henges, ZONE, GRID } from '/works/003/sun.js';
+
+const root = document.documentElement;
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (id) => document.getElementById(id);
+
+// ---------- the moment shown ----------
+// Live by default. Scrubbing, playing or jumping detaches it from the clock; "Now" brings it back.
+
+const PLAY_RATE = 3600 * 1000;      // a played day runs an hour a second
+const state = { t: Date.now(), live: true, playing: false, tween: null, view: 'above' };
+
+// ?at=2027-05-28T20:13 (New York time) and ?view=street open a particular moment, for links and captures
+{
+  const q = new URLSearchParams(location.search);
+  const at = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(q.get('at') || '');
+  if (at) {
+    const [y, m, d, h, min] = at.slice(1).map(Number);
+    state.t = nyMoment(y, m, d, h * 60 + min);
+    state.live = false;
+  }
+  if (['above', 'plan', 'street'].includes(q.get('view'))) state.view = q.get('view');
+}
+
+// ---------- reading the moment ----------
+
+const fmtTime = new Intl.DateTimeFormat('en-US', { timeZone: ZONE, hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+const fmtDate = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const fmtShort = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, day: 'numeric', month: 'short' });
+const parts = (f, ms) => Object.fromEntries(f.formatToParts(new Date(ms)).map((p) => [p.type, p.value]));
+const clockTime = (ms) => { const p = parts(fmtTime, ms); return `${p.hour}:${p.minute} ${p.dayPeriod.toLowerCase()}`; };
+const WINDS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
+const wind = (az) => WINDS[Math.round(az / 45) % 8];
+
+function describe(ms, sun) {
+  const p = parts(fmtTime, ms);
+  $('hm').textContent = `${p.hour}:${p.minute}`;
+  $('ampm').textContent = p.dayPeriod.toLowerCase();
+  $('zone').textContent = p.timeZoneName;
+  const d = parts(fmtDate, ms);
+  $('date').textContent = `${d.weekday} ${d.day} ${d.month} ${d.year}`;
+
+  const el = sun.elevation;
+  const c = nyClock(ms);
+  let sunText, gridText = '';
+  if (el > 0) {
+    sunText = `Sun ${Math.round(el)}° up in the ${wind(sun.azimuth)}`;
+    const off = offGrid(sun.azimuth);
+    gridText = off < 1.5 ? 'In line with the streets' : `${Math.round(off)}° off the grid`;
+  } else if (el > -6) {
+    sunText = `Twilight, the sun ${Math.max(1, Math.round(-el))}° below the horizon`;
+  } else {
+    const rise = sunrise(c.y, c.m, c.d), set = sunset(c.y, c.m, c.d);
+    sunText = rise && ms < rise ? `Night · sunrise at ${clockTime(rise)}` : set ? `Night · the sun set at ${clockTime(set)}` : 'Night';
+  }
+  $('sun').textContent = sunText;
+  $('grid').textContent = gridText;
+}
+
+// ---------- the next alignments ----------
+
+let upcoming = [];
+function findNext() {
+  const c = nyClock(Date.now());
+  upcoming = henges(c.y, c.m, c.d, 400).filter((h) => h.ms > Date.now() - 30 * 60000);
+  const next = upcoming[0];
+  $('next-date').textContent = next ? `· ${parts(fmtShort, next.ms).day} ${parts(fmtShort, next.ms).month}, ${next.setting ? 'sunset' : 'sunrise'}` : '';
+}
+findNext();
+
+// ---------- the two rails: the day at this date, the year at this hour ----------
+// Each is drawn as a band coloured by how high the sun stands, so you can read night, dusk and noon off it.
+
+const STOPS = [   // elevation, colour
+  [-18, [11, 14, 26]], [-12, [18, 24, 48]], [-6, [36, 46, 88]], [-2, [92, 74, 108]], [0, [196, 108, 76]],
+  [3, [226, 156, 100]], [8, [236, 200, 152]], [20, [240, 226, 204]], [60, [246, 240, 230]],
+];
+function bandColor(el) {
+  if (el <= STOPS[0][0]) return STOPS[0][1];
+  for (let i = 1; i < STOPS.length; i++) {
+    const [e1, c1] = STOPS[i];
+    if (el <= e1) {
+      const [e0, c0] = STOPS[i - 1];
+      const k = (el - e0) / (e1 - e0);
+      return c0.map((v, j) => Math.round(v + (c1[j] - v) * k));
+    }
+  }
+  return STOPS[STOPS.length - 1][1];
+}
+
+function paint(canvas, n, colorAt) {
+  const w = Math.max(1, Math.round(canvas.clientWidth * Math.min(devicePixelRatio || 1, 2)));
+  if (canvas.width !== w) { canvas.width = w; canvas.height = 1; }
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(w, 1);
+  for (let x = 0; x < w; x++) {
+    const c = colorAt(x / (w - 1 || 1));
+    img.data.set([c[0], c[1], c[2], 255], x * 4);
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+const daysIn = (y) => (Date.UTC(y + 1, 0, 1) - Date.UTC(y, 0, 1)) / 86400000;
+const dayOfYear = (c) => (Date.UTC(c.y, c.m - 1, c.d) - Date.UTC(c.y, 0, 1)) / 86400000;
+
+// New York midnight, as a moment, for every day of a year (cached: it takes the time zone database to know)
+const midnights = new Map();
+function midnightsOf(y) {
+  if (!midnights.has(y)) {
+    const n = daysIn(y), out = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      const c = new Date(Date.UTC(y, 0, 1 + i));
+      out[i] = nyMoment(c.getUTCFullYear(), c.getUTCMonth() + 1, c.getUTCDate(), 0);
+    }
+    midnights.set(y, out);
+  }
+  return midnights.get(y);
+}
+
+const dayRail = $('day'), yearRail = $('year');
+let paintedDay = '', paintedYear = '', markedYear = null;
+
+function drawRails(ms) {
+  const c = nyClock(ms);
+  const minute = c.h * 60 + c.min;
+  const doy = dayOfYear(c);
+  const nights = midnightsOf(c.y);
+  const n = nights.length;
+
+  const dayKey = `${c.y}-${doy}-${dayRail.clientWidth}`;
+  if (dayKey !== paintedDay) {
+    paintedDay = dayKey;
+    const base = nights[doy];
+    paint(dayRail.querySelector('canvas'), 1440, (f) => bandColor(sunAt(base + f * 86400000).elevation));
+  }
+  const yearKey = `${c.y}-${Math.round(minute / 4)}-${yearRail.clientWidth}`;
+  if (yearKey !== paintedYear) {
+    paintedYear = yearKey;
+    paint(yearRail.querySelector('canvas'), n, (f) => bandColor(sunAt(nights[Math.min(n - 1, Math.round(f * (n - 1)))] + minute * 60000).elevation));
+  }
+  if (markedYear !== c.y) {
+    markedYear = c.y;
+    const marks = yearRail.querySelector('.marks');
+    marks.replaceChildren();
+    const now = nyClock(Date.now());
+    for (const h of henges(c.y, 1, 1, n - 1)) {
+      const hc = nyClock(h.ms);
+      const dot = document.createElement('span');
+      dot.className = 'mark';
+      dot.style.left = `${(dayOfYear(hc) / (n - 1)) * 100}%`;
+      dot.title = `Manhattanhenge, ${parts(fmtShort, h.ms).day} ${parts(fmtShort, h.ms).month} at ${h.setting ? 'sunset' : 'sunrise'}`;
+      marks.appendChild(dot);
+    }
+    if (now.y === c.y) {
+      const tick = document.createElement('span');
+      tick.className = 'today';
+      tick.style.left = `${(dayOfYear(now) / (n - 1)) * 100}%`;
+      tick.title = 'Today';
+      marks.appendChild(tick);
+    }
+    yearRail.setAttribute('aria-valuemax', String(n));
+  }
+
+  dayRail.querySelector('.thumb').style.left = `${(minute / 1440) * 100}%`;
+  yearRail.querySelector('.thumb').style.left = `${(doy / (n - 1)) * 100}%`;
+  dayRail.setAttribute('aria-valuenow', String(minute));
+  dayRail.setAttribute('aria-valuetext', clockTime(ms));
+  yearRail.setAttribute('aria-valuenow', String(doy + 1));
+  yearRail.setAttribute('aria-valuetext', `${parts(fmtShort, ms).day} ${parts(fmtShort, ms).month} ${c.y}`);
+}
+
+// ---------- controls ----------
+
+const clockEl = $('clock');
+function detach() {
+  state.live = false;
+  state.tween = null;
+}
+function setLive() {
+  state.live = true; state.playing = false; state.tween = null;
+  findNext();
+}
+function setPlaying(on) {
+  if (on) detach();
+  state.playing = on;
+}
+
+function setMinute(minute) {
+  detach();
+  const c = nyClock(state.t);
+  state.t = nyMoment(c.y, c.m, c.d, Math.max(0, Math.min(1439, minute)));
+}
+function setDay(doy) {
+  detach();
+  const c = nyClock(state.t);
+  const n = daysIn(c.y);
+  const d = new Date(Date.UTC(c.y, 0, 1 + Math.max(0, Math.min(n - 1, doy))));
+  state.t = nyMoment(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate(), c.h * 60 + c.min);
+}
+
+function railDrag(rail, apply) {
+  const at = (e) => { const r = rail.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); };
+  rail.addEventListener('pointerdown', (e) => {
+    rail.setPointerCapture(e.pointerId);
+    setPlaying(false);
+    apply(at(e));
+  });
+  rail.addEventListener('pointermove', (e) => { if (rail.hasPointerCapture(e.pointerId)) apply(at(e)); });
+}
+railDrag(dayRail, (f) => setMinute(Math.round(f * 1439)));
+railDrag(yearRail, (f) => { const n = daysIn(nyClock(state.t).y); setDay(Math.round(f * (n - 1))); });
+
+dayRail.addEventListener('keydown', (e) => {
+  const step = e.shiftKey ? 60 : 5;
+  const now = minutesOfDay(state.t);
+  const to = { ArrowRight: now + step, ArrowUp: now + step, ArrowLeft: now - step, ArrowDown: now - step, Home: 0, End: 1439 }[e.key];
+  if (to === undefined) return;
+  e.preventDefault(); setPlaying(false); setMinute(Math.round(to));
+});
+yearRail.addEventListener('keydown', (e) => {
+  const step = e.shiftKey ? 7 : 1;
+  const now = dayOfYear(nyClock(state.t));
+  const to = { ArrowRight: now + step, ArrowUp: now + step, ArrowLeft: now - step, ArrowDown: now - step, PageUp: now + 30, PageDown: now - 30, Home: 0, End: 365 }[e.key];
+  if (to === undefined) return;
+  e.preventDefault(); setPlaying(false); setDay(to);
+});
+
+$('now').addEventListener('click', setLive);
+$('play').addEventListener('click', () => setPlaying(!state.playing));
+$('next').addEventListener('click', () => {
+  findNext();
+  const next = upcoming[0];
+  if (!next) return;
+  setPlaying(false);
+  state.live = false;
+  // arrive a little early on the right day and let the sun go down (or come up) the streets
+  const from = next.ms - (next.setting ? 75 : 35) * 60000;
+  const to = next.ms + (next.setting ? 0 : 6) * 60000;
+  state.t = from;
+  state.tween = reducedMotion ? null : { from, to, start: performance.now(), dur: 6500 };
+  if (reducedMotion) state.t = to;
+  scene?.setView('street', next.setting ? 'west' : 'east');
+  setViewButtons('street');
+});
+
+function setViewButtons(view) {
+  state.view = view;
+  document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+}
+document.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () => {
+  const sun = sunAt(state.t);
+  scene?.setView(b.dataset.view, gridBearing(sun.azimuth) < 180 ? 'east' : 'west');
+  setViewButtons(b.dataset.view);
+}));
+setViewButtons(state.view);
+
+addEventListener('keydown', (e) => {
+  if (e.target.closest?.('[role="slider"], button, a')) return;
+  if (e.code === 'Space') { e.preventDefault(); setPlaying(!state.playing); }
+});
+
+// ---------- the frame loop ----------
+
+const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
+let scene = null;
+let last = performance.now(), lastLabel = 0, lastLive = null, hengeShown = false;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min((now - last) / 1000, 0.1);
+  last = now;
+
+  if (state.live) state.t = Date.now();
+  else if (state.tween) {
+    const k = Math.min(1, (now - state.tween.start) / state.tween.dur);
+    state.t = state.tween.from + (state.tween.to - state.tween.from) * ease(k);
+    if (k >= 1) state.tween = null;
+  } else if (state.playing) state.t += dt * PLAY_RATE;
+
+  const sun = sunAt(state.t);
+  if (now - lastLabel > 120 || !state.live) {
+    lastLabel = now;
+    describe(state.t, sun);
+    drawRails(state.t);
+  }
+  if (lastLive !== state.live || clockEl.dataset.playing !== String(state.playing)) {
+    lastLive = state.live;
+    clockEl.dataset.playing = String(state.playing);
+    clockEl.classList.toggle('live', state.live);
+    $('now').setAttribute('aria-pressed', String(state.live));
+    $('state').textContent = state.live ? 'Now in New York' : state.playing ? 'New York, an hour a second' : 'New York';
+    $('play').textContent = state.playing ? 'Pause' : 'Play the day';
+  }
+  const aligned = sun.elevation > -0.8 && sun.elevation < 4 && offGrid(sun.azimuth) < 1.2;
+  if (aligned !== hengeShown) { hengeShown = aligned; $('henge').classList.toggle('show', aligned); }
+
+  scene?.render(dt, sun, state);
+}
+requestAnimationFrame(frame);
+setTimeout(() => root.classList.add('ready'), reducedMotion ? 0 : 400);
+
+// ---------- the model ----------
+
+try {
+  scene = await startScene($('scene'), state.view);
+} catch (err) {
+  console.warn(err);
+  root.classList.add('no-gl');
+}
+
+async function startScene(canvas, view) {
+  const [THREE, { OrbitControls }, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }, D] = await Promise.all([
+    import('three'),
+    import('three/addons/controls/OrbitControls.js'),
+    import('three/addons/postprocessing/EffectComposer.js'),
+    import('three/addons/postprocessing/RenderPass.js'),
+    import('three/addons/postprocessing/UnrealBloomPass.js'),
+    import('three/addons/postprocessing/ShaderPass.js'),
+    import('three/addons/postprocessing/OutputPass.js'),
+    fetch('/works/003/city.json').then((r) => { if (!r.ok) throw new Error(`city.json: ${r.status}`); return r.json(); }),
+  ]);
+  const { W, L } = D;
+  const FLOOR = 0.09;
+  const small = Math.min(innerWidth, innerHeight) < 700;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  let pixelRatio = Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.setSize(innerWidth, innerHeight, false);
+  renderer.toneMapping = THREE.AgXToneMapping;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(36, innerWidth / innerHeight, 0.05, 8000);
+
+  // The model is built in the street grid's own frame (x across the island, y up, -z uptown) and turned
+  // as a whole so uptown points 29° east of true north. The world frame is true: +x east, -z north.
+  const city = new THREE.Group();
+  city.rotation.y = -THREE.MathUtils.degToRad(GRID);
+  const model = new THREE.Group();
+  model.position.z = L / 2;                      // the middle of the island sits at the origin
+  city.add(model);
+  scene.add(city);
+  scene.updateMatrixWorld(true);
+  const v3 = (x, y, z) => new THREE.Vector3(x, z, -y);   // grid (x east, y uptown, z up) -> model space
+  const gridToWorld = (x, y, z) => model.localToWorld(v3(x, y, z));
+  const toGrid = new THREE.Matrix3().setFromMatrix4(new THREE.Matrix4().copy(model.matrixWorld).invert());
+
+  // ---------- light and air, shared by every material ----------
+
+  const U = {
+    uSunDir: { value: new THREE.Vector3(0, 1, 0) },
+    uZenith: { value: new THREE.Color() },
+    uHorizon: { value: new THREE.Color() },
+    uGlow: { value: new THREE.Color() },
+    uDisk: { value: 0 },
+    uHazeLight: { value: new THREE.Color() },
+    uHaze: { value: new THREE.Vector3(0.035, 1.2, W / 2 + 1.0) },
+    uToGrid: { value: toGrid },
+    uGridOrigin: { value: model.localToWorld(new THREE.Vector3()) },
+    uFog: { value: new THREE.Vector2(160, 900) },
+    uNight: { value: 0 },
+    uHenge: { value: 0 },
+    uWest: { value: 1 },
+    uTime: { value: 0 },
+  };
+
+  const SKY_GLSL = /* glsl */`
+    uniform vec3 uSunDir;
+    uniform vec3 uZenith;
+    uniform vec3 uHorizon;
+    uniform vec3 uGlow;
+    uniform vec3 uHazeLight;
+    uniform vec3 uHaze;
+    uniform mat3 uToGrid;
+    uniform vec3 uGridOrigin;
+    uniform vec2 uFog;
+
+    vec3 skyColor(vec3 d) {
+      float h = clamp(d.y, 0.0, 1.0);
+      vec3 col = mix(uHorizon, uZenith, pow(h, 0.42));
+      col = mix(col, uHorizon * 0.5, smoothstep(0.0, -0.12, d.y));
+      float f = max(dot(d, uSunDir), 0.0);
+      float hug = exp(-abs(d.y) * 5.0);
+      col += uGlow * (pow(f, 5.0) * (0.18 + 0.82 * hug) + pow(f, 60.0) * 0.9);
+      return col;
+    }
+
+    // haze that hugs the streets, lit from behind when you look toward a low sun:
+    // density * exp(-height / falloff) inside the island's slab, integrated exactly along the ray
+    vec3 canyonHaze(vec3 col, vec3 dirW, float dist) {
+      vec3 o = uToGrid * (cameraPosition - uGridOrigin);
+      vec3 dir = uToGrid * dirW;
+      float t0 = 0.0, t1 = dist;
+      if (abs(dir.x) > 1e-5) {
+        float ta = (-uHaze.z - o.x) / dir.x, tb = (uHaze.z - o.x) / dir.x;
+        t0 = clamp(min(ta, tb), 0.0, dist);
+        t1 = clamp(max(ta, tb), 0.0, dist);
+      } else if (abs(o.x) > uHaze.z) {
+        t1 = t0;
+      }
+      float len = t1 - t0;
+      if (len <= 0.0) return col;
+      float H = uHaze.y;
+      float y0 = max(o.y + dir.y * t0, 0.0), y1 = max(o.y + dir.y * t1, 0.0);
+      float tau = abs(y1 - y0) < 1e-3
+        ? uHaze.x * exp(-y0 / H) * len
+        : uHaze.x * H * len / (y1 - y0) * (exp(-y0 / H) - exp(-y1 / H));
+      float g = 0.65;
+      float mu = dot(dirW, uSunDir);
+      float phase = (1.0 - g * g) / (12.566 * pow(1.0 + g * g - 2.0 * g * mu, 1.5));
+      vec3 light = uHazeLight * phase + uHorizon * 0.12;
+      float a = 1.0 - exp(-tau);
+      return col * (1.0 - a) + light * a;
+    }
+
+    vec3 atmosphere(vec3 col, vec3 wp) {
+      vec3 V = wp - cameraPosition;
+      float d = max(length(V), 1e-4);
+      vec3 dir = V / d;
+      col = canyonHaze(col, dir, d);
+      float fog = 1.0 - exp(-max(d - uFog.x, 0.0) / uFog.y);
+      return mix(col, skyColor(dir), fog);
+    }
+  `;
+
+  // facades: an etched line at every floor, and at night a scatter of lit windows
+  const FACADE_GLSL = /* glsl */`
+    {
+      float facade = 1.0 - abs(vLocalNormal.y);
+      float s = vLocalPos.y / ${FLOOR.toFixed(3)};
+      float f = fract(s);
+      float w = fwidth(s);
+      float groove = smoothstep(0.0, 0.125 + w, min(f, 1.0 - f));
+      float fade = 1.0 - smoothstep(0.15, 0.45, w);
+      diffuseColor.rgb *= 1.0 - (1.0 - groove) * 0.16 * facade * fade;
+    }
+  `;
+  const WINDOWS_GLSL = /* glsl */`
+    {
+      float facade = step(0.5, 1.0 - abs(vLocalNormal.y));
+      float along = abs(vLocalNormal.x) > 0.5 ? vLocalPos.z : vLocalPos.x;
+      vec2 cell = vec2(along / 0.075, vLocalPos.y / ${FLOOR.toFixed(3)});
+      vec2 id = floor(cell);
+      vec2 f = fract(cell);
+      float px = max(fwidth(cell.x), fwidth(cell.y));
+      float seed = fract(sin(dot(id + vec2(vLocalNormal.x * 7.0, vLocalNormal.z * 13.0), vec2(12.9898, 78.233))) * 43758.5453);
+      // some buildings are busy late, some are dark
+      vec2 lot = floor(vLocalPos.xz * 1.7);
+      float busy = 0.25 + 0.6 * fract(sin(dot(lot, vec2(41.3, 289.1))) * 15731.743);
+      float lit = step(1.0 - busy * 0.55, seed) * step(0.25, vLocalPos.y);
+      float shape = smoothstep(0.16, 0.28, f.x) * smoothstep(0.84, 0.72, f.x) * smoothstep(0.2, 0.34, f.y) * smoothstep(0.8, 0.66, f.y);
+      float win = mix(lit * shape, busy * 0.55 * 0.3, smoothstep(0.35, 1.1, px));
+      vec3 tint = mix(vec3(1.0, 0.6, 0.3), vec3(0.8, 0.88, 1.0), step(0.86, fract(seed * 7.13)));
+      totalEmissiveRadiance += tint * win * facade * smoothstep(0.2, 0.8, uNight) * 2.0;
+    }
+  `;
+  // light from the streets onto the walls that face them: lamps at night, the low sun at an alignment
+  const STREETLIGHT_GLSL = /* glsl */`
+    {
+      float facesStreet = abs(vLocalNormal.z);
+      float x01 = clamp((vLocalPos.x + ${(W / 2).toFixed(2)}) / ${W.toFixed(2)}, 0.0, 1.0);
+      float fromSun = mix(1.0, 0.15, uWest > 0.5 ? x01 : 1.0 - x01);
+      float low = exp(-vLocalPos.y / 0.6);
+      totalEmissiveRadiance += (vec3(1.0, 0.55, 0.25) * uNight * 0.3 + vec3(1.0, 0.6, 0.3) * uHenge * 1.1 * fromSun) * facesStreet * low;
+    }
+  `;
+  // deep in a canyon a wall sees other walls, not the sky
+  const CANYON_GLSL = /* glsl */`
+    {
+      float roof = smoothstep(0.6, 0.9, vWorldNormal.y);
+      float skyView = mix(mix(0.3, 1.0, smoothstep(0.0, 4.0, vWorldPos.y)), 1.0, roof);
+      reflectedLight.indirectDiffuse *= skyView;
+    }
+  `;
+
+  function atmospheric(material, { facade = false, windows = false } = {}) {
+    material.onBeforeCompile = (shader) => {
+      Object.assign(shader.uniforms, U);
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', `#include <common>
+          varying vec3 vWorldPos;
+          varying vec3 vWorldNormal;
+          varying vec3 vLocalPos;
+          varying vec3 vLocalNormal;`)
+        .replace('#include <fog_vertex>', `#include <fog_vertex>
+          vec4 localPos = vec4(transformed, 1.0);
+          vec3 localNormal = objectNormal;
+          #ifdef USE_INSTANCING
+            localPos = instanceMatrix * localPos;
+            localNormal = mat3(instanceMatrix) * localNormal;
+          #endif
+          vLocalPos = localPos.xyz;
+          vLocalNormal = normalize(localNormal);
+          vWorldPos = (modelMatrix * localPos).xyz;
+          vWorldNormal = normalize(mat3(modelMatrix) * localNormal);`);
+      let frag = shader.fragmentShader
+        .replace('#include <common>', `#include <common>
+          varying vec3 vWorldPos;
+          varying vec3 vWorldNormal;
+          varying vec3 vLocalPos;
+          varying vec3 vLocalNormal;
+          uniform float uNight;
+          uniform float uHenge;
+          uniform float uWest;
+          ${SKY_GLSL}`)
+        .replace('#include <aomap_fragment>', `#include <aomap_fragment>\n${CANYON_GLSL}`)
+        .replace('#include <fog_fragment>', 'gl_FragColor.rgb = atmosphere(gl_FragColor.rgb, vWorldPos);');
+      if (facade) {
+        frag = frag
+          .replace('#include <color_fragment>', `#include <color_fragment>\n${FACADE_GLSL}`)
+          .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>\n${STREETLIGHT_GLSL}${windows ? WINDOWS_GLSL : ''}`);
+      }
+      shader.fragmentShader = frag;
+    };
+    material.customProgramCacheKey = () => `sundial-${facade}-${windows}`;
+    return material;
+  }
+
+  // ---------- sky and river ----------
+
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(3000, 64, 32), new THREE.ShaderMaterial({
+    uniforms: U, side: THREE.BackSide, depthWrite: false,
+    vertexShader: /* glsl */`
+      varying vec3 vDir;
+      void main() {
+        vDir = (modelMatrix * vec4(position, 0.0)).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
+    fragmentShader: /* glsl */`
+      uniform float uDisk;
+      varying vec3 vDir;
+      ${SKY_GLSL}
+      void main() {
+        vec3 d = normalize(vDir);
+        vec3 col = skyColor(d);
+        float mu = dot(d, uSunDir);
+        col += smoothstep(cos(radians(0.95)), cos(radians(0.8)), mu) * vec3(1.0, 0.78, 0.5) * 34.0 * uDisk;
+        col = canyonHaze(col, d, 3000.0);
+        gl_FragColor = vec4(col, 1.0);
+      }`,
+  }));
+  sky.renderOrder = -1;
+  sky.frustumCulled = false;
+  scene.add(sky);
+
+  const river = new THREE.Mesh(new THREE.PlaneGeometry(9000, 9000).rotateX(-Math.PI / 2), new THREE.ShaderMaterial({
+    uniforms: { ...U, uDeep: { value: new THREE.Color(0.004, 0.007, 0.012) }, uGlint: { value: 0 } },
+    vertexShader: /* glsl */`
+      varying vec3 vWorldPos;
+      void main() {
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vWorldPos = wp.xyz;
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }`,
+    fragmentShader: /* glsl */`
+      uniform float uTime;
+      uniform vec3 uDeep;
+      uniform float uGlint;
+      varying vec3 vWorldPos;
+      ${SKY_GLSL}
+      void main() {
+        vec3 V = vWorldPos - cameraPosition;
+        float d = length(V);
+        vec3 dir = V / d;
+        vec2 p = vWorldPos.xz;
+        vec3 n = vec3(
+          0.009 * sin(p.x * 1.7 + p.y * 0.6 + uTime * 0.5) + 0.006 * sin(p.y * 3.1 - uTime * 0.4 + p.x * 1.3),
+          1.0,
+          0.009 * sin(p.y * 2.3 - p.x * 0.7 + uTime * 0.45) + 0.006 * sin(p.x * 3.7 + p.y * 0.9 + uTime * 0.35));
+        n = normalize(mix(n, vec3(0.0, 1.0, 0.0), smoothstep(12.0, 90.0, d)));
+        vec3 r = reflect(dir, n);
+        r.y = abs(r.y);
+        float fres = 0.02 + 0.98 * pow(1.0 - max(dot(-dir, n), 0.0), 5.0);
+        vec3 col = mix(uDeep, skyColor(r), fres);
+        col += uGlint * pow(max(dot(r, uSunDir), 0.0), 900.0) * vec3(1.0, 0.75, 0.5);
+        float fog = 1.0 - exp(-max(d - uFog.x, 0.0) / uFog.y);
+        col = mix(col, skyColor(dir), fog);
+        gl_FragColor = vec4(col, 1.0);
+      }`,
+  }));
+  river.position.y = -0.18;
+  scene.add(river);
+
+  // ---------- the sun and the sky's light ----------
+
+  const sunLight = new THREE.DirectionalLight(0xffffff, 0);
+  sunLight.castShadow = true;
+  const shadowSize = small ? 2048 : 4096;
+  sunLight.shadow.mapSize.set(shadowSize, shadowSize);
+  sunLight.shadow.bias = -0.0003;
+  sunLight.shadow.normalBias = 0.025;
+  scene.add(sunLight, sunLight.target);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x14120f, 1);
+  scene.add(hemi);
+
+  // ---------- the model ----------
+
+  const lin = (r, g, b) => new THREE.Color(r, g, b);
+  const plaster = atmospheric(new THREE.MeshStandardMaterial({ roughness: 0.72 }), { facade: true, windows: true });
+  const plainPlaster = atmospheric(new THREE.MeshStandardMaterial({ roughness: 0.72 }));
+  const groundMat = atmospheric(new THREE.MeshStandardMaterial({ color: lin(0.12, 0.115, 0.11), roughness: 0.85 }));
+  const parkMat = atmospheric(new THREE.MeshStandardMaterial({
+    color: lin(0.24, 0.3, 0.2), roughness: 0.92, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+  }));
+  const reservoirMat = atmospheric(new THREE.MeshStandardMaterial({
+    color: lin(0.08, 0.11, 0.14), roughness: 0.15, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+  }));
+  const treeMat = atmospheric(new THREE.MeshStandardMaterial({ roughness: 0.9 }));
+
+  // the streets carry light: lamps after dusk, and the sun itself on the days it runs down them
+  const glowMat = (lamps, aligned) => new THREE.ShaderMaterial({
+    uniforms: { ...U, uLamps: { value: lamps }, uAligned: { value: aligned } },
+    side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3,
+    vertexShader: /* glsl */`
+      attribute float aX;
+      varying vec3 vWorldPos;
+      varying float vX;
+      void main() {
+        vX = aX;
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vWorldPos = wp.xyz;
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }`,
+    fragmentShader: /* glsl */`
+      uniform float uNight;
+      uniform float uHenge;
+      uniform float uWest;
+      uniform float uLamps;
+      uniform float uAligned;
+      varying vec3 vWorldPos;
+      varying float vX;
+      ${SKY_GLSL}
+      void main() {
+        float fromSun = mix(1.0, 0.12, uWest > 0.5 ? vX : 1.0 - vX);
+        vec3 col = vec3(1.0, 0.56, 0.26) * uNight * uLamps + vec3(1.0, 0.62, 0.32) * uHenge * uAligned * 4.0 * fromSun;
+        col += uHorizon * 0.025;
+        gl_FragColor = vec4(atmosphere(col, vWorldPos), 1.0);
+      }`,
+  });
+
+  const unitBox = new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
+  const tmp = new THREE.Object3D();
+  const tmpColor = new THREE.Color();
+  const ramp = (a, b, t) => tmpColor.setRGB(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
+  function instances(geometry, material, count, place) {
+    const mesh = new THREE.InstancedMesh(geometry, material, count);
+    for (let i = 0; i < count; i++) {
+      place(i, tmp);
+      tmp.updateMatrix();
+      mesh.setMatrixAt(i, tmp.matrix);
+      mesh.setColorAt(i, tmpColor);
+    }
+    mesh.computeBoundingSphere();
+    return mesh;
+  }
+
+  // towers: cx, cy, z0, sx, sy, sz, tone
+  const towers = instances(unitBox, plaster, D.city.length / 7, (i, o) => {
+    const [cx, cy, z0, sx, sy, sz, r] = D.city.slice(i * 7, i * 7 + 7);
+    o.position.copy(v3(cx, cy, z0));
+    o.scale.set(sx, sz, sy);
+    ramp([0.66, 0.64, 0.6], [0.86, 0.84, 0.8], r);
+  });
+  towers.castShadow = towers.receiveShadow = true;
+  model.add(towers);
+
+  // rooftop water tanks: post, tank and conical roof
+  {
+    const parts = [
+      new THREE.CylinderGeometry(0.02, 0.02, 0.04, 6).translate(0, -0.02, 0),
+      new THREE.CylinderGeometry(0.055, 0.055, 0.08, 14).translate(0, 0.04, 0),
+      new THREE.ConeGeometry(0.058, 0.035, 14).translate(0, 0.0975, 0),
+    ].map((g) => g.toNonIndexed());
+    const total = parts.reduce((n, g) => n + g.attributes.position.count, 0);
+    const pos = new Float32Array(total * 3), nrm = new Float32Array(total * 3);
+    let o = 0;
+    for (const g of parts) {
+      pos.set(g.attributes.position.array, o * 3);
+      nrm.set(g.attributes.normal.array, o * 3);
+      o += g.attributes.position.count;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.BufferAttribute(nrm, 3));
+    const tanks = instances(geo, plainPlaster, D.tanks.length / 3, (i, t) => {
+      const [x, y, z] = D.tanks.slice(i * 3, i * 3 + 3);
+      t.position.copy(v3(x, y, z));
+      t.scale.setScalar(1);
+      ramp([0.6, 0.58, 0.55], [0.76, 0.74, 0.7], (i * 0.618) % 1);
+    });
+    tanks.castShadow = tanks.receiveShadow = true;
+    model.add(tanks);
+  }
+
+  // the island: its outline extruded down into the river, with a softly rounded rim
+  {
+    const shape = new THREE.Shape();
+    const pts = [];
+    for (let k = 0; k < D.island.length; k += 2) pts.push([D.island[k], D.island[k + 1]]);
+    pts.forEach(([hw, y], k) => (k === 0 ? shape.moveTo(hw, y) : shape.lineTo(hw, y)));
+    [...pts].reverse().forEach(([hw, y]) => shape.lineTo(-hw, y));
+    const geo = new THREE.ExtrudeGeometry(shape, {
+      depth: 1.0, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 3, curveSegments: 1,
+    });
+    geo.translate(0, 0, -1.04).rotateX(-Math.PI / 2);
+    const island = new THREE.Mesh(geo, groundMat);
+    island.receiveShadow = true;
+    model.add(island);
+  }
+
+  // every cross street, and Broadway, the one diagonal
+  {
+    const pos = [], xs = [], idx = [];
+    const width = 0.2, h = 0.012;
+    for (let k = 0; k < D.streets.length; k += 3) {
+      const [x0, x1, y] = D.streets.slice(k, k + 3);
+      const base = pos.length / 3;
+      for (const [x, dy] of [[x0, -1], [x1, -1], [x1, 1], [x0, 1]]) {
+        const p = v3(x, y + dy * width / 2, h);
+        pos.push(p.x, p.y, p.z);
+        xs.push((x + W / 2) / W);
+      }
+      idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('aX', new THREE.Float32BufferAttribute(xs, 1));
+    geo.setIndex(idx);
+    model.add(new THREE.Mesh(geo, glowMat(1.5, 1)));
+  }
+  {
+    const pts = [];
+    for (let k = 0; k < D.broadway.length; k += 2) pts.push(new THREE.Vector2(D.broadway[k], D.broadway[k + 1]));
+    const pos = [], xs = [], idx = [];
+    const half = 0.06;
+    pts.forEach((p, k) => {
+      const a = pts[Math.max(k - 1, 0)], b = pts[Math.min(k + 1, pts.length - 1)];
+      const t = b.clone().sub(a).normalize();
+      const n = new THREE.Vector2(-t.y, t.x).multiplyScalar(half);
+      const l = v3(p.x + n.x, p.y + n.y, 0.016), r = v3(p.x - n.x, p.y - n.y, 0.016);
+      pos.push(l.x, l.y, l.z, r.x, r.y, r.z);
+      xs.push((p.x + W / 2) / W, (p.x + W / 2) / W);
+      if (k > 0) idx.push(2 * k - 2, 2 * k - 1, 2 * k + 1, 2 * k - 2, 2 * k + 1, 2 * k);
+    });
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('aX', new THREE.Float32BufferAttribute(xs, 1));
+    geo.setIndex(idx);
+    model.add(new THREE.Mesh(geo, glowMat(5, 0)));
+  }
+
+  // Central Park: lawn, reservoir and trees
+  {
+    const [x0, x1, y0, y1] = D.park;
+    const lawn = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, y1 - y0).rotateX(-Math.PI / 2), parkMat);
+    lawn.position.copy(v3((x0 + x1) / 2, (y0 + y1) / 2, 0.02));
+    lawn.receiveShadow = true;
+    model.add(lawn);
+    const [cx, cy, rx, ry] = D.reservoir;
+    const water = new THREE.Mesh(new THREE.CircleGeometry(1, 96).rotateX(-Math.PI / 2), reservoirMat);
+    water.scale.set(rx, 1, ry);
+    water.position.copy(v3(cx, cy, 0.03));
+    model.add(water);
+    const trees = instances(new THREE.IcosahedronGeometry(1, 1), treeMat, D.trees.length / 5, (i, o) => {
+      const [x, y, z, radius, r] = D.trees.slice(i * 5, i * 5 + 5);
+      o.position.copy(v3(x, y, z));
+      o.scale.setScalar(radius);
+      ramp([0.2, 0.28, 0.16], [0.32, 0.42, 0.24], r);
+    });
+    trees.receiveShadow = true;
+    model.add(trees);
+  }
+
+  // ---------- post: bloom, a light vignette, and a whisper of noise so dusk never bands ----------
+
+  const composer = new EffectComposer(renderer);
+  composer.setPixelRatio(pixelRatio);
+  composer.setSize(innerWidth, innerHeight);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.3, 0.6, 0.92);
+  composer.addPass(bloom);
+  composer.addPass(new OutputPass());
+  const finish = new ShaderPass({
+    uniforms: { tDiffuse: { value: null }, uAspect: { value: innerWidth / innerHeight }, uTime: U.uTime },
+    vertexShader: /* glsl */`varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: /* glsl */`
+      uniform sampler2D tDiffuse;
+      uniform float uAspect;
+      uniform float uTime;
+      varying vec2 vUv;
+      float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233)) + uTime) * 43758.5453); }
+      void main() {
+        vec2 c = vUv - 0.5;
+        float r = length(vec2(c.x * 2.0, c.y * 2.0 / uAspect));
+        vec3 col = texture2D(tDiffuse, vUv).rgb * mix(1.0, 0.8, smoothstep(0.55, 1.2, r));
+        gl_FragColor = vec4(col + (hash(gl_FragCoord.xy) - 0.5) / 255.0, 1.0);
+      }`,
+  });
+  composer.addPass(finish);
+
+  // ---------- the sun, the sky and the lamps, by how high the sun stands ----------
+
+  const SKY_KEYS = [   // elevation, zenith, horizon, glow around the sun (linear)
+    [-18, [0.003, 0.004, 0.010], [0.008, 0.010, 0.020], [0, 0, 0]],
+    [-10, [0.004, 0.006, 0.016], [0.018, 0.022, 0.042], [0.015, 0.008, 0.004]],
+    [-5, [0.010, 0.016, 0.045], [0.09, 0.075, 0.12], [0.22, 0.09, 0.04]],
+    [-1, [0.028, 0.042, 0.11], [0.42, 0.24, 0.2], [1.0, 0.36, 0.1]],
+    [2, [0.045, 0.075, 0.19], [0.7, 0.42, 0.28], [1.45, 0.6, 0.2]],
+    [8, [0.07, 0.13, 0.3], [0.68, 0.57, 0.48], [0.75, 0.52, 0.28]],
+    [20, [0.1, 0.2, 0.44], [0.6, 0.64, 0.7], [0.32, 0.27, 0.2]],
+    [60, [0.11, 0.24, 0.54], [0.58, 0.66, 0.76], [0.22, 0.2, 0.16]],
+  ];
+  const SUN_KEYS = [   // elevation, colour, intensity
+    [-1, [1.0, 0.4, 0.18], 0], [0.5, [1.0, 0.45, 0.2], 3.0], [4, [1.0, 0.56, 0.3], 4.2],
+    [12, [1.0, 0.76, 0.55], 4.0], [30, [1.0, 0.92, 0.82], 4.4], [70, [1.0, 0.97, 0.92], 4.6],
+  ];
+  const HEMI_KEYS = [  // elevation, sky light (linear, already scaled)
+    [-18, [0.016, 0.02, 0.04]], [-8, [0.024, 0.032, 0.065]], [-3, [0.12, 0.12, 0.2]], [0, [0.34, 0.3, 0.36]], [3, [0.6, 0.55, 0.56]],
+    [12, [0.85, 0.9, 1.0]], [40, [0.95, 1.05, 1.2]],
+  ];
+  const keyed = (keys, el, col) => {
+    if (el <= keys[0][0]) return keys[0][col];
+    for (let i = 1; i < keys.length; i++) {
+      if (el <= keys[i][0]) {
+        const k = (el - keys[i - 1][0]) / (keys[i][0] - keys[i - 1][0]);
+        const a = keys[i - 1][col], b = keys[i][col];
+        return Array.isArray(a) ? a.map((v, j) => v + (b[j] - v) * k) : a + (b - a) * k;
+      }
+    }
+    return keys[keys.length - 1][col];
+  };
+  const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+  const center = new THREE.Vector3(0, 2, 0);
+  const corners = [];
+  for (const x of [-W / 2 - 0.5, W / 2 + 0.5]) for (const y of [-1, L + 1]) for (const z of [-0.2, 10.5]) corners.push(gridToWorld(x, y, z));
+  const lightView = new THREE.Matrix4(), pv = new THREE.Vector3();
+
+  function lightFor(sun) {
+    const el = sun.elevation;
+    const az = THREE.MathUtils.degToRad(sun.azimuth), alt = THREE.MathUtils.degToRad(Math.max(el, -2));
+    const dir = U.uSunDir.value.set(Math.sin(az) * Math.cos(alt), Math.sin(alt), -Math.cos(az) * Math.cos(alt));
+
+    U.uZenith.value.setRGB(...keyed(SKY_KEYS, el, 1));
+    U.uHorizon.value.setRGB(...keyed(SKY_KEYS, el, 2));
+    U.uGlow.value.setRGB(...keyed(SKY_KEYS, el, 3));
+    U.uDisk.value = smooth(-1.4, -0.2, el);
+
+    const sunColor = keyed(SUN_KEYS, el, 1), sunPower = keyed(SUN_KEYS, el, 2);
+    sunLight.color.setRGB(...sunColor);
+    sunLight.intensity = sunPower;
+    hemi.color.setRGB(...keyed(HEMI_KEYS, el, 1)).multiplyScalar(1.5);
+    river.material.uniforms.uDeep.value.copy(U.uZenith.value).lerp(U.uHorizon.value, 0.5).multiplyScalar(0.07);
+    const low = 1 - smooth(3, 18, el);
+    U.uHazeLight.value.setRGB(...sunColor).multiplyScalar(sunPower * 1.1 * low);
+    river.material.uniforms.uGlint.value = smooth(-0.5, 3, el) * 8;
+
+    const night = 1 - smooth(-6, 1.5, el);
+    U.uNight.value = night;
+    const off = offGrid(sun.azimuth);
+    const henge = (1 - smooth(0.5, 2.2, off)) * smooth(-1.0, 0.3, el) * (1 - smooth(3, 7, el));
+    U.uHenge.value = henge;
+    U.uWest.value = gridBearing(sun.azimuth) > 180 ? 1 : 0;
+    renderer.toneMappingExposure = 1 + 0.45 * night;
+    bloom.strength = 0.2 + 0.45 * night + 0.55 * henge;
+    bloom.threshold = 1.0 + 0.8 * (1 - night) * (1 - henge);
+
+    // the shadow camera, fitted around the whole island as the sun sees it
+    renderer.shadowMap.autoUpdate = el > -1.5;
+    if (el > -1.5) {
+      sunLight.position.copy(center).addScaledVector(dir, 200);
+      sunLight.target.position.copy(center);
+      const cam = sunLight.shadow.camera;
+      cam.position.copy(sunLight.position);
+      cam.lookAt(center);
+      cam.updateMatrixWorld();
+      lightView.copy(cam.matrixWorld).invert();
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+      for (const c of corners) {
+        pv.copy(c).applyMatrix4(lightView);
+        x0 = Math.min(x0, pv.x); x1 = Math.max(x1, pv.x);
+        y0 = Math.min(y0, pv.y); y1 = Math.max(y1, pv.y);
+        z0 = Math.min(z0, pv.z); z1 = Math.max(z1, pv.z);
+      }
+      Object.assign(cam, { left: x0 - 0.3, right: x1 + 0.3, bottom: y0 - 0.3, top: y1 + 0.3, near: Math.max(0.1, -z1 - 1), far: -z0 + 1 });
+      cam.updateProjectionMatrix();
+    }
+  }
+
+  // ---------- where you look from ----------
+
+  const controls = new OrbitControls(camera, canvas);
+  Object.assign(controls, {
+    enableDamping: true, dampingFactor: 0.07, rotateSpeed: 0.55, zoomSpeed: 0.8, panSpeed: 0.7,
+    screenSpacePanning: true, maxPolarAngle: THREE.MathUtils.degToRad(88), autoRotateSpeed: 0.22,
+  });
+
+  // Each view is a camera, a target, a lens, and a lift: how far above the middle of the screen the target
+  // sits, so the model clears the clock in the lower part of the screen.
+  const aspect = () => innerWidth / innerHeight;
+  function aboveView() {
+    const target = gridToWorld(0, 44, 1.5);
+    const away = gridToWorld(0.5, -1, 0).sub(gridToWorld(0, 0, 0)).setY(0).normalize();    // from the southeast: the afternoon sun comes from the side
+    const dist = 132 * Math.max(1, 1.4 / aspect()) ** 0.4;
+    const phi = THREE.MathUtils.degToRad(54);
+    const pos = target.clone().addScaledVector(away, dist * Math.sin(phi)).setY(target.y + dist * Math.cos(phi));
+    const wide = aspect() > 1.2;
+    return { pos, target, fov: 34, lift: wide ? 0.04 : 0.1, shift: wide ? 0.11 : 0, near: [3, 420] };
+  }
+  function planView() {
+    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    for (const c of corners) { x0 = Math.min(x0, c.x); x1 = Math.max(x1, c.x); z0 = Math.min(z0, c.z); z1 = Math.max(z1, c.z); }
+    const fov = 30, lift = 0.07, shift = aspect() > 1.2 ? 0.1 : 0, t = Math.tan(THREE.MathUtils.degToRad(fov / 2));
+    const dist = Math.max((z1 - z0) / 2 / (t * (1 - 2 * lift)), (x1 - x0) / 2 / (t * aspect())) * 1.1;
+    const cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
+    return { pos: new THREE.Vector3(cx, dist, cz + 0.001), target: new THREE.Vector3(cx, 0, cz), fov, lift, shift, near: [3, 500] };
+  }
+  const VIEWS = {
+    above: aboveView,
+    plan: planView,
+    street: (side) => side === 'east'
+      ? { pos: gridToWorld(-12.5, 31.2, 1.6), target: gridToWorld(-9.5, 31.2, 1.75), fov: 52, lift: 0, shift: 0, near: [0.3, 80] }
+      : { pos: gridToWorld(12.5, 31.2, 1.6), target: gridToWorld(9.5, 31.2, 1.75), fov: 52, lift: 0, shift: 0, near: [0.3, 80] },
+  };
+  const lens = { fov: 34, lift: 0.1, shift: 0 };
+
+  // Lift and shift are a view offset: the frame is rendered as the lower left part of a larger one,
+  // which moves the model up and to the right, clear of the clock, without bending the perspective.
+  function project() {
+    const w = innerWidth, h = innerHeight, a = 2 * lens.lift, b = 2 * lens.shift;
+    // on a tall screen, open the lens partway toward the width a landscape screen would see
+    let half = Math.tan(THREE.MathUtils.degToRad(lens.fov / 2));
+    if (w / h < 1.2) half = Math.min(half * (1 + (1.2 * h / w - 1) * 0.4), Math.tan(THREE.MathUtils.degToRad(38)));
+    camera.aspect = (w * (1 + b)) / (h * (1 + a));
+    camera.fov = 2 * THREE.MathUtils.radToDeg(Math.atan(half * (1 + a)));
+    camera.setViewOffset(w * (1 + b), h * (1 + a), 0, a * h, w, h);
+  }
+
+  let flight = null, touched = performance.now();
+  controls.addEventListener('start', () => { touched = performance.now(); controls.autoRotate = false; flight = null; });
+
+  function setView(name, side = 'west', instant = false) {
+    const v = VIEWS[name](side);
+    [controls.minDistance, controls.maxDistance] = v.near;
+    controls.autoRotate = false;
+    touched = performance.now();
+    view = name;
+    if (instant || reducedMotion) {
+      camera.position.copy(v.pos);
+      controls.target.copy(v.target);
+      lens.fov = v.fov;
+      lens.lift = v.lift;
+      lens.shift = v.shift;
+      flight = null;
+      return;
+    }
+    flight = { from: { pos: camera.position.clone(), target: controls.target.clone(), fov: lens.fov, lift: lens.lift, shift: lens.shift }, to: v, start: performance.now(), dur: 2800 };
+  }
+
+  function fly(now) {
+    if (!flight) return;
+    const k = Math.min(1, (now - flight.start) / flight.dur);
+    const e = ease(k);
+    const { from, to } = flight;
+    camera.position.lerpVectors(from.pos, to.pos, e);
+    camera.position.y += Math.sin(Math.PI * e) * from.pos.distanceTo(to.pos) * 0.12;
+    controls.target.lerpVectors(from.target, to.target, e);
+    lens.fov = from.fov + (to.fov - from.fov) * e;
+    lens.lift = from.lift + (to.lift - from.lift) * e;
+    lens.shift = from.shift + (to.shift - from.shift) * e;
+    if (k >= 1) flight = null;
+  }
+
+  // open a little further out and settle in
+  {
+    const v = VIEWS[view]('west');
+    setView(view, gridBearing(sunAt(state.t).azimuth) < 180 ? 'east' : 'west', true);
+    if (!reducedMotion && view !== 'street') {
+      camera.position.copy(v.target).addScaledVector(v.pos.clone().sub(v.target), 1.35);
+      camera.position.y += 12;
+      setView(view, 'west');
+      flight.dur = 4200;
+    }
+  }
+
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(w, h, false);
+    composer.setPixelRatio(pixelRatio);
+    composer.setSize(w, h);
+    bloom.resolution.set(w / 2, h / 2);
+    finish.uniforms.uAspect.value = w / h;
+    if (view !== 'street' && !flight) setView(view, 'west', true);
+  }
+
+  let sizedFor = `${innerWidth}x${innerHeight}`;
+  let perfFrames = 0, perfTime = 0, perfChecked = false;
+  let started = false;
+
+  function render(dt, sun) {
+    if (!innerWidth || !innerHeight) return;
+    if (sizedFor !== `${innerWidth}x${innerHeight}`) { sizedFor = `${innerWidth}x${innerHeight}`; resize(); }
+    const now = performance.now();
+    U.uTime.value += dt;
+    lightFor(sun);
+
+    fly(now);
+    controls.enabled = !flight;
+    if (!flight && view === 'above' && !reducedMotion && now - touched > 9000) controls.autoRotate = true;
+    controls.update(dt);
+    const dist = camera.position.distanceTo(controls.target);
+    camera.near = THREE.MathUtils.clamp(Math.min(dist, camera.position.y + 0.2) * 0.02, 0.02, 2);
+    project();
+    camera.updateProjectionMatrix();
+    sky.position.copy(camera.position);
+
+    composer.render(dt);
+    if (!started) { started = true; root.classList.add('scene-ready'); }
+
+    // if the device struggles, trade resolution for smoothness
+    if (!perfChecked && U.uTime.value > 2) {
+      perfFrames++;
+      perfTime += dt;
+      if (perfFrames >= 90) {
+        perfChecked = true;
+        if (perfFrames / perfTime < 40) { pixelRatio = 1; resize(); }
+      }
+    }
+  }
+
+  return { render, setView: (name, side) => setView(name, side) };
+}
+</script>
+</body>
+</html>
