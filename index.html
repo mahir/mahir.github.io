@@ -1,72 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Eczar", serif;
-            font-optical-sizing: auto;
-            font-weight: 300;
-            font-size: 1.2em;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto;
-            display: block;
-            object-fit: cover;
-        }
-        h1 {
-            text-align: center;
-            margin: 15px 0;
-        }
-        p {
-/*            text-align: center;*/
-            line-height: 1.8;
-        }
-        .social-links {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .social-links a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #007bff;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahir Yavuz · Product and engineering leader, educator</title>
+<meta name="description" content="Mahir Yavuz is a product and engineering leader and educator, working with data since 1998. Head of Engineering at AirOps; before that Etsy, Topos and R/GA.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
+<meta name="theme-color" content="#06070b">
+<meta property="og:type" content="profile">
+<meta property="profile:first_name" content="Mahir">
+<meta property="profile:last_name" content="Yavuz">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="Mahir Yavuz">
+<meta property="og:description" content="Product and engineering leader, educator, working with data since 1998.">
+<meta property="og:url" content="https://mahiryavuz.com/">
+<meta property="og:image" content="https://mahiryavuz.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mahir Yavuz, with his portrait set in type on a round ink plate">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mahiryavuz.com/#website",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "inLanguage": "en",
+      "author": {
+        "@id": "https://mahiryavuz.com/#person"
+      }
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://mahiryavuz.com/#page",
+      "url": "https://mahiryavuz.com/",
+      "name": "Mahir Yavuz",
+      "isPartOf": {
+        "@id": "https://mahiryavuz.com/#website"
+      },
+      "mainEntity": {
+        "@id": "https://mahiryavuz.com/#person"
+      },
+      "dateModified": "2026-10-26"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mahiryavuz.com/#person",
+      "name": "Mahir Yavuz",
+      "url": "https://mahiryavuz.com/",
+      "image": "https://mahiryavuz.com/profile.jpg",
+      "description": "Product and engineering leader and educator, working with data since 1998.",
+      "jobTitle": "Head of Engineering",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "AirOps"
+      },
+      "knowsAbout": [
+        "AI products",
+        "Search",
+        "Recommendation systems",
+        "Advertising platforms",
+        "Data science",
+        "Machine learning",
+        "Product management",
+        "Data visualization",
+        "Media art"
+      ],
+      "sameAs": [
+        "https://mahir.substack.com/",
+        "https://bsky.app/profile/mahiryavuz.bsky.social",
+        "https://x.com/mahir_nyc",
+        "https://www.linkedin.com/in/mahiryavuz/"
+      ]
+    }
+  ]
+}
+</script>
+<!-- /gen:ld -->
+<script src="/works/works.js"></script>
+<script>
+  // The homepage is whichever work is up today. Hand over before anything paints, keeping ?query and #about along.
+  (() => {
+    const w = window.Works && Works.current(Works.today());
+    if (!w) return;
+    document.documentElement.style.visibility = 'hidden';
+    location.replace(Works.url(w) + location.search + location.hash);
+  })();
+</script>
+<style>
+  /* Only seen without JavaScript (and by the many crawlers that don't run it), or if the schedule fails to load. */
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 48px 24px;
+    background: #06070b; color: #e2e6eb; font: 16px/1.6 "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 36rem; }
+  h1 { margin: 0 0 .4rem; font-size: 2rem; font-weight: 500; letter-spacing: -.02em; }
+  h2 { margin: 2rem 0 .6rem; font-size: .75rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgba(226, 230, 235, .6); }
+  p { margin: 0 0 1rem; color: rgba(226, 230, 235, .72); }
+  .role { color: #e2e6eb; font-size: 1.1rem; }
+  ol { margin: 0; padding: 0; list-style: none; }
+  li { margin: 0 0 .3rem; }
+  time { color: rgba(226, 230, 235, .6); }
+  nav { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+  a { color: inherit; text-underline-offset: .25em; text-decoration-color: rgba(226, 230, 235, .4); }
+  a:hover { text-decoration-color: currentColor; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
-        <h1>Mahir Yavuz</h1>
-        <p><b>Mahir is the Head of Engineering for Search, Recommendations, and Ads at Etsy.</b> With over 20 years of experience in product development, data science, and AI/ML, he has led teams in developing innovative solutions for companies such as Nike, PwC, Google, and Microsoft.</p>
-        <p>Previously, Mahir served as Co-founder and CTO of Topos, Director of Data Science at R/GA, and Senior Researcher at Ars Electronica Futurelab in Linz. His work has been featured globally at events like the Ars Electronica Festival and SIGGRAPH, and he frequently speaks at conferences including Microsoft Build, TEDx, and Visualized.</p>
-        <p>An experienced educator since 2003, Mahir has taught at institutions like the University of Pennsylvania, Pratt, and the University of Art and Design Linz, advising numerous student projects and guest lecturing at MIT, NYU, Columbia, and more.
-        </p>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/mahiryavuz/">LinkedIn</a>
-            <a href="https://bsky.app/profile/mahiryavuz.bsky.social">Bluesky</a>
-        </div>
-    </div>
+  <main>
+    <h1>Mahir Yavuz</h1>
+    <p class="role">Product and engineering leader, educator, working with data since&nbsp;1998.</p>
+    <!-- gen:bio -->
+    <p class="bio-text">Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.</p>
+    <!-- /gen:bio -->
+
+    <h2>Works</h2>
+    <p>A new artwork some days. With JavaScript on, this page opens the latest one.</p>
+    <ol>
+      <!-- gen:works -->
+      <li><a href="/works/002/">No. 002 · Self-portrait in type</a> <time datetime="2026-10-26">26 Oct 2026</time></li>
+      <li><a href="/works/001/">No. 001 · Self-portrait in latent space</a> <time datetime="2026-10-26">26 Oct 2026</time></li>
+      <!-- /gen:works -->
+    </ol>
+    <p><a href="/works/">All works</a></p>
+
+    <h2>Elsewhere</h2>
+    <nav>
+      <a href="https://mahir.substack.com/" rel="me">Substack</a>
+      <a href="https://bsky.app/profile/mahiryavuz.bsky.social" rel="me">Bluesky</a>
+      <a href="https://x.com/mahir_nyc" rel="me">X</a>
+      <a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn</a>
+    </nav>
+  </main>
 </body>
 </html>
