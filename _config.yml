@@ -1,0 +1,7 @@
+# GitHub Pages builds this site with Jekyll. These stay in the repository but are not published:
+# notes for whoever works on the site, and Kaleidoscope, an old project whose data names other people.
+exclude:
+  - README.md
+  - works/README.md
+  - llms/CLAUDE.md
+  - kaleidoscope

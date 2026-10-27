@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+# lecture decks, kept out of search until they are updated
+Disallow: /llms/
+Disallow: /pm/
 
 Sitemap: https://mahiryavuz.com/sitemap.xml

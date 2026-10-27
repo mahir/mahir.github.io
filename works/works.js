@@ -1,6 +1,7 @@
 // The schedule of works. Each work lives at /works/<n as three digits>/ and goes up on its date.
-// The homepage shows the newest work whose date has arrived in the visitor's time zone, so a work dated
-// in the future goes up by itself that day, and a day without a new work keeps the last one.
+// The homepage is the newest work whose date has arrived in New York: works/_build.py writes it there, and a
+// GitHub Action runs that build just after midnight New York time, so a work dated ahead goes up by itself
+// on its day, and a day without a new work keeps the last one.
 // Preview any day by adding ?on=YYYY-MM-DD to the homepage or the index.
 // `medium` and `about` describe the work to search engines and AI assistants; after editing the list,
 // run `python3 works/_build.py` to refresh the sitemap, llms.txt and the pages' structured data.
@@ -23,11 +24,12 @@ window.Works = (() => {
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
-  const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1, 2)}-${pad(d.getDate(), 2)}`;
+  // New York's calendar day, as YYYY-MM-DD
+  const newYork = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' });
 
   function today() {
     const on = new URLSearchParams(location.search).get('on');
-    return /^\d{4}-\d{2}-\d{2}$/.test(on || '') ? on : ymd(new Date());
+    return /^\d{4}-\d{2}-\d{2}$/.test(on || '') ? on : newYork.format(new Date());
   }
 
   // Works up on a given day, oldest first.

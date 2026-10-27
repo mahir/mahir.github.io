@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""Refresh what search engines and AI assistants read, from the schedule in works/works.js.
+"""Put today's work on the homepage and refresh what search engines and AI assistants read, from works/works.js.
 
     python3 works/_build.py
 
-Writes the parts of the pages between <!-- gen:NAME --> and <!-- /gen:NAME --> markers
-(structured data, the static list of works, the short bio), plus /sitemap.xml and /llms.txt.
-Visitors with JavaScript see the live list from works.js either way; this keeps the plain HTML,
-which most crawlers read, in step with it. Works dated after today are left out until the next run.
+Writes /index.html: today's work itself, under the site's own title, description and structured data, so
+search engines index the homepage as Mahir's instead of following a redirect to whichever work is up.
+Also writes the parts of the pages between <!-- gen:NAME --> and <!-- /gen:NAME --> markers (structured
+data, the static list of works, the short bio), plus /sitemap.xml and /llms.txt.
+
+"Today" is New York's date. A GitHub Action (.github/workflows/daily.yml) runs this just after midnight
+there, so a work dated ahead goes up on its day. Running it twice changes nothing.
 
 The facts about Mahir below are the single source for all of that; edit them here.
 """
@@ -17,9 +20,11 @@ import html
 import json
 import pathlib
 import re
+from zoneinfo import ZoneInfo
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = 'https://mahiryavuz.com'
+ZONE = ZoneInfo('America/New_York')
 
 ROLE = 'Product and engineering leader, educator and advisor, working with data since 1998.'
 BIO = (
@@ -45,6 +50,15 @@ LINKS = [
     ('X', 'https://x.com/mahir_nyc'),
     ('LinkedIn', 'https://www.linkedin.com/in/mahiryavuz/'),
 ]
+# every profile that is Mahir's, for search engines to tie together (the pages link the ones above)
+PROFILES = LINKS + [('GitHub', 'https://github.com/mahir')]
+
+# what a search for Mahir should show for the homepage, whichever work is up
+HOME_TITLE = 'Mahir Yavuz · Product and engineering leader, educator and advisor'
+HOME_DESCRIPTION = (
+    'Mahir Yavuz: product and engineering leader, educator and advisor, working with data since 1998. '
+    'Head of Engineering at AirOps; before that Etsy, Topos and R/GA.'
+)
 PERSON = {
     '@type': 'Person',
     '@id': f'{SITE}/#person',
@@ -53,12 +67,12 @@ PERSON = {
     'image': f'{SITE}/profile.jpg',
     'description': ROLE,
     'jobTitle': 'Head of Engineering',
-    'worksFor': {'@type': 'Organization', 'name': 'AirOps'},
+    'worksFor': {'@type': 'Organization', 'name': 'AirOps', 'url': 'https://www.airops.com/'},
     'knowsAbout': [
         'AI products', 'Search', 'Recommendation systems', 'Advertising platforms', 'Data science',
         'Machine learning', 'Product management', 'Data visualization', 'Media art',
     ],
-    'sameAs': [url for _, url in LINKS],
+    'sameAs': [link for _, link in PROFILES],
 }
 WEBSITE = {
     '@type': 'WebSite',
@@ -123,6 +137,83 @@ def artwork(w):
     return node
 
 
+def breadcrumbs(*trail):
+    return {'@type': 'BreadcrumbList', 'itemListElement': [
+        {'@type': 'ListItem', 'position': i + 1, 'name': name, 'item': link} for i, (name, link) in enumerate(trail)]}
+
+
+def profile_page(updated):
+    return {'@type': 'ProfilePage', '@id': f'{SITE}/#page', 'url': f'{SITE}/', 'name': 'Mahir Yavuz',
+            'isPartOf': {'@id': WEBSITE['@id']}, 'mainEntity': {'@id': PERSON['@id']}, 'dateModified': updated}
+
+
+def homepage(current, newest_first, updated):
+    """/ is today's work as it stands, with the site's own head in place of the work's <!-- page:head --> block,
+    and an account of Mahir for screen readers and crawlers that read the HTML without running it."""
+    page = f'works/{number(current)}/index.html'
+    src = (ROOT / page).read_text()
+    block = re.search(r'<!-- page:head -->.*?<!-- /page:head -->\n?', src, re.S)
+    if not block or not src.startswith('<!doctype html>\n') or src.count('</body>') != 1:
+        raise SystemExit(f'works/_build.py: {page} needs a <!doctype html> first line, one </body> and a '
+                         '<!-- page:head --> ... <!-- /page:head --> block around its title, meta and structured data')
+    theme = re.search(r'<meta name="theme-color" content="([^"]*)">', block.group(0))
+    e = html.escape
+    head = '\n'.join([
+        f'<title>{e(HOME_TITLE)}</title>',
+        f'<meta name="description" content="{e(HOME_DESCRIPTION)}">',
+        '<meta name="author" content="Mahir Yavuz">',
+        f'<link rel="canonical" href="{SITE}/">',
+        '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+        '<link rel="apple-touch-icon" href="/profile.jpg">',
+        f'<meta name="theme-color" content="{theme.group(1) if theme else "#06070b"}">',
+        '<meta property="og:type" content="profile">',
+        '<meta property="profile:first_name" content="Mahir">',
+        '<meta property="profile:last_name" content="Yavuz">',
+        '<meta property="og:site_name" content="Mahir Yavuz">',
+        '<meta property="og:title" content="Mahir Yavuz">',
+        f'<meta property="og:description" content="{e(ROLE)}">',
+        f'<meta property="og:url" content="{SITE}/">',
+        f'<meta property="og:image" content="{SITE}/og.jpg">',
+        '<meta property="og:image:width" content="1200">',
+        '<meta property="og:image:height" content="630">',
+        '<meta property="og:image:alt" content="Mahir Yavuz, with his portrait set in type on a round ink plate">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        '<meta name="twitter:creator" content="@mahir_nyc">',
+        ld(WEBSITE, profile_page(updated), PERSON, artwork(current)),
+    ]) + '\n'
+    hidden = 'position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap'
+    about = '\n'.join([
+        f'<section aria-labelledby="home-about" style="{hidden}">',
+        '  <h2 id="home-about">About Mahir Yavuz</h2>',
+        f'  <p>{e(ROLE)}</p>',
+        f'  <p>{e(BIO)}</p>',
+        f'  <p>On the homepage today: <a href="/works/{number(current)}/">No. {number(current)} · {e(current["title"])}</a>. '
+        '<a href="/works/">All works and a short bio</a>.</p>',
+        '  <ul>',
+        *[f'    <li><a href="/works/{number(w)}/">No. {number(w)} · {e(w["title"])}</a></li>' for w in newest_first],
+        '  </ul>',
+        '  <ul>',
+        *[f'    <li><a href="{link}" rel="me">{name}</a></li>' for name, link in LINKS],
+        '  </ul>',
+        '</section>',
+        '<script src="/works/works.js"></script>',
+        '<script>',
+        '  // /?on=YYYY-MM-DD previews another day: hand over to the work that will be up then',
+        '  (() => {',
+        "    if (!window.Works || !new URLSearchParams(location.search).has('on')) return;",
+        '    const w = Works.current(Works.today());',
+        f"    if (w && Works.number(w) !== '{number(current)}') location.replace(Works.url(w) + location.search + location.hash);",
+        '  })();',
+        '</script>',
+        '',
+    ])
+    out = src[:block.start()] + head + src[block.end():]
+    out = out.replace('</body>', about + '</body>')
+    note = (f'<!-- The homepage: No. {number(current)} as it stands, under the site\'s own title and data. '
+            f'Written by works/_build.py from {page}; edit that page and run the build, not this file. -->\n')
+    (ROOT / 'index.html').write_text(out.replace('<!doctype html>\n', '<!doctype html>\n' + note, 1))
+
+
 def fill(path, name, content):
     """Replace what is between <!-- gen:name --> and <!-- /gen:name -->, indented like the opening marker."""
     p = ROOT / path
@@ -138,46 +229,44 @@ def fill(path, name, content):
 
 
 def main():
-    today = datetime.date.today().isoformat()
+    today = datetime.datetime.now(ZONE).date().isoformat()
     works = read_works()
     live = sorted((w for w in works if w['date'] <= today), key=lambda w: (w['date'], w['n']))
     newest_first = list(reversed(live))
     updated = live[-1]['date'] if live else today
     e = html.escape
 
-    # the static lists: the works index (replaced by the live list in the browser) and the homepage's plain version
+    # the static list on the works index (replaced by the live list in the browser), and the short bio
     fill('works/index.html', 'works', '\n'.join(
         f'<li><a href="/works/{number(w)}/"><span class="n mono">No. {number(w)}</span>'
         f'<span class="t">{e(w["title"])}</span>'
         f'<time class="d mono" datetime="{w["date"]}">{nice_date(w["date"])}</time></a></li>'
         for w in newest_first))
-    fill('index.html', 'works', '\n'.join(
-        f'<li><a href="/works/{number(w)}/">No. {number(w)} · {e(w["title"])}</a> <time datetime="{w["date"]}">{nice_date(w["date"])}</time></li>'
-        for w in newest_first))
-    fill('index.html', 'bio', f'<p class="bio-text">{e(BIO)}</p>')
     fill('works/index.html', 'bio', '\n'.join(f'<p>{e(para)}</p>' for para in SHORT_BIO))
 
     # structured data
-    fill('index.html', 'ld', ld(
-        WEBSITE,
-        {'@type': 'ProfilePage', '@id': f'{SITE}/#page', 'url': f'{SITE}/', 'name': 'Mahir Yavuz',
-         'isPartOf': {'@id': WEBSITE['@id']}, 'mainEntity': {'@id': PERSON['@id']}, 'dateModified': updated},
-        PERSON))
     fill('works/index.html', 'ld', ld(
         WEBSITE,
-        {'@type': 'CollectionPage', '@id': f'{SITE}/works/#page', 'url': f'{SITE}/works/', 'name': 'Works',
+        {'@type': 'CollectionPage', '@id': f'{SITE}/works/#page', 'url': f'{SITE}/works/', 'name': 'Bio and works',
          'description': 'Mahir Yavuz: a short bio, and his works, newest first.',
          'isPartOf': {'@id': WEBSITE['@id']}, 'author': {'@id': PERSON['@id']}, 'dateModified': updated,
          'mainEntity': {'@type': 'ItemList', 'itemListElement': [
              {'@type': 'ListItem', 'position': i + 1, 'url': url(w), 'name': w['title']}
              for i, w in enumerate(newest_first)]}},
+        breadcrumbs(('Mahir Yavuz', f'{SITE}/'), ('Bio and works', f'{SITE}/works/')),
         PERSON))
     for w in works:
         page = f'works/{number(w)}/index.html'
         if (ROOT / page).exists():
-            fill(page, 'ld', ld(WEBSITE, PERSON, artwork(w)))
+            fill(page, 'ld', ld(WEBSITE, PERSON, artwork(w), breadcrumbs(
+                ('Mahir Yavuz', f'{SITE}/'), ('Bio and works', f'{SITE}/works/'),
+                (f'No. {number(w)} · {w["title"]}', url(w)))))
         else:
             print(f'skipped {page}: no page yet')
+
+    # the homepage: today's work, once its page carries this run's structured data
+    if live:
+        homepage(live[-1], newest_first, updated)
 
     # sitemap
     entries = [(f'{SITE}/', updated), (f'{SITE}/works/', updated)] + [(url(w), w['date']) for w in live]
@@ -198,12 +287,13 @@ def main():
           for w in newest_first],
         f'- [All works]({SITE}/works/)', '',
         '## Elsewhere', '',
-        *[f'- [{name}]({link})' for name, link in LINKS],
+        *[f'- [{name}]({link})' for name, link in PROFILES],
         '',
     ]
     (ROOT / 'llms.txt').write_text('\n'.join(lines))
 
-    print(f'{len(live)} of {len(works)} works are up as of {today}; refreshed the pages, sitemap.xml and llms.txt')
+    print(f'{len(live)} of {len(works)} works are up as of {today} in New York; the homepage is '
+          f'No. {number(live[-1]) if live else "none"}; refreshed the pages, sitemap.xml and llms.txt')
 
 
 if __name__ == '__main__':
