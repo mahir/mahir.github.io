@@ -31,6 +31,14 @@ BIO = (
     'His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he '
     'has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.'
 )
+# The short version opens /works/: what Mahir does now and did before, then teaching and exhibitions.
+SHORT_BIO = (
+    'Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, '
+    'co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica '
+    'Futurelab in Linz.',
+    'He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art '
+    'and Design Linz, and his work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial.',
+)
 LINKS = [
     ('Substack', 'https://mahir.substack.com/'),
     ('Bluesky', 'https://bsky.app/profile/mahiryavuz.bsky.social'),
@@ -146,8 +154,8 @@ def main():
     fill('index.html', 'works', '\n'.join(
         f'<li><a href="/works/{number(w)}/">No. {number(w)} · {e(w["title"])}</a> <time datetime="{w["date"]}">{nice_date(w["date"])}</time></li>'
         for w in newest_first))
-    for path in ('index.html', 'works/index.html'):
-        fill(path, 'bio', f'<p class="bio-text">{e(BIO)}</p>')
+    fill('index.html', 'bio', f'<p class="bio-text">{e(BIO)}</p>')
+    fill('works/index.html', 'bio', '\n'.join(f'<p>{e(para)}</p>' for para in SHORT_BIO))
 
     # structured data
     fill('index.html', 'ld', ld(
@@ -158,7 +166,7 @@ def main():
     fill('works/index.html', 'ld', ld(
         WEBSITE,
         {'@type': 'CollectionPage', '@id': f'{SITE}/works/#page', 'url': f'{SITE}/works/', 'name': 'Works',
-         'description': 'Artworks by Mahir Yavuz, a new one some days. The homepage always shows the latest.',
+         'description': 'Mahir Yavuz: a short bio, and his works, newest first.',
          'isPartOf': {'@id': WEBSITE['@id']}, 'author': {'@id': PERSON['@id']}, 'dateModified': updated,
          'mainEntity': {'@type': 'ItemList', 'itemListElement': [
              {'@type': 'ListItem', 'position': i + 1, 'url': url(w), 'name': w['title']}
