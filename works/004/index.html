@@ -229,9 +229,10 @@
   .about h1 { font: 300 clamp(26px, 4vw, 40px)/1 var(--sans); font-stretch: 108%; margin: 0 0 .35em; }
   .about p { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--soft); }
 
-  .js:not(.ready) .hud { opacity: 0; }
+  /* the back link and the credit show at once; the tray and the count wait for the scene */
+  .js:not(.ready) .hud .bottom, .js:not(.ready) .count { opacity: 0; }
   .still-mode .hud > :not(.credit), .still-mode .toast { display: none; }
-  .hud { transition: opacity 1s ease; }
+  .hud .bottom, .count { transition: opacity 1s ease; }
 
   @media (max-width: 560px) {
     .play { flex-wrap: wrap; justify-content: flex-end; }
@@ -243,9 +244,10 @@
     .hint { font-size: 11px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .toast, .hint, .hud, .ghost.back-home { transition: none; }
+    .toast, .hint, .hud .bottom, .count, .ghost.back-home { transition: none; }
   }
 </style>
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
 <body>
 <canvas id="scene" aria-hidden="true"></canvas>

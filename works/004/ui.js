@@ -39,16 +39,23 @@ export function startUI({ game, scene, landmarks, reducedMotion }) {
   }
 
   // ---------- building ----------
+  // Whoever places the last piece also pulls the camera back to the whole city, after its rise has begun,
+  // so no glide to that landmark can cancel the payoff view.
+  const pullBack = () => scene.glideTo('all', { duration: 2200 });
+
   // a tap or Enter on a tray piece: glide to its outline, then build it
   async function fromTray(id) {
     if (running || !game.place(id)) return;
     await scene.glideTo(id, { duration: 600 });
-    await scene.placeLandmark(id);
+    const rise = scene.placeLandmark(id);
+    if (game.done()) pullBack();
+    await rise;
   }
   // a drop on the outline, or a tap on it: it is already in view
   function here(id) {
     if (running || !game.place(id)) return;
     scene.placeLandmark(id);
+    if (game.done()) pullBack();
   }
 
   game.on('place', ({ id, placed, total }) => {
@@ -71,7 +78,6 @@ export function startUI({ game, scene, landmarks, reducedMotion }) {
     document.documentElement.classList.add('done');
     buildAll.disabled = true;
     live.textContent = 'All thirteen landmarks are in. Istanbul is whole.';
-    if (!running) scene.glideTo('all', { duration: 2200 });
   });
 
   buildAll.addEventListener('click', async () => {
@@ -139,10 +145,11 @@ export function startUI({ game, scene, landmarks, reducedMotion }) {
     const { id } = drag;
     const overUI = document.elementFromPoint(e.clientX, e.clientY)?.closest('.play, .top, .credit');
     const p = overUI ? null : scene.screenToGround(e.clientX, e.clientY);
-    const hit = p && onTarget(p, scene.nearestOnFootprint(id, p), Math.max(80, scene.pxToMetres(30)));
+    const hit = p && (onTarget(p, scene.nearestOnFootprint(id, p), 80) || scene.pixelsTo(id, e.clientX, e.clientY) <= 30);
     if (hit && game.place(id)) {
       endDrag(false);
       scene.placeLandmark(id);
+      if (game.done()) pullBack();
     } else {
       endDrag(true);
     }

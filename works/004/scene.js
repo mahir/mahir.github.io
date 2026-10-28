@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toWorld, WIDTH, HEIGHT } from './geo.js';
 import { buildLandmark, buildOutline, PALETTE } from './models.js';
+import { riseOrder, riseWindow } from './city.js';
 
 const HEADING = 20 * Math.PI / 180; // the camera looks north-northeast
 const ELEVATION = 40 * Math.PI / 180;
@@ -71,7 +72,10 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   const showOutline = (id, on) => { pieces.get(id).outline.visible = on; };
 
   // ---------- the ordinary city, all of it waiting at scale 0 ----------
-  const { houses, trees } = city;
+  // in rising order, so each neighborhood is one run of each buffer
+  const H = riseOrder(city.houses, landmarks.length), T = riseOrder(city.trees, landmarks.length);
+  const houses = H.items, trees = T.items;
+  const houseDelays = Float32Array.from(houses, (h) => h.delay), treeDelays = Float32Array.from(trees, (t) => t.delay);
   const walls = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0),
     new THREE.MeshStandardMaterial({ roughness: 0.9 }), houses.length);
   const roofs = new THREE.InstancedMesh(new THREE.ConeGeometry(Math.SQRT1_2, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0),
@@ -90,9 +94,6 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     mesh.frustumCulled = false; // instances start at scale 0, so a bounding sphere taken early would be wrong
     scene.add(mesh);
   }
-  const byOwner = landmarks.map(() => ({ houses: [], trees: [] }));
-  houses.forEach((h, i) => byOwner[h.owner].houses.push(i));
-  trees.forEach((t, i) => byOwner[t.owner].trees.push(i));
 
   const o3 = new THREE.Object3D();
   const put = (mesh, i, x, y, z, sx, sy, sz) => {
@@ -125,29 +126,44 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     p.placed = true;
     p.outline.visible = false;
     scene.add(p.model);
-    const hood = byOwner[landmarks.indexOf(p.lm)];
+    const k = landmarks.indexOf(p.lm);
+    const runs = [
+      { from: H.start[k], to: H.start[k + 1], lo: H.start[k], list: houses, delays: houseDelays, set: setHouse, meshes: [walls, roofs] },
+      { from: T.start[k], to: T.start[k + 1], lo: T.start[k], list: trees, delays: treeDelays, set: setTree, meshes: [canopy] },
+    ];
     if (!animate || reducedMotion) {
-      hood.houses.forEach((i) => setHouse(i, 1));
-      hood.trees.forEach((i) => setTree(i, 1));
-      for (const mesh of [walls, roofs, canopy]) mesh.instanceMatrix.needsUpdate = true;
+      for (const run of runs) {
+        for (let i = run.from; i < run.to; i++) run.set(i, 1);
+        upload(run.meshes, run.from, run.to);
+      }
       return Promise.resolve();
     }
     p.model.position.y = p.y - p.model.userData.height - 2;
-    let last = 0;
-    for (const i of hood.houses) last = Math.max(last, houses[i].delay);
-    for (const i of hood.trees) last = Math.max(last, trees[i].delay);
-    return new Promise((resolve) => rising.push({ p, hood, t0: performance.now(), end: RISE + last * 1000 + GROW, resolve }));
+    const last = Math.max(0, ...runs.filter((run) => run.to > run.from).map((run) => run.delays[run.to - 1]));
+    return new Promise((resolve) => rising.push({ p, runs, t0: performance.now(), end: RISE + last * 1000 + GROW, resolve }));
   }
 
+  function upload(meshes, from, to) {
+    if (to <= from) return;
+    for (const mesh of meshes) {
+      mesh.instanceMatrix.addUpdateRange(from * 16, (to - from) * 16);
+      mesh.instanceMatrix.needsUpdate = true;
+    }
+  }
+
+  // each frame touches only what is growing in each rising neighborhood, plus what has just finished
   function stepRising(now) {
     for (let r = rising.length - 1; r >= 0; r--) {
       const a = rising[r], t = now - a.t0;
       const k = Math.min(1, t / RISE);
       a.p.model.position.y = a.p.y - (a.p.model.userData.height + 2) * (1 - easeOutBack(k));
-      const grow = (delay) => easeOut(Math.min(1, Math.max(0, (t - RISE - delay * 1000) / GROW)));
-      a.hood.houses.forEach((i) => setHouse(i, grow(houses[i].delay)));
-      a.hood.trees.forEach((i) => setTree(i, grow(trees[i].delay)));
-      for (const mesh of [walls, roofs, canopy]) mesh.instanceMatrix.needsUpdate = true;
+      for (const run of a.runs) {
+        const { hi, next } = riseWindow(run.delays.subarray(run.from, run.to), run.lo - run.from, t, RISE, GROW);
+        const to = run.from + hi;
+        for (let i = run.lo; i < to; i++) run.set(i, easeOut(Math.min(1, Math.max(0, (t - RISE - run.list[i].delay * 1000) / GROW))));
+        upload(run.meshes, run.lo, to);
+        run.lo = run.from + next;
+      }
       if (t >= a.end) { a.p.model.position.y = a.p.y; rising.splice(r, 1); a.resolve(); }
     }
   }
@@ -288,16 +304,33 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     if (!p || Math.abs(p.x) > WIDTH / 2 || Math.abs(p.z) > HEIGHT / 2) return null;
     return { x: p.x, z: p.z };
   }
-  const pxToMetres = (px) => px * view() / canvas.clientHeight;
+  // How far the pointer is from a landmark's footprint, in screen pixels (0 inside it). Measured on screen, because
+  // the tilt shortens ground distances toward the camera, and a tap target should be as tall as it is wide.
+  const corner = new THREE.Vector3();
+  function pixelsTo(id, clientX, clientY) {
+    const f = pieces.get(id), c = Math.cos(f.angle), s = Math.sin(f.angle), r = canvas.getBoundingClientRect();
+    const pts = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => {
+      const lx = (u * f.w) / 2, lz = (v * f.d) / 2;
+      corner.set(f.x + lx * c + lz * s, f.y + 7, f.z - lx * s + lz * c).project(camera);
+      return [((corner.x + 1) / 2) * r.width + r.left, ((1 - corner.y) / 2) * r.height + r.top];
+    });
+    let inside = true, sign = 0, best = Infinity;
+    for (let i = 0; i < 4; i++) {
+      const [ax, ay] = pts[i], [bx, by] = pts[(i + 1) % 4], dx = bx - ax, dy = by - ay;
+      const cross = dx * (clientY - ay) - dy * (clientX - ax);
+      if (cross !== 0) { if (sign && Math.sign(cross) !== sign) inside = false; sign = sign || Math.sign(cross); }
+      const t = Math.max(0, Math.min(1, ((clientX - ax) * dx + (clientY - ay) * dy) / (dx * dx + dy * dy || 1)));
+      best = Math.min(best, Math.hypot(clientX - ax - t * dx, clientY - ay - t * dy));
+    }
+    return inside ? 0 : best;
+  }
 
   // the waiting outline under the pointer, counting anything within 22 px of one as a hit
   function pickOutline(clientX, clientY) {
-    const p = screenToGround(clientX, clientY);
-    if (!p) return null;
-    let best = null, bestD = pxToMetres(22);
+    let best = null, bestD = 22;
     for (const [id, f] of pieces) {
       if (f.placed || !f.outline.visible) continue;
-      const q = nearestOnFootprint(id, p), d = Math.hypot(q.x - p.x, q.z - p.z);
+      const d = pixelsTo(id, clientX, clientY);
       if (d <= bestD) { best = id; bestD = d; }
     }
     return best;
@@ -327,7 +360,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
 
   return {
     three: THREE, scene, camera, renderer, controls,
-    glideTo, screenToGround, pxToMetres, setRay, ray,
+    glideTo, screenToGround, pixelsTo, setRay, ray,
     pickOutline, showOutline, placeLandmark, nearestOnFootprint,
     model: (id) => pieces.get(id).model,
     viewDir: TO_CAMERA.clone(), sunDir: SUN.clone(),

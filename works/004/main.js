@@ -39,5 +39,5 @@ try {
   if (params.has('dev')) Object.assign(window, { __scene: scene, __game: game, __life: life });
 } catch (err) {
   console.warn(err);
-  root.classList.add('no-gl');
+  root.classList.add('no-gl', 'ready');
 }

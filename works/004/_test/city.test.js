@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { FRAME, MX, MY, HEIGHT, toWorld, parseLand } from '../geo.js';
 import { LANDMARKS } from '../landmarks.js';
-import { assignOwners, makeCity, CLEAR } from '../city.js';
+import { assignOwners, makeCity, CLEAR, riseOrder, riseWindow } from '../city.js';
 import { ROUTES, BOAT_LOOPS } from '../routes.js';
 import { realLand } from './helpers.js';
 
@@ -89,4 +89,20 @@ test('small boats loop on open water', () => {
       for (const [dx, dz] of [[0, 0], [30, 0], [-30, 0], [0, 30], [0, -30]]) assert.equal(land.regionAt(x + dx, z + dz), 0, `${b.id} at angle ${k}`);
     }
   }
+});
+
+test('riseOrder: each neighborhood is one run, earliest first', () => {
+  const items = [{ owner: 2, delay: 0.5 }, { owner: 0, delay: 1 }, { owner: 2, delay: 0.1 }, { owner: 0, delay: 0.2 }, { owner: 1, delay: 0 }];
+  const { items: sorted, start } = riseOrder(items, 4);
+  assert.deepEqual(sorted.map((i) => [i.owner, i.delay]), [[0, 0.2], [0, 1], [1, 0], [2, 0.1], [2, 0.5]]);
+  assert.deepEqual([...start], [0, 2, 3, 5, 5]); // owner k runs from start[k] to start[k + 1]; owner 3 has none
+});
+
+test('riseWindow: only what is growing, plus what just finished', () => {
+  const delays = [0, 0, 0.5, 1, 2]; // seconds, sorted
+  // rise 700 ms, grow 400 ms: an item grows from 700 + delay to 1100 + delay
+  assert.deepEqual(riseWindow(delays, 0, 600, 700, 400), { hi: 0, next: 0 }); // nothing started
+  assert.deepEqual(riseWindow(delays, 0, 900, 700, 400), { hi: 2, next: 0 }); // the first two growing
+  assert.deepEqual(riseWindow(delays, 0, 1250, 700, 400), { hi: 3, next: 2 }); // first two done, third growing
+  assert.deepEqual(riseWindow(delays, 2, 5000, 700, 400), { hi: 5, next: 5 }); // all done
 });

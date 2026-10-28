@@ -63,3 +63,23 @@ export function makeCity(land, owners, landmarks, seed = 4) {
   }
   return { houses, trees };
 }
+
+// Instances in the order they will rise: grouped by owner, earliest first, so each neighborhood is one run of the
+// instance buffers and a rise touches, and uploads, only its own run. Owner k runs from start[k] to start[k + 1].
+export function riseOrder(items, ownerCount) {
+  const sorted = [...items].sort((a, b) => a.owner - b.owner || a.delay - b.delay);
+  const start = new Int32Array(ownerCount + 1);
+  for (const it of sorted) start[it.owner + 1]++;
+  for (let k = 0; k < ownerCount; k++) start[k + 1] += start[k];
+  return { items: sorted, start };
+}
+
+// Within one run (delays sorted, in seconds), t ms after placing: everything before lo is already grown,
+// items up to hi have started growing, and items before next have finished.
+export function riseWindow(delays, lo, t, rise, grow) {
+  let hi = lo;
+  while (hi < delays.length && t >= rise + delays[hi] * 1000) hi++;
+  let next = lo;
+  while (next < hi && t >= rise + delays[next] * 1000 + grow) next++;
+  return { hi, next };
+}
