@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { toWorld, WIDTH, HEIGHT } from './geo.js';
+import { buildLandmark, buildOutline, PALETTE } from './models.js';
 
 const HEADING = 20 * Math.PI / 180; // the camera looks north-northeast
 const ELEVATION = 40 * Math.PI / 180;
@@ -15,9 +16,9 @@ const LANDMARK_VIEW = 1400, LANDMARK_ACROSS = 1000;
 // small screens open on the mouth of the Golden Horn: the peninsula's tip, Galata and Üsküdar
 const START = { lat: 41.0200, lon: 28.9925, view: 2600, across: 3400 };
 const SLAB = 60, LAND_TOP = 6;
-export const COLORS = { paper: 0xf3ead9, water: 0x33838f, waterSide: 0x257f81, land: 0xe9dbbd, landSide: 0xc7b38c };
+export const COLORS = { paper: 0xf3ead9, water: 0x2a8c99, waterSide: 0x22747f, land: 0xe9dbbd, landSide: 0xc7b38c };
 
-export async function startScene(canvas, { land, landmarks, reducedMotion, small }) {
+export async function startScene(canvas, { land, landmarks, city, reducedMotion, small }) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75));
   renderer.setSize(innerWidth, innerHeight, false);
@@ -52,8 +53,112 @@ export async function startScene(canvas, { land, landmarks, reducedMotion, small
   const m = new THREE.Matrix4();
   landCells.forEach((i, k) => { const c = land.center(i); ground.setMatrixAt(k, m.makeTranslation(c.x, LAND_TOP / 2, c.z)); });
   ground.receiveShadow = true;
+  ground.frustumCulled = false;
   scene.add(ground);
   scene.add(slabEdge(land));
+
+  // ---------- landmarks, waiting as outlines ----------
+  const pieces = new Map();
+  for (const lm of landmarks) {
+    const model = buildLandmark(THREE, lm);
+    const outline = buildOutline(THREE, lm, model);
+    const p = toWorld(lm.lat, lm.lon), y = lm.ownsLand ? LAND_TOP : 0;
+    model.position.set(p.x, y, p.z);
+    outline.position.set(p.x, y, p.z);
+    scene.add(outline);
+    pieces.set(lm.id, { lm, model, outline, x: p.x, z: p.z, y, placed: false, ...model.userData.footprint });
+  }
+  const showOutline = (id, on) => { pieces.get(id).outline.visible = on; };
+
+  // ---------- the ordinary city, all of it waiting at scale 0 ----------
+  const { houses, trees } = city;
+  const walls = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0),
+    new THREE.MeshStandardMaterial({ roughness: 0.9 }), houses.length);
+  const roofs = new THREE.InstancedMesh(new THREE.ConeGeometry(Math.SQRT1_2, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0),
+    new THREE.MeshStandardMaterial({ roughness: 0.8, flatShading: true }), houses.length);
+  const canopy = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 0),
+    new THREE.MeshStandardMaterial({ roughness: 0.9, flatShading: true }), trees.length);
+  const tint = new THREE.Color();
+  houses.forEach((h, i) => {
+    walls.setColorAt(i, tint.setHex(PALETTE.walls[h.wall]));
+    roofs.setColorAt(i, tint.setHex(PALETTE.roofs[h.roof]));
+  });
+  trees.forEach((t, i) => canopy.setColorAt(i, tint.setHex(PALETTE.trees[i % 3])));
+  for (const mesh of [walls, roofs, canopy]) {
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.frustumCulled = false; // instances start at scale 0, so a bounding sphere taken early would be wrong
+    scene.add(mesh);
+  }
+  const byOwner = landmarks.map(() => ({ houses: [], trees: [] }));
+  houses.forEach((h, i) => byOwner[h.owner].houses.push(i));
+  trees.forEach((t, i) => byOwner[t.owner].trees.push(i));
+
+  const o3 = new THREE.Object3D();
+  const put = (mesh, i, x, y, z, sx, sy, sz) => {
+    o3.position.set(x, y, z);
+    o3.scale.set(sx || 1e-5, sy || 1e-5, sz || 1e-5);
+    o3.updateMatrix();
+    mesh.setMatrixAt(i, o3.matrix);
+  };
+  function setHouse(i, s) {
+    const h = houses[i], spread = 0.7 + 0.3 * s, roofH = Math.min(h.w, h.d) * 0.38;
+    put(walls, i, h.x, LAND_TOP, h.z, h.w * spread * (s > 0), h.h * s, h.d * spread * (s > 0));
+    put(roofs, i, h.x, LAND_TOP + h.h * s, h.z, h.w * spread * (s > 0), roofH * s, h.d * spread * (s > 0));
+  }
+  function setTree(i, s) {
+    const t = trees[i];
+    put(canopy, i, t.x, LAND_TOP + t.r * 0.9 * s, t.z, t.r * s, t.r * 1.1 * s, t.r * s);
+  }
+  houses.forEach((_, i) => setHouse(i, 0));
+  trees.forEach((_, i) => setTree(i, 0));
+
+  // ---------- placing: the landmark rises, then its neighborhood around it ----------
+  const RISE = 700, GROW = 400;
+  const rising = [];
+  const easeOutBack = (k) => 1 + 2.2 * (k - 1) ** 3 + 1.2 * (k - 1) ** 2;
+  const easeOut = (k) => 1 - (1 - k) ** 3;
+
+  function placeLandmark(id, { animate = true } = {}) {
+    const p = pieces.get(id);
+    if (p.placed) return Promise.resolve();
+    p.placed = true;
+    p.outline.visible = false;
+    scene.add(p.model);
+    const hood = byOwner[landmarks.indexOf(p.lm)];
+    if (!animate || reducedMotion) {
+      hood.houses.forEach((i) => setHouse(i, 1));
+      hood.trees.forEach((i) => setTree(i, 1));
+      for (const mesh of [walls, roofs, canopy]) mesh.instanceMatrix.needsUpdate = true;
+      return Promise.resolve();
+    }
+    p.model.position.y = p.y - p.model.userData.height - 2;
+    let last = 0;
+    for (const i of hood.houses) last = Math.max(last, houses[i].delay);
+    for (const i of hood.trees) last = Math.max(last, trees[i].delay);
+    return new Promise((resolve) => rising.push({ p, hood, t0: performance.now(), end: RISE + last * 1000 + GROW, resolve }));
+  }
+
+  function stepRising(now) {
+    for (let r = rising.length - 1; r >= 0; r--) {
+      const a = rising[r], t = now - a.t0;
+      const k = Math.min(1, t / RISE);
+      a.p.model.position.y = a.p.y - (a.p.model.userData.height + 2) * (1 - easeOutBack(k));
+      const grow = (delay) => easeOut(Math.min(1, Math.max(0, (t - RISE - delay * 1000) / GROW)));
+      a.hood.houses.forEach((i) => setHouse(i, grow(houses[i].delay)));
+      a.hood.trees.forEach((i) => setTree(i, grow(trees[i].delay)));
+      for (const mesh of [walls, roofs, canopy]) mesh.instanceMatrix.needsUpdate = true;
+      if (t >= a.end) { a.p.model.position.y = a.p.y; rising.splice(r, 1); a.resolve(); }
+    }
+  }
+
+  // the nearest point of a landmark's footprint to p (p itself when inside it)
+  function nearestOnFootprint(id, p) {
+    const f = pieces.get(id), c = Math.cos(f.angle), s = Math.sin(f.angle);
+    const dx = p.x - f.x, dz = p.z - f.z;
+    const lx = THREE.MathUtils.clamp(dx * c - dz * s, -f.w / 2, f.w / 2), lz = THREE.MathUtils.clamp(dx * s + dz * c, -f.d / 2, f.d / 2);
+    return { x: f.x + lx * c + lz * s, z: f.z - lx * s + lz * c };
+  }
 
   // ---------- camera and controls ----------
   const controls = new OrbitControls(camera, canvas);
@@ -185,6 +290,19 @@ export async function startScene(canvas, { land, landmarks, reducedMotion, small
   }
   const pxToMetres = (px) => px * view() / canvas.clientHeight;
 
+  // the waiting outline under the pointer, counting anything within 22 px of one as a hit
+  function pickOutline(clientX, clientY) {
+    const p = screenToGround(clientX, clientY);
+    if (!p) return null;
+    let best = null, bestD = pxToMetres(22);
+    for (const [id, f] of pieces) {
+      if (f.placed || !f.outline.visible) continue;
+      const q = nearestOnFootprint(id, p), d = Math.hypot(q.x - p.x, q.z - p.z);
+      if (d <= bestD) { best = id; bestD = d; }
+    }
+    return best;
+  }
+
   // ---------- the loop ----------
   const frameFns = [];
   const clock = new THREE.Clock();
@@ -192,6 +310,11 @@ export async function startScene(canvas, { land, landmarks, reducedMotion, small
     const dt = Math.min(clock.getDelta(), 0.1), now = performance.now();
     if (glide) glide.step(now);
     else controls.update();
+    if (rising.length) stepRising(now);
+    if (!reducedMotion) {
+      const o = 0.22 + 0.1 * Math.sin(now / 520);
+      for (const f of pieces.values()) if (!f.placed) f.outline.userData.ghostMat.opacity = o;
+    }
     for (const fn of frameFns) fn(dt, now);
     renderer.render(scene, camera);
   });
@@ -205,7 +328,8 @@ export async function startScene(canvas, { land, landmarks, reducedMotion, small
   return {
     three: THREE, scene, camera, renderer, controls,
     glideTo, screenToGround, pxToMetres, setRay, ray,
-    pickOutline: () => null,
+    pickOutline, showOutline, placeLandmark, nearestOnFootprint,
+    model: (id) => pieces.get(id).model,
     onFrame: (fn) => frameFns.push(fn),
     view, resize,
   };
