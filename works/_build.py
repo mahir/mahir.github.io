@@ -8,8 +8,9 @@ short bio, today's work and the list of works, which visitors with JavaScript se
 the latest posts from Mahir's Substack; in every page, the structured data. Also writes /sitemap.xml and /llms.txt.
 
 "Today" is New York's date. A GitHub Action (.github/workflows/daily.yml) runs this just after midnight
-there, so a work dated ahead is featured on its day and a new post is listed by the next morning. Running it twice
-changes nothing, as long as no post has gone up in between.
+there, so a work dated ahead is featured on its day. Substack refuses GitHub's servers, so there the posts already
+listed stay; after a new post, run this on your own machine and commit. Running it twice changes nothing, as long as
+no post has gone up in between.
 
 The facts about Mahir below are the single source for all of that; edit them here.
 """

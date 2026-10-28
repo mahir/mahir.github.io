@@ -12,6 +12,10 @@ On the site they are called experiments ("Experiments", "Open the experiment"); 
 
 "Today" is New York's calendar day. A GitHub Action (`.github/workflows/daily.yml`) runs the build just after midnight there and publishes the change when a work's date has come; on a day with no new work, the latest one stays up and nothing is committed. It can also be run by hand from the repository's Actions tab.
 
+## After a new Substack post
+
+The Writing list is refreshed by hand. Substack refuses GitHub's servers, so the daily Action can't read the feed and keeps the posts already listed. After a post goes up, run `python3 works/_build.py` on your own machine, check the homepage, and commit what it changed (`index.html` and `llms.txt`, and `sitemap.xml` when the post is newer than the latest work).
+
 ## Add a work
 
 1. Make a folder for it: `works/003/index.html`, three digits.
