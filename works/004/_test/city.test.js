@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { FRAME, MX, MY, HEIGHT, toWorld, parseLand } from '../geo.js';
 import { LANDMARKS } from '../landmarks.js';
 import { assignOwners, makeCity, CLEAR } from '../city.js';
-import { ROUTES } from '../routes.js';
+import { ROUTES, BOAT_LOOPS } from '../routes.js';
 import { realLand } from './helpers.js';
 
 // A strip of two shores: columns 0-4 are the peninsula (1), 5-9 the Asian side (3), one water cell in the corner.
@@ -75,5 +75,18 @@ test('ferry routes stay on water', () => {
   assert.equal(ROUTES.length, 4);
   for (const r of ROUTES) {
     for (const p of sampleRoute(r.stops, 40, 80)) assert.equal(land.regionAt(p.x, p.z), 0, `${r.id} at ${p.x.toFixed(0)},${p.z.toFixed(0)}`);
+  }
+});
+
+test('small boats loop on open water', () => {
+  const land = realLand();
+  assert.equal(BOAT_LOOPS.length, 6);
+  for (const b of BOAT_LOOPS) {
+    const c = toWorld(b.lat, b.lon);
+    for (let k = 0; k < 48; k++) {
+      const a = (k / 48) * Math.PI * 2, x = c.x + b.rx * Math.cos(a), z = c.z + b.rz * Math.sin(a);
+      // 30 m of water on every side of the boat's path
+      for (const [dx, dz] of [[0, 0], [30, 0], [-30, 0], [0, 30], [0, -30]]) assert.equal(land.regionAt(x + dx, z + dz), 0, `${b.id} at angle ${k}`);
+    }
   }
 });
