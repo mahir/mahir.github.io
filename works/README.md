@@ -2,7 +2,7 @@
 
 The homepage is Mahir's, and features whichever work is up today. Every work is a page of its own, and new ones can go up every day or only some days.
 
-On the site they are called experiments ("Experiments", "All experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
+On the site they are called experiments ("Experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
 
 - `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then the links that stay the same whatever the work is: Elsewhere, Talks, Press and Lectures. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
 - `/works/` only sends old links on to the list on `/` (`/#experiments`). It can become an archive of its own once there are many works.
@@ -16,7 +16,7 @@ On the site they are called experiments ("Experiments", "All experiments", "Open
 
 1. Make a folder for it: `works/003/index.html`, three digits.
 2. Make it self-contained: its own HTML, CSS and JS, with any files it needs beside it. Shared files from the site root use absolute paths, such as `/portrait.jpg`, the photo on the homepage, or `/profile.jpg`, the older, smaller one that No. 001 and No. 002 are drawn from (No. 001 is tuned to it, so leave it as it is).
-3. Give it a clear way back: an "← All experiments" link to `/#experiments` that is visible as soon as the page opens, on phones too. No. 001 and No. 002 put it top left, as a pill, with the work's number and title beside it.
+3. Give it a clear way back: a "← Home" link to `/` that is visible as soon as the page opens, on phones too. No. 001 and No. 002 put it top left, as a pill, with the work's number and title beside it.
 4. Copy the `<head>` of No. 002 and change the title, description (under 160 characters), canonical URL, `og:` and `twitter:` lines. Keep the empty `<!-- gen:ld -->` marker; the build fills it.
 5. Add a share image beside the page: `og.jpg`, 1200 × 630. It is also the picture of the work on the homepage while it is on view.
 6. Add it to the schedule in `works.js`:
