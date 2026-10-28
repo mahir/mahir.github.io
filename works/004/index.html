@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- page:head -->
+<title>Mahir Yavuz · Istanbul, piece by piece</title>
+<meta name="description" content="Istanbul, piece by piece, No. 004 by Mahir Yavuz: put Istanbul's landmarks back where the Bosphorus meets the Golden Horn, and watch the city grow around them.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/004/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
+<meta name="theme-color" content="#f3ead9">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="Istanbul, piece by piece · Mahir Yavuz">
+<meta property="og:description" content="No. 004: rebuild Istanbul landmark by landmark, and watch each neighborhood rise around it.">
+<meta property="og:url" content="https://mahiryavuz.com/works/004/">
+<meta property="og:image" content="https://mahiryavuz.com/works/004/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="An isometric model of Istanbul where the Bosphorus meets the Golden Horn: terracotta roofs around domes and minarets, ferries on turquoise water">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<!-- /gen:ld -->
+<!-- /page:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* A toy city on a sheet of warm paper. The palette is the puzzle's: terracotta, turquoise, cream.
+     Archivo for what you read at a glance (names, the count), Plex Mono for labels and buttons. */
+  :root {
+    --paper: #f3ead9;
+    --ink: #3b2f26;
+    --soft: rgba(59, 47, 38, .66);
+    --faint: rgba(59, 47, 38, .44);
+    --hair: rgba(59, 47, 38, .18);
+    --veil: rgba(255, 250, 240, .84);
+    --terra: #dd6a44;
+    --terra-deep: #c1381e;
+    --sea: #33838f;
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --pad: clamp(14px, 2.2vw, 28px);
+    color-scheme: light;
+  }
+  html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); }
+  body { font: 400 13px/1.5 var(--mono); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
+  #scene:active { cursor: grabbing; }
+  .still { position: fixed; inset: 0; margin: 0; display: none; }
+  .still img { width: 100%; height: 100%; object-fit: cover; }
+
+  .hud {
+    position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
+    padding: calc(var(--pad) + env(safe-area-inset-top)) calc(var(--pad) + env(safe-area-inset-right))
+             calc(var(--pad) + 14px + env(safe-area-inset-bottom)) calc(var(--pad) + env(safe-area-inset-left));
+    pointer-events: none;
+  }
+  .hud a, .hud button, .hud .tray { pointer-events: auto; }
+
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .works-nav { display: grid; justify-items: start; gap: .8em; }
+  .pill, .back {
+    display: inline-flex; align-items: center; gap: .5em; padding: 9px 14px; margin: 0; white-space: nowrap;
+    font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+    color: var(--ink); background: var(--veil); border: 1px solid var(--hair); border-radius: 999px;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .back { background: var(--ink); color: var(--paper); border-color: var(--ink); transition: background .2s ease, border-color .2s ease; }
+  .back:hover { background: var(--terra-deep); border-color: var(--terra-deep); }
+  .back:focus-visible, .build:focus-visible, .tray button:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; }
+  .label { margin: 0; padding-left: 1.2em; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+  .count b { font: 600 14px/1 var(--sans); letter-spacing: 0; }
+
+  .toast {
+    position: fixed; left: 0; right: 0; top: 18%; margin: 0; text-align: center; pointer-events: none;
+    font: 300 clamp(28px, 4.6vw, 54px)/1.05 var(--sans); font-stretch: 108%; letter-spacing: -.01em; color: var(--ink);
+    text-shadow: 0 0 18px var(--paper), 0 0 4px var(--paper);
+    opacity: 0; transform: translateY(6px); transition: opacity .5s ease, transform .5s ease;
+  }
+  .toast .year { color: var(--terra-deep); }
+  .toast.show { opacity: 1; transform: none; }
+
+  .bottom { display: grid; gap: 10px; justify-items: center; }
+  .hint {
+    margin: 0; padding: 7px 14px; border-radius: 999px; background: var(--veil); color: var(--soft);
+    font-size: 12px; text-align: center; transition: opacity .6s ease;
+  }
+  .hint.gone { opacity: 0; }
+  .play { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 1040px; }
+  .tray {
+    display: flex; gap: 8px; flex: 1; min-width: 0; margin: 0; padding: 8px; list-style: none;
+    overflow-x: auto; overscroll-behavior: contain; scrollbar-width: none;
+    background: var(--veil); border: 1px solid var(--hair); border-radius: 18px;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .tray::-webkit-scrollbar { display: none; }
+  .tray:empty { display: none; }
+  .tray li { flex: 0 0 auto; }
+  .tray button {
+    display: grid; justify-items: center; gap: 2px; width: 84px; padding: 6px 4px 7px; border: 0; border-radius: 12px;
+    background: rgba(255, 255, 255, .55); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+    font-size: 10px; line-height: 1.2; letter-spacing: .02em; color: var(--ink); transition: background .2s ease, opacity .2s ease;
+  }
+  .tray button:hover { background: #fff; }
+  .tray button.lifted { opacity: .3; }
+  .tray canvas, .ghost canvas { width: 56px; height: 56px; display: block; }
+  .tray .name { display: block; max-width: 78px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ghost { position: fixed; left: 0; top: 0; z-index: 10; pointer-events: none; transform: translate(-50%, -60%) scale(1.25); filter: drop-shadow(0 6px 10px rgba(59, 47, 38, .3)); }
+  .ghost.back-home { transition: transform .25s ease; }
+  .build {
+    flex: 0 0 auto; padding: 14px 20px; border: 0; border-radius: 999px; cursor: pointer;
+    font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+    color: #fff; background: var(--terra); box-shadow: 0 6px 18px rgba(193, 56, 30, .25);
+    transition: background .2s ease, opacity .3s ease;
+  }
+  .build:hover { background: var(--terra-deep); }
+  .build:disabled { cursor: default; opacity: .45; background: var(--terra); }
+  .build.running { opacity: 1; background: var(--terra-deep); }
+  .credit { position: fixed; left: calc(var(--pad) + env(safe-area-inset-left)); bottom: calc(6px + env(safe-area-inset-bottom)); margin: 0; font-size: 9.5px; color: var(--faint); pointer-events: auto; }
+  .credit a { color: inherit; }
+  .done .play { display: none; }
+
+  .about { position: absolute; }
+  .about ul { margin: .8em 0 0; padding: 0; list-style: none; columns: 2; column-gap: 2em; font-size: 12px; color: var(--soft); }
+
+  /* without WebGL or JavaScript: a still of the finished city, and the landmarks as a list */
+  .no-gl #scene, .no-gl .hud .bottom, .no-gl .count, .no-gl .toast { display: none; }
+  .no-gl .still, .no-js .still { display: block; }
+  .no-js .hud .bottom, .no-js .count { display: none; }
+  .no-gl .about, .no-js .about {
+    position: fixed; left: var(--pad); right: var(--pad); bottom: var(--pad); width: auto; height: auto; clip-path: none; white-space: normal;
+    max-width: 34rem; padding: 18px 20px; background: var(--veil); border-radius: 18px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .about h1 { font: 300 clamp(26px, 4vw, 40px)/1 var(--sans); font-stretch: 108%; margin: 0 0 .35em; }
+  .about p { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--soft); }
+
+  .js:not(.ready) .hud { opacity: 0; }
+  .hud { transition: opacity 1s ease; }
+
+  @media (max-width: 560px) {
+    .play { flex-wrap: wrap; justify-content: flex-end; }
+    .build { order: -1; }
+    .tray { flex-basis: 100%; }
+  }
+  @media (max-width: 420px) {
+    .label { display: none; }
+    .hint { font-size: 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .toast, .hint, .hud, .ghost.back-home { transition: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<figure class="still" aria-hidden="true"><img src="/works/004/still.jpg" alt=""></figure>
+
+<div class="hud">
+  <div class="top">
+    <nav class="works-nav" aria-label="Works">
+      <a class="back" href="/works/"><span aria-hidden="true">←</span> All works</a>
+      <p class="label">No. 004 · Istanbul, piece by piece, 2026</p>
+    </nav>
+    <p class="pill count" id="count" aria-hidden="true"><b>0</b> of 13</p>
+  </div>
+  <p class="toast" id="toast" aria-hidden="true"></p>
+  <div class="bottom">
+    <p class="hint" id="hint">Drag a landmark onto its outline, or tap an outline to build it.</p>
+    <div class="play">
+      <ol class="tray" id="tray" aria-label="Landmarks to place"></ol>
+      <button class="build" id="build" type="button">Build it for me</button>
+    </div>
+  </div>
+  <p class="credit">Coastline © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a></p>
+</div>
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<section class="about sr-only">
+  <h1>Istanbul, piece by piece</h1>
+  <p>No. 004 by Mahir Yavuz. An isometric Istanbul where the Bosphorus, the Golden Horn and the Sea of Marmara meet. Put its landmarks back one by one, and each raises its neighborhood around it.</p>
+  <ul>
+    <li>Hagia Sophia, 537</li>
+    <li>Blue Mosque, 1616</li>
+    <li>Topkapı Palace, 1478</li>
+    <li>Yeni Cami, 1665</li>
+    <li>Süleymaniye Mosque, 1557</li>
+    <li>Galata Bridge, 1994</li>
+    <li>Galata Tower, 1348</li>
+    <li>Dolmabahçe Palace, 1856</li>
+    <li>Ortaköy Mosque, 1856</li>
+    <li>Bosphorus Bridge, 1973</li>
+    <li>Mihrimah Sultan Mosque, 1548</li>
+    <li>Maiden's Tower, 1763</li>
+    <li>Haydarpaşa Station, 1908</li>
+  </ul>
+</section>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+</script>
+<script type="module" src="/works/004/main.js"></script>
+</body>
+</html>
