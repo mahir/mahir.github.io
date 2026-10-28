@@ -25,7 +25,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = 'https://mahiryavuz.com'
 ZONE = ZoneInfo('America/New_York')
 
-ROLE = 'Product and engineering leader, educator and advisor, working with data since 1998.'
+ROLE = 'Engineering and product leader. Teacher and advisor. Turning data into products since 1998.'
 BIO = (
     'Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations '
     'and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at '
