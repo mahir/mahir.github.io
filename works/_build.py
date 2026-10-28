@@ -30,31 +30,37 @@ BIO = (
     'Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations '
     'and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at '
     'Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including '
-    'Nike, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia University, the '
-    'University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU '
-    'and SVA. He lectures on Business Applications of LLMs and Product Management with AI. His work has been shown '
+    'Nike, SAP, Siemens, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia '
+    'University, the University of Pennsylvania, Pratt, the University of Art and Design Linz and Istanbul Bilgi '
+    'University, with guest lectures at MIT, NYU and SVA. He currently lectures on Business Applications of LLMs and '
+    'Product Management with AI. His work has been shown '
     'at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at '
     'events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
     'Innovation Festival.'
 )
+AIROPS = 'https://www.airops.com/'
+ETSY = 'https://www.etsy.com/'
+TOPOS = 'https://topos.com/'
+RGA = 'https://rga.com/'
+FUTURELAB = 'https://ars.electronica.art/futurelab/en/'
 TEDX_VIENNA = 'https://www.youtube.com/watch?v=gY36Sm2uI6k'
 MICROSOFT_BUILD = 'https://www.youtube.com/watch?v=dvC4dK9c7nQ'
 GOOGLE_CLOUD_NEXT = 'https://www.youtube.com/watch?v=yUK4XUggdQw'
 GOOGLE_CLOUD_STORY = 'https://cloud.google.com/customers/etsy-ai'
 STACK_OVERFLOW_PODCAST = 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/'
 # The short version opens the homepage: what Mahir does now and did before, and the press about it, then teaching,
-# lectures, exhibitions and talks. Its lists are examples, not every one. [words](url) becomes a link.
+# lectures and talks. Its lists are examples, not every one. [words](url) becomes a link.
 SHORT_BIO = (
-    'Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, '
-    'co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica '
-    'Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft, '
-    f'and his work at Etsy has been featured in [a Google Cloud customer story]({GOOGLE_CLOUD_STORY}) and on '
-    f'[the Stack Overflow podcast]({STACK_OVERFLOW_PODCAST}).',
-    'He has taught since 2003, at schools including Columbia University, the University of Pennsylvania, Pratt and the '
-    'University of Art and Design Linz, and lectures on Business Applications of LLMs and Product Management with AI. '
-    'His work has been shown at the Ars Electronica Festival, SIGGRAPH, the Istanbul Biennial and elsewhere, and he has '
-    f'spoken at events such as [TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), '
-    f'[Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and the Fast Company Innovation Festival.',
+    f'Head of Engineering at [AirOps]({AIROPS}). Before that, Mahir led engineering for Search, Recommendations and '
+    f'Ads at [Etsy]({ETSY}), co-founded [Topos]({TOPOS}) as its CTO, directed data science at [R/GA]({RGA}) and was a '
+    f'senior researcher at [Ars Electronica Futurelab]({FUTURELAB}) in Linz. His teams have taken on data problems for '
+    'companies including Nike, SAP, Siemens, PwC, Google and Microsoft, and his work at Etsy has been featured in '
+    f'[a Google Cloud customer story]({GOOGLE_CLOUD_STORY}) and on [the Stack Overflow podcast]({STACK_OVERFLOW_PODCAST}).',
+    'He has taught since 2003, at schools including Columbia University, the University of Pennsylvania, Pratt, the '
+    'University of Art and Design Linz and Istanbul Bilgi University, and he currently lectures on Business '
+    'Applications of LLMs and Product Management with AI. He has spoken at events such as '
+    f'[TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), [Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and '
+    'the Fast Company Innovation Festival.',
 )
 LINKS = [
     ('Substack', 'https://mahir.substack.com/'),
@@ -100,7 +106,7 @@ PERSON = {
     'image': f'{SITE}/portrait.jpg',
     'description': ROLE,
     'jobTitle': 'Head of Engineering',
-    'worksFor': {'@type': 'Organization', 'name': 'AirOps', 'url': 'https://www.airops.com/'},
+    'worksFor': {'@type': 'Organization', 'name': 'AirOps', 'url': AIROPS},
     'knowsAbout': [
         'AI products', 'Search', 'Recommendation systems', 'Advertising platforms', 'Data science',
         'Machine learning', 'Product management', 'Data visualization', 'Media art',
