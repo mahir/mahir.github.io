@@ -228,8 +228,8 @@ def latest_posts():
         problem = err
     print(f'kept the posts already on the homepage: could not read {SUBSTACK}feed ({problem})')
     region = re.search(r'<!-- gen:writing -->(.*?)<!-- /gen:writing -->', (ROOT / 'index.html').read_text(), re.S)
-    return [{'url': html.unescape(u), 'title': html.unescape(t), 'date': d} for u, t, d in re.findall(
-        r'<a href="([^"]+)">.*?<span class="t">(.*?)</span><time class="d mono" datetime="([^"]+)"',
+    return [{'url': html.unescape(u), 'title': html.unescape(t), 'date': d} for u, d, t in re.findall(
+        r'<a href="([^"]+)"><time class="n mono" datetime="([^"]+)">.*?</time><span class="t">(.*?)</span>',
         region.group(1) if region else '')]
 
 
@@ -266,9 +266,8 @@ def main():
         f'<time class="d mono" datetime="{w["date"]}">{nice_date(w["date"])}</time></a></li>'
         for w in newest_first))
     fill('index.html', 'writing', '\n'.join(
-        f'<li><a href="{e(p["url"])}"><span class="n"></span>'
-        f'<span class="t">{e(p["title"])}</span>'
-        f'<time class="d mono" datetime="{p["date"]}">{nice_date(p["date"])}</time></a></li>'
+        f'<li><a href="{e(p["url"])}"><time class="n mono" datetime="{p["date"]}">{nice_date(p["date"])}</time>'
+        f'<span class="t">{e(p["title"])}</span></a></li>'
         for p in posts))
 
     # structured data

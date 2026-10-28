@@ -304,7 +304,7 @@
 
   .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
   .list a {
-    display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto; align-items: baseline; column-gap: 1rem;
+    display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; align-items: baseline; column-gap: 1rem;
     padding: 1.15rem 0; border-bottom: 1px solid var(--hair);
   }
   .list .n { color: var(--faint); }
@@ -316,7 +316,11 @@
   .list a:hover .t, .list a:focus-visible .t { color: var(--accent); }
   .list a:focus-visible { outline-offset: -1px; }
   .empty { padding: 1.15rem 0; color: var(--dim); border-bottom: 1px solid var(--hair); }
-  .more { margin: 1.15rem 0 0; }
+  /* posts: the date leads, and the titles are set smaller than the experiments' */
+  .posts a { padding: .95rem 0; }
+  .posts .t { font-size: clamp(1.1rem, 1.9vw, 1.3rem); }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: .9rem; }
+  .head .label { margin: 0; }
 
   footer { margin-top: clamp(3rem, 8vw, 5rem); }
   footer dl { margin: 0; display: grid; gap: .6rem; }
@@ -324,8 +328,8 @@
   .row dt { color: var(--faint); }
   .row dd { margin: 0; display: flex; flex-wrap: wrap; column-gap: 1.5rem; }
   .row dd > * { padding: .45rem 0; }
-  footer dd a, .more a { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
-  footer dd a:hover, footer dd a:focus-visible, .more a:hover, .more a:focus-visible { text-decoration-color: var(--accent); }
+  footer dd a, a.more { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
+  footer dd a:hover, footer dd a:focus-visible, a.more:hover, a.more:focus-visible { text-decoration-color: var(--accent); }
   .row dd span { color: var(--dim); }
 
   @media (max-width: 699px) {
@@ -334,9 +338,6 @@
   @media (max-width: 599px) {
     .list a { grid-template-columns: minmax(0, 1fr) auto; row-gap: .35rem; }
     .list .t { grid-column: 1 / -1; grid-row: 2; }
-    /* a post has no number, so its date leads */
-    .posts .n { display: none; }
-    .posts .d { text-align: left; }
     .row { grid-template-columns: minmax(0, 1fr); }
     .row dt { margin-top: .6rem; }
   }
@@ -384,15 +385,17 @@
       </ol>
     </section>
     <section id="writing" aria-labelledby="writing-title">
-      <h2 class="label mono" id="writing-title">Writing</h2>
+      <div class="head">
+        <h2 class="label mono" id="writing-title">Writing</h2>
+        <a class="more mono" href="https://mahir.substack.com/">All posts on Substack ↗</a>
+      </div>
       <ul class="list posts">
         <!-- gen:writing -->
-        <li><a href="https://mahir.substack.com/p/the-median-answer"><span class="n"></span><span class="t">The Median Answer</span><time class="d mono" datetime="2026-10-05">5 Oct 2026</time></a></li>
-        <li><a href="https://mahir.substack.com/p/is-this-the-printing-press-moment"><span class="n"></span><span class="t">Is This the Printing Press Moment of Software?</span><time class="d mono" datetime="2026-02-16">16 Feb 2026</time></a></li>
-        <li><a href="https://mahir.substack.com/p/founder-mode-without-the-founder"><span class="n"></span><span class="t">Founder Mode, Without the Founder</span><time class="d mono" datetime="2026-02-09">9 Feb 2026</time></a></li>
+        <li><a href="https://mahir.substack.com/p/the-median-answer"><time class="n mono" datetime="2026-10-05">5 Oct 2026</time><span class="t">The Median Answer</span></a></li>
+        <li><a href="https://mahir.substack.com/p/is-this-the-printing-press-moment"><time class="n mono" datetime="2026-02-16">16 Feb 2026</time><span class="t">Is This the Printing Press Moment of Software?</span></a></li>
+        <li><a href="https://mahir.substack.com/p/founder-mode-without-the-founder"><time class="n mono" datetime="2026-02-09">9 Feb 2026</time><span class="t">Founder Mode, Without the Founder</span></a></li>
         <!-- /gen:writing -->
       </ul>
-      <p class="more mono"><a href="https://mahir.substack.com/">All posts on Substack ↗</a></p>
     </section>
     <footer>
       <dl>
