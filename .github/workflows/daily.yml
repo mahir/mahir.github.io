@@ -1,5 +1,5 @@
-# Just after midnight in New York, put up the work dated today, if there is one: works/_build.py writes it
-# onto the homepage and refreshes the list, sitemap and llms.txt. On days without a new work nothing changes
+# Just after midnight in New York, put up the work dated today, if there is one: works/_build.py features it
+# on the homepage and refreshes the list, sitemap and llms.txt. On days without a new work nothing changes
 # and nothing is committed. Two times cover both daylight and standard time.
 name: Put up today's work
 on:

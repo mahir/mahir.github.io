@@ -1,10 +1,11 @@
 // The schedule of works. Each work lives at /works/<n as three digits>/ and goes up on its date.
-// The homepage is the newest work whose date has arrived in New York: works/_build.py writes it there, and a
-// GitHub Action runs that build just after midnight New York time, so a work dated ahead goes up by itself
-// on its day, and a day without a new work keeps the last one.
-// Preview any day by adding ?on=YYYY-MM-DD to the homepage or the index.
-// `medium` and `about` describe the work to search engines and AI assistants; after editing the list,
-// run `python3 works/_build.py` to refresh the sitemap, llms.txt and the pages' structured data.
+// The homepage features the newest work whose date has arrived in New York: works/_build.py writes it there,
+// and a GitHub Action runs that build just after midnight New York time, so a work dated ahead goes up by
+// itself on its day, and a day without a new work keeps the last one.
+// Preview any day by adding ?on=YYYY-MM-DD to the homepage.
+// `about` is the line under the work on the homepage; it and `medium` also describe the work to search engines
+// and AI assistants. After editing the list, run `python3 works/_build.py` to refresh the homepage, sitemap,
+// llms.txt and the pages' structured data.
 window.Works = (() => {
   'use strict';
 
