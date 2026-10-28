@@ -30,24 +30,30 @@ BIO = (
     'Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations '
     'and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at '
     'Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including '
-    'Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of '
-    'Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. '
-    'His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he '
-    'has spoken at TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
+    'Nike, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia University, the '
+    'University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU '
+    'and SVA. He lectures on Business Applications of LLMs and Product Management with AI. His work has been shown '
+    'at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at '
+    'events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
     'Innovation Festival.'
 )
 TEDX_VIENNA = 'https://www.youtube.com/watch?v=gY36Sm2uI6k'
 MICROSOFT_BUILD = 'https://www.youtube.com/watch?v=dvC4dK9c7nQ'
 GOOGLE_CLOUD_NEXT = 'https://www.youtube.com/watch?v=yUK4XUggdQw'
-# The short version opens the homepage: what Mahir does now and did before, then teaching, exhibitions and talks.
-# [words](url) becomes a link.
+GOOGLE_CLOUD_STORY = 'https://cloud.google.com/customers/etsy-ai'
+STACK_OVERFLOW_PODCAST = 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/'
+# The short version opens the homepage: what Mahir does now and did before, and the press about it, then teaching,
+# lectures, exhibitions and talks. Its lists are examples, not every one. [words](url) becomes a link.
 SHORT_BIO = (
     'Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, '
     'co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica '
-    'Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft.',
-    'He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art '
-    'and Design Linz. His work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial, and '
-    f'he has spoken at [TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), '
+    'Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft, '
+    f'and his work at Etsy has been featured in [a Google Cloud customer story]({GOOGLE_CLOUD_STORY}) and on '
+    f'[the Stack Overflow podcast]({STACK_OVERFLOW_PODCAST}).',
+    'He has taught since 2003, at schools including Columbia University, the University of Pennsylvania, Pratt and the '
+    'University of Art and Design Linz, and lectures on Business Applications of LLMs and Product Management with AI. '
+    'His work has been shown at the Ars Electronica Festival, SIGGRAPH, the Istanbul Biennial and elsewhere, and he has '
+    f'spoken at events such as [TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), '
     f'[Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and the Fast Company Innovation Festival.',
 )
 LINKS = [
@@ -59,21 +65,20 @@ LINKS = [
 # every profile that is Mahir's, for search engines to tie together (the homepage links the ones above)
 PROFILES = LINKS + [('GitHub', 'https://github.com/mahir')]
 
-# Talks and press: two rows at the foot of the homepage, and pieces about Mahir in the structured data (subjectOf),
-# never among his profiles. `label` is what the homepage shows, `name` the piece's own title; no url, no link.
+# Talks and press: linked from the short bio, and pieces about Mahir in the structured data (subjectOf), never among
+# his profiles. `name` is the piece's own title.
 TALKS = [
-    {'label': 'TEDxVienna Salon', 'url': TEDX_VIENNA, 'by': 'TEDx Talks', 'date': '2015-07-09',
+    {'url': TEDX_VIENNA, 'by': 'TEDx Talks', 'date': '2015-07-09',
      'name': 'Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon'},
-    {'label': 'Microsoft Build', 'url': MICROSOFT_BUILD, 'by': 'Microsoft Developer', 'date': '2024-05-24',
+    {'url': MICROSOFT_BUILD, 'by': 'Microsoft Developer', 'date': '2024-05-24',
      'name': 'Five lessons Etsy learned building on Microsoft AI | BRK258'},
-    {'label': 'Google Cloud Next', 'url': GOOGLE_CLOUD_NEXT, 'by': 'Google Cloud', 'date': '2025-07-11',
+    {'url': GOOGLE_CLOUD_NEXT, 'by': 'Google Cloud', 'date': '2025-07-11',
      'name': 'New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI'},
 ]
 PRESS = [
-    {'label': 'Stack Overflow podcast', 'type': 'PodcastEpisode', 'by': 'Stack Overflow', 'date': '2025-07-29',
-     'url': 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/',
+    {'url': STACK_OVERFLOW_PODCAST, 'type': 'PodcastEpisode', 'by': 'Stack Overflow', 'date': '2025-07-29',
      'name': 'That custom gift for your mom takes more work than you think'},
-    {'label': 'Google Cloud customer story', 'url': 'https://cloud.google.com/customers/etsy-ai', 'by': 'Google Cloud',
+    {'url': GOOGLE_CLOUD_STORY, 'by': 'Google Cloud',
      'name': 'Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"'},
 ]
 
@@ -193,18 +198,6 @@ def linked(text):
     return re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', r'<a href="\2">\1</a>', html.escape(text))
 
 
-def rows(*groups):
-    """Rows for the list at the foot of the homepage: a label, then each piece, linked when it has a url."""
-    e = html.escape
-    lines = []
-    for title, items in groups:
-        lines.append(f'<div class="row mono"><dt>{title}</dt><dd>')
-        lines += [f'  <a href="{e(p["url"])}">{e(p["label"])} ↗</a>' if p.get('url') else f'  <span>{e(p["label"])}</span>'
-                  for p in items]
-        lines.append('</dd></div>')
-    return '\n'.join(lines)
-
-
 def fill(path, name, content):
     """Replace what is between <!-- gen:name --> and <!-- /gen:name -->, indented like the opening marker."""
     p = ROOT / path
@@ -227,11 +220,9 @@ def main():
     updated = live[-1]['date'] if live else today
     e = html.escape
 
-    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's
-    # day, and the talks and press at its foot
+    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's day
     fill('index.html', 'bio', '\n'.join(f'<p>{linked(para)}</p>' for para in SHORT_BIO))
     fill('index.html', 'today', feature(live[-1]) if live else '')
-    fill('index.html', 'talks', rows(('Talks', TALKS), ('Press', PRESS)))
     fill('index.html', 'works', '\n'.join(
         f'<li><a href="/works/{number(w)}/"><span class="n mono">No. {number(w)}</span>'
         f'<span class="t">{e(w["title"])}</span>'

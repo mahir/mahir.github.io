@@ -4,7 +4,7 @@ The homepage is Mahir's, and features whichever work is up today. Every work is 
 
 On the site they are called experiments ("Experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
 
-- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then the links that stay the same whatever the work is: Elsewhere, Talks, Press and Lectures. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
+- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then his profiles elsewhere. The talks, press and lectures are part of the short bio. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
 - `/works/` only sends old links on to the list on `/` (`/#experiments`). It can become an archive of its own once there are many works.
 - `/works/NNN/` is one work. It can look like anything.
 - `works.js` is the schedule, and the only list of works.
@@ -45,7 +45,7 @@ Most crawlers, and almost all AI ones, read the HTML without running JavaScript.
 - the short bio, today's work and a plain list of works in the HTML of `/`; visitors with JavaScript see today's work and the list drawn again for their own day
 - `/sitemap.xml` and `/llms.txt`
 
-The facts about Mahir that the build writes (role, bio, short bio, profiles, photo, talks and press) live at the top of `_build.py`; change them there and run it again. Talks and press go to search engines as pieces about Mahir, never among his profiles. The homepage's title, description, role line and the Elsewhere and Lectures links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
+The facts about Mahir that the build writes (role, bio, short bio, profiles, photo, talks and press) live at the top of `_build.py`; change them there and run it again. The bios name examples, not every school, show or talk. Talks and press go to search engines as pieces about Mahir, never among his profiles. The homepage's title, description, role line and the Elsewhere links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
 
 Not published, though they stay in the repository: these notes, `llms/CLAUDE.md` and the old Kaleidoscope project (see `/_config.yml`). The lecture decks under `/llms/` and `/pm/` are published but kept out of search engines by `/robots.txt` until they are updated. Addresses that don't exist get `/404.html`.
 
