@@ -11,6 +11,7 @@ root.classList.replace('no-js', 'js');
 const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = Math.min(innerWidth, innerHeight) < 700;
+if (params.has('nogl')) HTMLCanvasElement.prototype.getContext = () => null; // to check the fallback
 
 try {
   const res = await fetch(new URL('./land.json', import.meta.url));

@@ -21,6 +21,10 @@ window.Works = (() => {
       n: 3, title: 'Manhattan sundial', date: '2026-10-27', medium: 'Interactive WebGL and live solar data',
       about: 'An abstract model of Manhattan lit by the sun where it stands over New York at this minute; drag through the day and the year, or jump to the next Manhattanhenge.',
     },
+    {
+      n: 4, title: 'Istanbul, piece by piece', date: '2026-10-28', medium: 'Interactive WebGL game',
+      about: 'An isometric Istanbul where the Bosphorus, the Golden Horn and the Marmara meet, rebuilt landmark by landmark as each one raises its neighborhood.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
