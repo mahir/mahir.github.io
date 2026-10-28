@@ -1,5 +1,6 @@
-// The ordinary city. Every land cell belongs to the nearest landmark on its own shore and rises when that landmark
-// is placed, so placing every landmark that owns land builds all of it. Seeded, so every visit grows the same city.
+// The ordinary city, standing from the start around the gaps where the landmarks go. Every land cell belongs to the
+// nearest landmark on its own shore, its neighborhood, so each one gets its own small mosques. Seeded, so every visit
+// shows the same city.
 
 import { toWorld } from './geo.js';
 
@@ -65,41 +66,20 @@ export function makeCity(land, owners, landmarks, seed = 4) {
     const storeys = 3 + Math.floor(rnd() * 4), roofPick = rnd(), wall = Math.floor(rnd() * 6);
     const rot = (rnd() - 0.5) * 0.36, special = rnd();
     if (keepClear.some((p) => near(c, p))) continue;
-    const delay = Math.min(2, Math.hypot(c.x - at[owner].x, c.z - at[owner].z) / 1500);
     // a flat grey roof on about one building in eight, terracotta on the rest
     const roof = roofPick < 0.12 ? 4 : Math.floor(((roofPick - 0.12) / 0.88) * 4);
     if (near(c, park) || (kind >= HOUSE_CHANCE && kind < HOUSE_CHANCE + TREE_CHANCE)) {
-      trees.push({ x: c.x + jx, z: c.z + jz, r: land.cell * (0.3 + 0.15 * (w / land.cell)), owner, delay, kind: special < 0.35 ? 'cypress' : 'round' });
+      trees.push({ x: c.x + jx, z: c.z + jz, r: land.cell * (0.3 + 0.15 * (w / land.cell)), owner, kind: special < 0.35 ? 'cypress' : 'round' });
     } else if (kind < HOUSE_CHANCE) {
       if (special < MOSQUE_CHANCE && roomForMosque(c.x, c.z)) {
-        const m = { x: c.x, z: c.z, owner, delay, size: 38 + 12 * ((special * 97) % 1), rot };
+        const m = { x: c.x, z: c.z, owner, size: 38 + 12 * ((special * 97) % 1), rot };
         mosques.push(m);
         const k = key(c.x, c.z);
         spaced.set(k, [...(spaced.get(k) || []), m]);
       } else {
-        houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: storeys * STOREY * HEIGHT_SCALE, roof, wall, rot, owner, delay });
+        houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: storeys * STOREY * HEIGHT_SCALE, roof, wall, rot, owner });
       }
     }
   }
   return { houses, trees, mosques };
-}
-
-// Instances in the order they will rise: grouped by owner, earliest first, so each neighborhood is one run of the
-// instance buffers and a rise touches, and uploads, only its own run. Owner k runs from start[k] to start[k + 1].
-export function riseOrder(items, ownerCount) {
-  const sorted = [...items].sort((a, b) => a.owner - b.owner || a.delay - b.delay);
-  const start = new Int32Array(ownerCount + 1);
-  for (const it of sorted) start[it.owner + 1]++;
-  for (let k = 0; k < ownerCount; k++) start[k + 1] += start[k];
-  return { items: sorted, start };
-}
-
-// Within one run (delays sorted, in seconds), t ms after placing: everything before lo is already grown,
-// items up to hi have started growing, and items before next have finished.
-export function riseWindow(delays, lo, t, rise, grow) {
-  let hi = lo;
-  while (hi < delays.length && t >= rise + delays[hi] * 1000) hi++;
-  let next = lo;
-  while (next < hi && t >= rise + delays[next] * 1000 + grow) next++;
-  return { hi, next };
 }

@@ -11,7 +11,6 @@ import { HorizontalTiltShiftShader } from 'three/addons/shaders/HorizontalTiltSh
 import { VerticalTiltShiftShader } from 'three/addons/shaders/VerticalTiltShiftShader.js';
 import { toWorld, WIDTH, HEIGHT } from './geo.js';
 import { buildLandmark, buildOutline, PALETTE } from './models.js';
-import { riseOrder, riseWindow } from './city.js';
 
 const HEADING = 20 * Math.PI / 180; // the camera looks north-northeast
 const ELEVATION = 40 * Math.PI / 180;
@@ -33,7 +32,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(COLORS.paper);
+  scene.background = backdrop();
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, DISTANCE * 3);
 
   // ---------- light and air ----------
@@ -41,7 +40,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   // a haze the colour of the paper softens what is farther away, as over the Bosphorus
   scene.add(new THREE.HemisphereLight(0xe4ecf2, 0xc9a77c, 1.55));
   const sun = new THREE.DirectionalLight(0xffd8a6, 3.4);
-  scene.fog = new THREE.Fog(0xf1e3c9, DISTANCE - 600, DISTANCE + 15000);
+  scene.fog = new THREE.Fog(0xefd9b6, DISTANCE - 600, DISTANCE + 15000);
   sun.castShadow = true;
   sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
   sun.shadow.bias = -0.0004;
@@ -71,6 +70,11 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   ground.frustumCulled = false;
   scene.add(ground);
   scene.add(slabEdge(land));
+  // a soft shadow on the table under the slab, cast away from the sun, so the model sits on something
+  const under = new THREE.Mesh(new THREE.PlaneGeometry(WIDTH * 1.5, HEIGHT * 1.5).rotateX(-Math.PI / 2),
+    new THREE.MeshBasicMaterial({ map: softShadow(), transparent: true, depthWrite: false, fog: false }));
+  under.position.set(-SUN.x * 420, -SLAB - 2, -SUN.z * 420);
+  scene.add(under);
 
   // ---------- landmarks, waiting as outlines ----------
   const pieces = new Map();
@@ -85,78 +89,63 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   }
   const showOutline = (id, on) => { pieces.get(id).outline.visible = on; };
 
-  // ---------- the ordinary city, waiting as pale plots until its landmark is placed ----------
-  // in rising order, so each neighborhood is one run of each buffer
-  const n = landmarks.length;
-  const H = riseOrder(city.houses, n), T = riseOrder(city.trees, n), M = riseOrder(city.mosques, n);
-  const houses = H.items, trees = T.items, mosques = M.items;
-  const delaysOf = (list) => Float32Array.from(list, (x) => x.delay);
-  const houseDelays = delaysOf(houses), treeDelays = delaysOf(trees), mosqueDelays = delaysOf(mosques);
+  // ---------- the ordinary city, standing from the start: the landmarks are what is missing ----------
+  const { houses, trees, mosques } = city;
   const std = (o = {}) => new THREE.MeshStandardMaterial({ roughness: 0.85, ...o });
   const box = () => new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
-  const inst = (geo, mat, count, shadow = true) => {
+  const inst = (geo, mat, count) => {
     const mesh = new THREE.InstancedMesh(geo, mat, Math.max(count, 1));
     mesh.count = count;
-    mesh.castShadow = shadow;
+    mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.frustumCulled = false; // instances start at scale 0, so a bounding sphere taken early would be wrong
     scene.add(mesh);
     return mesh;
   };
   // walls darken toward the street, a baked stand-in for ambient occlusion
   const walls = inst(shadeBase(box(), 0.6), std({ vertexColors: true }), houses.length);
   const roofs = inst(new THREE.ConeGeometry(Math.SQRT1_2, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0), std({ flatShading: true, roughness: 0.7 }), houses.length);
-  const plots = inst(box(), std({ color: 0xe0cda8, roughness: 1 }), houses.length, false);
-  const crowns = inst(new THREE.IcosahedronGeometry(1, 0), std({ flatShading: true }), trees.length);
-  const cypresses = inst(new THREE.ConeGeometry(1, 1, 6).translate(0, 0.5, 0), std({ color: 0x3c5a34, flatShading: true }), trees.length);
+  const crownList = trees.filter((t) => t.kind !== 'cypress'), cypressList = trees.filter((t) => t.kind === 'cypress');
+  const crowns = inst(new THREE.IcosahedronGeometry(1, 0), std({ flatShading: true }), crownList.length);
+  const cypresses = inst(new THREE.ConeGeometry(1, 1, 6).translate(0, 0.5, 0), std({ color: 0x3c5a34, flatShading: true }), cypressList.length);
   const mBase = inst(shadeBase(box(), 0.66), std({ color: PALETTE.stone, vertexColors: true }), mosques.length);
   const mDome = inst(new THREE.SphereGeometry(1, 16, 7, 0, Math.PI * 2, 0, Math.PI / 2), std({ color: PALETTE.leadLight }), mosques.length);
   const mShaft = inst(new THREE.CylinderGeometry(1, 1, 1, 8).translate(0, 0.5, 0), std({ color: PALETTE.white }), mosques.length);
   const mCap = inst(new THREE.ConeGeometry(1, 1, 8).translate(0, 0.5, 0), std({ color: PALETTE.lead }), mosques.length);
-  const tint = new THREE.Color();
-  houses.forEach((h, i) => {
-    walls.setColorAt(i, tint.setHex(PALETTE.walls[h.wall]));
-    roofs.setColorAt(i, tint.setHex(PALETTE.roofs[h.roof]));
-  });
-  trees.forEach((t, i) => crowns.setColorAt(i, tint.setHex(PALETTE.trees[i % 3])));
 
-  const o3 = new THREE.Object3D();
+  const o3 = new THREE.Object3D(), tint = new THREE.Color();
   const put = (mesh, i, x, y, z, sx, sy, sz, rot = 0) => {
     o3.position.set(x, y, z);
     o3.rotation.set(0, rot, 0);
-    o3.scale.set(sx || 1e-5, sy || 1e-5, sz || 1e-5);
+    o3.scale.set(sx, sy, sz);
     o3.updateMatrix();
     mesh.setMatrixAt(i, o3.matrix);
   };
-  function setHouse(i, s) {
-    const h = houses[i], on = s > 0, spread = 0.7 + 0.3 * s, roofH = h.roof === 4 ? 1.5 : Math.min(h.w, h.d) * 0.38;
-    put(walls, i, h.x, LAND_TOP, h.z, h.w * spread * on, h.h * s, h.d * spread * on, h.rot);
-    put(roofs, i, h.x, LAND_TOP + h.h * s, h.z, h.w * spread * on, roofH * s, h.d * spread * on, h.rot);
-    put(plots, i, h.x, LAND_TOP, h.z, h.w * 0.9 * (s < 1), 1.6 * (s < 1), h.d * 0.9 * (s < 1), h.rot);
-  }
-  function setTree(i, s) {
-    const t = trees[i], c = t.kind === 'cypress';
-    put(crowns, i, t.x, LAND_TOP + t.r * 0.9 * s, t.z, t.r * s * !c, t.r * 1.1 * s * !c, t.r * s * !c);
-    put(cypresses, i, t.x, LAND_TOP, t.z, t.r * 0.42 * s * c, t.r * 3.4 * s * c, t.r * 0.42 * s * c);
-  }
-  // a neighborhood mosque: a block, a lead dome and one pencil minaret
-  function setMosque(i, s) {
-    const m = mosques[i], z = m.size, on = s > 0, h = z * 0.85 * s; // tall enough to stand clear of the roofs
-    put(mBase, i, m.x, LAND_TOP, m.z, z * on, h, z * on, m.rot);
-    put(mDome, i, m.x, LAND_TOP + h, m.z, z * 0.46 * on, z * 0.44 * s, z * 0.46 * on);
+  houses.forEach((h, i) => {
+    const roofH = h.roof === 4 ? 1.5 : Math.min(h.w, h.d) * 0.38; // the last roof colour is a flat grey roof
+    put(walls, i, h.x, LAND_TOP, h.z, h.w, h.h, h.d, h.rot);
+    put(roofs, i, h.x, LAND_TOP + h.h, h.z, h.w, roofH, h.d, h.rot);
+    walls.setColorAt(i, tint.setHex(PALETTE.walls[h.wall]));
+    roofs.setColorAt(i, tint.setHex(PALETTE.roofs[h.roof]));
+  });
+  crownList.forEach((t, i) => {
+    put(crowns, i, t.x, LAND_TOP + t.r * 0.9, t.z, t.r, t.r * 1.1, t.r);
+    crowns.setColorAt(i, tint.setHex(PALETTE.trees[i % 3]));
+  });
+  cypressList.forEach((t, i) => put(cypresses, i, t.x, LAND_TOP, t.z, t.r * 0.42, t.r * 3.4, t.r * 0.42));
+  // a neighborhood mosque: a block tall enough to stand clear of the roofs, a lead dome and one pencil minaret
+  mosques.forEach((m, i) => {
+    const z = m.size, h = z * 0.85;
+    put(mBase, i, m.x, LAND_TOP, m.z, z, h, z, m.rot);
+    put(mDome, i, m.x, LAND_TOP + h, m.z, z * 0.46, z * 0.44, z * 0.46);
     const mx = m.x + Math.cos(m.rot) * z * 0.66, mz = m.z - Math.sin(m.rot) * z * 0.66;
-    put(mShaft, i, mx, LAND_TOP, mz, 2.8 * on, z * 2.3 * s, 2.8 * on);
-    put(mCap, i, mx, LAND_TOP + z * 2.3 * s, mz, 3.3 * on, z * 0.4 * s, 3.3 * on);
-  }
-  houses.forEach((_, i) => setHouse(i, 0));
-  trees.forEach((_, i) => setTree(i, 0));
-  mosques.forEach((_, i) => setMosque(i, 0));
+    put(mShaft, i, mx, LAND_TOP, mz, 2.8, z * 2.3, 2.8);
+    put(mCap, i, mx, LAND_TOP + z * 2.3, mz, 3.3, z * 0.4, 3.3);
+  });
 
-  // ---------- placing: the landmark rises, then its neighborhood around it ----------
-  const RISE = 700, GROW = 400;
+  // ---------- placing: the landmark rises into its gap ----------
+  const RISE = 900;
   const rising = [];
   const easeOutBack = (k) => 1 + 2.2 * (k - 1) ** 3 + 1.2 * (k - 1) ** 2;
-  const easeOut = (k) => 1 - (1 - k) ** 3;
 
   function placeLandmark(id, { animate = true } = {}) {
     const p = pieces.get(id);
@@ -164,46 +153,16 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     p.placed = true;
     p.outline.visible = false;
     scene.add(p.model);
-    const k = landmarks.indexOf(p.lm);
-    const runs = [
-      { from: H.start[k], to: H.start[k + 1], lo: H.start[k], list: houses, delays: houseDelays, set: setHouse, meshes: [walls, roofs, plots] },
-      { from: T.start[k], to: T.start[k + 1], lo: T.start[k], list: trees, delays: treeDelays, set: setTree, meshes: [crowns, cypresses] },
-      { from: M.start[k], to: M.start[k + 1], lo: M.start[k], list: mosques, delays: mosqueDelays, set: setMosque, meshes: [mBase, mDome, mShaft, mCap] },
-    ];
-    if (!animate || reducedMotion) {
-      for (const run of runs) {
-        for (let i = run.from; i < run.to; i++) run.set(i, 1);
-        upload(run.meshes, run.from, run.to);
-      }
-      return Promise.resolve();
-    }
+    if (!animate || reducedMotion) return Promise.resolve();
     p.model.position.y = p.y - p.model.userData.height - 2;
-    const last = Math.max(0, ...runs.filter((run) => run.to > run.from).map((run) => run.delays[run.to - 1]));
-    return new Promise((resolve) => rising.push({ p, runs, t0: performance.now(), end: RISE + last * 1000 + GROW, resolve }));
+    return new Promise((resolve) => rising.push({ p, t0: performance.now(), resolve }));
   }
 
-  function upload(meshes, from, to) {
-    if (to <= from) return;
-    for (const mesh of meshes) {
-      mesh.instanceMatrix.addUpdateRange(from * 16, (to - from) * 16);
-      mesh.instanceMatrix.needsUpdate = true;
-    }
-  }
-
-  // each frame touches only what is growing in each rising neighborhood, plus what has just finished
   function stepRising(now) {
     for (let r = rising.length - 1; r >= 0; r--) {
-      const a = rising[r], t = now - a.t0;
-      const k = Math.min(1, t / RISE);
+      const a = rising[r], k = Math.min(1, (now - a.t0) / RISE);
       a.p.model.position.y = a.p.y - (a.p.model.userData.height + 2) * (1 - easeOutBack(k));
-      for (const run of a.runs) {
-        const { hi, next } = riseWindow(run.delays.subarray(run.from, run.to), run.lo - run.from, t, RISE, GROW);
-        const to = run.from + hi;
-        for (let i = run.lo; i < to; i++) run.set(i, easeOut(Math.min(1, Math.max(0, (t - RISE - run.list[i].delay * 1000) / GROW))));
-        upload(run.meshes, run.lo, to);
-        run.lo = run.from + next;
-      }
-      if (t >= a.end) { a.p.model.position.y = a.p.y; rising.splice(r, 1); a.resolve(); }
+      if (k === 1) { rising.splice(r, 1); a.resolve(); }
     }
   }
 
@@ -514,4 +473,48 @@ float foam = smoothstep(0.84, 0.95, near + 0.05 * sin(uTime * 1.2 + n * 5.0));
 diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.92, 0.86), foam * 0.8);`);
   };
   return mat;
+}
+
+// The backdrop: warm haze lit from the sun's side, deepening to dusty sand at the corners, with a fine grain,
+// so the model floats in late-afternoon air rather than on a flat sheet.
+function backdrop() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 1024;
+  const g = c.getContext('2d');
+  const sky = g.createLinearGradient(0, 0, 0, 1024);
+  sky.addColorStop(0, '#f7e6c6');
+  sky.addColorStop(0.55, '#efd6ae');
+  sky.addColorStop(1, '#ddbb8f');
+  g.fillStyle = sky;
+  g.fillRect(0, 0, 1024, 1024);
+  const glow = g.createRadialGradient(170, 140, 0, 170, 140, 760);
+  glow.addColorStop(0, 'rgba(255, 246, 225, 0.95)');
+  glow.addColorStop(0.45, 'rgba(255, 236, 200, 0.35)');
+  glow.addColorStop(1, 'rgba(255, 236, 200, 0)');
+  g.fillStyle = glow;
+  g.fillRect(0, 0, 1024, 1024);
+  const vignette = g.createRadialGradient(512, 470, 330, 512, 512, 760);
+  vignette.addColorStop(0, 'rgba(120, 78, 40, 0)');
+  vignette.addColorStop(1, 'rgba(120, 78, 40, 0.28)');
+  g.fillStyle = vignette;
+  g.fillRect(0, 0, 1024, 1024);
+  const grain = g.getImageData(0, 0, 1024, 1024), d = grain.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - 0.5) * 9; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  g.putImageData(grain, 0, 0);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function softShadow() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const g = c.getContext('2d');
+  const r = g.createRadialGradient(128, 128, 40, 128, 128, 128);
+  r.addColorStop(0, 'rgba(90, 58, 30, 0.42)');
+  r.addColorStop(0.6, 'rgba(90, 58, 30, 0.2)');
+  r.addColorStop(1, 'rgba(90, 58, 30, 0)');
+  g.fillStyle = r;
+  g.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(c);
 }
