@@ -6,10 +6,10 @@ import { toWorld } from './geo.js';
 
 export const PALETTE = {
   water: 0x2a8c99,
-  roofs: [0xdd6a44, 0xc9603c, 0xe8845a, 0xb8714a],
+  roofs: [0xdd6a44, 0xc9603c, 0xe8845a, 0xb8714a, 0x9aa0a0], // the last: a flat grey roof
   red: 0xc1381e,
   trees: [0x5caa3b, 0x546647, 0x7d9f45],
-  walls: [0xf6ebdc, 0xeee6d6, 0xebd3a3],
+  walls: [0xf6ebdc, 0xeee6d6, 0xebd3a3, 0xe8b9a6, 0xbcd0d4, 0xcfdcbc], // cream, stone, ochre, rose, pale blue, sage
   stone: 0xece2cf,
   greyStone: 0xdedad2,
   hagia: 0xd7a07a,

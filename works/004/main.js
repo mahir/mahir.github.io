@@ -24,12 +24,14 @@ try {
   const life = createLife(scene.three, scene, { reducedMotion });
   scene.onFrame((dt) => life.update(dt));
   const game = createGame(LANDMARKS.map((l) => l.id));
+  game.on('place', ({ id }) => life.placed(id));
   game.on('done', () => life.finish());
   startUI({ game, scene, landmarks: LANDMARKS, reducedMotion });
   // ?built opens on the finished city; ?still also hides the controls and frames all of it, for the share image
   if (params.has('built') || params.has('still')) {
     for (const lm of LANDMARKS) if (game.place(lm.id)) scene.placeLandmark(lm.id, { animate: false });
-    await scene.glideTo('all', { duration: 0 });
+    // ?still=close frames the opening view instead, for the share card
+    await scene.glideTo(params.get('still') === 'close' ? 'start' : 'all', { duration: 0 });
   }
   if (params.has('still')) {
     root.classList.add('still-mode');

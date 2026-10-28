@@ -7,7 +7,8 @@ export const HOUSE_CHANCE = 0.82;
 export const TREE_CHANCE = 0.08;
 export const STOREY = 3.2;
 export const HEIGHT_SCALE = 2; // a little taller than true, so the city reads as packed from above
-export const CLEAR = 150; // metres kept open around a landmark, unless it names its own `clear`
+export const CLEAR = 150;
+export const MOSQUE_CHANCE = 0.04, MOSQUE_GAP = 350; // metres between neighborhood mosques // metres kept open around a landmark, unless it names its own `clear`
 const GULHANE = { lat: 41.0130, lon: 28.9813, radius: 260 }; // the park below Topkapı: trees, never houses
 
 export function mulberry32(seed) {
@@ -42,26 +43,45 @@ export function makeCity(land, owners, landmarks, seed = 4) {
   const rnd = mulberry32(seed);
   const at = landmarks.map((m) => toWorld(m.lat, m.lon));
   const keepClear = landmarks.map((m, k) => m.ownsLand && { ...at[k], r: m.clear ?? CLEAR }).filter(Boolean);
-  const park = { ...toWorld(GULHANE.lat, GULHANE.lon), r: GULHANE.radius };
+  const park = { ...toWorld(GULHANE.lat, GULHANE.lon), r: GULHANE.radius + land.cell / 2 }; // half a cell more, so no house jitters in
   const near = (c, p) => Math.hypot(c.x - p.x, c.z - p.z) < p.r;
-  const houses = [], trees = [];
+  const houses = [], trees = [], mosques = [];
+  // every neighborhood has its own small mosques, never closer than MOSQUE_GAP to one another
+  const spaced = new Map(), key = (x, z) => `${Math.floor(x / MOSQUE_GAP)},${Math.floor(z / MOSQUE_GAP)}`;
+  const roomForMosque = (x, z) => {
+    const [gx, gz] = key(x, z).split(',').map(Number);
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+      for (const m of spaced.get(`${gx + a},${gz + b}`) || []) if (Math.hypot(m.x - x, m.z - z) < MOSQUE_GAP) return false;
+    }
+    return true;
+  };
   for (let i = 0; i < owners.length; i++) {
     const owner = owners[i];
     if (owner < 0) continue;
     const c = land.center(i);
     // draw every number for every cell, so one cell's outcome never shifts another's
-    const kind = rnd(), w = land.cell * (0.72 + 0.2 * rnd()), d = land.cell * (0.72 + 0.2 * rnd());
+    const kind = rnd(), w = land.cell * (0.6 + 0.3 * rnd()), d = land.cell * (0.6 + 0.3 * rnd());
     const jx = (rnd() - 0.5) * (land.cell - w), jz = (rnd() - 0.5) * (land.cell - d);
-    const storeys = 3 + Math.floor(rnd() * 4), roof = Math.floor(rnd() * 4), wall = Math.floor(rnd() * 3);
+    const storeys = 3 + Math.floor(rnd() * 4), roofPick = rnd(), wall = Math.floor(rnd() * 6);
+    const rot = (rnd() - 0.5) * 0.36, special = rnd();
     if (keepClear.some((p) => near(c, p))) continue;
     const delay = Math.min(2, Math.hypot(c.x - at[owner].x, c.z - at[owner].z) / 1500);
+    // a flat grey roof on about one building in eight, terracotta on the rest
+    const roof = roofPick < 0.12 ? 4 : Math.floor(((roofPick - 0.12) / 0.88) * 4);
     if (near(c, park) || (kind >= HOUSE_CHANCE && kind < HOUSE_CHANCE + TREE_CHANCE)) {
-      trees.push({ x: c.x + jx, z: c.z + jz, r: land.cell * (0.3 + 0.15 * (w / land.cell)), owner, delay });
+      trees.push({ x: c.x + jx, z: c.z + jz, r: land.cell * (0.3 + 0.15 * (w / land.cell)), owner, delay, kind: special < 0.35 ? 'cypress' : 'round' });
     } else if (kind < HOUSE_CHANCE) {
-      houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: storeys * STOREY * HEIGHT_SCALE, roof, wall, owner, delay });
+      if (special < MOSQUE_CHANCE && roomForMosque(c.x, c.z)) {
+        const m = { x: c.x, z: c.z, owner, delay, size: 38 + 12 * ((special * 97) % 1), rot };
+        mosques.push(m);
+        const k = key(c.x, c.z);
+        spaced.set(k, [...(spaced.get(k) || []), m]);
+      } else {
+        houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: storeys * STOREY * HEIGHT_SCALE, roof, wall, rot, owner, delay });
+      }
     }
   }
-  return { houses, trees };
+  return { houses, trees, mosques };
 }
 
 // Instances in the order they will rise: grouped by owner, earliest first, so each neighborhood is one run of the

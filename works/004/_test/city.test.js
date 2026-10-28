@@ -106,3 +106,25 @@ test('riseWindow: only what is growing, plus what just finished', () => {
   assert.deepEqual(riseWindow(delays, 0, 1250, 700, 400), { hi: 3, next: 2 }); // first two done, third growing
   assert.deepEqual(riseWindow(delays, 2, 5000, 700, 400), { hi: 5, next: 5 }); // all done
 });
+
+test('real map: small mosques scattered through every neighborhood, never crowded', () => {
+  const land = realLand(), o = assignOwners(land, LANDMARKS), city = makeCity(land, o, LANDMARKS);
+  const ms = city.mosques;
+  assert.ok(ms.length > 120 && ms.length < 600, `${ms.length} mosques`);
+  for (let i = 0; i < ms.length; i++) {
+    const m = ms[i];
+    assert.equal(o[land.index(m.x, m.z)], m.owner);
+    assert.ok(m.delay >= 0 && m.delay <= 2);
+    for (let j = i + 1; j < ms.length; j++) assert.ok(Math.hypot(m.x - ms[j].x, m.z - ms[j].z) >= 350, 'mosques too close');
+  }
+  for (const lm of LANDMARKS.filter((l) => l.ownsLand)) assert.ok(ms.some((m) => LANDMARKS[m.owner] === lm), lm.id);
+});
+
+test('real map: houses vary, trees include cypresses', () => {
+  const land = realLand(), o = assignOwners(land, LANDMARKS), city = makeCity(land, o, LANDMARKS);
+  const walls = new Set(city.houses.map((h) => h.wall)), roofs = new Set(city.houses.map((h) => h.roof));
+  assert.ok(walls.size >= 6 && roofs.size >= 5);
+  assert.ok(city.houses.every((h) => Math.abs(h.rot) <= 0.2));
+  const kinds = new Set(city.trees.map((t) => t.kind));
+  assert.deepEqual([...kinds].sort(), ['cypress', 'round']);
+});
