@@ -330,6 +330,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     glideTo, screenToGround, pxToMetres, setRay, ray,
     pickOutline, showOutline, placeLandmark, nearestOnFootprint,
     model: (id) => pieces.get(id).model,
+    viewDir: TO_CAMERA.clone(), sunDir: SUN.clone(),
     onFrame: (fn) => frameFns.push(fn),
     view, resize,
   };

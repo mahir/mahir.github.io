@@ -87,7 +87,7 @@
   .toast .year { color: var(--terra-deep); }
   .toast.show { opacity: 1; transform: none; }
 
-  .bottom { display: grid; gap: 10px; justify-items: center; }
+  .bottom { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; justify-items: center; }
   .hint {
     margin: 0; padding: 7px 14px; border-radius: 999px; background: var(--veil); color: var(--soft);
     font-size: 12px; text-align: center; transition: opacity .6s ease;
@@ -105,14 +105,14 @@
   .tray li { flex: 0 0 auto; }
   .tray button {
     display: grid; justify-items: center; gap: 2px; width: 84px; padding: 6px 4px 7px; border: 0; border-radius: 12px;
-    background: rgba(255, 255, 255, .55); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+    background: rgba(255, 255, 255, .55); cursor: grab; touch-action: pan-x; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
     font-size: 10px; line-height: 1.2; letter-spacing: .02em; color: var(--ink); transition: background .2s ease, opacity .2s ease;
   }
   .tray button:hover { background: #fff; }
   .tray button.lifted { opacity: .3; }
   .tray canvas, .ghost canvas { width: 56px; height: 56px; display: block; }
   .tray .name { display: block; max-width: 78px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ghost { position: fixed; left: 0; top: 0; z-index: 10; pointer-events: none; transform: translate(-50%, -60%) scale(1.25); filter: drop-shadow(0 6px 10px rgba(59, 47, 38, .3)); }
+  .ghost { position: fixed; left: 0; top: 0; z-index: 10; pointer-events: none; filter: drop-shadow(0 6px 10px rgba(59, 47, 38, .3)); }
   .ghost.back-home { transition: transform .25s ease; }
   .build {
     flex: 0 0 auto; padding: 14px 20px; border: 0; border-radius: 999px; cursor: pointer;
