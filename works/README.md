@@ -2,8 +2,10 @@
 
 The homepage is Mahir's, and features whichever work is up today. Every work is a page of its own, and new ones can go up every day or only some days.
 
-- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then the links that stay the same whatever the work is. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
-- `/works/` only sends old links on to the list on `/` (`/#works`). It can become an archive of its own once there are many works.
+On the site they are called experiments ("Experiments", "All experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
+
+- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then the links that stay the same whatever the work is: Elsewhere, Talks, Press and Lectures. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
+- `/works/` only sends old links on to the list on `/` (`/#experiments`). It can become an archive of its own once there are many works.
 - `/works/NNN/` is one work. It can look like anything.
 - `works.js` is the schedule, and the only list of works.
 - `_build.py` writes today's work and the list onto the homepage, and what search engines and AI assistants read, from that list (see below).
@@ -14,7 +16,7 @@ The homepage is Mahir's, and features whichever work is up today. Every work is 
 
 1. Make a folder for it: `works/003/index.html`, three digits.
 2. Make it self-contained: its own HTML, CSS and JS, with any files it needs beside it. Shared files from the site root use absolute paths, such as `/portrait.jpg`, the photo on the homepage, or `/profile.jpg`, the older, smaller one that No. 001 and No. 002 are drawn from (No. 001 is tuned to it, so leave it as it is).
-3. Give it a clear way back: an "← All works" link to `/#works` that is visible as soon as the page opens, on phones too. No. 001 and No. 002 put it top left, as a pill, with the work's number and title beside it.
+3. Give it a clear way back: an "← All experiments" link to `/#experiments` that is visible as soon as the page opens, on phones too. No. 001 and No. 002 put it top left, as a pill, with the work's number and title beside it.
 4. Copy the `<head>` of No. 002 and change the title, description (under 160 characters), canonical URL, `og:` and `twitter:` lines. Keep the empty `<!-- gen:ld -->` marker; the build fills it.
 5. Add a share image beside the page: `og.jpg`, 1200 × 630. It is also the picture of the work on the homepage while it is on view.
 6. Add it to the schedule in `works.js`:
@@ -43,7 +45,7 @@ Most crawlers, and almost all AI ones, read the HTML without running JavaScript.
 - the short bio, today's work and a plain list of works in the HTML of `/`; visitors with JavaScript see today's work and the list drawn again for their own day
 - `/sitemap.xml` and `/llms.txt`
 
-The facts about Mahir that the build writes (role, bio, short bio, profiles, photo) live at the top of `_build.py`; change them there and run it again. The homepage's title, description, role line and links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
+The facts about Mahir that the build writes (role, bio, short bio, profiles, photo, talks and press) live at the top of `_build.py`; change them there and run it again. Talks and press go to search engines as pieces about Mahir, never among his profiles. The homepage's title, description, role line and the Elsewhere and Lectures links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
 
 Not published, though they stay in the repository: these notes, `llms/CLAUDE.md` and the old Kaleidoscope project (see `/_config.yml`). The lecture decks under `/llms/` and `/pm/` are published but kept out of search engines by `/robots.txt` until they are updated. Addresses that don't exist get `/404.html`.
 

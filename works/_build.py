@@ -35,13 +35,16 @@ BIO = (
     'His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he '
     'has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.'
 )
-# The short version opens the homepage: what Mahir does now and did before, then teaching and exhibitions.
+TEDX_VIENNA = 'https://www.youtube.com/watch?v=gY36Sm2uI6k'
+# The short version opens the homepage: what Mahir does now and did before, then teaching, exhibitions and talks.
+# [words](url) becomes a link.
 SHORT_BIO = (
     'Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, '
     'co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica '
-    'Futurelab in Linz.',
+    'Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft.',
     'He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art '
-    'and Design Linz, and his work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial.',
+    'and Design Linz. His work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial, and '
+    f'he has spoken at [TEDx Vienna]({TEDX_VIENNA}), Microsoft Build and the Fast Company Innovation Festival.',
 )
 LINKS = [
     ('Substack', 'https://mahir.substack.com/'),
@@ -51,6 +54,33 @@ LINKS = [
 ]
 # every profile that is Mahir's, for search engines to tie together (the homepage links the ones above)
 PROFILES = LINKS + [('GitHub', 'https://github.com/mahir')]
+
+# Talks and press: two rows at the foot of the homepage, and pieces about Mahir in the structured data (subjectOf),
+# never among his profiles. `label` is what the homepage shows, `name` the piece's own title; no url, no link.
+TALKS = [
+    {'label': 'TEDxVienna Salon', 'url': TEDX_VIENNA, 'by': 'TEDx Talks', 'date': '2015-07-09',
+     'name': 'Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon'},
+    {'label': 'Microsoft Build'},
+]
+PRESS = [
+    {'label': 'Google Cloud video', 'url': 'https://www.youtube.com/watch?v=yUK4XUggdQw', 'by': 'Google Cloud',
+     'date': '2025-07-11',
+     'name': 'New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI'},
+    {'label': 'Stack Overflow podcast', 'type': 'PodcastEpisode', 'by': 'Stack Overflow', 'date': '2025-07-29',
+     'url': 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/',
+     'name': 'That custom gift for your mom takes more work than you think'},
+    {'label': 'Google Cloud customer story', 'url': 'https://cloud.google.com/customers/etsy-ai', 'by': 'Google Cloud',
+     'name': 'Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"'},
+]
+
+
+def piece(p):
+    node = {'@type': p.get('type', 'CreativeWork'), 'name': p['name'], 'url': p['url'],
+            'publisher': {'@type': 'Organization', 'name': p['by']}}
+    if p.get('date'):
+        node['datePublished'] = p['date']
+    return node
+
 
 PERSON = {
     '@type': 'Person',
@@ -67,6 +97,7 @@ PERSON = {
         'Machine learning', 'Product management', 'Data visualization', 'Media art',
     ],
     'sameAs': [link for _, link in PROFILES],
+    'subjectOf': [piece(p) for p in TALKS + PRESS if p.get('url')],
 }
 WEBSITE = {
     '@type': 'WebSite',
@@ -149,7 +180,24 @@ def feature(w):
     ]
     if w.get('about'):
         lines.append(f'    <span class="about">{e(w["about"])}</span>')
-    lines += ['    <span class="go mono">Open the work →</span>', '  </span>', '</a>']
+    lines += ['    <span class="go mono">Open the experiment →</span>', '  </span>', '</a>']
+    return '\n'.join(lines)
+
+
+def linked(text):
+    """Text for HTML, with [words](url) as links."""
+    return re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', r'<a href="\2">\1</a>', html.escape(text))
+
+
+def rows(*groups):
+    """Rows for the list at the foot of the homepage: a label, then each piece, linked when it has a url."""
+    e = html.escape
+    lines = []
+    for title, items in groups:
+        lines.append(f'<div class="row mono"><dt>{title}</dt><dd>')
+        lines += [f'  <a href="{e(p["url"])}">{e(p["label"])} ↗</a>' if p.get('url') else f'  <span>{e(p["label"])}</span>'
+                  for p in items]
+        lines.append('</dd></div>')
     return '\n'.join(lines)
 
 
@@ -175,9 +223,11 @@ def main():
     updated = live[-1]['date'] if live else today
     e = html.escape
 
-    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's day
-    fill('index.html', 'bio', '\n'.join(f'<p>{e(para)}</p>' for para in SHORT_BIO))
+    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's
+    # day, and the talks and press at its foot
+    fill('index.html', 'bio', '\n'.join(f'<p>{linked(para)}</p>' for para in SHORT_BIO))
     fill('index.html', 'today', feature(live[-1]) if live else '')
+    fill('index.html', 'talks', rows(('Talks', TALKS), ('Press', PRESS)))
     fill('index.html', 'works', '\n'.join(
         f'<li><a href="/works/{number(w)}/"><span class="n mono">No. {number(w)}</span>'
         f'<span class="t">{e(w["title"])}</span>'
@@ -190,7 +240,7 @@ def main():
         {'@type': 'ProfilePage', '@id': f'{SITE}/#page', 'url': f'{SITE}/', 'name': 'Mahir Yavuz',
          'isPartOf': {'@id': WEBSITE['@id']}, 'mainEntity': {'@id': PERSON['@id']}, 'dateModified': updated},
         PERSON,
-        {'@type': 'ItemList', '@id': f'{SITE}/#works', 'name': 'Works by Mahir Yavuz',
+        {'@type': 'ItemList', '@id': f'{SITE}/#experiments', 'name': 'Experiments by Mahir Yavuz',
          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
          'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': url(w), 'name': w['title']}
                              for i, w in enumerate(newest_first)]}))
@@ -213,12 +263,15 @@ def main():
     # llms.txt (llmstxt.org): the same facts as plain text for AI assistants
     lines = [
         '# Mahir Yavuz', '',
-        f'> {ROLE} Head of Engineering at AirOps. The homepage has his bio and his works, a new one some days, '
-        'with the latest on view; every work has its own page.', '',
+        f'> {ROLE} Head of Engineering at AirOps. The homepage has his bio and his experiments, a new one some '
+        'days, with the latest on view; every experiment has its own page.', '',
         BIO, '',
-        '## Works', '',
+        '## Experiments', '',
         *[f'- [No. {number(w)} · {w["title"]}]({url(w)}) ({nice_date(w["date"])}): {w.get("about", "")}'.rstrip(': ')
           for w in newest_first],
+        '',
+        '## Talks and press', '',
+        *[f'- [{p["name"]}]({p["url"]}) ({p["by"]})' for p in TALKS + PRESS if p.get('url')],
         '',
         '## Elsewhere', '',
         *[f'- [{name}]({link})' for name, link in PROFILES],

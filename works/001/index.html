@@ -66,6 +66,47 @@
         "https://x.com/mahir_nyc",
         "https://www.linkedin.com/in/mahiryavuz/",
         "https://github.com/mahir"
+      ],
+      "subjectOf": [
+        {
+          "@type": "CreativeWork",
+          "name": "Who will govern \"smart\" cities? | Mahir Yavuz | TEDxViennaSalon",
+          "url": "https://www.youtube.com/watch?v=gY36Sm2uI6k",
+          "publisher": {
+            "@type": "Organization",
+            "name": "TEDx Talks"
+          },
+          "datePublished": "2015-07-09"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI",
+          "url": "https://www.youtube.com/watch?v=yUK4XUggdQw",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Google Cloud"
+          },
+          "datePublished": "2025-07-11"
+        },
+        {
+          "@type": "PodcastEpisode",
+          "name": "That custom gift for your mom takes more work than you think",
+          "url": "https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Stack Overflow"
+          },
+          "datePublished": "2025-07-29"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Etsy: Connecting nearly 90 million buyers with special items using gen AI and \"algotorial curation\"",
+          "url": "https://cloud.google.com/customers/etsy-ai",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Google Cloud"
+          }
+        }
       ]
     },
     {
@@ -313,6 +354,8 @@
   @media (max-width: 599px) {
     .tag-s { display: none; }
     .works-nav .label { display: none; }
+    /* "All experiments" and "Connect on LinkedIn" don't fit side by side on a phone */
+    .tr .long { display: none; }
   }
 
   /* no JavaScript: plain, readable page */
@@ -347,12 +390,12 @@
     </div>
   </header>
 
-  <nav class="corner tl works-nav" aria-label="Works">
-    <a class="cta" href="/#works"><span aria-hidden="true">←</span> All works</a>
+  <nav class="corner tl works-nav" aria-label="Experiments">
+    <a class="cta" href="/#experiments"><span aria-hidden="true">←</span> All experiments</a>
     <span class="label">No. 001 · Self-portrait in latent space, 2026</span>
   </nav>
   <div class="corner bl" aria-hidden="true"><div id="how">Move to query · drag to orbit</div><div id="readout">&nbsp;</div></div>
-  <a class="corner tr cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
+  <a class="corner tr cta" href="https://www.linkedin.com/in/mahiryavuz/" rel="me"><span class="long">Connect on </span>LinkedIn <span aria-hidden="true">↗</span></a>
   <div class="corner br sky" id="sky" aria-hidden="true">&nbsp;</div>
 
   <section id="about" class="about" aria-labelledby="about-title">
@@ -378,7 +421,7 @@
         <div class="rv"><dt>Talks</dt><dd>TEDx Istanbul and Vienna, Microsoft Build, Visualized, Fast Company Innovation Festival</dd></div>
       </dl>
       <p class="links rv">
-        <a href="/#works">All works →</a>
+        <a href="/#experiments">All experiments →</a>
         <a href="https://mahir.substack.com/" rel="me">Substack ↗</a>
         <a href="https://bsky.app/profile/mahiryavuz.bsky.social" rel="me">Bluesky ↗</a>
         <a href="https://x.com/mahir_nyc" rel="me">X ↗</a>

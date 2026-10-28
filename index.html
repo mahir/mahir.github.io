@@ -81,12 +81,53 @@
         "https://x.com/mahir_nyc",
         "https://www.linkedin.com/in/mahiryavuz/",
         "https://github.com/mahir"
+      ],
+      "subjectOf": [
+        {
+          "@type": "CreativeWork",
+          "name": "Who will govern \"smart\" cities? | Mahir Yavuz | TEDxViennaSalon",
+          "url": "https://www.youtube.com/watch?v=gY36Sm2uI6k",
+          "publisher": {
+            "@type": "Organization",
+            "name": "TEDx Talks"
+          },
+          "datePublished": "2015-07-09"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI",
+          "url": "https://www.youtube.com/watch?v=yUK4XUggdQw",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Google Cloud"
+          },
+          "datePublished": "2025-07-11"
+        },
+        {
+          "@type": "PodcastEpisode",
+          "name": "That custom gift for your mom takes more work than you think",
+          "url": "https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Stack Overflow"
+          },
+          "datePublished": "2025-07-29"
+        },
+        {
+          "@type": "CreativeWork",
+          "name": "Etsy: Connecting nearly 90 million buyers with special items using gen AI and \"algotorial curation\"",
+          "url": "https://cloud.google.com/customers/etsy-ai",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Google Cloud"
+          }
+        }
       ]
     },
     {
       "@type": "ItemList",
-      "@id": "https://mahiryavuz.com/#works",
-      "name": "Works by Mahir Yavuz",
+      "@id": "https://mahiryavuz.com/#experiments",
+      "name": "Experiments by Mahir Yavuz",
       "itemListOrder": "https://schema.org/ItemListOrderDescending",
       "itemListElement": [
         {
@@ -124,7 +165,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=swap" rel="stylesheet">
 <script src="/works/works.js"></script>
 <style>
-  /* Who Mahir is first, then the work on view today, every work, and the ways to reach him.
+  /* Who Mahir is first, then the experiment on view today, every experiment, and the ways to reach him, his talks and press.
      Same ground, type and accent as No. 001. */
   :root {
     --bg: #06070b;
@@ -174,6 +215,8 @@
   .bio { max-width: 37em; color: var(--dim); font-size: 1.02rem; line-height: 1.65; }
   .bio p { margin: 0 0 .85em; text-wrap: pretty; }
   .bio p:last-child { margin-bottom: 0; }
+  .bio a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .2em; transition: text-decoration-color .25s ease; }
+  .bio a:hover, .bio a:focus-visible { text-decoration-color: var(--accent); }
   .preview { margin: 1.4rem 0 0; color: var(--accent); }
   .preview a { border-bottom: 1px solid currentColor; }
 
@@ -246,8 +289,8 @@
       <p class="role">Product and engineering leader, educator and advisor, working with data since&nbsp;1998.</p>
       <div class="bio">
         <!-- gen:bio -->
-        <p>Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica Futurelab in Linz.</p>
-        <p>He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz, and his work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial.</p>
+        <p>Head of Engineering at AirOps. Before that, Mahir led engineering for Search, Recommendations and Ads at Etsy, co-founded Topos as its CTO, directed data science at R/GA and was a senior researcher at Ars Electronica Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft.</p>
+        <p>He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz. His work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial, and he has spoken at <a href="https://www.youtube.com/watch?v=gY36Sm2uI6k">TEDx Vienna</a>, Microsoft Build and the Fast Company Innovation Festival.</p>
         <!-- /gen:bio -->
       </div>
       <p class="preview mono" id="preview" hidden></p>
@@ -261,13 +304,13 @@
           <span class="n mono">No. 004 · 28 Oct 2026</span>
           <span class="t">Istanbul, piece by piece</span>
           <span class="about">An isometric Istanbul where the Bosphorus, the Golden Horn and the Marmara meet, rebuilt landmark by landmark as each one raises its neighborhood.</span>
-          <span class="go mono">Open the work →</span>
+          <span class="go mono">Open the experiment →</span>
         </span>
       </a>
       <!-- /gen:today -->
     </section>
-    <section id="works" aria-labelledby="works-title">
-      <h2 class="label mono" id="works-title">Works</h2>
+    <section id="experiments" aria-labelledby="experiments-title">
+      <h2 class="label mono" id="experiments-title">Experiments</h2>
       <ol class="list" id="list" reversed>
         <!-- gen:works -->
         <li><a href="/works/004/"><span class="n mono">No. 004</span><span class="t">Istanbul, piece by piece</span><time class="d mono" datetime="2026-10-28">28 Oct 2026</time></a></li>
@@ -285,6 +328,17 @@
           <a href="https://x.com/mahir_nyc" rel="me">X ↗</a>
           <a href="https://www.linkedin.com/in/mahiryavuz/" rel="me">LinkedIn ↗</a>
         </dd></div>
+        <!-- gen:talks -->
+        <div class="row mono"><dt>Talks</dt><dd>
+          <a href="https://www.youtube.com/watch?v=gY36Sm2uI6k">TEDxVienna Salon ↗</a>
+          <span>Microsoft Build</span>
+        </dd></div>
+        <div class="row mono"><dt>Press</dt><dd>
+          <a href="https://www.youtube.com/watch?v=yUK4XUggdQw">Google Cloud video ↗</a>
+          <a href="https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/">Stack Overflow podcast ↗</a>
+          <a href="https://cloud.google.com/customers/etsy-ai">Google Cloud customer story ↗</a>
+        </dd></div>
+        <!-- /gen:talks -->
         <div class="row mono"><dt>Lectures</dt><dd>
           <span>Business Applications of LLMs</span>
           <span>Product Management with AI</span>
@@ -320,7 +374,7 @@
     body.append(el('span', 'n mono', `No. ${Works.number(current)} · ${fmt.format(Works.date(current.date))}`),
       el('span', 't', current.title));
     if (current.about) body.append(el('span', 'about', current.about));
-    body.append(el('span', 'go mono', 'Open the work →'));
+    body.append(el('span', 'go mono', 'Open the experiment →'));
     a.append(img, body);
     shown ? shown.replaceWith(a) : today.append(a);
   }

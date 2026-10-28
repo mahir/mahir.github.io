@@ -1,15 +1,22 @@
 # Mahir Yavuz
 
-> Product and engineering leader, educator and advisor, working with data since 1998. Head of Engineering at AirOps. The homepage has his bio and his works, a new one some days, with the latest on view; every work has its own page.
+> Product and engineering leader, educator and advisor, working with data since 1998. Head of Engineering at AirOps. The homepage has his bio and his experiments, a new one some days, with the latest on view; every experiment has its own page.
 
 Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.
 
-## Works
+## Experiments
 
 - [No. 004 · Istanbul, piece by piece](https://mahiryavuz.com/works/004/) (28 Oct 2026): An isometric Istanbul where the Bosphorus, the Golden Horn and the Marmara meet, rebuilt landmark by landmark as each one raises its neighborhood.
 - [No. 003 · Manhattan sundial](https://mahiryavuz.com/works/003/) (27 Oct 2026): An abstract model of Manhattan lit by the sun where it stands over New York at this minute; drag through the day and the year, or jump to the next Manhattanhenge.
 - [No. 002 · Self-portrait in type](https://mahiryavuz.com/works/002/) (26 Oct 2026): The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.
 - [No. 001 · Self-portrait in latent space](https://mahiryavuz.com/works/001/) (26 Oct 2026): A career as a cloud of points that searches itself under the cursor and gathers into a face when the name is clicked.
+
+## Talks and press
+
+- [Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon](https://www.youtube.com/watch?v=gY36Sm2uI6k) (TEDx Talks)
+- [New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI](https://www.youtube.com/watch?v=yUK4XUggdQw) (Google Cloud)
+- [That custom gift for your mom takes more work than you think](https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/) (Stack Overflow)
+- [Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"](https://cloud.google.com/customers/etsy-ai) (Google Cloud)
 
 ## Elsewhere
 
