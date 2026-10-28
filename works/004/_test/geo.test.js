@@ -1,22 +1,9 @@
 // Run: node --test "works/004/_test/*.test.js"
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { FRAME, toLocal, toWorld, parseLand } from '../geo.js';
 import { LANDMARKS } from '../landmarks.js';
-
-export const realLand = () => parseLand(JSON.parse(readFileSync(new URL('../land.json', import.meta.url))));
-
-// the region of the nearest land cell within radius metres of p, or 0
-export function nearestLandRegion(L, p, radius) {
-  let best = 0, bestD = Infinity;
-  for (let i = 0; i < L.region.length; i++) {
-    if (!L.region[i]) continue;
-    const c = L.center(i), d = Math.hypot(c.x - p.x, c.z - p.z);
-    if (d <= radius && d < bestD) { best = L.region[i]; bestD = d; }
-  }
-  return best;
-}
+import { realLand, nearestLandRegion } from './helpers.js';
 
 test('frame corners', () => {
   assert.deepEqual(toLocal(40.976, 28.945), { x: 0, y: 0 });
