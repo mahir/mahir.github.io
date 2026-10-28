@@ -25,6 +25,15 @@ try {
   const game = createGame(LANDMARKS.map((l) => l.id));
   game.on('done', () => life.finish());
   startUI({ game, scene, landmarks: LANDMARKS, reducedMotion });
+  // ?built opens on the finished city; ?still also hides the controls and frames all of it, for the share image
+  if (params.has('built') || params.has('still')) {
+    for (const lm of LANDMARKS) if (game.place(lm.id)) scene.placeLandmark(lm.id, { animate: false });
+    await scene.glideTo('all', { duration: 0 });
+  }
+  if (params.has('still')) {
+    root.classList.add('still-mode');
+    requestAnimationFrame(() => requestAnimationFrame(() => { document.title = 'ready'; }));
+  }
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('ready')));
   if (params.has('dev')) Object.assign(window, { __scene: scene, __game: game, __life: life });
 } catch (err) {
