@@ -4,21 +4,25 @@
     python3 works/_build.py
 
 Writes the parts of the pages between <!-- gen:NAME --> and <!-- /gen:NAME --> markers: on the homepage, the
-short bio, today's work and the list of works, which visitors with JavaScript see redrawn for their own day; in
-every page, the structured data. Also writes /sitemap.xml and /llms.txt.
+short bio, today's work and the list of works, which visitors with JavaScript see redrawn for their own day, and
+the latest posts from Mahir's Substack; in every page, the structured data. Also writes /sitemap.xml and /llms.txt.
 
 "Today" is New York's date. A GitHub Action (.github/workflows/daily.yml) runs this just after midnight
-there, so a work dated ahead is featured on its day. Running it twice changes nothing.
+there, so a work dated ahead is featured on its day and a new post is listed by the next morning. Running it twice
+changes nothing, as long as no post has gone up in between.
 
 The facts about Mahir below are the single source for all of that; edit them here.
 """
 
 import ast
 import datetime
+import email.utils
 import html
 import json
 import pathlib
 import re
+import urllib.request
+import xml.etree.ElementTree as ET
 from zoneinfo import ZoneInfo
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -62,8 +66,10 @@ SHORT_BIO = (
     f'[TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), [Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and '
     'the Fast Company Innovation Festival.',
 )
+SUBSTACK = 'https://mahir.substack.com/'
+POSTS_SHOWN = 3  # the newest posts listed under Writing on the homepage
 LINKS = [
-    ('Substack', 'https://mahir.substack.com/'),
+    ('Substack', SUBSTACK),
     ('Bluesky', 'https://bsky.app/profile/mahiryavuz.bsky.social'),
     ('X', 'https://x.com/mahir_nyc'),
     ('LinkedIn', 'https://www.linkedin.com/in/mahiryavuz/'),
@@ -204,6 +210,28 @@ def linked(text):
     return re.sub(r'\[([^\]]+)\]\(([^)\s]+)\)', r'<a href="\2">\1</a>', html.escape(text))
 
 
+def latest_posts():
+    """The newest posts on Mahir's Substack, from its feed. If the feed can't be read, the ones the homepage lists
+    already, so a bad night at Substack never empties the list."""
+    try:
+        request = urllib.request.Request(f'{SUBSTACK}feed', headers={'User-Agent': f'{SITE} build'})
+        with urllib.request.urlopen(request, timeout=20) as response:
+            items = ET.fromstring(response.read()).findall('./channel/item')
+        posts = [{'title': i.findtext('title').strip(), 'url': i.findtext('link').strip(),
+                  'date': email.utils.parsedate_to_datetime(i.findtext('pubDate')).astimezone(ZONE).date().isoformat()}
+                 for i in items]
+        if posts:
+            return sorted(posts, key=lambda p: p['date'], reverse=True)[:POSTS_SHOWN]
+        problem = 'it has no posts'
+    except (OSError, ET.ParseError, AttributeError, TypeError, ValueError) as err:
+        problem = err
+    print(f'kept the posts already on the homepage: could not read {SUBSTACK}feed ({problem})')
+    region = re.search(r'<!-- gen:writing -->(.*?)<!-- /gen:writing -->', (ROOT / 'index.html').read_text(), re.S)
+    return [{'url': html.unescape(u), 'title': html.unescape(t), 'date': d} for u, t, d in re.findall(
+        r'<a href="([^"]+)">.*?<span class="t">(.*?)</span><time class="d mono" datetime="([^"]+)"',
+        region.group(1) if region else '')]
+
+
 def fill(path, name, content):
     """Replace what is between <!-- gen:name --> and <!-- /gen:name -->, indented like the opening marker."""
     p = ROOT / path
@@ -223,10 +251,12 @@ def main():
     works = read_works()
     live = sorted((w for w in works if w['date'] <= today), key=lambda w: (w['date'], w['n']))
     newest_first = list(reversed(live))
-    updated = live[-1]['date'] if live else today
+    posts = latest_posts()
+    updated = max([live[-1]['date'] if live else today] + [p['date'] for p in posts])
     e = html.escape
 
-    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's day
+    # the homepage: the short bio, today's work and a plain list of works, which the page redraws for the visitor's
+    # day, then the latest posts
     fill('index.html', 'bio', '\n'.join(f'<p>{linked(para)}</p>' for para in SHORT_BIO))
     fill('index.html', 'today', feature(live[-1]) if live else '')
     fill('index.html', 'works', '\n'.join(
@@ -234,6 +264,11 @@ def main():
         f'<span class="t">{e(w["title"])}</span>'
         f'<time class="d mono" datetime="{w["date"]}">{nice_date(w["date"])}</time></a></li>'
         for w in newest_first))
+    fill('index.html', 'writing', '\n'.join(
+        f'<li><a href="{e(p["url"])}"><span class="n"></span>'
+        f'<span class="t">{e(p["title"])}</span>'
+        f'<time class="d mono" datetime="{p["date"]}">{nice_date(p["date"])}</time></a></li>'
+        for p in posts))
 
     # structured data
     fill('index.html', 'ld', ld(
@@ -244,7 +279,12 @@ def main():
         {'@type': 'ItemList', '@id': f'{SITE}/#experiments', 'name': 'Experiments by Mahir Yavuz',
          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
          'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': url(w), 'name': w['title']}
-                             for i, w in enumerate(newest_first)]}))
+                             for i, w in enumerate(newest_first)]},
+        {'@type': 'ItemList', '@id': f'{SITE}/#writing', 'name': 'Writing by Mahir Yavuz',
+         'itemListOrder': 'https://schema.org/ItemListOrderDescending',
+         'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'item': {
+             '@type': 'BlogPosting', 'headline': p['title'], 'url': p['url'], 'datePublished': p['date'],
+             'author': {'@id': PERSON['@id']}}} for i, p in enumerate(posts)]}))
     for w in works:
         page = f'works/{number(w)}/index.html'
         if (ROOT / page).exists():
@@ -270,6 +310,10 @@ def main():
         '## Experiments', '',
         *[f'- [No. {number(w)} · {w["title"]}]({url(w)}) ({nice_date(w["date"])}): {w.get("about", "")}'.rstrip(': ')
           for w in newest_first],
+        '',
+        '## Writing', '',
+        *[f'- [{p["title"]}]({p["url"]}) ({nice_date(p["date"])})' for p in posts],
+        f'- [All posts on Substack]({SUBSTACK})',
         '',
         '## Talks and press', '',
         *[f'- [{p["name"]}]({p["url"]}) ({p["by"]})' for p in TALKS + PRESS if p.get('url')],

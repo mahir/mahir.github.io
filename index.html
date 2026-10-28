@@ -165,6 +165,53 @@
           "name": "Self-portrait in latent space"
         }
       ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://mahiryavuz.com/#writing",
+      "name": "Writing by Mahir Yavuz",
+      "itemListOrder": "https://schema.org/ItemListOrderDescending",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "BlogPosting",
+            "headline": "The Median Answer",
+            "url": "https://mahir.substack.com/p/the-median-answer",
+            "datePublished": "2026-10-05",
+            "author": {
+              "@id": "https://mahiryavuz.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "BlogPosting",
+            "headline": "Is This the Printing Press Moment of Software?",
+            "url": "https://mahir.substack.com/p/is-this-the-printing-press-moment",
+            "datePublished": "2026-02-16",
+            "author": {
+              "@id": "https://mahiryavuz.com/#person"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "BlogPosting",
+            "headline": "Founder Mode, Without the Founder",
+            "url": "https://mahir.substack.com/p/founder-mode-without-the-founder",
+            "datePublished": "2026-02-09",
+            "author": {
+              "@id": "https://mahiryavuz.com/#person"
+            }
+          }
+        }
+      ]
     }
   ]
 }
@@ -269,6 +316,7 @@
   .list a:hover .t, .list a:focus-visible .t { color: var(--accent); }
   .list a:focus-visible { outline-offset: -1px; }
   .empty { padding: 1.15rem 0; color: var(--dim); border-bottom: 1px solid var(--hair); }
+  .more { margin: 1.15rem 0 0; }
 
   footer { margin-top: clamp(3rem, 8vw, 5rem); }
   footer dl { margin: 0; display: grid; gap: .6rem; }
@@ -276,8 +324,8 @@
   .row dt { color: var(--faint); }
   .row dd { margin: 0; display: flex; flex-wrap: wrap; column-gap: 1.5rem; }
   .row dd > * { padding: .45rem 0; }
-  footer dd a { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
-  footer dd a:hover, footer dd a:focus-visible { text-decoration-color: var(--accent); }
+  footer dd a, .more a { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
+  footer dd a:hover, footer dd a:focus-visible, .more a:hover, .more a:focus-visible { text-decoration-color: var(--accent); }
   .row dd span { color: var(--dim); }
 
   @media (max-width: 699px) {
@@ -286,6 +334,9 @@
   @media (max-width: 599px) {
     .list a { grid-template-columns: minmax(0, 1fr) auto; row-gap: .35rem; }
     .list .t { grid-column: 1 / -1; grid-row: 2; }
+    /* a post has no number, so its date leads */
+    .posts .n { display: none; }
+    .posts .d { text-align: left; }
     .row { grid-template-columns: minmax(0, 1fr); }
     .row dt { margin-top: .6rem; }
   }
@@ -331,6 +382,17 @@
         <li><a href="/works/001/"><span class="n mono">No. 001</span><span class="t">Self-portrait in latent space</span><time class="d mono" datetime="2026-10-26">26 Oct 2026</time></a></li>
         <!-- /gen:works -->
       </ol>
+    </section>
+    <section id="writing" aria-labelledby="writing-title">
+      <h2 class="label mono" id="writing-title">Writing</h2>
+      <ul class="list posts">
+        <!-- gen:writing -->
+        <li><a href="https://mahir.substack.com/p/the-median-answer"><span class="n"></span><span class="t">The Median Answer</span><time class="d mono" datetime="2026-10-05">5 Oct 2026</time></a></li>
+        <li><a href="https://mahir.substack.com/p/is-this-the-printing-press-moment"><span class="n"></span><span class="t">Is This the Printing Press Moment of Software?</span><time class="d mono" datetime="2026-02-16">16 Feb 2026</time></a></li>
+        <li><a href="https://mahir.substack.com/p/founder-mode-without-the-founder"><span class="n"></span><span class="t">Founder Mode, Without the Founder</span><time class="d mono" datetime="2026-02-09">9 Feb 2026</time></a></li>
+        <!-- /gen:writing -->
+      </ul>
+      <p class="more mono"><a href="https://mahir.substack.com/">All posts on Substack ↗</a></p>
     </section>
     <footer>
       <dl>

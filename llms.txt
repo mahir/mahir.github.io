@@ -11,6 +11,13 @@ Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Se
 - [No. 002 · Self-portrait in type](https://mahiryavuz.com/works/002/) (26 Oct 2026): The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.
 - [No. 001 · Self-portrait in latent space](https://mahiryavuz.com/works/001/) (26 Oct 2026): A career as a cloud of points that searches itself under the cursor and gathers into a face when the name is clicked.
 
+## Writing
+
+- [The Median Answer](https://mahir.substack.com/p/the-median-answer) (5 Oct 2026)
+- [Is This the Printing Press Moment of Software?](https://mahir.substack.com/p/is-this-the-printing-press-moment) (16 Feb 2026)
+- [Founder Mode, Without the Founder](https://mahir.substack.com/p/founder-mode-without-the-founder) (9 Feb 2026)
+- [All posts on Substack](https://mahir.substack.com/)
+
 ## Talks and press
 
 - [Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon](https://www.youtube.com/watch?v=gY36Sm2uI6k) (TEDx Talks)
