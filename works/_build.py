@@ -33,9 +33,12 @@ BIO = (
     'Nike, PwC, Google and Microsoft. He has taught since 2003, at Columbia University, the University of '
     'Pennsylvania, Pratt and the University of Art and Design Linz, with guest lectures at MIT, NYU and SVA. '
     'His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA and the Istanbul Biennial, and he '
-    'has spoken at TEDx Istanbul and Vienna, Microsoft Build, Visualized and the Fast Company Innovation Festival.'
+    'has spoken at TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
+    'Innovation Festival.'
 )
 TEDX_VIENNA = 'https://www.youtube.com/watch?v=gY36Sm2uI6k'
+MICROSOFT_BUILD = 'https://www.youtube.com/watch?v=dvC4dK9c7nQ'
+GOOGLE_CLOUD_NEXT = 'https://www.youtube.com/watch?v=yUK4XUggdQw'
 # The short version opens the homepage: what Mahir does now and did before, then teaching, exhibitions and talks.
 # [words](url) becomes a link.
 SHORT_BIO = (
@@ -44,7 +47,8 @@ SHORT_BIO = (
     'Futurelab in Linz. His teams have taken on data problems for companies including Nike, PwC, Google and Microsoft.',
     'He has taught since 2003, at Columbia University, the University of Pennsylvania, Pratt and the University of Art '
     'and Design Linz. His work has been shown at the Ars Electronica Festival, SIGGRAPH and the Istanbul Biennial, and '
-    f'he has spoken at [TEDx Vienna]({TEDX_VIENNA}), Microsoft Build and the Fast Company Innovation Festival.',
+    f'he has spoken at [TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), '
+    f'[Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and the Fast Company Innovation Festival.',
 )
 LINKS = [
     ('Substack', 'https://mahir.substack.com/'),
@@ -60,12 +64,12 @@ PROFILES = LINKS + [('GitHub', 'https://github.com/mahir')]
 TALKS = [
     {'label': 'TEDxVienna Salon', 'url': TEDX_VIENNA, 'by': 'TEDx Talks', 'date': '2015-07-09',
      'name': 'Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon'},
-    {'label': 'Microsoft Build'},
+    {'label': 'Microsoft Build', 'url': MICROSOFT_BUILD, 'by': 'Microsoft Developer', 'date': '2024-05-24',
+     'name': 'Five lessons Etsy learned building on Microsoft AI | BRK258'},
+    {'label': 'Google Cloud Next', 'url': GOOGLE_CLOUD_NEXT, 'by': 'Google Cloud', 'date': '2025-07-11',
+     'name': 'New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI'},
 ]
 PRESS = [
-    {'label': 'Google Cloud video', 'url': 'https://www.youtube.com/watch?v=yUK4XUggdQw', 'by': 'Google Cloud',
-     'date': '2025-07-11',
-     'name': 'New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI'},
     {'label': 'Stack Overflow podcast', 'type': 'PodcastEpisode', 'by': 'Stack Overflow', 'date': '2025-07-29',
      'url': 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/',
      'name': 'That custom gift for your mom takes more work than you think'},
