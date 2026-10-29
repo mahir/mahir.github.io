@@ -169,6 +169,7 @@
     --ember: #ffb57f;
     --hair: rgba(241, 234, 225, .24);
     --veil: rgba(13, 12, 16, .42);
+    --shade: rgba(13, 12, 16, .76) 58%, rgba(13, 12, 16, .64) 68.5%, rgba(13, 12, 16, .38) 79%, rgba(13, 12, 16, .12) 89.5%, transparent;
     --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
     --pad: clamp(16px, 2.4vw, 32px);
@@ -194,6 +195,19 @@
   .hud::before, .hud::after { content: ""; position: fixed; left: 0; right: 0; z-index: -1; pointer-events: none; }
   .hud::before { top: 0; height: 11rem; background: linear-gradient(rgba(13, 12, 16, .5), transparent); }
   .hud::after { bottom: 0; height: 24rem; background: linear-gradient(transparent, rgba(13, 12, 16, .66)); }
+  /* and deepen from the corner behind the nav and the clock, enough for the small labels over the model at noon */
+  .works-nav, .clock { position: relative; }
+  .works-nav::before, .clock::before { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+  .works-nav::before {
+    left: calc(-1 * var(--pad) - env(safe-area-inset-left)); top: calc(-1 * var(--pad) - env(safe-area-inset-top));
+    width: calc(220% + var(--pad)); height: calc(280% + var(--pad));
+    background: radial-gradient(farthest-side at 0 0, var(--shade));
+  }
+  .clock::before {
+    left: calc(-1 * var(--pad) - env(safe-area-inset-left)); bottom: calc(-1 * var(--pad) - env(safe-area-inset-bottom));
+    width: calc(135% + var(--pad)); height: calc(170% + var(--pad));
+    background: radial-gradient(farthest-side at 0 100%, var(--shade));
+  }
   .hud a, .hud button, .hud [role="slider"] { pointer-events: auto; }
 
   .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
@@ -274,7 +288,7 @@
   .js:not(.ready) .hud > .top, .js:not(.ready) .clock { opacity: 0; }
 
   @media (max-width: 640px) {
-    .label, .wide { display: none; }
+    .label, .wide, .works-nav::before { display: none; }
     .narrow { display: inline; }
     .views .pill { padding: 8px 10px; letter-spacing: .1em; }
     .clock { gap: 10px; }
@@ -282,6 +296,7 @@
     .track { grid-template-columns: 2.8rem minmax(0, 1fr); column-gap: 8px; }
     .actions .pill { padding: 8px 11px; letter-spacing: .1em; }
     .hud::after { height: 30rem; }
+    .clock::before { width: calc(200% + var(--pad)); }
   }
   @media (max-height: 560px) and (min-width: 641px) {
     .time { font-size: 44px; }
