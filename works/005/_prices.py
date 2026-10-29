@@ -31,6 +31,7 @@ DAYS = 451  # 252 for the year, 199 before it for the 200-day average
 GAPS = 3  # missing days a company may have forward-filled before it is left out
 ENOUGH = 0.9  # share of companies that must come back, or the old file stays
 CLIFF = 0.6  # a close below this share of the day before is left out: almost always a spin-off Nasdaq doesn't adjust for
+FRESH = 0.95  # share of companies that must have the latest day before it counts; until then it is still being posted
 UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 MEMBERS = 'https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv'
 
@@ -127,7 +128,11 @@ def align(series, days=DAYS, gaps=GAPS):
     if not series:
         return [], {}
     counts = Counter(d for rows in series.values() for d, _ in rows)
-    calendar = sorted(d for d, n in counts.items() if n * 2 >= len(series))[-days:]
+    calendar = sorted(d for d, n in counts.items() if n * 2 >= len(series))
+    # a day only some companies have yet is still being posted; it counts on the next run
+    while calendar and counts[calendar[-1]] < FRESH * len(series):
+        calendar.pop()
+    calendar = calendar[-days:]
     if len(calendar) < days:
         return [], {}
     out = {}
@@ -150,11 +155,26 @@ def align(series, days=DAYS, gaps=GAPS):
 
 
 def cliff(dates, closes):
-    """The first day a close fell below CLIFF of the one before, or None. Such a fall would draw a false cliff."""
+    """The first day that looks like an unadjusted corporate action, or None; it would draw a false cliff.
+
+    A fall below CLIFF of the day before is almost always a spin-off. A rise past 1 / CLIFF counts only when it is
+    close to a whole multiple, as a reverse split is; a real jump (Moderna's x2.77 in August 2026) stays.
+    """
     for d, a, b in zip(dates[1:], closes, closes[1:]):
-        if b < CLIFF * a:
+        ratio = b / a
+        if ratio < CLIFF:
+            return d
+        if ratio > 1 / CLIFF and abs(ratio - round(ratio)) < 0.04 * ratio:
             return d
     return None
+
+
+def moves_back(old_text, through):
+    """Whether the file already there runs later than `through`; then it stays."""
+    try:
+        return json.loads(old_text)['through'] > through
+    except (ValueError, KeyError, TypeError):
+        return False
 
 
 def enough(got, wanted):
@@ -186,13 +206,16 @@ def main():
         if s not in closes:
             print(f'{s}: no usable closes; leaving it out today.')
         elif cliff(dates, closes[s]):
-            print(f'{s} fell more than {1 - CLIFF:.0%} on {cliff(dates, closes[s])}, likely a spin-off; leaving it out.')
+            print(f'{s} jumped or fell on {cliff(dates, closes[s])} like an unadjusted split or spin-off; leaving it out.')
             del closes[s]
 
     if not enough(len(closes), len(names)):
         print(f'Only {len(closes)} of {len(names)} companies came back; keeping {OUT.name} as it is.')
         return 0
     text = render(dates, closes, names)
+    if OUT.exists() and moves_back(OUT.read_text(encoding='utf-8'), dates[-1]):
+        print(f'{OUT.name} already runs past {dates[-1]}; keeping it as it is.')
+        return 0
     if OUT.exists() and OUT.read_text(encoding='utf-8') == text:
         print(f'No change: {len(closes)} companies through {dates[-1]}.')
         return 0

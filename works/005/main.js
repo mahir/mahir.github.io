@@ -88,7 +88,7 @@ try {
     swapping = true;
     root.classList.add('swap');
     setTimeout(() => {
-      show(pick(json, { last: range.d.t }));
+      try { show(pick(json, { last: range.d.t })); } catch (err) { fail(err); }
       root.classList.remove('swap');
       swapping = false;
     }, 380);
@@ -156,6 +156,8 @@ try {
 
   addEventListener('resize', () => { aspect = scene.resize(); if (range) rebuildPath(); });
   canvas.addEventListener('click', skip);
+  // a lost GPU context (phones drop them under pressure) shows the still rather than a page that never moves
+  canvas.addEventListener('webglcontextlost', () => fail(new Error('WebGL context lost')));
   addEventListener('keydown', (e) => {
     if (e.target.closest?.('a, button')) return;
     if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); skip(); }

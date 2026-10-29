@@ -128,7 +128,7 @@
 - [x] `og.jpg` (1200 × 630) and `still.jpg` from headless Chrome with `?t=…&still=1`.
 - [x] The `works.js` entry, dated the first free day once it's checked. Run `python3 works/_build.py`.
 - [x] `works/README.md`: a section on the daily price refresh. `PRODUCT.md` is uncommitted in Mahir's checkout, so give Mahir the line it needs instead of writing it here.
-- [ ] Code review, then ask Mahir before merging.
+- [x] Code review (fixes below), then ask Mahir before merging.
 
 ## Changes made while building
 
@@ -142,3 +142,11 @@
 - **Steep ground is textured from the side** (two-plane projection), so cliffs aren't smeared.
 - **The land's shaders compile with `compileAsync`** while the chart draws, so phones don't freeze on a black screen.
 - **The share image and still** were captured from the in-app browser with a dev-only `__shot()` hook (`?dev`). Headless software rendering was too slow for this scene.
+- **Fixes from the code review:**
+  - The land fades fully into the haze before the camera's far plane. Before, quiet years showed a hard line just below the horizon.
+  - The horizon plane's height lives in its vertices, so it no longer sits too high while the land rises.
+  - A rise close to a whole multiple (an unadjusted reverse split) is left out like a spin-off's fall, but Moderna's real ×2.77 stays.
+  - A day fewer than 95% of the companies have yet is still being posted, so it waits for the next run.
+  - The file's date never moves backwards.
+  - Each new range frees the last one's GPU buffers.
+  - A lost WebGL context, or a failed swap, shows the still.

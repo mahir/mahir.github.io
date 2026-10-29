@@ -60,7 +60,28 @@ class Cliff(unittest.TestCase):
         self.assertEqual(prices.cliff(days(4), [464.42, 470, 227.8, 230]), '2026-01-03')
 
     def test_lets_real_moves_through(self):
-        self.assertIsNone(prices.cliff(days(4), [100, 61, 177, 120]))
+        self.assertIsNone(prices.cliff(days(4), [100, 61, 160, 120]))
+        self.assertIsNone(prices.cliff(days(3), [62.96, 174.38, 133.32]))  # Moderna, August 2026: x2.77
+
+    def test_finds_a_jump_like_a_reverse_split(self):
+        self.assertEqual(prices.cliff(days(3), [10, 10.1, 30.2]), '2026-01-03')  # x2.99
+        self.assertEqual(prices.cliff(days(3), [10, 10.1, 101]), '2026-01-03')  # x10
+
+
+class Freshness(unittest.TestCase):
+    def test_a_day_only_some_companies_have_waits(self):
+        full = list(zip(days(5), range(5)))
+        short = full[:-1]
+        series = {f'C{i}': (full if i < 18 else short) for i in range(20)}  # 18 of 20 have the 5th day: 90%
+        dates, closes = prices.align(series, days=3)
+        self.assertEqual(dates[-1], '2026-01-04')
+        series = {f'C{i}': (full if i < 19 else short) for i in range(20)}  # 95%
+        self.assertEqual(prices.align(series, days=3)[0][-1], '2026-01-05')
+
+    def test_the_file_never_moves_back(self):
+        self.assertTrue(prices.moves_back('{"through":"2026-10-28"}', '2026-10-27'))
+        self.assertFalse(prices.moves_back('{"through":"2026-10-28"}', '2026-10-28'))
+        self.assertFalse(prices.moves_back('not json', '2026-10-28'))
 
 
 class Writing(unittest.TestCase):

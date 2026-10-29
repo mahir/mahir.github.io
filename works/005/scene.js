@@ -26,7 +26,7 @@ export function createScene(canvas, { small }) {
 
   const U = {
     uSunDir: { value: new THREE.Vector3(0, 1, 0) }, uHaze: { value: new THREE.Color() }, uHazeSun: { value: new THREE.Color() }, uHorizonSun: { value: new THREE.Color() }, uSunGlow: { value: new THREE.Color() },
-    uBeta: { value: 1e-4 }, uHazeH: { value: 2000 }, uNight: { value: 1 }, uNightCol: { value: new THREE.Color(0x0d0f12).convertSRGBToLinear() },
+    uBeta: { value: 1e-4 }, uHazeH: { value: 2000 }, uFar: { value: 1e5 }, uNight: { value: 1 }, uNightCol: { value: new THREE.Color(0x0d0f12).convertSRGBToLinear() },
     uCover: { value: 0.5 }, uTime: { value: 0 }, uCloudScale: { value: 2600 }, uWind: { value: new THREE.Vector2(0.004, 0.0015) },
     uCloudBase: { value: 2000 }, uRise: { value: 0 }, uStretch: { value: 1 }, uFloor: { value: FLOOR },
     uTreeLine: { value: TREE_LINE }, uSnowLine: { value: SNOW_LINE },
@@ -179,8 +179,9 @@ export function createScene(canvas, { small }) {
     camera.fov = pose.fov;
     const dist = camera.position.distanceTo(lookAt);
     camera.near = Math.min(2000, Math.max(8, dist * 0.004));
-    camera.far = dist + 6 * L;
+    camera.far = dist + 12 * L;
     camera.updateProjectionMatrix();
+    U.uFar.value = camera.far;
 
     // while the land rises its shadows move; after that they stay put
     const moving = beats.rise < 1 || stretch > 1.0001;

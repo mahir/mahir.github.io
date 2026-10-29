@@ -51,6 +51,7 @@ uniform float uBeta;
 uniform float uHazeH;
 uniform float uNight;
 uniform vec3 uNightCol;
+uniform float uFar;
 // how much a direction looks toward the sun, across the horizon
 float sunward(vec3 dir) {
   vec2 a = dir.xz, b = uSunDir.xz;
@@ -68,6 +69,7 @@ vec3 haze(vec3 col, vec3 world) {
   float k = dir.y * b * dist;
   float depth = uBeta * exp(-cameraPosition.y * b) * dist * (abs(k) > 1e-4 ? (1.0 - exp(-k)) / k : 1.0);
   float t = 1.0 - exp(-depth);
+  t = max(t, smoothstep(0.55 * uFar, 0.95 * uFar, dist)); // fully haze before the far plane, as the sky is there
   col = mix(col, hazeColor(dir), t);
   return mix(col, uNightCol, uNight);
 }

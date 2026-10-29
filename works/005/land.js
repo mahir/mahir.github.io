@@ -129,26 +129,21 @@ export function createLand(U) {
   mesh.frustumCulled = false;
 
   // flat land running on past the grid to the horizon
-  const plane = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+  const plane = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2).translate(0, HORIZON - 4, 0);
   plane.setAttribute('aBase', new THREE.BufferAttribute(new Float32Array(4).fill(HORIZON - 4), 1));
   const skirt = new THREE.Mesh(plane, material);
-  skirt.position.y = HORIZON - 4;
   skirt.receiveShadow = true;
   skirt.frustumCulled = false;
 
-  let indexKey = '';
+  let indexKey = '', index = null;
   function setTerrain(t) {
     const { cols, rows, xs, zs, heights, base, normals } = t;
     const position = new Float32Array(cols * rows * 3);
     for (let r = 0, i = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++, i++) { position[i * 3] = xs[c]; position[i * 3 + 1] = heights[i]; position[i * 3 + 2] = zs[r]; }
     }
-    const g = mesh.geometry;
-    g.setAttribute('position', new THREE.BufferAttribute(position, 3));
-    g.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
-    g.setAttribute('aBase', new THREE.BufferAttribute(base, 1));
     if (indexKey !== `${cols}x${rows}`) {
-      const index = new Uint32Array((cols - 1) * (rows - 1) * 6);
+      index = new Uint32Array((cols - 1) * (rows - 1) * 6);
       for (let r = 0, k = 0; r < rows - 1; r++) {
         for (let c = 0; c < cols - 1; c++) {
           const a = r * cols + c, b = a + 1, d = a + cols, e = d + 1;
@@ -156,12 +151,19 @@ export function createLand(U) {
           index[k++] = b; index[k++] = d; index[k++] = e;
         }
       }
-      g.setIndex(new THREE.BufferAttribute(index, 1));
       indexKey = `${cols}x${rows}`;
     }
+    // a fresh geometry each time, so the last range's buffers leave the GPU at once
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(position, 3));
+    g.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+    g.setAttribute('aBase', new THREE.BufferAttribute(base, 1));
+    g.setIndex(new THREE.BufferAttribute(index, 1));
     g.computeBoundingSphere();
+    mesh.geometry.dispose();
+    mesh.geometry = g;
     const L = t.L;
-    skirt.position.set(L / 2, HORIZON - 4, -0.2 * L);
+    skirt.position.set(L / 2, 0, -0.2 * L);
     skirt.scale.set(60 * L, 1, 60 * L);
   }
 
