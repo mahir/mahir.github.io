@@ -4,7 +4,7 @@ import { makePath, blend, beats, T } from '../path.js';
 import { buildTerrain, sampler, monotone } from '../terrain.js';
 import { decode, seedOf, YEAR } from '../data.js';
 import { makeScale, FLOOR } from '../scale.js';
-import { weatherFor } from '../weather.js';
+import { weatherFor, deckFor } from '../weather.js';
 import { prices, project } from './helpers.js';
 
 function setup(t, aspect) {
@@ -12,13 +12,14 @@ function setup(t, aspect) {
   const scale = makeScale(d.lo, d.hi);
   const terrain = buildTerrain({ ...d, scale, seed: seedOf(t), quality: 'low' });
   const crest = monotone(d.closes.map(scale.alt), scale.L / (YEAR - 1));
-  const { cloudBase } = weatherFor(d.change);
-  return { d, scale, cloudBase, path: makePath({ scale, crest, aspect, cloudBase, ground: sampler(terrain) }), ground: sampler(terrain) };
+  const top = Math.max(...[...d.closes, ...d.ma50, ...d.ma200].map(scale.alt));
+  const { base: cloudBase, ceiling } = deckFor(weatherFor(d.change), top);
+  return { d, scale, cloudBase, ceiling, path: makePath({ scale, crest, aspect, cloudBase, ceiling, ground: sampler(terrain) }), ground: sampler(terrain) };
 }
 
 const points = (d, scale, stretch = 1) => d.closes.map((c, i) => [scale.dayX(i), FLOOR + (scale.alt(c) - FLOOR) * stretch, 0]);
 
-for (const t of ['BRK.B', 'NFLX', 'MRNA']) {
+for (const t of ['BRK.B', 'NFLX', 'MRNA', 'DIS', 'COIN']) {
   for (const aspect of [16 / 9, 9 / 19.5]) {
     test(`${t} at ${aspect.toFixed(2)}: the chart and the rest frame the whole year`, () => {
       const { d, scale, path } = setup(t, aspect);
@@ -31,12 +32,12 @@ for (const t of ['BRK.B', 'NFLX', 'MRNA']) {
     });
 
     test(`${t} at ${aspect.toFixed(2)}: the camera stays out of the cloud deck and above the ground`, () => {
-      const { path, cloudBase, ground } = setup(t, aspect);
+      const { path, cloudBase, ceiling, ground } = setup(t, aspect);
       for (let s = T.flight; s <= T.rest + 30; s += 0.1) {
         const { pos } = path.at(s);
         assert.ok(pos[1] > ground(pos[0], pos[2]) + 60, `t=${s.toFixed(1)} below ground`);
       }
-      for (const k of [path.wide, ...path.along, path.rest]) assert.ok(k.pos[1] < cloudBase - 200 || k.pos[1] > cloudBase + 300);
+      for (const k of [path.wide, ...path.along, path.rest]) assert.ok(k.pos[1] < cloudBase - 200 || (!ceiling && k.pos[1] > cloudBase + 300));
     });
   }
 }

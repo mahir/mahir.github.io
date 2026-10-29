@@ -67,15 +67,17 @@ function fit(target, yaw, pitch, fov, aspect, points, L, margin = [0.9, 0.8]) {
   return { pos: orbit(target, yaw, pitch, hi), target, fov };
 }
 
-export function makePath({ scale, crest, aspect, cloudBase, ground = () => FLOOR }) {
+// Under a heavy deck (overcast, storm) the camera stays below it; under scattered cloud it keeps out of the layer,
+// above or below, since a camera inside it would see it edge on.
+export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, ground = () => FLOOR }) {
   const { L, relief } = scale;
   const stretch = chartStretch(scale, aspect);
   const portrait = aspect < 1;
 
-  // Keep clear of the cloud deck (a camera inside it would see it edge on) and of the ground.
   const clear = (pose) => {
     let y = pose.pos[1];
-    if (y > cloudBase - 220 && y < cloudBase + 320) y = y < cloudBase + 50 ? cloudBase - 220 : cloudBase + 320;
+    if (ceiling) y = Math.min(y, cloudBase - 220);
+    else if (y > cloudBase - 220 && y < cloudBase + 320) y = y < cloudBase + 50 ? cloudBase - 220 : cloudBase + 320;
     y = Math.max(y, ground(pose.pos[0], pose.pos[2]) + 160);
     return { ...pose, pos: [pose.pos[0], y, pose.pos[2]] };
   };
@@ -94,8 +96,8 @@ export function makePath({ scale, crest, aspect, cloudBase, ground = () => FLOOR
   // 2. The whole range, from above and in front.
   const wideTarget = [L / 2, FLOOR + relief * 0.35, -0.08 * L];
   const wide = clear(portrait
-    ? fit(wideTarget, 40, 16, 50, aspect, ridge, L)
-    : fit(wideTarget, -6, 15, 40, aspect, ridge, L));
+    ? fit(wideTarget, 40, 9, 50, aspect, ridge, L)
+    : fit(wideTarget, -6, 8, 40, aspect, ridge, L));
 
   // 3. Along the year, a little below the local peaks so the crest stands against the sky.
   const along = [];
@@ -112,11 +114,11 @@ export function makePath({ scale, crest, aspect, cloudBase, ground = () => FLOOR
     }));
   }
 
-  // 4. The rest: the whole range again, lower, with today's end nearest.
-  const restTarget = [L / 2, FLOOR + relief * 0.4, -0.05 * L];
+  // 4. The rest: the whole range again, from about the height of its peaks, so the crest stands against the sky.
+  const restTarget = [L / 2, FLOOR + relief * 0.5, -0.05 * L];
   const rest = clear(portrait
-    ? fit(restTarget, 42, 9, 52, aspect, ridge, L)
-    : fit(restTarget, -4, 9, 36, aspect, ridge, L));
+    ? fit(restTarget, 42, 1.5, 52, aspect, ridge, L)
+    : fit(restTarget, -4, 0.8, 36, aspect, ridge, L));
 
   // the flight's keys and their times
   const keys = [wide, ...along, rest];

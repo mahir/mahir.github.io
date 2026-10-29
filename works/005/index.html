@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mahir Yavuz · The year in relief</title>
+<meta name="description" content="The year in relief, No. 005 by Mahir Yavuz: a well-known S&amp;P 500 company's last year of closing prices, turned into a mountain range.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/005/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="The year in relief · Mahir Yavuz">
+<meta property="og:description" content="No. 005: a stock's last year of closing prices, turned into a mountain range. A new company every visit.">
+<meta property="og:url" content="https://mahiryavuz.com/works/005/">
+<meta property="og:image" content="https://mahiryavuz.com/works/005/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A mountain range whose crest is a year of a stock's closing prices, in haze and low sun">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<!-- /gen:ld -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* A photograph of a mountain range, with a few words laid over it. White type on whatever the weather is,
+     held up by a soft shade at the bottom. Archivo for the company, Plex Mono for everything else. */
+  :root {
+    --night: #0d0f12;
+    --ink: #fff;
+    --soft: rgba(255, 255, 255, .78);
+    --faint: rgba(255, 255, 255, .56);
+    --hair: rgba(255, 255, 255, .22);
+    --veil: rgba(13, 15, 18, .42);
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --pad: clamp(16px, 2.4vw, 32px);
+    --lift: 0 1px 2px rgba(0, 0, 0, .35), 0 0 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+  html, body { margin: 0; height: 100%; background: var(--night); color: var(--ink); }
+  body { font: 400 13px/1.5 var(--mono); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; transition: opacity .38s ease; }
+  .swap #scene { opacity: 0; }
+  .still { position: fixed; inset: 0; margin: 0; display: none; }
+  .still img { width: 100%; height: 100%; object-fit: cover; }
+  /* a lens's falloff, and shade under the words */
+  .shade {
+    position: fixed; inset: 0; pointer-events: none;
+    background: radial-gradient(130% 100% at 50% 45%, transparent 55%, rgba(0, 0, 0, .28) 100%),
+                linear-gradient(to top, rgba(0, 0, 0, .42), transparent 34%);
+  }
+
+  .hud {
+    position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
+    padding: calc(var(--pad) + env(safe-area-inset-top)) calc(var(--pad) + env(safe-area-inset-right))
+             calc(var(--pad) + 12px + env(safe-area-inset-bottom)) calc(var(--pad) + env(safe-area-inset-left));
+    pointer-events: none;
+  }
+  .hud a, .hud button { pointer-events: auto; }
+  .works-nav { display: grid; justify-items: start; gap: .8em; }
+  .back {
+    display: inline-flex; align-items: center; gap: .5em; padding: 9px 14px; margin: 0; white-space: nowrap;
+    font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-decoration: none;
+    color: var(--night); background: #fff; border-radius: 999px; transition: background .2s ease;
+  }
+  .back:hover { background: #dfe3e8; }
+  .label { margin: 0; padding-left: 1.2em; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); text-shadow: var(--lift); }
+
+  .bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+  .ticker { margin: 0; text-shadow: var(--lift); min-width: 0; }
+  .ticker h2 { margin: 0 0 .25em; font: 300 clamp(30px, 5vw, 60px)/1 var(--sans); font-stretch: 112%; letter-spacing: -.01em; }
+  .ticker h2 b { font-weight: 600; letter-spacing: .01em; }
+  .ticker h2 span { color: var(--soft); }
+  .ticker p { margin: 0; }
+  .move { font-size: 14px; color: var(--ink); }
+  .span { margin-top: .15em !important; font-size: 11.5px; color: var(--soft); letter-spacing: .04em; }
+  .actions { display: flex; gap: 10px; flex: 0 0 auto; }
+  .actions button {
+    padding: 13px 20px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+    background: var(--veil); border: 1px solid var(--hair); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    transition: background .2s ease, opacity .4s ease;
+  }
+  .actions button:hover { background: rgba(13, 15, 18, .62); }
+  .actions #another { background: #fff; color: var(--night); border-color: #fff; }
+  .actions #another:hover { background: #dfe3e8; }
+  .back:focus-visible, .actions button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  #another, .resting #skip { display: none; }
+  .resting #another { display: inline-block; }
+  .credit { position: fixed; left: calc(var(--pad) + env(safe-area-inset-left)); bottom: calc(8px + env(safe-area-inset-bottom)); margin: 0; font-size: 9.5px; color: var(--faint); text-shadow: var(--lift); }
+
+  /* tags on the crest, and the dates under the opening chart */
+  .tags { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .tags span { position: absolute; left: 0; top: 0; opacity: 0; white-space: nowrap; will-change: transform, opacity; }
+  .tag {
+    margin: -34px 0 0 -1px; padding: 0 0 12px 8px; font-size: 11px; letter-spacing: .03em;
+    border-left: 1px solid rgba(255, 255, 255, .7); text-shadow: var(--lift);
+  }
+  .tag.day { color: var(--soft); }
+  .axis { margin: 6px 0 0; font-size: 11px; color: var(--faint); transform-origin: left top; }
+  #axis-start { translate: 0 0; }
+  #axis-end { translate: -100% 0; }
+
+  /* without WebGL or JavaScript: a still of one range, and what the experiment is */
+  .about { position: absolute; }
+  .no-gl #scene, .no-gl .bottom, .no-gl .tags, .no-gl .credit, .no-js .bottom, .no-js .credit { display: none; }
+  .no-gl .still, .no-js .still { display: block; }
+  .no-gl .about, .no-js .about {
+    position: fixed; left: var(--pad); right: var(--pad); bottom: var(--pad); width: auto; height: auto; clip-path: none; white-space: normal;
+    max-width: 34rem; padding: 18px 20px; background: var(--veil); border-radius: 18px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .about h1 { font: 300 clamp(26px, 4vw, 40px)/1 var(--sans); font-stretch: 108%; margin: 0 0 .35em; }
+  .about p { margin: 0 0 .6em; font-size: 12.5px; line-height: 1.6; color: var(--soft); }
+
+  /* the back link shows at once; the rest waits for the scene */
+  .js:not(.ready) .bottom, .js:not(.ready) .credit { opacity: 0; }
+  .bottom, .credit { transition: opacity 1s ease; }
+  .still-mode .hud, .still-mode .tags { display: none; }
+
+  @media (max-width: 560px) {
+    .bottom { flex-direction: column; align-items: stretch; }
+    .actions { justify-content: flex-end; }
+    .label { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #scene, .bottom, .credit, .actions button { transition: none; }
+  }
+</style>
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<figure class="still" aria-hidden="true"><img src="/works/005/still.jpg" alt=""></figure>
+<div class="shade" aria-hidden="true"></div>
+<div class="tags" aria-hidden="true">
+  <span class="tag" id="tag-hi"></span>
+  <span class="tag" id="tag-lo"></span>
+  <span class="tag day" id="tag-day"></span>
+  <span class="axis" id="axis-start"></span>
+  <span class="axis" id="axis-end"></span>
+</div>
+
+<div class="hud">
+  <nav class="works-nav" aria-label="Experiments">
+    <a class="back" href="/"><span aria-hidden="true">←</span> Home</a>
+    <p class="label">No. 005 · The year in relief, 2026</p>
+  </nav>
+  <div class="bottom">
+    <div class="ticker" aria-hidden="true">
+      <h2><b id="sym"></b> <span id="name"></span></h2>
+      <p class="move" id="move"></p>
+      <p class="span" id="span"></p>
+    </div>
+    <div class="actions">
+      <button id="skip" type="button">Skip</button>
+      <button id="another" type="button">Another</button>
+    </div>
+  </div>
+  <p class="credit" id="source"></p>
+</div>
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<section class="about sr-only">
+  <h1>The year in relief</h1>
+  <p>No. 005 by Mahir Yavuz. Each visit picks a well-known S&amp;P 500 company and turns its last year of daily closing prices into a mountain range. The crest is the price, a year ago on the left and the last close on the right. The ranges behind it are the 50-day and 200-day averages, and the weather follows how the year went: a clear golden morning for a year up, overcast for a flat one, a stormy dusk for a year down.</p>
+  <p>Height is the log of the price, at a fixed scale, so a quiet year stays in green foothills and a stock that doubled reaches the snow.</p>
+</section>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+</script>
+<script type="module" src="/works/005/main.js"></script>
+</body>
+</html>

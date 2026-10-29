@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { weatherFor, ANCHORS, moodOf, sunDirection } from '../weather.js';
+import { weatherFor, ANCHORS, moodOf, sunDirection, deckFor } from '../weather.js';
 
 test('the anchors are hit exactly and the ends clamp', () => {
   assert.equal(weatherFor(0.3).visibility, ANCHORS.golden.visibility);
@@ -22,4 +22,13 @@ test('the sun direction is a unit vector, up when the sun is up', () => {
   assert.ok(Math.abs(Math.hypot(...d) - 1) < 1e-9);
   assert.ok(d[1] > 0);
   assert.ok(d[0] < 0); // a golden morning lights the ridge from the left
+});
+
+test('a heavy deck lifts above the highest ground; scattered cloud stays put', () => {
+  assert.equal(deckFor(weatherFor(0.5), 5000).base, ANCHORS.golden.cloudBase);
+  assert.equal(deckFor(weatherFor(0.5), 5000).ceiling, false);
+  const storm = deckFor(weatherFor(-0.5), 4000);
+  assert.equal(storm.base, 4350);
+  assert.equal(storm.ceiling, true);
+  assert.equal(deckFor(weatherFor(0), 900).base, ANCHORS.overcast.cloudBase); // already above the hills
 });

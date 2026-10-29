@@ -8,6 +8,7 @@ import { YEAR } from './data.js';
 import { FLOOR } from './scale.js';
 
 export const FOOT = 150; // m, where the ranges meet the plain
+export const HORIZON = 100; // m, the flat land the grid fades into at its edges, which runs on to the horizon
 const BLEND = 120; // m, how softly the ranges and the plain merge; a crest this far above everything else stays exact
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -16,8 +17,9 @@ const smoothstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); retu
 const smax = (a, b) => { const h = Math.max(BLEND - Math.abs(a - b), 0) / BLEND; return Math.max(a, b) + (h * h * BLEND) / 4; };
 
 // Columns land exactly on the days; rows are as fine as the columns around the ridges and coarser toward the edges.
+// quality: columns a day, 1 (low), 2 (mid) or 3 (high).
 export function grid(L, quality = 'high') {
-  const sub = quality === 'high' ? 2 : 1;
+  const sub = { low: 1, mid: 2, high: 3 }[quality] || 2;
   const dx = L / ((YEAR - 1) * sub);
   const left = Math.ceil((0.25 * L) / dx);
   const cols = left * 2 + (YEAR - 1) * sub + 1;
@@ -93,14 +95,23 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
     { line: ridgeLine(ma200.map(lift), L), z: -0.62 * L, wide: 1.8 },
   ];
   const gully = clamp(L / 40, 250, 800); // spacing of spurs and gullies, which run down the slopes (along z)
+  const spike = 1.6 * (L / (YEAR - 1)); // how far a single day's rise or dip reaches down the slope
   const broad = 0.35 * L;
 
   const heights = new Float32Array(cols * rows);
   const base = new Float32Array(cols * rows);
-  const perCol = ranges.map(() => ({ c: new Float64Array(cols), s: new Float64Array(cols) }));
-  for (let ci = 0; ci < cols; ci++) {
-    ranges.forEach((r, k) => { perCol[k].c[ci] = r.line.crest(xs[ci]); perCol[k].s[ci] = r.line.soft(xs[ci]); });
-  }
+  // per column and range: the crest, its smoothed line, and how wide and lopsided the range is there
+  const perCol = ranges.map((r, k) => {
+    const out = { c: new Float64Array(cols), s: new Float64Array(cols), wide: new Float64Array(cols), back: new Float64Array(cols) };
+    for (let ci = 0; ci < cols; ci++) {
+      const x = xs[ci];
+      out.c[ci] = r.line.crest(x);
+      out.s[ci] = r.line.soft(x);
+      out.wide[ci] = r.wide * (1 + 0.28 * noise.fbm(x / (0.12 * L), 3.7 + k * 11, 2));
+      out.back[ci] = 1.35 * (1 + 0.25 * noise.fbm(x / (0.09 * L), -8.1 + k * 7, 2));
+    }
+    return out;
+  });
 
   let maxH = 0;
   for (let ri = 0; ri < rows; ri++) {
@@ -108,26 +119,36 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
     for (let ci = 0; ci < cols; ci++) {
       const x = xs[ci];
       const plain = FOOT - 40 + 120 * (0.5 + 0.5 * noise.fbm(x / broad, z / broad, 3)) + 25 * noise.fbm(x / 700, z / 700, 3);
-      const erosion = clamp(0.62 * (1 - noise.ridged(x / gully, z / (gully * 2.5), 5)) + 0.38 * (0.5 + 0.5 * noise.fbm(x / (gully * 3), z / (gully * 3), 3)), 0, 1);
+      // gullies, warped so they branch and wander instead of running in rows
+      const wx = x + 0.45 * gully * noise.fbm(x / (2 * gully), z / (2 * gully), 2);
+      const wz = z + 0.45 * gully * noise.fbm(x / (2 * gully) + 5.2, z / (2 * gully) - 1.3, 2);
+      const erosion = clamp(0.6 * (1 - noise.ridged(wx / gully, wz / (gully * 1.25), 5)) + 0.4 * (0.5 + 0.5 * noise.fbm(x / (gully * 4), z / (gully * 4), 3)), 0, 1);
       const detail = 0.5 + 0.5 * noise.fbm(x / (gully * 0.35), z / (gully * 0.35), 3); // only ever carves
       let h = plain;
       for (let k = 0; k < ranges.length; k++) {
-        const c = perCol[k].c[ci], s = perCol[k].s[ci];
+        const col = perCol[k];
+        const c = col.c[ci], s = col.s[ci];
         const dz = z - ranges[k].z;
-        const w = (0.5 * (s - FOOT) + 0.035 * L + 200) * ranges[k].wide * (dz < 0 ? 1.35 : 1);
+        const w = (0.62 * (s - FOOT) + 0.035 * L + 200) * col.wide[ci] * (dz < 0 ? col.back[ci] : 1);
         const d = Math.abs(dz) / w;
         if (d > 6) continue;
-        const p = 1.9 - 0.75 * clamp((s - FLOOR) / 2500, 0, 1); // round hills, sharper peaks
+        const p = 1.9 - 0.6 * clamp((s - FLOOR) / 2500, 0, 1); // round hills, sharper peaks
         // the ranges behind never reach the main crest: after a fall the averages stand taller than the price
         const f = Math.exp(-(d ** p)) * (k === 0 ? 1 : 1 - smoothstep(-0.14 * L, -0.04 * L, z));
         const keep = 1 - Math.exp(-((d / 0.07) ** 2)); // 0 on the crest line, so it stays exact
-        const R = c - FOOT;
-        const r = FOOT + R * f * (1 - 0.55 * erosion * keep - 0.03 * detail * keep);
-        h = k === 0 ? smax(plain, r) : smax(h, r);
+        // The slopes follow the smoothed line. The day-to-day wiggle (c - s) fades fast below the crest, so it
+        // doesn't run down the mountainside as ribs; a notch fades only as fast as keeps the crest the highest point.
+        const R = s - FOOT, wiggle = c - s;
+        const fast = Math.exp(-((Math.abs(dz) / spike) ** 2)); // a day's spike is a peak, about as deep as it is wide
+        const g = wiggle >= 0 ? fast : Math.max(fast, 1 - (R * (1 - f)) / -wiggle);
+        const r = FOOT + (R * f + wiggle * g) * (1 - 0.38 * erosion * keep - 0.03 * detail * keep);
+        h = smax(h, r);
       }
+      // toward the grid's edges everything settles onto the flat land beyond
+      const edge = smoothstep(0, 0.08 * L, Math.min(x - xs[0], xs[cols - 1] - x, z - zs[0], zs[rows - 1] - z));
       const i = ri * cols + ci;
-      heights[i] = h;
-      base[i] = plain;
+      heights[i] = HORIZON + (h - HORIZON) * edge;
+      base[i] = HORIZON + (plain - HORIZON) * edge;
       if (h > maxH) maxH = h;
     }
   }
