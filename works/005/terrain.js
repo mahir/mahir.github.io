@@ -6,6 +6,7 @@
 import { makeNoise } from './noise.js';
 import { YEAR } from './data.js';
 import { FLOOR } from './scale.js';
+import { GRANITE } from './kinds.js';
 
 export const FOOT = 150; // m, where the ranges meet the plain
 export const HORIZON = 100; // m, the flat land the grid fades into at its edges, which runs on to the horizon
@@ -82,7 +83,8 @@ function ridgeLine(alts, L) {
   };
 }
 
-export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = 'high' }) {
+// shape: the kind of land's (see kinds.js)
+export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = 'high', shape = GRANITE.shape }) {
   const { L } = scale;
   const g = grid(L, quality);
   const { xs, zs, cols, rows } = g;
@@ -94,10 +96,12 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
     { line: ridgeLine(ma50.map(lift), L), z: -0.3 * L, wide: 1.4 },
     { line: ridgeLine(ma200.map(lift), L), z: -0.62 * L, wide: 1.8 },
   ];
-  const gully = clamp(L / 40, 250, 800); // spacing of spurs and gullies, which run down the slopes (along z)
+  const gully = clamp(L / 40, 250, 800) * shape.gully; // spacing of spurs and gullies, which run down the slopes (along z)
   const spike = Math.max(1.6 * (L / (YEAR - 1)), 160); // how far a day's rise or dip reaches down the slope; wide enough that hills stay rounded
   const hills = clamp(0.13 * scale.relief, 120, 480); // the foothills' height
   const broad = 0.35 * L;
+  // a coarser grid can't draw a sharp cliff without a sawtooth along it, so its terraces' cliffs are gentler
+  const riser = Math.min(0.9, shape.riser * ({ low: 3, mid: 1.5 }[quality] || 1));
 
   const heights = new Float32Array(cols * rows);
   const base = new Float32Array(cols * rows);
@@ -135,10 +139,10 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
         const col = perCol[k];
         const c = col.c[ci], s = col.s[ci];
         const dz = z - ranges[k].z;
-        const w = (0.62 * (s - FOOT) + 0.035 * L + 200) * col.wide[ci] * (dz < 0 ? col.back[ci] : 1);
+        const w = (0.62 * (s - FOOT) + 0.035 * L + 200) * shape.wide * col.wide[ci] * (dz < 0 ? col.back[ci] : 1);
         const d = Math.abs(dz) / w;
         if (d > 6) continue;
-        const p = 1.9 - 0.6 * clamp((s - FLOOR) / 2500, 0, 1); // round hills, sharper peaks
+        const p = 1.9 - 0.6 * clamp((s - FLOOR) / 2500, 0, 1) + shape.round; // round hills, sharper peaks; higher is flatter-topped
         // the ranges behind never reach the main crest: after a fall the averages stand taller than the price
         const f = Math.exp(-(d ** p)) * (k === 0 ? 1 : 1 - smoothstep(-0.14 * L, -0.04 * L, z));
         const keep = 1 - Math.exp(-((d / 0.07) ** 2)); // 0 on the crest line, so it stays exact
@@ -147,7 +151,15 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
         const R = s - FOOT, wiggle = c - s;
         const fast = Math.exp(-((Math.abs(dz) / spike) ** 2)); // a day's spike is a peak, about as deep as it is wide
         const g = wiggle >= 0 ? fast : Math.max(fast, 1 - (R * (1 - f)) / -wiggle);
-        const r = FOOT + (R * f + wiggle * g) * (1 - 0.42 * erosion * keep - 0.03 * detail * keep);
+        let r = FOOT + (R * f + wiggle * g) * (1 - shape.erode * erosion * keep - shape.detail * detail * keep);
+        if (shape.terrace) {
+          // Benches and the cliffs between them, in beds of uneven thickness (the sine), tilted and wavering (the
+          // noise), the benches sloping a little. They only carve, and leave the crest alone.
+          const v = (r - FOOT) / shape.terrace;
+          const u = v + 0.45 * Math.sin(1.3 * v + 2) + 0.5 * noise.fbm(x / 1800 + 5.7, z / 1800 - 2.3, 2) + 0.12 * noise.fbm(x / 300, z / 300, 2);
+          const f = u - Math.floor(u);
+          r -= Math.max(0, 0.75 * shape.terrace * (f - smoothstep(1 - riser, 1, f))) * keep;
+        }
         h = smax(h, r);
       }
       // toward the grid's edges everything settles onto the flat land beyond

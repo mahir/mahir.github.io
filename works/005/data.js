@@ -40,12 +40,15 @@ export function decode(json, t) {
   };
 }
 
-// A ticker from ?t= when the list has it, otherwise a random one that isn't the last one shown.
-export function pick(json, { param = null, last = null, random = Math.random } = {}) {
+// A ticker from ?t= when the list has it, otherwise a random one that isn't the last one shown, and, when there's
+// any other choice, not one `avoid` turns down (so the next company stands in a different kind of land).
+export function pick(json, { param = null, last = null, avoid = () => false, random = Math.random } = {}) {
   const symbols = json.tickers.map((e) => e.t);
   const asked = normalize(param);
   if (asked && symbols.includes(asked)) return asked;
-  const pool = symbols.length > 1 ? symbols.filter((s) => s !== last) : symbols;
+  let pool = symbols.length > 1 ? symbols.filter((s) => s !== last) : symbols;
+  const fresh = pool.filter((s) => !avoid(s));
+  if (fresh.length) pool = fresh;
   return pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))];
 }
 

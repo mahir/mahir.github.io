@@ -4,6 +4,7 @@ import { grid, monotone, buildTerrain, sampler, crestLine, FOOT } from '../terra
 import { decode, seedOf, YEAR } from '../data.js';
 import { makeScale } from '../scale.js';
 import { prices } from './helpers.js';
+import { KINDS, kindOf } from '../kinds.js';
 
 const land = (t, quality = 'low') => {
   const d = decode(prices, t);
@@ -50,6 +51,30 @@ for (const t of ['BRK.B', 'NKE', 'MRNA', 'COIN']) {
     assert.ok(checked > YEAR * 0.5, `only ${checked} days checked`);
   });
 }
+
+// every kind of land keeps the crest exact and the highest point, terraces and all
+for (const kind of KINDS) {
+  test(`${kind.name}: the crest is exact, and the highest point of its cross-section`, () => {
+    const d = decode(prices, 'NFLX');
+    const scale = makeScale(d.lo, d.hi);
+    const { heights, cols, zero, dayCol, zs, rows } = buildTerrain({ ...d, scale, seed: seedOf('NFLX'), quality: 'low', shape: kind.shape });
+    for (let i = 0; i < YEAR; i++) {
+      const alt = scale.alt(d.closes[i]);
+      if (alt - FOOT < 300) continue;
+      const c = dayCol(i);
+      assert.ok(Math.abs(heights[zero * cols + c] - alt) < 0.5, `day ${i}`);
+      for (let r = 0; r < rows; r++) if (Math.abs(zs[r]) < 0.06 * scale.L) assert.ok(heights[r * cols + c] <= alt + 0.5, `day ${i} row ${r}`);
+    }
+  });
+}
+
+test('the kinds come out about evenly, and the same ticker always gets the same one', () => {
+  const counts = new Map();
+  for (const { t } of prices.tickers) counts.set(kindOf(seedOf(t)).name, (counts.get(kindOf(seedOf(t)).name) || 0) + 1);
+  assert.equal(counts.size, KINDS.length);
+  for (const n of counts.values()) assert.ok(n >= 12, `${n}`);
+  assert.equal(kindOf(seedOf('MU')), kindOf(seedOf('MU')));
+});
 
 test('the same ticker always makes the same land', () => {
   const a = land('NFLX').terrain, b = land('NFLX').terrain;

@@ -6,6 +6,7 @@ import { makeScale, FLOOR } from './scale.js';
 import { weatherFor, deckFor } from './weather.js';
 import { makePath, beats as beatsAt, blend, T } from './path.js';
 import { crestLine, monotone, sampler } from './terrain.js';
+import { kindOf } from './kinds.js';
 
 const root = document.documentElement;
 root.classList.replace('no-js', 'js');
@@ -48,8 +49,10 @@ try {
     // the tags the flight passes: each month's last close, leaving room for the high and the low
     const months = d.dates.flatMap((date, i) => (i < YEAR - 1 && date.slice(0, 7) !== d.dates[i + 1].slice(0, 7)
       && Math.abs(i - d.hiDay) > 6 && Math.abs(i - d.loDay) > 6 ? [i] : []));
-    range = { d, scale, weather, crest, months, heightAt: null, ready: false };
+    const kind = kindOf(seedOf(symbol));
+    range = { d, scale, weather, crest, months, kind, heightAt: null, ready: false };
     scene.setWeather(weather, scale);
+    scene.setPaint(kind.paint);
     scene.setLine(crestLine(d.closes, scale, 4));
     rebuildPath();
     ui.setTicker(d);
@@ -57,7 +60,7 @@ try {
     remember(symbol);
     t = 0; skipping = null; wantSkip = false; restFrames = 0;
     root.classList.remove('resting');
-    worker.postMessage({ id: ++buildId, closes: d.closes, ma50: d.ma50, ma200: d.ma200, lo: d.lo, hi: d.hi, seed: seedOf(symbol), quality: small ? 'mid' : 'high' });
+    worker.postMessage({ id: ++buildId, closes: d.closes, ma50: d.ma50, ma200: d.ma200, lo: d.lo, hi: d.hi, seed: seedOf(symbol), quality: small ? 'mid' : 'high', kind: kind.name });
   }
 
   worker.onmessage = async ({ data }) => {
@@ -91,7 +94,8 @@ try {
     swapping = true;
     root.classList.add('swap');
     setTimeout(() => {
-      try { show(pick(json, { last: range.d.t })); } catch (err) { fail(err); }
+      const avoid = (s) => kindOf(seedOf(s)) === range.kind;
+      try { show(pick(json, { last: range.d.t, avoid })); } catch (err) { fail(err); }
       root.classList.remove('swap');
       swapping = false;
     }, 600);
@@ -175,7 +179,8 @@ try {
     if (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); skip(); }
   });
 
-  show(pick(json, { param: params.get('t'), last: remembered() }));
+  const before = remembered();
+  show(pick(json, { param: params.get('t'), last: before, avoid: (s) => before !== null && kindOf(seedOf(s)) === kindOf(seedOf(before)) }));
   if (still) root.classList.add('still-mode');
   requestAnimationFrame((n) => { last = n; root.classList.add('ready'); tick(n); });
   if (params.has('dev')) {

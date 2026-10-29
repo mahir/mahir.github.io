@@ -69,6 +69,7 @@ Values in between blend smoothly, and the ends clamp.
 ## Look
 
 - **Photorealistic, within what a browser can do on a phone.** The aim is a high-end game or an aerial photograph, not film CG.
+- **Kinds of land:** *added after a first look.* Each company always stands in one of six kinds of land, picked from its ticker: granite, autumn larch, red-rock sandstone mesas, black basalt and moss, heather moor, pale limestone walls. The tree and snow lines are the same in every kind.
 - **Sky:** a physical sky model, so the sun's position and the weather drive the colors.
 - **Distance:** aerial perspective, meaning distance haze that goes bluer and paler with depth. It does most of the work of making the scale read.
 - **Ground:** grass and forest below the tree line, rock on steep slopes, scree, and snow above the snow line where the slope is gentle enough to hold it.

@@ -41,6 +41,15 @@ test('pick honours ?t=, falls back to random, and avoids the last one shown', ()
   assert.equal(normalize(null), '');
 });
 
+test('pick passes over what avoid turns down, unless nothing else is left', () => {
+  const json = fakeJson();
+  const symbols = json.tickers.map((e) => e.t);
+  const keep = symbols[symbols.length - 1];
+  for (const r of [0, 0.4, 0.99999]) assert.equal(pick(json, { avoid: (s) => s !== keep, random: () => r }), keep);
+  assert.ok(symbols.includes(pick(json, { avoid: () => true, random: () => 0.5 })));
+  assert.equal(pick(json, { param: 'aaa', avoid: () => true }), 'AAA');
+});
+
 test('seeds are stable and differ between tickers', () => {
   assert.equal(seedOf('NFLX'), seedOf('NFLX'));
   assert.notEqual(seedOf('NFLX'), seedOf('NKE'));

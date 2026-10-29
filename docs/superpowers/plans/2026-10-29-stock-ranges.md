@@ -157,3 +157,9 @@
   - The tag under the flight stands at each month's last close and crossfades into the next, instead of rolling through every day. Months within six days of the high or the low are left out.
   - Crest tags sit on whichever side of their stem has more room, and fade at the screen's edge instead of being cut off.
   - "Another" fades the name and tags out with the land, over 0.6 seconds, and Skip glides to the rest over 2.
+- **Kinds of land** (`kinds.js`), so the ranges don't all look alike:
+  - Six kinds: granite, larch (autumn), sandstone (terraced red-rock mesas), basalt (black rock and moss), moor (rounded heather hills) and limestone (pale walls over meadows).
+  - Each is a shape for the terrain (erosion, how round or flat-topped the slopes, terraces) and a paint for the land (ground, forest, rock and its layers). The tree and snow lines stay the same in every kind, so height still reads as price.
+  - Each company always gets the same kind, from its ticker. The salt spreads today's 102 companies 16 to 18 to a kind, and Micron stays granite, so the share image still matches.
+  - "Another" and a reload never show the same kind twice in a row.
+  - Terraces only carve and leave the crest alone, in beds of uneven thickness. On the coarser phone grid their cliffs are gentler, so they don't draw a sawtooth.

@@ -34,6 +34,10 @@ export function createScene(canvas, { small }) {
     uHigh: { value: 0 }, uCloudDark: { value: 0 }, uDisk: { value: 1 }, uSkyCover: { value: 0 }, uSkyTime: { value: 0 },
     uSunI: { value: 1 }, uAmb: { value: new THREE.Color() },
     uHeight: { value: null }, uRect: { value: new THREE.Vector4(0, 0, 1, 1) }, uCenter: { value: new THREE.Vector2() }, uRadius: { value: 1 },
+    uGrassLo: { value: new THREE.Color() }, uGrassHi: { value: new THREE.Color() }, uDry: { value: new THREE.Color() },
+    uForest: { value: new THREE.Color() }, uForestAlt: { value: new THREE.Color() }, uForestAmt: { value: 0 },
+    uRockDark: { value: new THREE.Color() }, uRockLight: { value: new THREE.Color() }, uBand: { value: new THREE.Color() },
+    uStrata: { value: 0 }, uBandH: { value: 30 }, uRockAt: { value: 0 },
   };
 
   const sky = createSky(U);
@@ -86,6 +90,17 @@ export function createScene(canvas, { small }) {
     renderer.toneMappingExposure = w.exposure;
     clouds.place(L, w.cloudBase);
     scene.environment = sky.environment(renderer);
+  }
+
+  // the land's colours, from its kind (kinds.js); linear RGB
+  function setPaint(p) {
+    for (const k of ['grassLo', 'grassHi', 'dry', 'forest', 'forestAlt', 'rockDark', 'rockLight', 'band']) {
+      U[`u${k[0].toUpperCase()}${k.slice(1)}`].value.setRGB(...p[k], THREE.LinearSRGBColorSpace);
+    }
+    U.uForestAmt.value = p.forestAmt;
+    U.uStrata.value = p.strata;
+    U.uBandH.value = p.bandH;
+    U.uRockAt.value = p.rockAt;
   }
 
   function setLine(positions) {
@@ -207,5 +222,5 @@ export function createScene(canvas, { small }) {
     return w / h;
   }
 
-  return { renderer, camera, setWeather, setLine, setTerrain, prepare, frame, project, resize, fitShadow };
+  return { renderer, camera, setWeather, setPaint, setLine, setTerrain, prepare, frame, project, resize, fitShadow };
 }

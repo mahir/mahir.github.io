@@ -1,5 +1,6 @@
 // The land: the heightfield from the worker as a mesh, painted by altitude and slope (grass and forest low, rock on
-// steep ground and above the trees, snow above the snow line where it can lie), with fine rock detail in the light,
+// steep ground and above the trees, snow above the snow line where it can lie) in the colours of its kind of land
+// (kinds.js), with fine rock detail in the light,
 // cloud shadows and the shared haze. Before the land rises it lies flat on the plain; the opening chart's stretch
 // applies to it as it does to the line, so the two meet exactly.
 
@@ -31,16 +32,20 @@ const PAINT = /* glsl */ `
   float n1 = fbm(vWorld.xz / 420.0);
   float n2 = mix(0.5, tfbm(vWorld, top, sideX, 47.0), 1.0 - smoothstep(8.0, 40.0, fw));
   float n3 = mix(0.5, tnoise(vWorld, top, sideX, 6.0), 1.0 - smoothstep(1.5, 6.0, fw));
-  vec3 grass = mix(vec3(0.13, 0.16, 0.05), vec3(0.24, 0.21, 0.09), smoothstep(300.0, uTreeLine + 400.0, h + (n1 - 0.5) * 600.0));
-  grass = mix(grass, vec3(0.2, 0.19, 0.09), smoothstep(0.55, 0.8, n2) * 0.5); // dry patches
+  vec3 grass = mix(uGrassLo, uGrassHi, smoothstep(300.0, uTreeLine + 400.0, h + (n1 - 0.5) * 600.0));
+  grass = mix(grass, uDry, smoothstep(0.55, 0.8, n2) * 0.5); // dry patches
   grass *= 0.82 + 0.36 * n2;
   float forest = (1.0 - smoothstep(uTreeLine - 300.0, uTreeLine + 80.0, h + (n1 - 0.5) * 400.0))
     * (1.0 - smoothstep(0.3, 0.55, slope)) * smoothstep(0.42, 0.7, n2 + (n1 - 0.5) * 0.5 + slope * 0.4);
-  vec3 col = mix(grass, vec3(0.032, 0.05, 0.022) * (0.75 + 0.5 * n3), forest * 0.85);
-  float grip = 0.12 * (1.0 - smoothstep(600.0, 1400.0, h)); // low down, grass holds on steeper ground
+  vec3 trees = mix(uForest, uForestAlt, smoothstep(0.35, 0.65, n1 + (n3 - 0.5) * 0.6));
+  vec3 col = mix(grass, trees * (0.75 + 0.5 * n3), forest * uForestAmt);
+  float grip = 0.12 * (1.0 - smoothstep(600.0, 1400.0, h)) + uRockAt; // low down, grass holds on steeper ground
   rockMask = clamp(smoothstep(0.36 + grip, 0.58 + grip, slope + (n2 - 0.5) * 0.14)
     + smoothstep(uTreeLine + 100.0, uTreeLine + 800.0, h + (n1 - 0.5) * 500.0) * smoothstep(0.12, 0.32, slope), 0.0, 1.0);
-  vec3 rock = mix(vec3(0.075, 0.068, 0.06), vec3(0.24, 0.215, 0.19), n2) * (0.85 + 0.3 * n3);
+  vec3 rock = mix(uRockDark, uRockLight, n2) * (0.85 + 0.3 * n3);
+  // layers of another colour, as thick as the kind's beds, fading out before they're finer than a pixel
+  float bed = smoothstep(0.35, 0.65, 0.5 + 0.5 * sin(h / uBandH + n1 * 6.0 + (n2 - 0.5) * 1.5));
+  rock = mix(rock, uBand * (0.85 + 0.3 * n3), bed * uStrata * (1.0 - smoothstep(uBandH, 4.0 * uBandH, fw)));
   rock *= 0.9 + 0.12 * sin(h / 19.0 + n1 * 6.0); // strata
   col = mix(col, rock, rockMask);
   float steepest = 0.5 + 0.28 * smoothstep(uSnowLine, uSnowLine + 2500.0, h); // high up, snow holds on steeper ground
@@ -84,6 +89,8 @@ function patch(material, U, depthOnly = false) {
         uniform float uTreeLine;
         uniform float uSnowLine;
         uniform float uCloudBase;
+        uniform vec3 uGrassLo, uGrassHi, uDry, uForest, uForestAlt, uRockDark, uRockLight, uBand;
+        uniform float uForestAmt, uStrata, uBandH, uRockAt;
         ${NOISE}
         ${CLOUDS}
         ${HAZE}
