@@ -163,7 +163,13 @@ try {
   show(pick(json, { param: params.get('t'), last: remembered() }));
   if (still) root.classList.add('still-mode');
   requestAnimationFrame((n) => { last = n; root.classList.add('ready'); tick(n); });
-  if (params.has('dev')) Object.assign(window, { __scene: scene, __range: () => range, __t: (v) => { if (v !== undefined) t = v; return t; } });
+  if (params.has('dev')) {
+    Object.assign(window, {
+      __scene: scene, __range: () => range, __t: (v) => { if (v !== undefined) t = v; return t; },
+      // the rest view drawn once, as a PNG, for the share image and the still (works with the pane hidden)
+      __shot: () => { scene.frame({ pose: range.path.rest, beats: END, stretch: 1, time: performance.now() / 1000 }); return canvas.toDataURL('image/png'); },
+    });
+  }
 } catch (err) {
   fail(err);
 }

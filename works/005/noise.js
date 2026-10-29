@@ -72,5 +72,31 @@ export function makeNoise(seed) {
     return sum / norm;
   }
 
-  return { noise2, fbm, ridged };
+  // Value noise with its gradient: [value in -1..1, d/dx, d/dy]. Quintic, so the gradient is smooth too.
+  function noised(x, y) {
+    const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy;
+    const ux = fx * fx * fx * (fx * (fx * 6 - 15) + 10), uy = fy * fy * fy * (fy * (fy * 6 - 15) + 10);
+    const dux = 30 * fx * fx * (fx * (fx - 2) + 1), duy = 30 * fy * fy * (fy * (fy - 2) + 1);
+    const h = (i, j) => perm[(perm[i & 255] + j) & 255] / 255;
+    const a = h(ix, iy), b = h(ix + 1, iy), c = h(ix, iy + 1), d = h(ix + 1, iy + 1);
+    const k1 = b - a, k2 = c - a, k4 = a - b - c + d;
+    return [2 * (a + k1 * ux + k2 * uy + k4 * ux * uy) - 1, 2 * dux * (k1 + k4 * uy), 2 * duy * (k2 + k4 * ux)];
+  }
+
+  // Inigo Quilez's eroded fbm: each octave is damped where the slopes so far are steep, which grows smooth
+  // valleys and sharp, detailed ridges, much as water would. Roughly in -1..1.
+  function eroded(x, y, octaves = 6) {
+    let sum = 0, amp = 1, dx = 0, dy = 0;
+    for (let o = 0; o < octaves; o++) {
+      const [v, nx, ny] = noised(x, y);
+      dx += nx; dy += ny;
+      sum += (amp * v) / (1 + dx * dx + dy * dy);
+      amp *= 0.5;
+      const qx = 1.6 * x - 1.2 * y, qy = 1.2 * x + 1.6 * y;
+      x = qx + 3.1; y = qy - 7.7;
+    }
+    return sum;
+  }
+
+  return { noise2, fbm, ridged, noised, eroded };
 }

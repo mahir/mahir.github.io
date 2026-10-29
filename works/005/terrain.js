@@ -120,18 +120,16 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
     for (let ci = 0; ci < cols; ci++) {
       const x = xs[ci];
       const plain = FOOT - 40 + 120 * (0.5 + 0.5 * noise.fbm(x / broad, z / broad, 3)) + 25 * noise.fbm(x / 700, z / 700, 3);
-      // gullies, warped so they branch and wander instead of running in rows
-      const wx = x + 0.45 * gully * noise.fbm(x / (2 * gully), z / (2 * gully), 2);
-      const wz = z + 0.45 * gully * noise.fbm(x / (2 * gully) + 5.2, z / (2 * gully) - 1.3, 2);
-      const erosion = clamp(0.6 * (1 - noise.ridged(wx / gully, wz / (gully * 1.25), 5)) + 0.4 * (0.5 + 0.5 * noise.fbm(x / (gully * 4), z / (gully * 4), 3)), 0, 1);
+      // where water would have carved: deep in eroded noise's valleys, little along its ridges
+      const erosion = clamp(0.5 - 0.62 * noise.eroded(x / (2.2 * gully), z / (2.6 * gully), 6), 0, 1);
       const detail = 0.5 + 0.5 * noise.fbm(x / (gully * 0.35), z / (gully * 0.35), 3); // only ever carves
       // belts of foothills in front of the range, for depth; lower where the year was low, never near the crest
       const front = smoothstep(0.07 * L, 0.17 * L, z) * (1 - smoothstep(0.36 * L, 0.44 * L, z));
       let h = plain;
       if (front > 0) {
         const lowHere = clamp((perCol[0].c[ci] - FLOOR) / Math.max(scale.relief, 1) * 2, 0.3, 1);
-        const belt = noise.ridged(wx / (0.09 * L), wz / (0.045 * L), 4);
-        h += front * lowHere * hills * belt * belt * (0.75 + 0.25 * erosion);
+        const belt = clamp(0.45 + 0.7 * noise.eroded(x / (0.06 * L) + 11.3, z / (0.04 * L) - 4.1, 6), 0, 1);
+        h += front * lowHere * hills * belt ** 1.6;
       }
       for (let k = 0; k < ranges.length; k++) {
         const col = perCol[k];
@@ -149,7 +147,7 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
         const R = s - FOOT, wiggle = c - s;
         const fast = Math.exp(-((Math.abs(dz) / spike) ** 2)); // a day's spike is a peak, about as deep as it is wide
         const g = wiggle >= 0 ? fast : Math.max(fast, 1 - (R * (1 - f)) / -wiggle);
-        const r = FOOT + (R * f + wiggle * g) * (1 - 0.38 * erosion * keep - 0.03 * detail * keep);
+        const r = FOOT + (R * f + wiggle * g) * (1 - 0.42 * erosion * keep - 0.03 * detail * keep);
         h = smax(h, r);
       }
       // toward the grid's edges everything settles onto the flat land beyond

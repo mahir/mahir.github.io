@@ -17,3 +17,14 @@ test('noise is deterministic per seed and stays in range', () => {
   }
   assert.ok(differs);
 });
+
+test('the gradient matches the value, and eroded noise stays in range', () => {
+  const n = makeNoise(3), e = 1e-4;
+  for (let i = 0; i < 300; i++) {
+    const x = i * 0.731 - 50, y = i * 0.377 + 9;
+    const [v, dx, dy] = n.noised(x, y);
+    assert.ok(Math.abs((n.noised(x + e, y)[0] - v) / e - dx) < 1e-2);
+    assert.ok(Math.abs((n.noised(x, y + e)[0] - v) / e - dy) < 1e-2);
+    assert.ok(Math.abs(n.eroded(x, y)) < 1.5);
+  }
+});

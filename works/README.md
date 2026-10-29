@@ -12,6 +12,10 @@ On the site they are called experiments ("Experiments", "Open the experiment"); 
 
 "Today" is New York's calendar day. A GitHub Action (`.github/workflows/daily.yml`) runs the build just after midnight there and publishes the change when a work's date has come; on a day with no new work, the latest one stays up and nothing is committed. It can also be run by hand from the repository's Actions tab.
 
+## No. 005's prices
+
+No. 005 draws a year of a company's closing prices, from `works/005/prices.json`. The daily Action runs `works/005/_prices.py` before the build, so the file follows each trading day and the Action commits it ("Refresh No. 005's prices") even on days no work goes up. If Nasdaq doesn't answer, yesterday's file stays and the build still runs. The companies are listed at the top of `_prices.py`; one that leaves the S&P 500 drops out by itself, and one whose price falls more than 40% in a day, which is almost always a spin-off Nasdaq doesn't adjust for, is left out while that day is in the file. To refresh by hand: `python3 works/005/_prices.py`.
+
 ## After a new Substack post
 
 The Writing list is refreshed by hand. Substack refuses GitHub's servers, so the daily Action can't read the feed and keeps the posts already listed. After a post goes up, run `python3 works/_build.py` on your own machine, check the homepage, and commit what it changed (`index.html` and `llms.txt`, and `sitemap.xml` when the post is newer than the latest work).
