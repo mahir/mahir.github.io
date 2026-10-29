@@ -271,7 +271,8 @@
   .js .rise { opacity: 0; transform: translateY(8px); animation: rise .9s var(--ease) forwards; animation-delay: calc(600ms + var(--i) * 90ms); }
   @keyframes rise { to { opacity: 1; transform: none; } }
 
-  @media (max-width: 899px) {
+  /* one column until the plate fits beside the bio with a gutter to spare; narrower, it spills over the text */
+  @media (max-width: 1139px) {
     :root { --plate: min(calc(100vw - 72px), 480px); }
     .nav { position: static; padding: calc(var(--pad) + env(safe-area-inset-top)) 24px 0; }
     .page { display: block; padding: 2.8rem 24px calc(var(--pad) * 2); }
