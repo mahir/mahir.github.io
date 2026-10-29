@@ -50,6 +50,7 @@ try {
     scene.setLine(crestLine(d.closes, scale, 4));
     rebuildPath();
     ui.setTicker(d);
+    for (const node of [ui.el.hi, ui.el.lo, ui.el.cursor]) ui.place(node, null, 0); // no tags left from the last company
     remember(symbol);
     t = 0; skipping = null; wantSkip = false; restFrames = 0;
     root.classList.remove('resting');

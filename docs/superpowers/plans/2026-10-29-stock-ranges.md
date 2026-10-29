@@ -76,56 +76,69 @@
 ## Tasks
 
 ### 1. Prices
-- [ ] `works/005/_prices.py`:
+- [x] `works/005/_prices.py`:
   - `TICKERS` holds about 100 `(symbol, display name)` pairs, spread across sectors. Check them against the S&P 500 CSV, skipping the check if the CSV can't be read.
   - Fetch 700 days back, with 4 threads and 2 retries. Parse the closes and dates.
   - Align the tickers on the most common calendar and forward-fill up to 3 missing days. Drop a ticker with more gaps or fewer than 451 days.
   - Keep the last 451 days. Write `prices.json` atomically, through a temporary file and a rename, only if at least 90% of the tickers came back. Otherwise keep the old file and exit 0 with a message.
   - Running it twice on the same day changes nothing.
-- [ ] `works/005/_test_prices.py` (stdlib unittest): parsing, alignment and forward-fill, trimming, and the 90% rule.
-- [ ] Run it locally and commit `prices.json`.
-- [ ] `.github/workflows/daily.yml`:
+- [x] `works/005/_test_prices.py` (stdlib unittest): parsing, alignment and forward-fill, trimming, and the 90% rule.
+- [x] Run it locally and commit `prices.json`.
+- [x] `.github/workflows/daily.yml`:
   - a step `python3 works/005/_prices.py` before the build, with `continue-on-error: true`
   - the commit message "Refresh No. 005's prices" when only `works/005/prices.json` changed
   - Remove `nasdaq-probe.yml`.
 
 ### 2. Pure modules and tests (`works/005/_test/*.test.mjs`)
-- [ ] `noise.js`: seeded 2D simplex, `fbm` and `ridged`. Deterministic for a seed, with values in range.
-- [ ] `data.js`:
+- [x] `noise.js`: seeded 2D simplex, `fbm` and `ridged`. Deterministic for a seed, with values in range.
+- [x] `data.js`:
   - `decode(json, t)` → `{ t, name, dates, closes (252), ma50, ma200, first, last, hi, lo, hiDay, loDay, change }`
   - `pick(json, { param, last, random })`: honours `?t=`, falls back to random on an unknown ticker, and avoids `last`
   - `seedOf(t)`
   - Moving averages are checked against a hand-computed example.
-- [ ] `scale.js`: `relief`, `altitude`, the Everest cap, `yearLength`, `dayX`.
-- [ ] `weather.js`: `weatherFor(change)` → sun elevation and azimuth, colors (zenith, horizon, haze, sun, ground bounce), haze density and falloff, cloud cover, base and darkness, exposure. The anchors are hit exactly, the in-between values are monotone, and the ends clamp.
-- [ ] `format.js`: `money`, `pct`, `day` ("28 Oct 2026"), `shortDay` ("30 Jun"), `summary` (the screen-reader sentence).
-- [ ] `terrain.js`:
+- [x] `scale.js`: `relief`, `altitude`, the Everest cap, `yearLength`, `dayX`.
+- [x] `weather.js`: `weatherFor(change)` → sun elevation and azimuth, colors (zenith, horizon, haze, sun, ground bounce), haze density and falloff, cloud cover, base and darkness, exposure. The anchors are hit exactly, the in-between values are monotone, and the ends clamp.
+- [x] `format.js`: `money`, `pct`, `day` ("28 Oct 2026"), `shortDay` ("30 Jun"), `summary` (the screen-reader sentence).
+- [x] `terrain.js`:
   - `grid(L, quality)` → column x's (day points fall on columns) and row z's (dense near the ridge)
   - `crestAt(series, x)` as a monotone cubic
   - `buildTerrain(opts)` → `{ heights, normals, cols, rows, xs, zs, maxH }`
   - Tests: crest exactness, determinism per seed, and the crest being the highest point of its cross-section near the ridge.
-- [ ] `path.js`: camera keyframes for the four beats, given the scale and the series. The flight stays clear of the cloud band (−200/+300 m) and above the ground under it. The rest view frames `[0, L]`.
+- [x] `path.js`: camera keyframes for the four beats, given the scale and the series. The flight stays clear of the cloud band (−200/+300 m) and above the ground under it. The rest view frames `[0, L]`.
 
 ### 3. Rendering
-- [ ] `terrain-worker.js`: a module worker wrapping `buildTerrain`, transferring the arrays.
-- [ ] `sky.js`: a sky dome shader driven by the weather (zenith-to-horizon gradient, sun glow and disk, a high cloud layer, and a night blend for the chart beat), plus a PMREM environment from it.
-- [ ] `land.js`: terrain mesh and material:
+- [x] `terrain-worker.js`: a module worker wrapping `buildTerrain`, transferring the arrays.
+- [x] `sky.js`: a sky dome shader driven by the weather (zenith-to-horizon gradient, sun glow and disk, a high cloud layer, and a night blend for the chart beat), plus a PMREM environment from it.
+- [x] `land.js`: terrain mesh and material:
   - a `MeshStandardMaterial` with `onBeforeCompile` mixing grass, forest, rock and snow by altitude, slope and noise, with a detail normal on rock
   - height fog with aerial perspective that replaces three's fog
   - the rise and exaggeration uniforms
-- [ ] `clouds.js`: two stacked deck layers with an fbm coverage shader, lit tops and dark bases, a soft fade where they meet the terrain (heightmap texture), and the same haze.
-- [ ] `scene.js`: renderer (AgX tonemapping, sRGB, pixel ratio capped at 2 on desktop and 1.5 on phones), sun, shadows (4096 on desktop, 2048 on phones), the crest `Line2`, and the beat timeline.
-- [ ] `main.js` and `ui.js`: load, pick, build, run the beats; skip, "Another" and `?t=`; markers projected from world points; the flight cursor; the screen-reader summary; reduced motion; a `?still=1` mode for screenshots.
+- [x] `clouds.js`: two stacked deck layers with an fbm coverage shader, lit tops and dark bases, a soft fade where they meet the terrain (heightmap texture), and the same haze.
+- [x] `scene.js`: renderer (AgX tonemapping, sRGB, pixel ratio capped at 2 on desktop and 1.5 on phones), sun, shadows (4096 on desktop, 2048 on phones), the crest `Line2`, and the beat timeline.
+- [x] `main.js` and `ui.js`: load, pick, build, run the beats; skip, "Another" and `?t=`; markers projected from world points; the flight cursor; the screen-reader summary; reduced motion; a `?still=1` mode for screenshots.
 
 ### 4. The page
-- [ ] `works/005/index.html`:
+- [x] `works/005/index.html`:
   - the `<head>` from No. 004, changed for No. 005, with the empty `gen:ld` marker
   - the "← Home" pill and label, the ticker block, Skip and Another, the source line
   - the `still.jpg` fallback for no-JS and no-WebGL, an about section, and the import map
 
 ### 5. Finish
-- [ ] Browser checks: desktop and phone sizes, a flat, a big and a falling ticker, reduced motion, no WebGL.
-- [ ] `og.jpg` (1200 × 630) and `still.jpg` from headless Chrome with `?t=…&still=1`.
-- [ ] The `works.js` entry, dated the first free day once it's checked. Run `python3 works/_build.py`.
-- [ ] `works/README.md`: a line on the daily price refresh. `PRODUCT.md` is uncommitted in Mahir's checkout, so give Mahir the line it needs instead of writing it here.
+- [x] Browser checks: desktop and phone sizes, a flat, a big and a falling ticker, reduced motion, no WebGL.
+- [x] `og.jpg` (1200 × 630) and `still.jpg` from headless Chrome with `?t=…&still=1`.
+- [x] The `works.js` entry, dated the first free day once it's checked. Run `python3 works/_build.py`.
+- [x] `works/README.md`: a section on the daily price refresh. `PRODUCT.md` is uncommitted in Mahir's checkout, so give Mahir the line it needs instead of writing it here.
 - [ ] Code review, then ask Mahir before merging.
+
+## Changes made while building
+
+- **Closes are exact,** and the page computes the averages, high and low (see the data file above).
+- **Honeywell is left out** while its June 2026 aerospace spin-off is in the file. Nasdaq doesn't adjust for spin-offs, and the 51% one-day fall would draw a false cliff. `_prices.py` now leaves out any company that fell more than 40% in a day.
+- **The slopes follow a smoothed crest.** The day-to-day wiggle fades within about 1.6 days' width below the crest (at least 160 m), so it doesn't run down the faces as ribs. A notch fades only as fast as keeps the crest the highest point of its cross-section.
+- **Erosion comes from Inigo Quilez's derivative-damped fbm** (`noise.eroded`). Ridged noise drew a bed of small cones.
+- **Under a heavy deck** (overcast, storm), the clouds lift to 350 m above the highest ground and the camera stays below them (`weatherFor` → `deckFor`).
+- **The storm** has a dusk sun low behind the range, so the crest stands as a silhouette against a band of light.
+- **The rest view** turns three-quarters toward today's end, at about peak height. Foothill belts in front give it depth.
+- **Steep ground is textured from the side** (two-plane projection), so cliffs aren't smeared.
+- **The land's shaders compile with `compileAsync`** while the chart draws, so phones don't freeze on a black screen.
+- **The share image and still** were captured from the in-app browser with a dev-only `__shot()` hook (`?dev`). Headless software rendering was too slow for this scene.
