@@ -90,10 +90,12 @@ Values in between blend smoothly, and the ends clamp.
   - **Stooq** now shows a JavaScript bot check before its CSV downloads.
 - **`works/005/_prices.py`** (stdlib Python 3.9) fetches each ticker's closes for about 20 months, enough history for the 200-day average on the year's first day. It writes `works/005/prices.json`. The `_` keeps the script unpublished, like No. 004's `_coast.py`.
 - **`prices.json` holds only what the page draws:**
-  - the date the data runs through
-  - per ticker: the display name, the three lines (close, 50-day, 200-day) quantized to 0–1000 on one shared scale, and the first close, last close, high and low with their dates
+  - the date the data runs through, and one shared list of 451 trading days
+  - per ticker: the display name and its 451 daily closes, to the cent
+  - The page takes the last 252 as the year, and the 199 before them feed the 200-day average.
   - no open, intraday high and low, or volume
   - about 100–150 KB once GitHub Pages gzips it
+  - *Changed while planning the build:* closes are exact rather than quantized to 0–1000, so the price under the flight cursor matches Nasdaq's close.
 - **The daily Action** (`.github/workflows/daily.yml`) runs `_prices.py` before `_build.py`.
   - The market has closed by then, so the data is final.
   - Weekends and holidays bring no new data, so nothing changes and nothing is committed.
@@ -102,7 +104,7 @@ Values in between blend smoothly, and the ends clamp.
 - **This changes how often the Action commits:** on every trading day, not only on days a new experiment goes up. `PRODUCT.md` and `works/README.md` get a line saying so.
 - **Risks:**
   - **Nasdaq may block GitHub's servers.** The first build task is a test run from Actions. The fallback is the `yfinance` library, the only non-stdlib dependency, installed in the workflow.
-  - **Nasdaq's terms limit redistribution.** A quantized one-year line and four closes is what the picture shows anyway, but it is still derived from their data.
+  - **Nasdaq's terms limit redistribution.** The file holds closing prices only, which is what the picture shows, but it is still their data republished.
 
 ## How it's built (my calls)
 
@@ -166,7 +168,7 @@ Values in between blend smoothly, and the ends clamp.
 
 ## Left to the builder
 
-- **The scale constants:** 4,300 m per log unit, the tree, snow and cloud lines, and the horizontal length of the year. The flattest and the wildest stock on the list are the test cases.
+- **The scale constants:** 4,300 m per log unit, the tree, snow and cloud lines, and the horizontal length of the year. The plan starts with a length of 10 × the relief, between 8 and 32 km, so the ridge keeps a chart's proportions. The flattest and the wildest stock on the list are the test cases.
 - **The terrain recipe:** the noise, the erosion and the slope falloff, as long as the crest stays exact.
 - **The cloud technique, and the camera path and timings** within the beats above.
 - **Which ticker the share image shows,** chosen when it's made for how good it looks.
