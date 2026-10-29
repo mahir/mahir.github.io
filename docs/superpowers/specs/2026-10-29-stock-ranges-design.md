@@ -130,7 +130,7 @@ Values in between blend smoothly, and the ends clamp.
 
 ## Schedule and first version
 
-- **Date (my call):** the first free day once it's finished and checked, 2026-10-30 at the earliest. Medium: "Interactive WebGL and daily market data".
+- **Date (my call):** the first free day once it's finished and checked, 2026-10-30 at the earliest. *Moved to 2026-10-29 at Mahir's request, the day it was finished.* Medium: "Interactive WebGL and daily market data".
 - **Branch:** `works/005-ranges`, cut from `master`. Merging and pushing need Mahir's go-ahead in chat.
 
 **The first version has:**

@@ -27,7 +27,7 @@ window.Works = (() => {
       about: 'An isometric Istanbul where the Bosphorus, the Golden Horn and the Marmara meet, rebuilt landmark by landmark as each one raises its neighborhood.',
     },
     {
-      n: 5, title: 'The year in relief', date: '2026-10-30', medium: 'Interactive WebGL and daily market data',
+      n: 5, title: 'The year in relief', date: '2026-10-29', medium: 'Interactive WebGL and daily market data',
       about: 'A well-known S&P 500 company’s last year of closing prices as a mountain range, a new company every visit, with the weather set by how the year went.',
     },
   ];
