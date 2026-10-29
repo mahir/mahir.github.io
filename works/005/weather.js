@@ -15,14 +15,14 @@ export const ANCHORS = {
     sunElevation: 38, sunAzimuth: -150,
     zenith: hex(0x98a3ae), horizon: hex(0xcdd2d6), horizonSun: hex(0xd8d9d8), haze: hex(0xc2c8cd), hazeSun: hex(0xcfd1d0),
     sun: hex(0xe9edf1), sunIntensity: 0.9, envIntensity: 0.9, exposure: 1.0, glow: 0.06,
-    visibility: 60000, hazeHeight: 2600,
+    visibility: 70000, hazeHeight: 2600,
     cloudCover: 0.93, cloudBase: 2400, cloudDark: 0.3, highClouds: 0,
   },
   storm: {
     sunElevation: 2, sunAzimuth: 20,
     zenith: hex(0x1b2129), horizon: hex(0x4a535d), horizonSun: hex(0xc9805a), haze: hex(0x434b55), hazeSun: hex(0x6a5650),
     sun: hex(0xff8f55), sunIntensity: 2.2, envIntensity: 0.45, exposure: 0.95, glow: 0.3,
-    visibility: 40000, hazeHeight: 2000,
+    visibility: 55000, hazeHeight: 2000,
     cloudCover: 0.86, cloudBase: 1450, cloudDark: 0.7, highClouds: 0.15,
   },
 };

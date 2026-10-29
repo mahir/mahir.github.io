@@ -114,11 +114,12 @@ export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, gro
     }));
   }
 
-  // 4. The rest: the whole range again, from about the height of its peaks, so the crest stands against the sky.
-  const restTarget = [L / 2, FLOOR + relief * 0.5, -0.05 * L];
+  // 4. The rest: the whole range again, from about the height of its peaks so the crest stands against the sky,
+  // turned toward today's end so it is nearest and the year recedes into the haze.
+  const restTarget = [0.55 * L, FLOOR + relief * 0.62, -0.05 * L];
   const rest = clear(portrait
-    ? fit(restTarget, 42, 1.5, 52, aspect, ridge, L)
-    : fit(restTarget, -4, 0.8, 36, aspect, ridge, L));
+    ? fit(restTarget, 60, 0.5, 52, aspect, ridge, L)
+    : fit(restTarget, 34, -0.3, 38, aspect, ridge, L));
 
   // the flight's keys and their times
   const keys = [wide, ...along, rest];

@@ -37,7 +37,8 @@ const PAINT = /* glsl */ `
   float forest = (1.0 - smoothstep(uTreeLine - 300.0, uTreeLine + 80.0, h + (n1 - 0.5) * 400.0))
     * (1.0 - smoothstep(0.3, 0.55, slope)) * smoothstep(0.42, 0.7, n2 + (n1 - 0.5) * 0.5 + slope * 0.4);
   vec3 col = mix(grass, vec3(0.032, 0.05, 0.022) * (0.75 + 0.5 * n3), forest * 0.85);
-  rockMask = clamp(smoothstep(0.36, 0.58, slope + (n2 - 0.5) * 0.14)
+  float grip = 0.12 * (1.0 - smoothstep(600.0, 1400.0, h)); // low down, grass holds on steeper ground
+  rockMask = clamp(smoothstep(0.36 + grip, 0.58 + grip, slope + (n2 - 0.5) * 0.14)
     + smoothstep(uTreeLine + 100.0, uTreeLine + 800.0, h + (n1 - 0.5) * 500.0) * smoothstep(0.12, 0.32, slope), 0.0, 1.0);
   vec3 rock = mix(vec3(0.075, 0.068, 0.06), vec3(0.24, 0.215, 0.19), n2) * (0.85 + 0.3 * n3);
   rock *= 0.9 + 0.12 * sin(h / 19.0 + n1 * 6.0); // strata

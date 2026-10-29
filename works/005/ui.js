@@ -30,9 +30,14 @@ export function createUI({ onSkip, onAnother }) {
     el.cursor.textContent = `${day(d.dates[i])} · ${money(d.closes[i])}`;
   }
 
-  // a tag at a point on screen, or hidden
-  function place(node, at, opacity) {
+  const bottom = document.querySelector('.bottom');
+
+  // A tag at a point on screen, or hidden. A crest tag turns to the left of its stem near the right edge, and
+  // hides rather than sit on the company's name.
+  function place(node, at, opacity, crest = false) {
+    if (crest && at && at.y > bottom.getBoundingClientRect().top - 8) at = null;
     if (!at || opacity < 0.01) { node.style.opacity = '0'; return; }
+    if (crest) node.classList.toggle('flip', at.x + node.offsetWidth > innerWidth - 12);
     node.style.transform = `translate3d(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px, 0)`;
     node.style.opacity = opacity.toFixed(3);
   }

@@ -43,7 +43,8 @@ export function createClouds(U) {
           float lit = clamp(0.62 + (d - toward) * 2.2, 0.18, 1.2);
           vec3 top = (uAmb * 0.72 + uSunCol * uSunI * 0.3 * lit) * (0.74 + 0.09 * uLayer);
           top = mix(top * vec3(0.8, 0.84, 0.92), top, smoothstep(0.05, 0.7, d)); // thin edges cooler and darker
-          vec3 under = uAmb * mix(0.8, 0.3, uCloudDark) * (0.75 + 0.25 * (1.0 - d));
+          // from below: bright and thin at the edges on a fine day, a dark ceiling in a storm
+          vec3 under = uAmb * mix(1.05, 0.3, uCloudDark) * (0.78 + 0.25 * (1.0 - d)) + uSunCol * uSunI * 0.05 * (1.0 - uCloudDark) * (1.0 - d);
           vec3 col = cameraPosition.y > vWorld.y ? top : under;
           float ground = texture2D(uHeight, (vWorld.xz - uRect.xy) * uRect.zw).r;
           float a = smoothstep(0.0, 0.85, d) * uOpacity;

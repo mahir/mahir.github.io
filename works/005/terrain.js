@@ -95,7 +95,8 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
     { line: ridgeLine(ma200.map(lift), L), z: -0.62 * L, wide: 1.8 },
   ];
   const gully = clamp(L / 40, 250, 800); // spacing of spurs and gullies, which run down the slopes (along z)
-  const spike = 1.6 * (L / (YEAR - 1)); // how far a single day's rise or dip reaches down the slope
+  const spike = Math.max(1.6 * (L / (YEAR - 1)), 160); // how far a day's rise or dip reaches down the slope; wide enough that hills stay rounded
+  const hills = clamp(0.13 * scale.relief, 120, 480); // the foothills' height
   const broad = 0.35 * L;
 
   const heights = new Float32Array(cols * rows);
@@ -124,7 +125,14 @@ export function buildTerrain({ closes, ma50, ma200, scale, seed = 1, quality = '
       const wz = z + 0.45 * gully * noise.fbm(x / (2 * gully) + 5.2, z / (2 * gully) - 1.3, 2);
       const erosion = clamp(0.6 * (1 - noise.ridged(wx / gully, wz / (gully * 1.25), 5)) + 0.4 * (0.5 + 0.5 * noise.fbm(x / (gully * 4), z / (gully * 4), 3)), 0, 1);
       const detail = 0.5 + 0.5 * noise.fbm(x / (gully * 0.35), z / (gully * 0.35), 3); // only ever carves
+      // belts of foothills in front of the range, for depth; lower where the year was low, never near the crest
+      const front = smoothstep(0.07 * L, 0.17 * L, z) * (1 - smoothstep(0.36 * L, 0.44 * L, z));
       let h = plain;
+      if (front > 0) {
+        const lowHere = clamp((perCol[0].c[ci] - FLOOR) / Math.max(scale.relief, 1) * 2, 0.3, 1);
+        const belt = noise.ridged(wx / (0.09 * L), wz / (0.045 * L), 4);
+        h += front * lowHere * hills * belt * belt * (0.75 + 0.25 * erosion);
+      }
       for (let k = 0; k < ranges.length; k++) {
         const col = perCol[k];
         const c = col.c[ci], s = col.s[ci];

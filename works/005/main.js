@@ -56,11 +56,14 @@ try {
     worker.postMessage({ id: ++buildId, closes: d.closes, ma50: d.ma50, ma200: d.ma200, lo: d.lo, hi: d.hi, seed: seedOf(symbol), quality: small ? 'mid' : 'high' });
   }
 
-  worker.onmessage = ({ data }) => {
+  worker.onmessage = async ({ data }) => {
     if (data.id !== buildId) return;
-    range.heightAt = sampler(data);
-    scene.setTerrain(data, range.heightAt);
+    const mine = range;
+    mine.heightAt = sampler(data);
+    scene.setTerrain(data, mine.heightAt);
     rebuildPath();
+    await scene.prepare();
+    if (range !== mine) return;
     range.ready = true;
     if (noFlight) t = T.rest;
     if (wantSkip) skip();
@@ -103,7 +106,7 @@ try {
 
   function tag(node, p, cam, opacity) {
     const s = scene.project(p);
-    ui.place(node, s.visible && !hidden(p, cam) ? s : null, opacity);
+    ui.place(node, s.visible && !hidden(p, cam) ? s : null, opacity, true);
   }
 
   let last = performance.now();

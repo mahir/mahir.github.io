@@ -40,6 +40,9 @@ export function createScene(canvas, { small }) {
   const land = createLand(U);
   const clouds = createClouds(U);
   scene.add(sky.mesh, land.mesh, land.skirt, ...clouds.layers);
+  // the land and clouds stay out of the opening chart until their shaders are compiled
+  const hideLand = (hidden) => { for (const m of [land.mesh, land.skirt, ...clouds.layers]) m.visible = !hidden; };
+  hideLand(true);
 
   const sun = new THREE.DirectionalLight(0xffffff, 1);
   sun.castShadow = true;
@@ -53,7 +56,7 @@ export function createScene(canvas, { small }) {
   scene.add(line);
   let segments = 0;
 
-  let weather = null, terrain = null, L = 1, envReady = false;
+  let weather = null, terrain = null, L = 1;
   const center = new THREE.Vector3();
 
   function setWeather(w, scale) {
@@ -82,7 +85,7 @@ export function createScene(canvas, { small }) {
     srgb(sun.color, w.sun);
     renderer.toneMappingExposure = w.exposure;
     clouds.place(L, w.cloudBase);
-    envReady = false;
+    scene.environment = sky.environment(renderer);
   }
 
   function setLine(positions) {
@@ -97,6 +100,7 @@ export function createScene(canvas, { small }) {
   // the land from the worker, and a small heightmap so the clouds can thin where peaks break through
   function setTerrain(t, heightAt) {
     terrain = t;
+    hideLand(true);
     land.setTerrain(t);
     const n = 256, x0 = t.xs[0], z0 = t.zs[0], w = t.xs[t.cols - 1] - x0, d = t.zs[t.rows - 1] - z0;
     const data = new Uint16Array(n * n);
@@ -112,6 +116,12 @@ export function createScene(canvas, { small }) {
     U.uRadius.value = 2.4 * L;
     center.set(L / 2, 0, -0.2 * L);
     fitShadow();
+  }
+
+  // Compile the land's and clouds' shaders without holding up the page, then let them show.
+  async function prepare() {
+    try { await renderer.compileAsync(scene, camera); } catch { /* compiles on first draw instead */ }
+    hideLand(false);
   }
 
   // the sun's shadow camera, tight around the land as the sun sees it
@@ -154,7 +164,6 @@ export function createScene(canvas, { small }) {
     U.uSkyTime.value = time;
     sun.intensity = weather.sunIntensity * day;
     scene.environmentIntensity = weather.envIntensity * day;
-    if (!envReady && terrain) { scene.environment = sky.environment(renderer); envReady = true; }
 
     line.scale.y = stretch;
     line.position.y = FLOOR * (1 - stretch) + 2;
@@ -197,5 +206,5 @@ export function createScene(canvas, { small }) {
     return w / h;
   }
 
-  return { renderer, camera, setWeather, setLine, setTerrain, frame, project, resize, fitShadow };
+  return { renderer, camera, setWeather, setLine, setTerrain, prepare, frame, project, resize, fitShadow };
 }
