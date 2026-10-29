@@ -1,0 +1,50 @@
+# Temporary: checks that Nasdaq's public quote API answers GitHub's servers before No. 005 relies on it.
+# Removed once works/005/_prices.py runs in daily.yml.
+name: Nasdaq probe
+on:
+  push:
+    branches: [works/005-ranges]
+    paths: ['.github/workflows/nasdaq-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Nasdaq API
+        run: |
+          python3 - <<'PY'
+          import json, time, urllib.request
+          UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+          ok = 0
+          tickers = ['NFLX', 'MSFT', 'NKE', 'AAPL', 'DIS', 'KO', 'BRK.B', 'NVDA', 'JPM', 'SBUX']
+          for t in tickers:
+              url = f'https://api.nasdaq.com/api/quote/{t}/historical?assetclass=stocks&fromdate=2025-03-01&todate=2026-10-29&limit=9999'
+              req = urllib.request.Request(url, headers={'User-Agent': UA, 'Accept': 'application/json, text/plain, */*', 'Accept-Language': 'en-US,en;q=0.9'})
+              t0 = time.time()
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as r:
+                      d = json.load(r)['data']
+                  rows = d['tradesTable']['rows']
+                  print(f'{t:6} ok   {len(rows)} rows  {rows[-1]["date"]} {rows[-1]["close"]} .. {rows[0]["date"]} {rows[0]["close"]}  {time.time()-t0:.1f}s')
+                  ok += 1
+              except Exception as e:
+                  print(f'{t:6} FAIL {type(e).__name__}: {e}  {time.time()-t0:.1f}s')
+              time.sleep(0.5)
+          print(f'Nasdaq: {ok} of {len(tickers)}')
+          PY
+      - name: yfinance (fallback)
+        continue-on-error: true
+        run: |
+          pip install --quiet yfinance
+          python3 - <<'PY'
+          import yfinance as yf
+          for t in ['NFLX', 'MSFT', 'BRK-B']:
+              try:
+                  h = yf.Ticker(t).history(period='2y', auto_adjust=True)
+                  print(f'{t:6} ok   {len(h)} rows  last close {h["Close"].iloc[-1]:.2f}')
+              except Exception as e:
+                  print(f'{t:6} FAIL {type(e).__name__}: {e}')
+          PY
