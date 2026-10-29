@@ -165,11 +165,11 @@
   :root {
     --night: #0d0c10;
     --plaster: #f1eae1;
-    --dust: rgba(241, 234, 225, .7);
-    --faint: rgba(241, 234, 225, .46);
+    --dust: rgba(241, 234, 225, .8);
     --ember: #ffb57f;
     --hair: rgba(241, 234, 225, .24);
     --veil: rgba(13, 12, 16, .42);
+    --shade: rgba(13, 12, 16, .76) 58%, rgba(13, 12, 16, .64) 68.5%, rgba(13, 12, 16, .38) 79%, rgba(13, 12, 16, .12) 89.5%, transparent;
     --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
     --pad: clamp(16px, 2.4vw, 32px);
@@ -195,6 +195,19 @@
   .hud::before, .hud::after { content: ""; position: fixed; left: 0; right: 0; z-index: -1; pointer-events: none; }
   .hud::before { top: 0; height: 11rem; background: linear-gradient(rgba(13, 12, 16, .5), transparent); }
   .hud::after { bottom: 0; height: 24rem; background: linear-gradient(transparent, rgba(13, 12, 16, .66)); }
+  /* and deepen from the corner behind the nav and the clock, enough for the small labels over the model at noon */
+  .works-nav, .clock { position: relative; }
+  .works-nav::before, .clock::before { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+  .works-nav::before {
+    left: calc(-1 * var(--pad) - env(safe-area-inset-left)); top: calc(-1 * var(--pad) - env(safe-area-inset-top));
+    width: calc(220% + var(--pad)); height: calc(280% + var(--pad));
+    background: radial-gradient(farthest-side at 0 0, var(--shade));
+  }
+  .clock::before {
+    left: calc(-1 * var(--pad) - env(safe-area-inset-left)); bottom: calc(-1 * var(--pad) - env(safe-area-inset-bottom));
+    width: calc(135% + var(--pad)); height: calc(170% + var(--pad));
+    background: radial-gradient(farthest-side at 0 100%, var(--shade));
+  }
   .hud a, .hud button, .hud [role="slider"] { pointer-events: auto; }
 
   .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
@@ -237,17 +250,17 @@
   @keyframes pulse { 50% { opacity: .35; } }
   .time { display: flex; align-items: baseline; gap: .18em; font: 300 clamp(48px, 7.4vw, 96px)/.9 var(--sans); font-stretch: 112%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .time .ampm { font-size: .36em; letter-spacing: 0; }
-  .time .zone { margin-left: .5em; font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--faint); }
+  .time .zone { margin-left: .5em; font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--dust); }
   .meta { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 12.5px; color: var(--dust); }
   .meta .grid-line { color: var(--plaster); }
 
   .actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .pill.now[aria-pressed="true"] { border-color: var(--ember); color: var(--ember); }
-  .pill .soft { color: var(--faint); text-transform: none; letter-spacing: .04em; }
+  .pill .soft { color: var(--dust); text-transform: none; letter-spacing: .04em; }
 
   .tracks { display: grid; gap: 4px; }
   .track { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); align-items: center; column-gap: 12px; }
-  .track .name { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+  .track .name { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dust); }
   .rail { position: relative; height: 30px; cursor: pointer; touch-action: none; }
   .rail canvas { position: absolute; left: 0; right: 0; top: 12px; width: 100%; height: 6px; border-radius: 3px; }
   .rail .marks { position: absolute; inset: 0; pointer-events: none; }
@@ -257,7 +270,7 @@
     position: absolute; top: 6px; width: 2px; height: 18px; margin-left: -1px; border-radius: 1px; background: var(--plaster);
     box-shadow: 0 0 0 3px rgba(13, 12, 16, .45);
   }
-  .scale { grid-column: 2; display: flex; justify-content: space-between; margin-top: -4px; font-size: 10px; letter-spacing: .08em; color: var(--faint); }
+  .scale { grid-column: 2; display: flex; justify-content: space-between; margin-top: -4px; font-size: 11px; letter-spacing: .08em; color: var(--dust); }
 
   .about { position: absolute; }
 
@@ -275,7 +288,7 @@
   .js:not(.ready) .hud > .top, .js:not(.ready) .clock { opacity: 0; }
 
   @media (max-width: 640px) {
-    .label, .wide { display: none; }
+    .label, .wide, .works-nav::before { display: none; }
     .narrow { display: inline; }
     .views .pill { padding: 8px 10px; letter-spacing: .1em; }
     .clock { gap: 10px; }
@@ -283,6 +296,7 @@
     .track { grid-template-columns: 2.8rem minmax(0, 1fr); column-gap: 8px; }
     .actions .pill { padding: 8px 11px; letter-spacing: .1em; }
     .hud::after { height: 30rem; }
+    .clock::before { width: calc(200% + var(--pad)); }
   }
   @media (max-height: 560px) and (min-width: 641px) {
     .time { font-size: 44px; }

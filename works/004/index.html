@@ -165,8 +165,7 @@
   :root {
     --paper: #f3ead9;
     --ink: #3b2f26;
-    --soft: rgba(59, 47, 38, .66);
-    --faint: rgba(59, 47, 38, .44);
+    --soft: rgba(59, 47, 38, .8);
     --hair: rgba(59, 47, 38, .18);
     --veil: rgba(255, 250, 240, .84);
     --terra: #dd6a44;
@@ -190,7 +189,7 @@
   .hud {
     position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
     padding: calc(var(--pad) + env(safe-area-inset-top)) calc(var(--pad) + env(safe-area-inset-right))
-             calc(var(--pad) + 14px + env(safe-area-inset-bottom)) calc(var(--pad) + env(safe-area-inset-left));
+             calc(var(--pad) + 22px + env(safe-area-inset-bottom)) calc(var(--pad) + env(safe-area-inset-left));
     pointer-events: none;
   }
   .hud a, .hud button, .hud .tray { pointer-events: auto; }
@@ -206,7 +205,10 @@
   .back { background: var(--ink); color: var(--paper); border-color: var(--ink); transition: background .2s ease, border-color .2s ease; }
   .back:hover { background: var(--terra-deep); border-color: var(--terra-deep); }
   .back:focus-visible, .build:focus-visible, .tray button:focus-visible { outline: 2px solid var(--terra); outline-offset: 3px; }
-  .label { margin: 0; padding-left: 1.2em; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+  .label {
+    margin: 0; padding: 6px 14px; border-radius: 999px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--soft); background: var(--veil); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
   .count b { font: 600 14px/1 var(--sans); letter-spacing: 0; }
 
   .toast {
@@ -248,13 +250,16 @@
   .build {
     flex: 0 0 auto; padding: 14px 20px; border: 0; border-radius: 999px; cursor: pointer;
     font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
-    color: #fff; background: var(--terra); box-shadow: 0 6px 18px rgba(193, 56, 30, .25);
+    color: #fff; background: var(--terra-deep); box-shadow: 0 6px 18px rgba(193, 56, 30, .25);
     transition: background .2s ease, opacity .3s ease;
   }
-  .build:hover { background: var(--terra-deep); }
-  .build:disabled { cursor: default; opacity: .45; background: var(--terra); }
-  .build.running { opacity: 1; background: var(--terra-deep); }
-  .credit { position: fixed; left: calc(var(--pad) + env(safe-area-inset-left)); bottom: calc(6px + env(safe-area-inset-bottom)); margin: 0; font-size: 9.5px; color: var(--faint); pointer-events: auto; }
+  .build:hover { background: var(--ink); }
+  .build:disabled { cursor: default; opacity: .45; background: var(--terra-deep); }
+  .build.running { opacity: 1; }
+  .credit {
+    position: fixed; left: calc(var(--pad) + env(safe-area-inset-left)); bottom: calc(6px + env(safe-area-inset-bottom));
+    margin: 0; padding: 3px 10px; border-radius: 999px; font-size: 11px; line-height: 1.4; color: var(--soft); background: var(--veil); pointer-events: auto;
+  }
   .credit a { color: inherit; }
   .done .play { display: none; }
 
