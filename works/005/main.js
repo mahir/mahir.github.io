@@ -45,12 +45,15 @@ try {
     const sky = weatherFor(d.change);
     const deck = deckFor(sky, top);
     const weather = { ...sky, cloudBase: deck.base, ceiling: deck.ceiling };
-    range = { d, scale, weather, crest, heightAt: null, ready: false };
+    // the tags the flight passes: each month's last close, leaving room for the high and the low
+    const months = d.dates.flatMap((date, i) => (i < YEAR - 1 && date.slice(0, 7) !== d.dates[i + 1].slice(0, 7)
+      && Math.abs(i - d.hiDay) > 6 && Math.abs(i - d.loDay) > 6 ? [i] : []));
+    range = { d, scale, weather, crest, months, heightAt: null, ready: false };
     scene.setWeather(weather, scale);
     scene.setLine(crestLine(d.closes, scale, 4));
     rebuildPath();
     ui.setTicker(d);
-    for (const node of [ui.el.hi, ui.el.lo, ui.el.cursor]) ui.place(node, null, 0); // no tags left from the last company
+    for (const node of [ui.el.hi, ui.el.lo, ...ui.el.marks]) ui.place(node, null, 0); // no tags left from the last company
     remember(symbol);
     t = 0; skipping = null; wantSkip = false; restFrames = 0;
     root.classList.remove('resting');
@@ -91,7 +94,7 @@ try {
       try { show(pick(json, { last: range.d.t })); } catch (err) { fail(err); }
       root.classList.remove('swap');
       swapping = false;
-    }, 380);
+    }, 600);
   }
 
   // Is anything between the camera and this point? A few samples along the way, against the land.
@@ -122,7 +125,7 @@ try {
       let b = beatsAt(t);
       let pose = noFlight && t >= T.rest ? range.path.rest : range.path.at(t);
       if (skipping) {
-        skipping.u = Math.min(1, skipping.u + dt / 1.4);
+        skipping.u = Math.min(1, skipping.u + dt / 2);
         const u = smooth(skipping.u);
         pose = blend(skipping.pose, pose, u);
         b = mixBeats(skipping.beats, END, u);
@@ -133,15 +136,24 @@ try {
 
       const { d, scale } = range;
       const alt = (c) => FLOOR + (scale.alt(c) - FLOOR) * stretch;
-      const marks = skipping ? 0 : smooth((t - T.flight + 0.4) / 1.4);
+      const marks = skipping ? 0 : smooth((t - T.flight + 0.6) / 2);
       tag(ui.el.hi, [scale.dayX(d.hiDay), alt(d.hi), 0], pose.pos, marks);
       tag(ui.el.lo, [scale.dayX(d.loDay), alt(d.lo), 0], pose.pos, marks);
-      const along = smooth((t - T.alongStart) / 0.8) * (1 - smooth((t - T.alongEnd + 0.4) / 0.8));
-      if (along > 0 && !skipping) {
-        const i = Math.max(0, Math.min(YEAR - 1, Math.round((pose.target[0] / scale.L) * (YEAR - 1))));
-        ui.setCursor(d, i);
-        tag(ui.el.cursor, [scale.dayX(i), alt(d.closes[i]), 0], pose.pos, along);
-      } else ui.place(ui.el.cursor, null, 0);
+      // the month ends the flight passes: each holds while the view is on it and crossfades into the next
+      const along = skipping ? 0 : smooth((t - T.alongStart) / 1.2) * (1 - smooth((t - T.alongEnd + 0.6) / 1.2));
+      const [px, , pz] = pose.pos, [qx, , qz] = pose.target;
+      const look = ((pz - qz > 1 ? px + ((qx - px) * pz) / (pz - qz) : qx) / scale.L) * (YEAR - 1); // the day in the middle of the view
+      const shown = [null, null];
+      if (along > 0) range.months.forEach((i, j) => {
+        const o = 1 - smooth((Math.abs(look - i) / 21 - 0.25) / 0.5);
+        if (o > 0) shown[j % 2] = { i, o };
+      });
+      ui.el.marks.forEach((node, k) => {
+        const m = shown[k];
+        if (!m) { ui.place(node, null, 0); return; }
+        ui.setMark(node, d, m.i);
+        tag(node, [scale.dayX(m.i), alt(d.closes[m.i]), 0], pose.pos, m.o * along);
+      });
       const axis = b.draw * (1 - smooth((t - T.tip) / 0.8));
       const below = FLOOR - 0.07 * scale.relief * stretch;
       ui.place(ui.el.start, scene.project([0, below, 0]), axis);

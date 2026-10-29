@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { makePath, blend, beats, T } from '../path.js';
+import { makePath, blend, beats, flightClock, T } from '../path.js';
 import { buildTerrain, sampler, monotone } from '../terrain.js';
 import { decode, seedOf, YEAR } from '../data.js';
 import { makeScale, FLOOR } from '../scale.js';
@@ -47,6 +47,22 @@ test('blend starts and ends on its poses', () => {
   const close = (p, q) => p.every((v, i) => Math.abs(v - q[i]) < 1e-6);
   assert.ok(close(blend(a, b, 0).pos, a.pos) && close(blend(a, b, 1).pos, b.pos));
   assert.ok(Math.abs(blend(a, b, 1).fov - 40) < 1e-9);
+});
+
+test('the flight clock meets every key on time, never runs back, and sets off and settles without a jolt', () => {
+  const times = [8.4, 12.6, 14.7, 16.8, 18.9, 21, 23.1, 25.2, 27.3, 29.4, 34];
+  const clock = flightClock(times);
+  times.forEach((t, k) => assert.ok(Math.abs(clock(t) - k) < 1e-9, `key ${k}`));
+  const dt = 0.01;
+  let prev = clock(times[0]), prevSpeed = 0;
+  for (let t = times[0] + dt; t <= times.at(-1) + 1e-9; t += dt) {
+    const u = clock(t), speed = (u - prev) / dt;
+    assert.ok(speed >= -1e-9, `backwards at ${t.toFixed(2)}`);
+    assert.ok(Math.abs(speed - prevSpeed) < 0.02, `a jolt at ${t.toFixed(2)}`);
+    prev = u; prevSpeed = speed;
+  }
+  assert.ok((clock(times[0] + dt) - clock(times[0])) / dt < 0.01, 'sets off from a standstill');
+  assert.ok((clock(times.at(-1)) - clock(times.at(-1) - dt)) / dt < 0.01, 'settles to a standstill');
 });
 
 test('the beats run in order', () => {

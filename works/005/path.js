@@ -4,8 +4,8 @@
 
 import { FLOOR } from './scale.js';
 
-export const T = { tip: 2.2, flight: 6.4, alongStart: 8.8, alongEnd: 21.6, rest: 24.2 };
-export const DRAW = [0.25, 2.0]; // the line draws itself between these seconds
+export const T = { tip: 2.9, flight: 8.4, alongStart: 12.6, alongEnd: 29.4, rest: 34 };
+export const DRAW = [0.3, 2.3]; // the line draws itself between these seconds
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const smooth = (t) => { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
@@ -100,19 +100,29 @@ export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, gro
     : fit(wideTarget, -6, 8, 40, aspect, ridge, L));
 
   // 3. Along the year, a little below the local peaks so the crest stands against the sky.
-  const along = [];
+  const raw = [];
   const n = 9;
   for (let i = 0; i < n; i++) {
     const x = lerp(-0.03 * L, 1.03 * L, i / (n - 1));
     let peak = FLOOR;
     for (let s = -0.05; s <= 0.12; s += 0.01) peak = Math.max(peak, crest(clamp(x + s * L, 0, L)));
     const camX = x - 0.03 * L, camZ = 0.13 * L;
-    along.push(clear({
+    raw.push({
       pos: [camX, Math.max(FLOOR + 220, FLOOR + 0.85 * (peak - FLOOR)), camZ],
       target: [x + 0.14 * L, FLOOR + 0.78 * (peak - FLOOR), -0.03 * L],
       fov: portrait ? 64 : 48,
-    }));
+    });
   }
+  // heights eased between neighbours, so the camera glides over the year rather than bobbing from key to key
+  const soften = (field, i) => {
+    const y = (j) => raw[clamp(j, 0, n - 1)][field][1];
+    return (y(i - 2) + 4 * y(i - 1) + 6 * y(i) + 4 * y(i + 1) + y(i + 2)) / 16;
+  };
+  const along = raw.map((k, i) => clear({
+    ...k,
+    pos: [k.pos[0], soften('pos', i), k.pos[2]],
+    target: [k.target[0], soften('target', i), k.target[2]],
+  }));
 
   // 4. The rest: the whole range again, from about the height of its peaks so the crest stands against the sky,
   // turned toward today's end so it is nearest and the year recedes into the haze.
@@ -124,13 +134,11 @@ export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, gro
   // the flight's keys and their times
   const keys = [wide, ...along, rest];
   const times = [T.flight, ...along.map((_, i) => lerp(T.alongStart, T.alongEnd, i / (n - 1))), T.rest];
+  const clock = flightClock(times);
 
-  function spline(field, t) {
-    let k = 0;
-    while (k < times.length - 2 && t > times[k + 1]) k++;
-    const u = clamp((t - times[k]) / (times[k + 1] - times[k]), 0, 1);
-    // ease into the first key and out of the last
-    const e = k === 0 || k === times.length - 2 ? smooth(u) : u;
+  // the curve through the keys at u, key k at u = k
+  function spline(field, u) {
+    const k = Math.min(Math.floor(u), keys.length - 2), e = u - k;
     const p0 = keys[Math.max(0, k - 1)][field], p1 = keys[k][field], p2 = keys[k + 1][field], p3 = keys[Math.min(keys.length - 1, k + 2)][field];
     const e2 = e * e, e3 = e2 * e;
     return p1.map((_, i) => 0.5 * (2 * p1[i] + (-p0[i] + p2[i]) * e + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * e2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * e3));
@@ -140,17 +148,31 @@ export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, gro
     if (t < T.tip) return chart;
     if (t < T.flight) return blend(chart, wide, smooth((t - T.tip) / (T.flight - T.tip)));
     if (t < T.rest) {
-      let k = 0;
-      while (k < times.length - 2 && t > times[k + 1]) k++;
-      const u = clamp((t - times[k]) / (times[k + 1] - times[k]), 0, 1);
-      const pos = spline('pos', t);
+      const u = clock(t), k = Math.min(Math.floor(u), keys.length - 2);
+      const pos = spline('pos', u);
       pos[1] = Math.max(pos[1], ground(pos[0], pos[2]) + 160); // between keys the curve can swing low
-      return { pos, target: spline('target', t), fov: lerp(keys[k].fov, keys[k + 1].fov, smooth(u)) };
+      return { pos, target: spline('target', u), fov: lerp(keys[k].fov, keys[k + 1].fov, smooth(u - k)) };
     }
     return drift(rest, t - T.rest, L);
   }
 
   return { at, chart, wide, along, rest, stretch };
+}
+
+// Where along the keys the flight is at time t: key k at times[k], setting off from the first and settling on the
+// last from a standstill, and changing speed smoothly between keys a different time apart (a monotone cubic through
+// the knots, so it never runs backwards).
+export function flightClock(times) {
+  const n = times.length;
+  const rate = times.slice(1).map((v, k) => 1 / (v - times[k])); // keys a second, gap by gap
+  const m = times.map((_, k) => (k === 0 || k === n - 1 ? 0 : (rate[k - 1] + rate[k]) / 2));
+  return (t) => {
+    let k = 0;
+    while (k < n - 2 && t > times[k + 1]) k++;
+    const h = times[k + 1] - times[k];
+    const s = clamp((t - times[k]) / h, 0, 1), s2 = s * s, s3 = s2 * s;
+    return k + 3 * s2 - 2 * s3 + h * ((s3 - 2 * s2 + s) * m[k] + (s3 - s2) * m[k + 1]);
+  };
 }
 
 // From one pose to another as a dolly zoom: direction and target glide, distance and lens change in log space,

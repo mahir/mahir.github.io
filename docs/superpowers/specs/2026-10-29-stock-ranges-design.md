@@ -59,8 +59,8 @@ Values in between blend smoothly, and the ends clamp.
 ## The animation (Mahir chose "chart becomes land")
 
 1. **The chart.** A plain white line draws itself left to right on a dark, empty background, with the ticker, the company name and faint start and end dates. It should look like any stock chart. About 2 seconds.
-2. **It tips forward.** The camera swings from a flat front view to a low view across the land. Terrain rises up under the line, the line becomes the crest, the sky lights into the day's weather, and the ranges behind rise out of the haze. About 4 seconds.
-3. **The flight.** A slow camera flight along the ridge from a year ago to today. Small markers stand at the year's high and low, and the dates pass by. About 15–20 seconds.
+2. **It tips forward.** The camera swings from a flat front view to a low view across the land. Terrain rises up under the line, the line becomes the crest, the sky lights into the day's weather, and the ranges behind rise out of the haze. About 5½ seconds.
+3. **The flight.** A slow camera flight along the ridge from a year ago to today. Small markers stand at the year's high and low, and a tag stands at each month's last close as the flight passes it, crossfading into the next. About 20 seconds.
 4. **The rest.** The camera ends on the whole range with today's close in view, the labels settle, and the camera drifts slowly. "Another" is there.
 
 - **Skipping.** A click, tap or key skips straight to the rest view.

@@ -150,3 +150,10 @@
   - The file's date never moves backwards.
   - Each new range frees the last one's GPU buffers.
   - A lost WebGL context, or a failed swap, shows the still.
+- **Calmer after a first look:**
+  - The beats are slower: 34 seconds to the rest, from 24. The tip forward takes 5½ seconds and the flight along the year 17.
+  - The flight's clock is a monotone cubic through the keys (`flightClock`), so the camera sets off from the wide view and settles on the rest without a jolt. Its top speed is about half what it was.
+  - The camera's heights along the year are smoothed across neighbouring keys, so it glides rather than bobbing.
+  - The tag under the flight stands at each month's last close and crossfades into the next, instead of rolling through every day. Months within six days of the high or the low are left out.
+  - Crest tags sit on whichever side of their stem has more room, and fade at the screen's edge instead of being cut off.
+  - "Another" fades the name and tags out with the land, over 0.6 seconds, and Skip glides to the rest over 2.

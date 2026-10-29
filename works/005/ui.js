@@ -1,5 +1,5 @@
 // The words over the picture: the company and its year, the buttons, the dates under the opening chart, and the
-// tags that stand on the crest at the year's high, its low and the day the flight is passing.
+// tags that stand on the crest at the year's high, its low and the month ends the flight passes.
 
 import { money, pct, day, shortDay, span, summary } from './format.js';
 
@@ -8,7 +8,7 @@ export function createUI({ onSkip, onAnother }) {
   const el = {
     sym: $('sym'), name: $('name'), move: $('move'), span: $('span'), source: $('source'), live: $('live'),
     skip: $('skip'), another: $('another'),
-    hi: $('tag-hi'), lo: $('tag-lo'), cursor: $('tag-day'), start: $('axis-start'), end: $('axis-end'),
+    hi: $('tag-hi'), lo: $('tag-lo'), marks: [$('tag-month-a'), $('tag-month-b')], start: $('axis-start'), end: $('axis-end'),
   };
   el.skip.addEventListener('click', (e) => { e.stopPropagation(); onSkip(); });
   el.another.addEventListener('click', (e) => { e.stopPropagation(); onAnother(); });
@@ -26,21 +26,33 @@ export function createUI({ onSkip, onAnother }) {
     el.live.textContent = summary(d);
   }
 
-  function setCursor(d, i) {
-    el.cursor.textContent = `${day(d.dates[i])} · ${money(d.closes[i])}`;
+  // two month tags take turns, so one can fade out while the next fades in
+  function setMark(node, d, i) {
+    if (node.dataset.day === `${d.t}:${i}`) return;
+    node.dataset.day = `${d.t}:${i}`;
+    node.textContent = `${day(d.dates[i])} · ${money(d.closes[i])}`;
   }
 
   const bottom = document.querySelector('.bottom');
 
-  // A tag at a point on screen, or hidden. A crest tag turns to the left of its stem near the right edge, and
-  // hides rather than sit on the company's name.
+  // A tag at a point on screen, or hidden. A crest tag turns to the left of its stem when there's more room there
+  // near the right edge, fades out as the screen's edge reaches it rather than being cut off, and hides rather than
+  // sit on the company's name.
   function place(node, at, opacity, crest = false) {
     if (crest && at && at.y > bottom.getBoundingClientRect().top - 8) at = null;
     if (!at || opacity < 0.01) { node.style.opacity = '0'; return; }
-    if (crest) node.classList.toggle('flip', at.x + node.offsetWidth > innerWidth - 12);
+    if (crest) {
+      const w = node.offsetWidth, right = innerWidth - at.x - w, left = at.x - w;
+      const flip = right < 12 && left > right;
+      node.classList.toggle('flip', flip);
+      const room = flip ? Math.min(left, innerWidth - at.x) : Math.min(at.x, right);
+      const u = Math.min(1, Math.max(0, (room + 6) / 30));
+      opacity *= u * u * (3 - 2 * u);
+      if (opacity < 0.01) { node.style.opacity = '0'; return; }
+    }
     node.style.transform = `translate3d(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px, 0)`;
     node.style.opacity = opacity.toFixed(3);
   }
 
-  return { el, setTicker, setCursor, place };
+  return { el, setTicker, setMark, place };
 }

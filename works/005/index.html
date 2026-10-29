@@ -180,8 +180,9 @@
   button { font: inherit; color: inherit; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; transition: opacity .38s ease; }
-  .swap #scene { opacity: 0; }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+  #scene, .ticker, .tags { transition: opacity .6s ease; }
+  .swap #scene, .swap .ticker, .swap .tags { opacity: 0; }
   .still { position: fixed; inset: 0; margin: 0; display: none; }
   .still img { width: 100%; height: 100%; object-fit: cover; }
   /* a lens's falloff, and shade under the words */
@@ -265,7 +266,7 @@
     .label { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #scene, .bottom, .credit, .actions button { transition: none; }
+    #scene, .ticker, .tags, .bottom, .credit, .actions button { transition: none; }
   }
 </style>
 <script>document.documentElement.classList.replace('no-js', 'js');</script>
@@ -277,7 +278,8 @@
 <div class="tags" aria-hidden="true">
   <span class="tag" id="tag-hi"></span>
   <span class="tag" id="tag-lo"></span>
-  <span class="tag day" id="tag-day"></span>
+  <span class="tag day" id="tag-month-a"></span>
+  <span class="tag day" id="tag-month-b"></span>
   <span class="axis" id="axis-start"></span>
   <span class="axis" id="axis-end"></span>
 </div>
