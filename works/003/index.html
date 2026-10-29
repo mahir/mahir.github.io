@@ -165,8 +165,7 @@
   :root {
     --night: #0d0c10;
     --plaster: #f1eae1;
-    --dust: rgba(241, 234, 225, .7);
-    --faint: rgba(241, 234, 225, .46);
+    --dust: rgba(241, 234, 225, .8);
     --ember: #ffb57f;
     --hair: rgba(241, 234, 225, .24);
     --veil: rgba(13, 12, 16, .42);
@@ -237,17 +236,17 @@
   @keyframes pulse { 50% { opacity: .35; } }
   .time { display: flex; align-items: baseline; gap: .18em; font: 300 clamp(48px, 7.4vw, 96px)/.9 var(--sans); font-stretch: 112%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .time .ampm { font-size: .36em; letter-spacing: 0; }
-  .time .zone { margin-left: .5em; font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--faint); }
+  .time .zone { margin-left: .5em; font: 400 11px/1 var(--mono); letter-spacing: .14em; color: var(--dust); }
   .meta { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 12.5px; color: var(--dust); }
   .meta .grid-line { color: var(--plaster); }
 
   .actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .pill.now[aria-pressed="true"] { border-color: var(--ember); color: var(--ember); }
-  .pill .soft { color: var(--faint); text-transform: none; letter-spacing: .04em; }
+  .pill .soft { color: var(--dust); text-transform: none; letter-spacing: .04em; }
 
   .tracks { display: grid; gap: 4px; }
   .track { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); align-items: center; column-gap: 12px; }
-  .track .name { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+  .track .name { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dust); }
   .rail { position: relative; height: 30px; cursor: pointer; touch-action: none; }
   .rail canvas { position: absolute; left: 0; right: 0; top: 12px; width: 100%; height: 6px; border-radius: 3px; }
   .rail .marks { position: absolute; inset: 0; pointer-events: none; }
@@ -257,7 +256,7 @@
     position: absolute; top: 6px; width: 2px; height: 18px; margin-left: -1px; border-radius: 1px; background: var(--plaster);
     box-shadow: 0 0 0 3px rgba(13, 12, 16, .45);
   }
-  .scale { grid-column: 2; display: flex; justify-content: space-between; margin-top: -4px; font-size: 10px; letter-spacing: .08em; color: var(--faint); }
+  .scale { grid-column: 2; display: flex; justify-content: space-between; margin-top: -4px; font-size: 11px; letter-spacing: .08em; color: var(--dust); }
 
   .about { position: absolute; }
 
