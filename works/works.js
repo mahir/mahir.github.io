@@ -30,6 +30,10 @@ window.Works = (() => {
       n: 5, title: 'The year in relief', date: '2026-10-29', medium: 'Interactive WebGL and daily market data',
       about: 'A well-known S&P 500 company’s last year of closing prices as a mountain range, a new company every visit, with the weather set by how the year went.',
     },
+    {
+      n: 6, title: 'New York, interlocked', date: '2026-10-30', medium: 'Animated SVG lettering',
+      about: 'New York neighborhoods drawn stroke by stroke in nested block letters, short letters held in the arms of tall ones, in pairs of colors after Josef Albers, a new name every 15 seconds.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
