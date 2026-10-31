@@ -34,6 +34,10 @@ window.Works = (() => {
       n: 6, title: 'New York, interlocked', date: '2026-10-30', medium: 'Animated SVG lettering',
       about: 'New York neighborhoods drawn stroke by stroke in nested block letters, short letters held in the arms of tall ones, in pairs of colors after Josef Albers, a new name every 15 seconds.',
     },
+    {
+      n: 7, title: 'Iznik, plate by plate', date: '2026-10-31', medium: 'Interactive WebGL and canvas',
+      about: 'Ottoman Iznik dishes painted on a 3D plate in workshop order, outline, cobalt, turquoise, green and red, then glazed, a new pattern every time.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
