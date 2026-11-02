@@ -38,6 +38,10 @@ window.Works = (() => {
       n: 7, title: 'Iznik, plate by plate', date: '2026-10-31', medium: 'Interactive WebGL and canvas',
       about: 'Ottoman Iznik dishes painted on a 3D plate in workshop order, outline, cobalt, turquoise, green and red, then glazed, a new pattern every time.',
     },
+    {
+      n: 8, title: 'Philosophy, mind to mind', date: '2026-11-03', medium: 'Interactive SVG chart',
+      about: 'Who drew on whom in 2,600 years of philosophy, from Thales to Judith Butler, as one chart that plays its own lines through time; tap a thinker to light their lineage.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
