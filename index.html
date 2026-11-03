@@ -245,9 +245,32 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=swap" rel="stylesheet">
 <script src="/works/works.js"></script>
+<script>
+  // Light by day, dark by night, by the visitor's own clock. Sunrise and sunset are estimated without asking where they are:
+  // the sun at 40° latitude (south of the equator if summer time falls in January) on today's date, with noon near 12:00,
+  // or 13:00 under summer time, moved by the equation of time. Rechecked every minute, so an open page turns at sunset.
+  // Without script the page stays dark.
+  (() => {
+    const root = document.documentElement, meta = document.querySelector('meta[name="theme-color"]');
+    const rad = Math.PI / 180;
+    const apply = () => {
+      const now = new Date(), y = now.getFullYear();
+      const jan = new Date(y, 0, 1).getTimezoneOffset(), jul = new Date(y, 6, 1).getTimezoneOffset();
+      const day = (now - new Date(y, 0, 1)) / 864e5, b = 2 * Math.PI * (day - 81) / 364;
+      const lat = (jan < jul ? -40 : 40) * rad, decl = -23.44 * rad * Math.cos(2 * Math.PI * (day + 10) / 365);
+      const noon = (now.getTimezoneOffset() < Math.max(jan, jul) ? 13 : 12) - (9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b)) / 60;
+      const halfDay = Math.acos((Math.sin(-.833 * rad) - Math.sin(lat) * Math.sin(decl)) / (Math.cos(lat) * Math.cos(decl))) / rad / 15;
+      const light = Math.abs(now.getHours() + now.getMinutes() / 60 - noon) < halfDay;
+      root.dataset.theme = light ? 'light' : 'dark';
+      meta.content = light ? '#f4f5f7' : '#06070b';
+    };
+    apply();
+    setInterval(apply, 6e4);
+  })();
+</script>
 <style>
   /* Who Mahir is first, then the experiment on view today, every experiment, and the ways to reach him, his talks and press.
-     Same ground, type and accent as No. 001. */
+     At night, the same ground, type and accent as No. 001. */
   :root {
     --bg: #06070b;
     --ink: #e2e6eb;
@@ -259,6 +282,16 @@
     --mono: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     --pad: clamp(20px, 6vw, 96px);
     color-scheme: dark;
+  }
+  /* by day: the same page on a light ground, with the accent deepened so it still reads as text */
+  :root[data-theme="light"] {
+    --bg: #f4f5f7;
+    --ink: #0c0e13;
+    --dim: rgba(12, 14, 19, .7);
+    --faint: rgba(12, 14, 19, .6);
+    --hair: rgba(12, 14, 19, .13);
+    --accent: #2a5bd7;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
   body {
