@@ -42,6 +42,10 @@ window.Works = (() => {
       n: 8, title: 'Philosophy, mind to mind', date: '2026-11-03', medium: 'Interactive SVG chart',
       about: 'Who drew on whom in 2,600 years of philosophy, from Thales to Judith Butler, as one chart that plays its own lines through time; tap a thinker to light their lineage.',
     },
+    {
+      n: 9, title: 'The midterm tide', date: '2026-11-04', medium: 'Interactive SVG charts and election data',
+      about: 'Every US midterm since 1790 set against 2026: what the record said before the vote, the results as they were called, and state-by-state maps since 1978.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
