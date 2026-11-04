@@ -185,6 +185,29 @@ def senate_map_2026():
     return sorted(seats, key=lambda x: x['m'])
 
 
+def senate_swing():
+    """For each midterm, every Senate race with both a Democrat and a Republican on the ballot: how many points the
+    president's party ran behind its own presidential margin in the state two years before, in the two-party vote.
+    Above zero, its Senate candidate did worse than its presidential candidate had."""
+    pres = defaultdict(Counter)
+    for r in csv.DictReader(io.StringIO(get(PRESIDENT_VOTES))):
+        if r['party_simplified'] in ('DEMOCRAT', 'REPUBLICAN'):
+            pres[(int(r['year']), r['state_po'])][r['party_simplified'][0]] += float(r['candidatevotes'])
+    sen = defaultdict(Counter)
+    for r in senate_rows():
+        y = int(r['year'])
+        if y in PRESIDENT and r['stage'].upper() == 'GEN' and r['party_simplified'] in ('DEMOCRAT', 'REPUBLICAN'):
+            sen[(y, r['state_po'], r['special'].upper())][r['party_simplified'][0]] += float(r['candidatevotes'] or 0)
+    out = defaultdict(list)
+    for (y, s, _), v in sorted(sen.items()):
+        p, before = PRESIDENT[y], pres[(y - 2, s)]
+        if not (v['D'] and v['R'] and before['D'] and before['R']):
+            continue
+        lead = lambda c: (c[p] - c['R' if p == 'D' else 'D']) / (c['D'] + c['R']) * 100
+        out[y].append(round(lead(before) - lead(v), 1))
+    return {y: sorted(v) for y, v in out.items()}
+
+
 def senate_vs_house(W):
     """Each midterm Senate race against the House vote in the same state on the same day: the president's party's share
     of the two-party vote in each, and who won. Races an independent won are left out."""
@@ -322,6 +345,7 @@ def main():
 
     splits = senate_vs_house(W)
     senate2026 = senate_map_2026()
+    sen_swing = senate_swing()
     freshmen, class2024 = incumbents(W)
     # seats the out-party left without a candidate of its own, in each midterm
     uncontested = {y: sum(1 for (yy, s, d), v in W.items() if yy == y and v['w'] == p and not v['R' if p == 'D' else 'D'])
@@ -335,7 +359,7 @@ def main():
         'governorOdd': GOVERNOR_ODD, 'governorPresidential': GOVERNOR_PRESIDENTIAL,
         'close2024': close, 'newLines2026': NEW_LINES_2026, 'splits': splits,
         'freshmen': freshmen, 'class2024': class2024, 'uncontested': uncontested,
-        'uncontested2026': UNCONTESTED_2026, 'senate2026': senate2026,
+        'uncontested2026': UNCONTESTED_2026, 'senate2026': senate2026, 'senateSwing': sen_swing,
     }
     text = (
         '// Written by _states.py from the MIT Election Lab\'s House and Senate returns and the UF Election Lab\'s turnout.\n'

@@ -108,6 +108,51 @@
     }
   }
 
+  // ---------- the night: each Senate race against the president's last margin ----------
+  // One row per midterm, one dot per race with both parties on the ballot; past zero, the president's party ran behind.
+  function swings26() {
+    const shares = now.senateShares || {};
+    return S.senate2026.filter((d) => shares[d.s]).map((d) => {
+      const [dem, rep] = shares[d.s];
+      return Math.round((d.m - (rep - dem) / (dem + rep) * 100) * 10) / 10;
+    }).sort((a, b) => a - b);
+  }
+  function drawSwing(chart) {
+    const W = chart.clientWidth, narrow = W < 520;
+    const rows = Object.entries(S.senateSwing).map(([yr, v]) => ({ y: +yr, v, p: S.president[yr] }));
+    const v26 = swings26();
+    if (v26.length) rows.push({ y: 2026, v: v26, p: 'R' });
+    const row = 28, m = { t: 38, r: narrow ? 46 : 70, b: 30, l: 40 };
+    const H = m.t + m.b + row * rows.length;
+    chart.textContent = '';
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, chart);
+    const lo = -30, hi = 50, x = scale([lo, hi], [m.l, W - m.r]);
+    const ax = el('g', { class: 'axis' }, svg);
+    for (const t of range(-20, 40, 20)) {
+      el('line', { x1: x(t), x2: x(t), y1: m.t - 6, y2: H - m.b + 4, ...(t === 0 ? { style: 'stroke:var(--ink);stroke-width:1' } : {}) }, ax);
+      el('text', { x: x(t), y: H - m.b + 18, 'text-anchor': 'middle' }, ax).textContent = t === 0 ? '0' : signed(t);
+    }
+    el('text', { x: x(0) - 6, y: 20, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = '← ran ahead';
+    el('text', { x: x(0) + 6, y: 20, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'ran behind →';
+    const marks = el('g', {}, svg);
+    rows.forEach((d, i) => {
+      const cy = m.t + i * row + row / 2, now = d.y === 2026;
+      const behind = d.v.filter((s) => s > 0).length, med = d.v[Math.floor(d.v.length / 2)];
+      el('text', { x: 0, y: cy + 4, class: 'ghost-label', style: now ? null : 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = d.y;
+      const g = el('g', {}, marks);
+      d.v.forEach((s, j) => {
+        const cx = x(Math.max(lo, Math.min(hi, s)));
+        el('circle', { cx, cy: cy + ((j % 3) - 1) * 4, r: 2.6, style: `fill:${now ? color('R') : '#a9a397'};opacity:${now ? 1 : .8}` }, g);
+      });
+      el('line', { x1: x(med), x2: x(med), y1: cy - 9, y2: cy + 9, style: `stroke:var(--ink);stroke-width:${now ? 2.5 : 2}` }, g);
+      label(svg, W, cy + 4, narrow ? `${behind}/${d.v.length}` : `${behind} of ${d.v.length}`, 'end', now);
+      const hit = el('rect', { x: 0, y: cy - row / 2, width: W, height: row, fill: 'transparent', class: 'hit' }, svg);
+      hover(hit, chart, svg, `sw${d.y}`, () => tip(String(d.y), `${d.p === 'D' ? 'Democrats' : 'Republicans'}, the president’s party`, [
+        ['Ran behind', `${behind} of ${d.v.length} races`], ['Median race', `${signed(med, 1)} pts`],
+      ]), () => [x(med), cy - 10], g);
+    });
+  }
+
   // ---------- 3. the ballot ----------
   function drawContest(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(260, Math.min(360, W * .55)));
@@ -237,6 +282,7 @@
     document.getElementById('cush-house').textContent = kept(now26) ? 'kept' : 'lost';
   }
 
+  watch(document.getElementById('c-swing'), drawSwing);
   watch(document.getElementById('c-rule'), drawRule);
   watch(document.getElementById('c-senmap'), drawSenmap);
   watch(document.getElementById('c-contest'), drawContest);

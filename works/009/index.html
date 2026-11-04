@@ -96,6 +96,8 @@
   .tile .big small { font: 400 .8rem/1 var(--mono); color: var(--mute); letter-spacing: 0; }
   .tile .big.wait { color: var(--mute); font-style: italic; font-size: 1.9rem; }
   .tile p { margin: 0; font: 400 .86rem/1.4 var(--sans); color: var(--ink-2); }
+  .verdict { margin: 1.4rem 0 0; padding: .1rem 0 .1rem .9rem; border-left: 3px solid var(--ink); }
+  .verdict span { display: block; font: 500 .72rem/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
   .board-note { margin: .7rem 0 0; font: 400 .78rem/1.4 var(--mono); color: var(--mute); }
 
   /* ---------- figures ---------- */
@@ -244,6 +246,22 @@
       <p class="board-note" id="board-note">2026 results are added here once the races are called.</p>
     </div>
 
+    <section class="col" aria-labelledby="h-swing">
+      <h2 id="h-swing"><span class="n">2026 · The result</span>Every Senate race moved one way</h2>
+      <p>Set each Senate race against Trump’s 2024 margin in the same state. In all 31 races with both a Democrat and a Republican on the ballot, the Republican ran behind him: by 18 points in the median race, by 26 in Texas, and by less than one in Maine, where Susan Collins had long run ahead of her party, and lost anyway.</p>
+      <p>No midterm since at least 1978 has moved every race the same way. The closest were 1982 and 1986, when 29 races of 33 and of 34 moved against Ronald Reagan’s Republicans. Their median races moved further than this year’s, 26 and 28 points, but they came after his landslides of 10 and 18 points. Trump won by 1.5.</p>
+      <p>The South moved furthest: 20 points in the median Southern race, 16 elsewhere.</p>
+      <figure>
+        <div class="legend" aria-hidden="true">
+          <span><i class="key-sw" style="background:var(--R);border-radius:50%;width:8px;height:8px"></i>a 2026 race</span>
+          <span><i class="key-sw" style="background:#a9a397;border-radius:50%;width:8px;height:8px"></i>an earlier race</span>
+          <span><i class="key-sw" style="background:var(--ink);width:2px;height:12px;border-radius:0"></i>the median race</span>
+        </div>
+        <div class="chart" id="c-swing" role="img" aria-label="Dot plot of every midterm Senate race since 1978 with both a Democrat and a Republican on the ballot, one row per midterm, placed by how far the president's party ran behind its last presidential margin in the state. In 2026 all 31 races sit to the right of zero, with a median of 18 points; no earlier midterm has every race on one side."></div>
+        <figcaption>Points the president’s party ran behind its presidential margin in the same state two years before, in the two-party vote; races beyond 30 ahead or 50 behind sit at the edge. Earlier years from the MIT Election Lab’s Senate and presidential returns. 2026 from the AP’s count as ABC News showed it at 10:32 a.m. on 4 November, with some states still counting; Idaho, Montana, Nebraska and South Dakota had no Democrat on the ballot.</figcaption>
+      </figure>
+    </section>
+
     <header class="col part" id="signals">
       <p class="part-n">2026</p>
       <h2 class="part-h">What the record said before the vote</h2>
@@ -262,6 +280,7 @@
         <div class="chart" id="c-rule" role="img" aria-label="Scatter plot of nine midterms since 1946 with the president below 50 percent approval, by seats to spare over a House majority. The six with 40 or fewer seats to spare lost the House; 2026 sits at 2 seats and 33 percent."></div>
         <figcaption>Seats the president’s party held beyond the 218 a majority needs as the midterm began, and the last Gallup reading before the vote.</figcaption>
       </figure>
+      <p class="verdict"><span>2026</span>Republicans lost the House, as the six before them did.</p>
     </section>
 
     <section class="col" aria-labelledby="h-cushion">
@@ -277,6 +296,7 @@
           <tr class="now"><td class="y">2026</td><td class="who">Donald J. Trump<small>Republican</small></td><td class="v">2</td><td class="v">33%</td><td class="v" id="cush-seats">?</td><td id="cush-house">counting</td></tr>
         </tbody>
       </table>
+      <p class="verdict"><span>2026</span>Republicans lost the House. By Wednesday morning they had lost at least 16 seats, with 60 races still uncalled.</p>
     </section>
 
     <section class="col" aria-labelledby="h-senmap">
@@ -292,6 +312,7 @@
         <div class="chart" id="c-senmap" role="img" aria-label="The 35 Senate seats up in 2026, lined up by Trump's 2024 margin in each state, from Massachusetts, which Harris won by 26 points, to Wyoming, which Trump won by 47. Only Maine is a Republican seat in a state Harris won; Michigan and Georgia are Democratic seats in states Trump won."></div>
         <figcaption>Trump’s 2024 margin over Harris in each state, in points of the two-party vote. Holders as of the 2020 elections, with Georgia’s January runoff, and the Republican appointees in Ohio and Florida, whose seats are filled in special elections.</figcaption>
       </figure>
+      <p class="verdict"><span>2026</span>The map did not hold. Democrats kept all 13 of their seats and took 7 Republican ones, 5 of them in states Trump had carried by more than 10 points.</p>
     </section>
 
     <section class="col" aria-labelledby="h-contest">
@@ -302,6 +323,7 @@
         <div class="chart" id="c-contest" role="img" aria-label="Scatter plot of 12 midterms since 1978: seats the out-party left without a candidate against the president's party's House seat change, with a line at one seat for 2026."></div>
         <figcaption>Seats the president’s party won with no candidate from the other major party on the ballot, from the MIT Election Lab’s returns. 2026 is Ballotpedia’s count of 21 September 2026.</figcaption>
       </figure>
+      <p class="verdict"><span>2026</span>The signal held. Democrats, who ran in 434 races, had won at least 231 seats by Wednesday morning, up from 215.</p>
     </section>
 
     <section class="col" aria-labelledby="h-cleveland">
@@ -310,6 +332,7 @@
       <figure>
         <div class="chart" id="c-cleveland" role="img" aria-label="Bar chart of House seats lost by the president's party in Cleveland's midterms of 1886 and 1894 and Trump's of 2018 and 2026."></div>
       </figure>
+      <p class="verdict"><span>2026</span>Still counting. Republicans had lost at least 16 seats by Wednesday morning; NBC News projected 43, near the 41 of Trump’s first midterm and far from Cleveland’s 125.</p>
     </section>
 
     <section class="col" aria-labelledby="h-control">
@@ -319,6 +342,7 @@
         <div class="chart" id="c-control" role="img" aria-label="Timeline of every House election since 1946, marking the nine changes of control; the six since 1952 all fell in midterms."></div>
         <figcaption>Every House election since 1946. Large dots changed control, in the color of the party that took it.</figcaption>
       </figure>
+      <p class="verdict"><span>2026</span>The House changed hands in a midterm again, the seventh time in a row since 1952.</p>
     </section>
 
     <section class="col" aria-labelledby="h-fresh">
@@ -333,6 +357,7 @@
         <div class="chart" id="c-fresh" role="img" aria-label="Paired bars for 11 midterms since 1982: the share of the president's party's first-term members who lost, against the share of its other members who lost. In 2010, 58 percent against 16."></div>
         <figcaption>Members of the president’s party who ran again in November, matched by name in the MIT Election Lab’s returns. Those who retired or lost a primary are not counted.</figcaption>
       </figure>
+      <p class="verdict"><span>2026</span>Still counting. Which members lost is added once the district results are final.</p>
     </section>
 
     <section class="col" aria-labelledby="h-not">
@@ -341,7 +366,7 @@
         <dt>Coattails</dt>
         <dd>A president who brings many new members in with him is said to have more to lose. Since 1900, the House seats his party gained in his own election say almost nothing about what it lost two years later: a correlation of −0.10. Clinton in 1992 and Trump in 2016 lost House ground as they won, and still lost 54 and 41 seats in their midterms.</dd>
         <dt>A surge in turnout</dt>
-        <dd>In 1994, 2006, 2010, 2014 and 2018, the states where turnout rose most from the midterm before did not swing harder against the president.</dd>
+        <dd>In 1994, 2006, 2010, 2014 and 2018, the states where turnout rose most from the midterm before did not swing harder against the president. Nor in 2026: the states that kept more of their 2024 turnout than they usually keep in a midterm swung no harder in the Senate, a correlation of −0.03.</dd>
         <dt>A shrinking battlefield</dt>
         <dd>The number of seats won by less than 10 points rises with each wave and falls after it, from 22 in 2004 to 89 in 2018. It has not been shrinking.</dd>
       </dl>

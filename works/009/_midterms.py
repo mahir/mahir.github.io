@@ -40,7 +40,7 @@ TURNOUT_2026 = 'https://election.lab.ufl.edu/data-downloads/turnoutdata/Turnout_
 # by_state: House seats in each state where every race has been called, as {'PA': [Democrats, Republicans], ...}; a state
 # with races still out stays off the list. Once all 435 are in, house is added up from it. senate_by_state: the party
 # that won each Senate race called so far, as {'ME': 'D', ...}. house_called and senate_called: the national count so
-# far, as [Democrats, Republicans], shown until the chamber is final.
+# far, as [Democrats, Republicans], shown until the chamber is final. senate_shares: each Senate race's vote so far.
 RESULTS_2026 = {
     'by_state': {  # NBC News / AP, 9:49 a.m. 4 November: 28 states fully called
         'AL': [2, 5], 'AR': [0, 4], 'CT': [5, 0], 'DE': [1, 0], 'GA': [5, 9], 'HI': [2, 0], 'ID': [0, 2], 'IL': [14, 3],
@@ -55,6 +55,13 @@ RESULTS_2026 = {
         'AL': 'R', 'AR': 'R', 'FL': 'R', 'ID': 'R', 'KY': 'R', 'LA': 'R', 'MT': 'R', 'NE': 'R', 'OK': 'R', 'SD': 'R',
         'TN': 'R', 'WV': 'R', 'WY': 'R',
     },
+    'senate_shares': {  # percent of the vote, [Democrat, Republican], as ABC News showed it at 10:32 a.m. 4 November
+        'MA': [63, 32], 'DE': [64, 36], 'OR': [57, 41], 'RI': [67, 29], 'CO': [60, 36], 'IL': [61, 37], 'ME': [54, 46],
+        'NM': [63, 37], 'NJ': [62, 35], 'VA': [61, 39], 'MN': [54, 44], 'NH': [56, 42], 'MI': [53, 45], 'GA': [59, 41],
+        'NC': [59, 39], 'OH': [50, 45], 'FL': [48, 51], 'IA': [51, 46], 'AK': [48.2, 47.9], 'TX': [55, 43],
+        'KS': [51, 46], 'SC': [51, 47], 'LA': [49, 51], 'MS': [48.9, 48.9], 'TN': [43, 55], 'AL': [45, 55],
+        'KY': [43, 55], 'AR': [42, 54], 'OK': [39, 57], 'WV': [38, 58], 'WY': [35, 65],
+    },  # Idaho, Montana, Nebraska and South Dakota had no Democrat on the ballot
     'house_called': [231, 144],
     'senate_called': [54, 44],
     'house': None,
@@ -254,7 +261,7 @@ def main():
         'turnout': turnout_2026(),
         'house': RESULTS_2026['house'], 'senateSeats': RESULTS_2026['senate'], 'byState': by_state,
         'senateCalls': RESULTS_2026['senate_by_state'],
-        'houseCalled': RESULTS_2026['house_called'], 'senateCalled': RESULTS_2026['senate_called'],
+        'senateShares': RESULTS_2026['senate_shares'], 'houseCalled': RESULTS_2026['house_called'], 'senateCalled': RESULTS_2026['senate_called'],
         'asOf': RESULTS_2026['as_of'], 'note': RESULTS_2026['note'],
     }
     if y2026['house'] is not None:
