@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mahir Yavuz · The midterm tide</title>
+<meta name="description" content="The midterm tide, No. 009 by Mahir Yavuz: every US midterm election since 1790, what the president's party lost in each, and where 2026 lands.">
+<meta name="author" content="Mahir Yavuz">
+<link rel="canonical" href="https://mahiryavuz.com/works/009/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/profile.jpg">
+<meta name="theme-color" content="#f4f1ea">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mahir Yavuz">
+<meta property="og:title" content="The midterm tide · Mahir Yavuz">
+<meta property="og:description" content="No. 009: every US midterm since 1790, what the president's party lost, and where 2026 lands.">
+<meta property="og:url" content="https://mahiryavuz.com/works/009/">
+<meta property="og:image" content="https://mahiryavuz.com/works/009/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Red, blue and teal bars for every US midterm since 1790, most of them falling below the line">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@mahir_nyc">
+<!-- gen:ld -->
+<!-- /gen:ld -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* An almanac page: newsprint, ink, and the two parties' colors, with one teal for the parties that came before them. */
+  :root {
+    --paper: #f4f1ea;
+    --paper-2: #ebe6da;
+    --ink: #1b1a17;
+    --ink-2: #4a4740;
+    --mute: #67635a;
+    --rule: rgba(27, 26, 23, .16);
+    --grid: rgba(27, 26, 23, .08);
+    --D: #2f5fb3;
+    --R: #c8423a;
+    --E: #3f9a7a;
+    --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+    --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --col: 600px;
+    --wide: 1120px;
+    --gut: clamp(16px, 4vw, 40px);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { background: var(--paper); -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 18px/1.55 var(--serif); -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(200, 66, 58, .2); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 3px; }
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+  /* ---------- the way home ---------- */
+  .bar {
+    position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: .8rem; padding: 12px var(--gut);
+    padding-top: calc(12px + env(safe-area-inset-top)); background: rgba(244, 241, 234, .9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .back {
+    display: inline-flex; align-items: center; gap: .5em; padding: .55em 1em; border: 1px solid var(--ink); border-radius: 999px; text-decoration: none;
+    font: 500 .74rem/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; transition: background-color .2s, color .2s; flex: none;
+  }
+  .back:hover, .back:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
+  .label { font: 400 .74rem/1.2 var(--mono); color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---------- type ---------- */
+  .col { max-width: calc(var(--col) + var(--gut) * 2); margin: 0 auto; padding: 0 var(--gut); }
+  .wide { max-width: calc(var(--wide) + var(--gut) * 2); margin: 0 auto; padding: 0 var(--gut); }
+  header.hero { padding-top: clamp(40px, 8vw, 96px); }
+  h1 { margin: 0 0 1.4rem; font: 400 clamp(3rem, 9vw, 6.2rem)/.95 var(--serif); letter-spacing: -.025em; }
+  h1 i { color: var(--R); }
+  .lede { font-size: clamp(1.2rem, 2.4vw, 1.45rem); line-height: 1.45; margin: 0 0 1rem; color: var(--ink); }
+  h2 { margin: 0 0 .9rem; font: 500 clamp(1.7rem, 3.6vw, 2.3rem)/1.1 var(--serif); letter-spacing: -.01em; }
+  h2 .n { display: block; margin-bottom: .6rem; font: 500 .72rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+  p { margin: 0 0 1rem; text-wrap: pretty; }
+  figcaption, .fine { max-width: 62ch; text-wrap: pretty; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  section.col, section.wide { padding-top: clamp(56px, 9vw, 96px); }
+  .num { font-family: var(--mono); font-size: .86em; letter-spacing: -.01em; }
+  .pd { color: var(--D); } .pr { color: var(--R); }
+  .chip { display: inline-block; width: .62em; height: .62em; border-radius: 2px; margin-right: .35em; vertical-align: .05em; background: var(--c); }
+  .cD { --c: var(--D); } .cR { --c: var(--R); } .cE { --c: var(--E); }
+
+  /* ---------- 2026 ---------- */
+  .board { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); margin-top: 2.2rem; }
+  .tile { padding: 1rem 1.1rem 1.15rem 0; }
+  .tile:nth-child(even) { padding-left: 1.1rem; border-left: 1px solid var(--rule); }
+  .tile:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .tile h3 { margin: 0 0 .5rem; font: 500 .7rem/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+  .tile .big { display: flex; align-items: baseline; gap: .35rem; font: 400 2.6rem/1 var(--serif); letter-spacing: -.02em; margin-bottom: .45rem; }
+  .tile .big small { font: 400 .8rem/1 var(--mono); color: var(--mute); letter-spacing: 0; }
+  .tile .big.wait { color: var(--mute); font-style: italic; font-size: 1.9rem; }
+  .tile p { margin: 0; font: 400 .86rem/1.4 var(--sans); color: var(--ink-2); }
+  .board-note { margin: .7rem 0 0; font: 400 .78rem/1.4 var(--mono); color: var(--mute); }
+
+  /* ---------- figures ---------- */
+  figure { margin: 1.6rem 0 0; }
+  .fig-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem 1.2rem; margin-bottom: .5rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 400 .8rem/1.3 var(--sans); color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; }
+  .legend .ghost { width: .62em; height: .62em; border: 1.2px dashed var(--ink-2); border-radius: 2px; margin-right: .35em; }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 2px; }
+  .seg button { border: 0; background: none; padding: .45em .9em; border-radius: 999px; cursor: pointer; font: 500 .72rem/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .chart { position: relative; width: 100%; touch-action: pan-y; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  figcaption { margin-top: .6rem; font: 400 .8rem/1.45 var(--sans); color: var(--mute); }
+
+  svg text { font-family: var(--sans); fill: var(--ink-2); }
+  .axis text { font: 400 11px var(--mono); fill: var(--mute); }
+  .axis line, .axis path { stroke: var(--grid); stroke-width: 1; fill: none; }
+  .axis .zero { stroke: var(--ink); stroke-width: 1.2; }
+  .note text { font: 400 12px var(--sans); fill: var(--ink-2); }
+  .note text.yr { font: 500 11px var(--mono); fill: var(--ink); }
+  .note line { stroke: var(--ink-2); stroke-width: .8; }
+  .mark { cursor: pointer; transition: opacity .2s; }
+  .dim .mark { opacity: .25; }
+  .dim .mark.on { opacity: 1; }
+  .rule-line { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .rule-label { font: 500 11.5px var(--sans); fill: var(--ink); }
+  .ghost-bar { fill: none; stroke: var(--ink-2); stroke-width: 1.2; stroke-dasharray: 3 2.5; }
+  .ghost-label { font: 500 11px var(--mono); fill: var(--ink); }
+  .band { fill: var(--paper-2); }
+
+  .tip {
+    position: absolute; z-index: 5; pointer-events: none; min-width: 190px; max-width: 260px; padding: .7rem .8rem; border-radius: 8px;
+    background: var(--ink); color: var(--paper); font: 400 .8rem/1.4 var(--sans); box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+    opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s;
+  }
+  .tip.on { opacity: 1; transform: none; }
+  .tip b { display: block; font: 500 1.05rem/1.2 var(--serif); margin-bottom: .1rem; }
+  .tip .who { color: #c9c3b6; margin-bottom: .45rem; }
+  .tip dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem .7rem; margin: 0; }
+  .tip dt { color: #a8a294; }
+  .tip dd { margin: 0; font-family: var(--mono); font-size: .76rem; }
+
+  /* ---------- the biggest waves ---------- */
+  .waves { width: 100%; border-collapse: collapse; margin-top: 1.4rem; font: 400 .9rem/1.3 var(--sans); }
+  .waves th { text-align: left; font: 500 .72rem/1.2 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); padding: 0 .5rem .5rem; border-bottom: 1px solid var(--ink); }
+  .waves td { padding: .5rem; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  .waves td.y { font: 500 .9rem var(--mono); width: 3.6rem; }
+  .waves td.v { font: 400 .82rem var(--mono); text-align: right; white-space: nowrap; width: 4.6rem; }
+  .waves td.who { width: 32%; }
+  .waves td.bar { width: 40%; }
+  .waves .b { height: 10px; border-radius: 0 3px 3px 0; background: var(--c); min-width: 2px; }
+  .waves tr.now td { background: rgba(200, 66, 58, .07); }
+  .waves th:first-child, .waves td:first-child { padding-left: 0; }
+  .waves tr.now td:first-child { padding-left: .6rem; }
+
+  /* ---------- 2026: the signals ---------- */
+  .cushion td:last-child { font: 500 .82rem var(--sans); }
+  .cushion th { white-space: nowrap; }
+  .cushion td.v { width: 4.4rem; }
+  .myths { margin: 1.2rem 0 0; }
+  .myths dt { font: 500 .72rem/1.2 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-top: 1.1rem; }
+  .myths dd { margin: .3rem 0 0; }
+
+  /* ---------- part two: the states ---------- */
+  header.part { padding-top: clamp(80px, 12vw, 140px); }
+  .part-n { margin: 0 0 .8rem; font: 500 .74rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+  .part-h { font: 400 clamp(2.4rem, 6vw, 3.8rem)/1 var(--serif); letter-spacing: -.02em; margin-bottom: 1.2rem; padding-top: 1rem; border-top: 2px solid var(--ink); }
+  .years { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .9rem; }
+  .years button {
+    border: 1px solid var(--rule); background: none; border-radius: 999px; padding: .45em .75em; cursor: pointer;
+    font: 500 .78rem/1 var(--mono); color: var(--ink-2);
+  }
+  .years button:hover { border-color: var(--ink); }
+  .years button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .years button .p { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: .4em; vertical-align: .1em; background: var(--c); }
+  .wave-sum { min-height: 3em; margin: 0 0 .6rem; font: 400 1.05rem/1.45 var(--serif); }
+  .tile text { pointer-events: none; }
+  .tile .st { font: 500 10.5px var(--sans); letter-spacing: .02em; }
+  .tile .v { font: 500 12px var(--mono); }
+  #wave-key, #home-key { margin-top: .6rem; }
+  .key-sw { display: inline-block; width: 14px; height: 10px; border-radius: 2px; margin-right: .4em; vertical-align: -.05em; }
+  .waves .who small { display: block; color: var(--mute); font-size: .78rem; }
+
+  /* ---------- sources, data ---------- */
+  .fine { font: 400 .86rem/1.55 var(--sans); color: var(--ink-2); }
+  .fine li { margin-bottom: .5rem; }
+  details { margin-top: 1.4rem; border-top: 1px solid var(--rule); padding-top: 1rem; }
+  summary { cursor: pointer; font: 500 .74rem/1.2 var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  .data { border-collapse: collapse; width: 100%; font: 400 .78rem/1.3 var(--mono); }
+  .data th, .data td { padding: .3rem .6rem .3rem 0; border-bottom: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+  .data th:nth-child(-n+3), .data td:nth-child(-n+3) { text-align: left; }
+  .data th { font: 500 .72rem/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+  footer.col { padding-top: 72px; padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+  footer p { font: 400 .8rem/1.5 var(--mono); color: var(--mute); }
+
+  @media (max-width: 760px) {
+    body { font-size: 17px; }
+    .tile .big { font-size: 2.2rem; }
+    .waves td.who { width: auto; }
+    .waves td.bar { width: 30%; }
+    .waves .who small { display: none; }
+  }
+  @media (max-width: 420px) { .label .long { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .tip, .mark { transition: none; } }
+</style>
+</head>
+<body>
+  <nav class="bar">
+    <a class="back" href="/"><span aria-hidden="true">←</span> Home</a>
+    <span class="label">No. 009<span class="long"> · The midterm tide · 2026</span></span>
+  </nav>
+
+  <main>
+    <header class="hero col">
+      <h1>The midterm <i>tide</i></h1>
+      <p class="lede">Two years into a presidency, the country elects the whole House and a third of the Senate, and the president’s party almost always loses ground: in 45 of the 57 midterms since 1790 that can be scored. In 2026 Republicans could have lost two House seats and kept it. By the morning after, they had lost both chambers.</p>
+      <p>This page starts with what the record said about 2026 before the vote. Then it lays out the record itself: every midterm since 1790, and state by state since 1978.</p>
+    </header>
+
+    <div class="col" id="y2026">
+      <h2 class="sr">2026 so far</h2>
+      <div class="board" id="board">
+        <div class="tile">
+          <h3>House</h3>
+          <div class="big wait" id="b-house">Counting</div>
+          <p id="b-house-p">Republicans held 220 of 435 seats. A net loss of 3 hands the House to the Democrats.</p>
+        </div>
+        <div class="tile">
+          <h3>Senate</h3>
+          <div class="big wait" id="b-senate">Counting</div>
+          <p id="b-senate-p">Republicans held 53 of 100. A net loss of 4 gives the Democrats the majority.</p>
+        </div>
+        <div class="tile">
+          <h3>Turnout</h3>
+          <div class="big wait" id="b-turnout">Counting</div>
+          <p id="b-turnout-p">Of 251.6 million eligible voters. 2018 drew 50.0%, the most for a midterm since 1914.</p>
+        </div>
+        <div class="tile">
+          <h3>Approval</h3>
+          <div class="big" id="b-approval">33<small>%</small></div>
+          <p id="b-approval-p">Trump in late August, by Gallup. Truman’s 27% in 1946 was the last reading lower.</p>
+        </div>
+      </div>
+      <p class="board-note" id="board-note">2026 results are added here once the races are called.</p>
+    </div>
+
+    <header class="col part" id="signals">
+      <p class="part-n">2026</p>
+      <h2 class="part-h">What the record said before the vote</h2>
+      <p>Seven signals the history of the midterm gave about this one, set down before the count, and three ideas that turn out not to matter.</p>
+    </header>
+
+    <section class="col" aria-labelledby="h-rule">
+      <h2 id="h-rule"><span class="n">Signal 1 · Approval and the majority</span>Unpopular, with little to spare</h2>
+      <p>Since 1946, nine presidents have gone into a midterm below 50% approval while their party ran the House. The six with 40 seats or fewer to spare over a majority all lost it: Truman in 1946, Clinton in 1994, George W. Bush in 2006, Obama in 2010, Trump in 2018 and Biden in 2022. The three with 45 or more kept it: Truman in 1950, Johnson in 1966 and Carter in 1978.</p>
+      <p>Trump went into this one at 33%, with two seats to spare.</p>
+      <figure>
+        <div class="legend" aria-hidden="true">
+          <span><i class="chip" style="--c: var(--ink)"></i>lost the House</span>
+          <span><i class="key-sw" style="background:var(--paper);box-shadow:inset 0 0 0 2px var(--ink);border-radius:50%;width:10px"></i>kept it</span>
+        </div>
+        <div class="chart" id="c-rule" role="img" aria-label="Scatter plot of nine midterms since 1946 with the president below 50 percent approval, by seats to spare over a House majority. The six with 40 or fewer seats to spare lost the House; 2026 sits at 2 seats and 33 percent."></div>
+        <figcaption>Seats the president’s party held beyond the 218 a majority needs as the midterm began, and the last Gallup reading before the vote.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-cushion">
+      <h2 id="h-cushion"><span class="n">Signal 2 · The margin</span>Two seats to spare</h2>
+      <p>Republicans can lose two House seats and keep the majority. Since 1830, four parties have gone into a midterm with four seats or fewer to spare. Three lost the House. The one that held on was George W. Bush’s, in 2002, a year after September 11, at 67% approval.</p>
+      <table class="waves cushion" id="cushion">
+        <thead><tr><th>Year</th><th>President</th><th style="text-align:right">To spare</th><th style="text-align:right">Approval</th><th style="text-align:right">Seats</th><th>House</th></tr></thead>
+        <tbody>
+          <tr><td class="y">1882</td><td class="who">Chester A. Arthur<small>Republican</small></td><td class="v">4</td><td class="v">—</td><td class="v">−34</td><td>lost</td></tr>
+          <tr><td class="y">1954</td><td class="who">Dwight D. Eisenhower<small>Republican</small></td><td class="v">3</td><td class="v">62%</td><td class="v">−18</td><td>lost</td></tr>
+          <tr><td class="y">2002</td><td class="who">George W. Bush<small>Republican</small></td><td class="v">2</td><td class="v">67%</td><td class="v">+8</td><td>kept</td></tr>
+          <tr><td class="y">2022</td><td class="who">Joe Biden<small>Democratic</small></td><td class="v">4</td><td class="v">40%</td><td class="v">−9</td><td>lost</td></tr>
+          <tr class="now"><td class="y">2026</td><td class="who">Donald J. Trump<small>Republican</small></td><td class="v">2</td><td class="v">33%</td><td class="v" id="cush-seats">?</td><td id="cush-house">counting</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="col" aria-labelledby="h-senmap">
+      <h2 id="h-senmap"><span class="n">Signal 3 · The Senate map</span>The Senate map runs the other way</h2>
+      <p>In the Senate, where the seats are matters more than how many are up. Since 2006 the president’s party has lost 13 of the 14 seats it defended in states the president had lost two years before. It gains only where the other party holds seats in his states: in 2018 Republicans lost 41 House seats and still gained two in the Senate, taking four of the ten Democratic seats in states Trump had won. In the five big waves since 1994, a state the president had carried by more than 10 points changed hands three times: Maine in 1994, Montana in 2006 and Wisconsin in 2010.</p>
+      <p>This year one Republican seat was in a state Harris won: Maine. Democrats needed four. After Maine, the other three would have to come from states Trump carried, where the closest was North Carolina, at 3 points, and the next Ohio, at 11.</p>
+      <p>They took Maine and North Carolina, then five seats in states Trump had carried by more than 10 points: Ohio, Iowa, Texas, Kansas and South Carolina. That is more such seats in one night than in the five big waves since 1994 together. They held Michigan and Georgia. Republicans kept Florida, at 13 points. Alaska, at 14, and Mississippi, at 23, were still being counted on Wednesday morning.</p>
+      <figure>
+        <div class="legend" aria-hidden="true" id="senmap-key">
+          <span><i class="chip cD"></i>held by a Democrat</span>
+          <span><i class="chip cR"></i>held by a Republican</span>
+        </div>
+        <div class="chart" id="c-senmap" role="img" aria-label="The 35 Senate seats up in 2026, lined up by Trump's 2024 margin in each state, from Massachusetts, which Harris won by 26 points, to Wyoming, which Trump won by 47. Only Maine is a Republican seat in a state Harris won; Michigan and Georgia are Democratic seats in states Trump won."></div>
+        <figcaption>Trump’s 2024 margin over Harris in each state, in points of the two-party vote. Holders as of the 2020 elections, with Georgia’s January runoff, and the Republican appointees in Ohio and Florida, whose seats are filled in special elections.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-contest">
+      <h2 id="h-contest"><span class="n">Signal 4 · The ballot</span>Democrats are running everywhere</h2>
+      <p>Of the 435 House races in 2026, one has no Democrat on the ballot, by Ballotpedia’s count. That is the fewest in any election since at least 1976. In the four big waves since then, the party out of the White House left 17 seats or fewer unchallenged: 17 in 1994, 10 in 2006, 5 in 2010 and 4 in 2018. In the quiet midterms of 1990, 1998, 2002 and 2014 it left 36 to 45.</p>
+      <p>Across 12 midterms, this count has tracked the president’s losses more closely than his approval has: a correlation of 0.68, against 0.30. It is a sign of what candidates expected, not a cause. Strong challengers run when they think they can win.</p>
+      <figure>
+        <div class="chart" id="c-contest" role="img" aria-label="Scatter plot of 12 midterms since 1978: seats the out-party left without a candidate against the president's party's House seat change, with a line at one seat for 2026."></div>
+        <figcaption>Seats the president’s party won with no candidate from the other major party on the ballot, from the MIT Election Lab’s returns. 2026 is Ballotpedia’s count of 21 September 2026.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-cleveland">
+      <h2 id="h-cleveland"><span class="n">Signal 5 · The precedent</span>Only Grover Cleveland has been here</h2>
+      <p>Trump is the second president to serve two terms that are not consecutive. The first, Grover Cleveland, faced a midterm in each. His Democrats lost 15 seats in 1886. In 1894, in a depression, they lost 125, the most any party has lost in a midterm. Trump’s Republicans lost 41 in 2018.</p>
+      <figure>
+        <div class="chart" id="c-cleveland" role="img" aria-label="Bar chart of House seats lost by the president's party in Cleveland's midterms of 1886 and 1894 and Trump's of 2018 and 2026."></div>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-control">
+      <h2 id="h-control"><span class="n">Signal 6 · The calendar</span>The House changes hands in midterms</h2>
+      <p>Control of the House has changed nine times since 1946. The last time it changed in a presidential election was 1952. All six changes since came in midterms: 1954, 1994, 2006, 2010, 2018 and 2022.</p>
+      <figure>
+        <div class="chart" id="c-control" role="img" aria-label="Timeline of every House election since 1946, marking the nine changes of control; the six since 1952 all fell in midterms."></div>
+        <figcaption>Every House election since 1946. Large dots changed control, in the color of the party that took it.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-fresh">
+      <h2 id="h-fresh"><span class="n">Signal 7 · The members</span>The newest fall first</h2>
+      <p>In 2010, 22 of the 38 Democrats first elected with Obama in 2008 who ran again lost, 58%. Of the Democrats elected before them, 16% lost. In 9 of the 11 midterms since 1982, the president’s first-term members lost at a higher rate than the rest of his party. Republicans elected 35 new members in 2024; 8 of them took seats Democrats had held.</p>
+      <p>Waves take the senior too: the Speaker, Tom Foley, with Dan Rostenkowski and Jack Brooks in 1994; Jim Oberstar, Ike Skelton and John Spratt in 2010; Pete Sessions in 2018.</p>
+      <figure>
+        <div class="legend" aria-hidden="true">
+          <span><i class="chip" style="--c: var(--ink)"></i>first elected two years before</span>
+          <span><i class="chip" style="--c: #a9a397"></i>elected earlier</span>
+        </div>
+        <div class="chart" id="c-fresh" role="img" aria-label="Paired bars for 11 midterms since 1982: the share of the president's party's first-term members who lost, against the share of its other members who lost. In 2010, 58 percent against 16."></div>
+        <figcaption>Members of the president’s party who ran again in November, matched by name in the MIT Election Lab’s returns. Those who retired or lost a primary are not counted.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-not">
+      <h2 id="h-not"><span class="n">And three that don’t matter</span>What doesn’t decide it</h2>
+      <dl class="myths">
+        <dt>Coattails</dt>
+        <dd>A president who brings many new members in with him is said to have more to lose. Since 1900, the House seats his party gained in his own election say almost nothing about what it lost two years later: a correlation of −0.10. Clinton in 1992 and Trump in 2016 lost House ground as they won, and still lost 54 and 41 seats in their midterms.</dd>
+        <dt>A surge in turnout</dt>
+        <dd>In 1994, 2006, 2010, 2014 and 2018, the states where turnout rose most from the midterm before did not swing harder against the president.</dd>
+        <dt>A shrinking battlefield</dt>
+        <dd>The number of seats won by less than 10 points rises with each wave and falls after it, from 22 in 2004 to 89 in 2018. It has not been shrinking.</dd>
+      </dl>
+    </section>
+
+    <header class="col part" id="record">
+      <p class="part-n">Part one</p>
+      <h2 class="part-h">The record, 1790 to 2026</h2>
+      <p>Every midterm the country has held, what the president’s party lost in each, and what moves with it.</p>
+    </header>
+
+    <section class="wide" aria-labelledby="h-all">
+      <div class="col" style="padding:0">
+        <h2 id="h-all"><span class="n">1 · The whole record</span>Every midterm since 1790</h2>
+        <p>Each bar is one midterm: how many House seats the president’s party gained or lost. Below the line, it lost. The parties of the early republic, Federalists, Jeffersonian Republicans, Jacksonians and Whigs, are in teal. Switch to share to compare years when the House was a third of its size.</p>
+      </div>
+      <figure>
+        <div class="fig-head">
+          <div class="legend" aria-hidden="true">
+            <span><i class="chip cD"></i>Democratic president</span>
+            <span><i class="chip cR"></i>Republican president</span>
+            <span><i class="chip cE"></i>Earlier parties</span>
+            <span id="legend-2026"><i class="ghost"></i>2026, counting</span>
+          </div>
+          <div class="seg" role="group" aria-label="Measure">
+            <button type="button" data-m="change" aria-pressed="true">Seats</button>
+            <button type="button" data-m="shift" aria-pressed="false">Share of the House</button>
+          </div>
+        </div>
+        <div class="chart" id="c-all" role="img" aria-label="Bar chart of the change in House seats for the president's party in every midterm from 1790 to 2022, with 2026 still being counted. Nearly every bar since 1830 falls below zero; the deepest is 1894, at minus 125 seats."></div>
+        <figcaption>1822 and 1866 have no bar: no party of the president’s carried over in the House. Seat counts are as the House opened; from 1934, as The American Presidency Project counts them.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-three">
+      <h2 id="h-three"><span class="n">2 · Three seats</span>What it would take to hold the House</h2>
+      <p>Republicans went in with 220 seats, two more than the 218 a majority needs. Since 1830, in 48 midterms with a party to score, the president’s party has lost fewer than three seats five times: 1834, 1902, 1934, 1998 and 2002.</p>
+      <p>Each dot below is one of those midterms, placed by the seats the president’s party gained or lost. Left of the dashed line, Republicans would lose the House this year.</p>
+      <figure>
+        <div class="chart" id="c-three" role="img" aria-label="Dot plot of 48 midterms since 1830 by House seat change. Only five sit to the right of minus three seats."></div>
+        <figcaption>Stacked in five-seat steps. Tap a dot for the year.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-approval">
+      <h2 id="h-approval"><span class="n">3 · Approval</span>Unpopular presidents always lose. How many is another matter</h2>
+      <p>Gallup has asked about the president’s job before every midterm since 1938. All eleven presidents below 50% lost House seats, but the loss ran from 9 seats (Biden, 40%, in 2022) to 63 (Obama, 45%, in 2010), with 30 in the middle. Approval and seat change move together only loosely: a correlation of 0.30 across 22 midterms.</p>
+      <p>The dashed line is Trump in 2026, at 33%.</p>
+      <figure>
+        <div class="chart" id="c-approval" role="img" aria-label="Scatter plot of presidential approval against House seat change for 22 midterms from 1938 to 2022, with a line marking 33 percent approval for 2026."></div>
+        <figcaption>The latest Gallup reading listed before each midterm by The American Presidency Project. None is listed for 1934.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-turnout">
+      <h2 id="h-turnout"><span class="n">4 · Turnout</span>Fewer people vote in the middle</h2>
+      <p>Since 1840, every midterm has drawn fewer voters than the presidential elections on either side of it. Midterm turnout peaked at 71% of eligible voters in 1866, fell to 33% in 1926, and was down to 37% again in 2014. Then 2018 drew 50%, the most for a midterm since 1914.</p>
+      <figure>
+        <div class="fig-head">
+          <div class="legend" aria-hidden="true">
+            <span><i class="chip" style="--c: var(--ink)"></i>Midterm</span>
+            <span><i class="chip" style="--c: #a9a397"></i>Presidential</span>
+          </div>
+        </div>
+        <div class="chart" id="c-turnout" role="img" aria-label="Line chart of turnout among eligible voters in presidential and midterm elections from 1789 to 2024. Midterm turnout runs below presidential and was 50 percent in 2018 and 46 percent in 2022."></div>
+        <figcaption>Share of the voting-eligible population who cast a ballot. Before 1948, Walter Dean Burnham’s estimates; since, Michael McDonald’s.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-senate">
+      <h2 id="h-senate"><span class="n">5 · The Senate</span>A looser rule</h2>
+      <p>Only a third of the Senate is up each time, and which third decides a lot. Since 1934 the president’s party has held or gained Senate seats in 8 of 23 midterms. It lost four or more, what Republicans can’t lose this year, in 12.</p>
+      <figure>
+        <div class="chart" id="c-senate" role="img" aria-label="Dot plot of Senate seat change for the president's party in 23 midterms since 1934. Eight are at zero or above; twelve are at minus four or below."></div>
+        <figcaption>With 50 seats and the vice president’s tie-breaking vote, Republicans would keep the Senate.</figcaption>
+      </figure>
+      <p>Mostly the two chambers move together: since 1934 they went the same way in 18 of 23 midterms. When they part, the map explains it. In 1970, 1982 and 2018 the president’s party lost 12, 26 and 41 House seats and still gained Senate seats, because it was defending only 7, 12 and 9 of them. When it defended 20 or more, it lost Senate seats eight times in nine, seven on average.</p>
+      <p>This year Republicans defend 22 of the 35 seats up, counting the special elections in Ohio and Florida.</p>
+      <figure>
+        <div class="chart" id="c-exposure" role="img" aria-label="Scatter plot of Senate seats the president's party defended against the Senate seats it gained or lost in 23 midterms since 1934, with a line at 20 seats for 2026."></div>
+        <figcaption>Senate seats the president’s party had up for election, and the seats it gained or lost. Tap a dot for the House result the same year.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-waves">
+      <h2 id="h-waves"><span class="n">6 · The waves</span>The biggest swings, by share of the House</h2>
+      <p>In 1894, in a depression, Grover Cleveland’s Democrats went from 218 seats to 93, the most ever lost in a midterm. Measured as a share of the House, three of the five biggest waves came in the 19th century. The largest since then is 1922, and the largest of living memory is 1938.</p>
+      <table class="waves" id="waves">
+        <thead><tr><th>Year</th><th>President</th><th colspan="2">Share of the House lost</th><th style="text-align:right">Seats</th></tr></thead>
+        <tbody>
+          <tr><td class="y">1894</td><td class="who">Grover Cleveland<small>Democratic</small></td><td class="bar"><div class="b cD" style="width:100%"></div></td><td class="v">−35.2 pts</td><td class="v">−125</td></tr>
+          <tr><td class="y">1874</td><td class="who">Ulysses S. Grant<small>Republican</small></td><td class="bar"><div class="b cR" style="width:94%"></div></td><td class="v">−33.0 pts</td><td class="v">−96</td></tr>
+          <tr><td class="y">1854</td><td class="who">Franklin Pierce<small>Democratic</small></td><td class="bar"><div class="b cD" style="width:90%"></div></td><td class="v">−31.6 pts</td><td class="v">−74</td></tr>
+          <tr><td class="y">1890</td><td class="who">Benjamin Harrison<small>Republican</small></td><td class="bar"><div class="b cR" style="width:80%"></div></td><td class="v">−28.0 pts</td><td class="v">−93</td></tr>
+          <tr><td class="y">1842</td><td class="who">John Tyler<small>Whig</small></td><td class="bar"><div class="b cE" style="width:75%"></div></td><td class="v">−26.4 pts</td><td class="v">−70</td></tr>
+          <tr><td class="y">1858</td><td class="who">James Buchanan<small>Democratic</small></td><td class="bar"><div class="b cD" style="width:59%"></div></td><td class="v">−20.8 pts</td><td class="v">−49</td></tr>
+          <tr><td class="y">1922</td><td class="who">Warren G. Harding<small>Republican</small></td><td class="bar"><div class="b cR" style="width:50%"></div></td><td class="v">−17.7 pts</td><td class="v">−77</td></tr>
+          <tr><td class="y">1938</td><td class="who">Franklin D. Roosevelt<small>Democratic</small></td><td class="bar"><div class="b cD" style="width:47%"></div></td><td class="v">−16.6 pts</td><td class="v">−72</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <header class="col part" id="states">
+      <p class="part-n">Part two</p>
+      <h2 class="part-h">State by state, 1978 to 2026</h2>
+      <p>Since 1976 every House race is on record district by district. Put together state by state, they show where each wave broke, how evenly it ran, and who stays home.</p>
+    </header>
+
+    <section class="col" aria-labelledby="h-where">
+      <h2 id="h-where"><span class="n">7 · Where it broke</span>Each wave lands somewhere else</h2>
+      <p>In 1994 the Democrats lost six seats in Washington alone, the Speaker’s among them. In 2010 they lost five each in New York, Ohio and Pennsylvania. In 2018 Republicans lost seven in California and four each in New Jersey and Pennsylvania. In 2006 and 2018 the Republicans didn’t gain a House seat in any state.</p>
+      <figure>
+        <div class="years" id="wave-years" role="group" aria-label="Midterm"></div>
+        <p class="wave-sum" id="wave-sum" aria-live="polite"></p>
+        <div class="chart" id="c-wave" role="img" aria-label="Map of the states, each showing the House seats the president's party gained or lost in the chosen midterm."></div>
+        <div class="legend" id="wave-key" aria-hidden="true"></div>
+        <figcaption id="wave-cap">Seats the president’s party held after the midterm, less those it held after the election before. In the years after a census, new maps and seats moving between states account for some of the change.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-national">
+      <h2 id="h-national"><span class="n">8 · One tide</span>The big waves are national</h2>
+      <p>Take the districts that kept their lines and had both parties on the ballot both times. In 2010, 332 of 358 moved against the Democrats, 93%. In 1994, 2006, 2014 and 2018, at least four in five moved against the president’s party. In 1990 and 1998, about half did, and the House barely changed.</p>
+      <p>Nor do the same states lead each time. Measured against the national swing, how hard a state swung in one midterm says almost nothing about the next: the correlation from one to the next ran from −0.30 to 0.42, and averaged 0.03.</p>
+      <figure>
+        <div class="chart" id="c-national" role="img" aria-label="Bar chart of the share of districts that swung against the president's party in nine midterms with unchanged maps, from 49 percent in 1990 and 1998 to 93 percent in 2010."></div>
+        <figcaption>Share of districts where the president’s party’s share of the two-party vote fell from the election before, in the midterms with no new maps after a census.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-south">
+      <h2 id="h-south"><span class="n">9 · The South</span>Two midterms remade the South</h2>
+      <p>In 1976 Democrats held 81 of the 108 House seats in the eleven states of the old Confederacy, 75%. By 2024 they held 43 of 142, 30%. Two midterms under Democratic presidents did two thirds of that: 1994, from 62% to 49%, and 2010, from 45% to 28%.</p>
+      <figure>
+        <div class="chart" id="c-south" role="img" aria-label="Line chart of the Democratic share of House seats in the eleven Southern states from 1976 to 2024, falling from 75 to 30 percent, with the steepest drops in 1994 and 2010."></div>
+        <figcaption>Alabama, Arkansas, Florida, Georgia, Louisiana, Mississippi, North Carolina, South Carolina, Tennessee, Texas and Virginia. The South gained seats at every census, and maps were redrawn in 1992 with new majority-Black districts.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-home">
+      <h2 id="h-home"><span class="n">10 · Who stays home</span>The states that keep their voters</h2>
+      <p>In the six midterms from 2002 to 2022, the average state drew 73% as many eligible voters as at the presidential election two years before. South Dakota kept 86%, and Hawaii, Oregon, Alaska and Montana more than 80%. Mississippi kept 59% and New Jersey 63%.</p>
+      <p>Three of the five that keep the fewest, Mississippi, New Jersey and Virginia, choose their governors in odd years, when there is no federal race at all. The five odd-year states kept 66% on average, the 34 states that choose a governor in the midterm 74%.</p>
+      <figure>
+        <div class="fig-head">
+          <div class="seg" role="group" aria-label="Midterms" id="home-seg" hidden>
+            <button type="button" data-k="avg" aria-pressed="true">2002–2022</button>
+            <button type="button" data-k="2026" aria-pressed="false">2026</button>
+          </div>
+        </div>
+        <div class="chart" id="c-home" role="img" aria-label="Map of the states shaded by midterm turnout as a share of the presidential turnout two years before, from 59 percent in Mississippi to 86 percent in South Dakota."></div>
+        <div class="legend" id="home-key" aria-hidden="true"></div>
+        <figcaption id="home-cap">Turnout of eligible voters at each midterm, as a share of that state’s turnout two years before, averaged over 2002 to 2022.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-fight">
+      <h2 id="h-fight"><span class="n">11 · 2026</span>Where the House is decided</h2>
+      <p>Republicans won 14 seats by less than five points in 2024. Thirteen are in states whose lines didn’t move: three in Pennsylvania, two each in Arizona and Iowa, one each in Alaska, Colorado, Michigan, Nebraska, Virginia and Wisconsin. Nine states with 173 seats, two in five, vote on different lines than in 2024, so their old margins say little.</p>
+      <figure>
+        <div class="fig-head">
+          <div class="legend" id="fight-key" aria-hidden="true"></div>
+          <div class="seg" role="group" aria-label="Margin" id="fight-seg">
+            <button type="button" data-k="0" aria-pressed="true">Under 5 pts</button>
+            <button type="button" data-k="1" aria-pressed="false">Under 10 pts</button>
+          </div>
+        </div>
+        <div class="chart" id="c-fight" role="img" aria-label="Map of the states showing how many House seats Republicans won by narrow margins in 2024, with the nine states that redrew their lines for 2026 hatched."></div>
+        <figcaption>Republican margins over the Democrat in 2024, among seats both parties contested. New lines for 2026 as of 28 September 2026, from PolicyMap’s redistricting tracker: eight new maps in force, and Alabama back on its 2023 map.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-split">
+      <h2 id="h-split"><span class="n">12 · One ballot</span>Voters stopped splitting their tickets</h2>
+      <p>On the same day, in the same state, the Senate race and the House races used to go different ways. In 1994, 16 of the 34 states with a Senate race elected a senator from the party that lost the state’s House vote. In 2014 two did.</p>
+      <p>The gap between how the president’s party ran for the Senate and for the House in the same state averaged 8 to 13 points in every midterm from 1978 to 2006. In 2022 it was 3. The three splits of 2018, Democratic senators kept by Montana, Ohio and West Virginia, all went Republican in 2024. In 2022 four states split, all for Democratic senators: Arizona, Georgia, Nevada and Pennsylvania.</p>
+      <figure>
+        <div class="legend" aria-hidden="true">
+          <span><i class="chip cD"></i>Democrat won the Senate seat</span>
+          <span><i class="chip cR"></i>Republican won</span>
+          <span><i class="key-sw" style="background:var(--paper);box-shadow:inset 0 0 0 2px var(--ink);border-radius:50%;width:10px"></i>the state’s House vote went the other way</span>
+          <span><i class="key-sw" style="background:var(--paper-2)"></i>average gap</span>
+        </div>
+        <div class="chart" id="c-split" role="img" aria-label="Dot chart of 384 midterm Senate races from 1978 to 2022, each placed by how far the Senate vote ran from the House vote in the same state. The spread narrows from about 10 points to 3."></div>
+        <figcaption>The president’s party’s share of the two-party Senate vote, less its share of the state’s two-party House vote, counting every House vote cast. Above zero, its Senate candidate ran ahead of its House candidates. The numbers along the top count the splits. Races won by an independent are left out. 2026 is added once states publish their full counts.</figcaption>
+      </figure>
+    </section>
+
+    <section class="col" aria-labelledby="h-src">
+      <h2 id="h-src"><span class="n">Sources</span>Where the numbers come from</h2>
+      <ul class="fine">
+        <li>House seats held by each party as each Congress opened, 1789 to 2025: <a href="https://history.house.gov/Institution/Party-Divisions/Party-Divisions/">Office of the Historian, US House of Representatives</a>. The changes up to 1930 are worked out from it.</li>
+        <li>House and Senate seat changes and Gallup approval for every midterm since 1934: <a href="https://www.presidency.ucsb.edu/statistics/data/seats-congress-gainedlost-the-presidents-party-mid-term-elections">The American Presidency Project, UC Santa Barbara</a>. Its counts can differ by a seat from the House table, because seats change hands between an election and the day a Congress opens.</li>
+        <li>Turnout of the voting-eligible population, 1789 to 2024, and the 2026 count: <a href="https://election.lab.ufl.edu/voter-turnout/">UF Election Lab</a>, Michael McDonald, with Walter Dean Burnham’s estimates before 1948.</li>
+        <li>Every House race by district, 1976 to 2024, for part two: <a href="https://doi.org/10.7910/DVN/IG0UN2">MIT Election Data and Science Lab</a>. Seats by state and the district swings are worked out from it; its seat totals come within a seat or two of the House’s own count of each election, so part two’s figures can differ by that much from part one’s. Turnout by state, 1980 to 2024: the UF Election Lab, with votes for the highest office standing in where a state reported no total of ballots before 2010.</li>
+        <li>Every Senate race by state, 1976 to 2024: <a href="https://doi.org/10.7910/DVN/PEJ5QU">MIT Election Data and Science Lab</a>. Georgia’s December runoffs decide who won; the vote shares are from November.</li>
+        <li>States voting on new House lines in 2026: <a href="https://www.policymap.com/blog/redistricting-tracker">PolicyMap’s redistricting tracker</a>, as of 28 September 2026, checked against <a href="https://votingrightslab.org/2026/08/19/an-emerging-trend-mid-decade-redistricting/">Voting Rights Lab</a>.</li>
+        <li>Which party counts as the president’s before 1934 is the author’s reading. 1842 is counted for the Whigs, who elected John Tyler and expelled him a year later. Nine states vote on different House lines in 2026 than in 2024, so some of this year’s change was set before a vote was cast.</li>
+      </ul>
+      <details>
+        <summary>Every midterm, as a table</summary>
+        <div class="table-wrap"><table class="data" id="data"><thead><tr><th>Year</th><th>President</th><th>Party</th><th>House before</th><th>After</th><th>Change</th><th>Share, pts</th><th>Senate</th><th>Approval</th><th>Turnout</th></tr></thead><tbody></tbody></table></div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="col">
+    <p>No. 009 · The midterm tide · Mahir Yavuz, 2026</p>
+  </footer>
+
+  <div class="tip" id="tip" role="tooltip"></div>
+  <noscript><p class="col fine">The charts on this page are drawn by JavaScript. The text and the table of the biggest waves carry the findings without it.</p></noscript>
+
+<script src="midterms.js"></script>
+<script src="main.js"></script>
+<script src="states.js"></script>
+<script src="map.js"></script>
+<script src="lead.js"></script>
+</body>
+</html>
