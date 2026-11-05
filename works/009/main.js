@@ -105,7 +105,7 @@
   }
   const range = (a, b, step) => { const out = []; for (let v = a; v <= b + 1e-9; v += step) out.push(+v.toFixed(6)); return out; };
 
-  // ---------- 1. every midterm ----------
+  // ---------- 2026: every midterm ----------
   let measure = 'change';
   const since1946 = scored.filter((m) => m.y >= 1946);
   const typical = { change: median(since1946.map((m) => m.change)), shift: median(since1946.map((m) => m.shift)) };
@@ -176,95 +176,7 @@
     drawAll(document.getElementById('c-all'));
   }));
 
-  // ---------- dot plots, stacked in steps ----------
-  function drawDots(chart, items, { value, step, domain, rule, ruleLabel, axisStep, unit }) {
-    const W = chart.clientWidth;
-    const r = W < 520 ? 5 : 6.5, gap = 2, pitch = r * 2 + gap;
-    const bins = new Map();
-    const placed = items.map((d) => {
-      const k = Math.round(value(d) / step);
-      const i = bins.get(k) || 0; bins.set(k, i + 1);
-      return { d, k, i };
-    });
-    const tallest = Math.max(...bins.values());
-    const m = { t: 46, r: 14, b: 30, l: 14 };
-    const H = m.t + m.b + tallest * pitch + 8;
-    chart.textContent = '';
-    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, chart);
-    const x = scale(domain, [m.l + r, W - m.r - r]);
-    const base = H - m.b - r - 4;
-
-    const ax = el('g', { class: 'axis' }, svg);
-    el('line', { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b }, ax);
-    const ticks = range(Math.ceil(domain[0] / axisStep) * axisStep, domain[1], axisStep);
-    for (const t of ticks) {
-      el('line', { x1: x(t), x2: x(t), y1: H - m.b, y2: H - m.b + 4, class: t === 0 ? 'zero' : null }, ax);
-      el('text', { x: x(t), y: H - m.b + 17, 'text-anchor': 'middle' }, ax).textContent = t === 0 ? '0' : signed(t);
-    }
-    el('text', { x: W - m.r, y: H - 2, 'text-anchor': 'end' }, ax).textContent = unit;
-
-    // the line Republicans can't cross this year
-    const rx = x(rule);
-    el('line', { x1: rx, x2: rx, y1: 18, y2: H - m.b, class: 'rule-line' }, svg);
-    el('text', { x: rx - 8, y: 22, 'text-anchor': 'end', class: 'rule-label' }, svg).textContent = ruleLabel[0];
-    el('text', { x: rx + 8, y: 22, 'text-anchor': 'start', class: 'rule-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = ruleLabel[1];
-
-    const marks = el('g', {}, svg);
-    for (const { d, k, i } of placed) {
-      const cx = x(k * step), cy = base - i * pitch;
-      const c = el('circle', { cx, cy, r, class: 'mark', style: `fill:${color(d.party)};stroke:var(--paper);stroke-width:1.5` }, marks);
-      if (d.y === 2026) { c.setAttribute('r', r + 1); c.style.stroke = 'var(--ink)'; c.style.strokeWidth = 2; }
-      const hit = el('circle', { cx, cy, r: Math.max(r + 3, pitch / 2 + 1), fill: 'transparent', class: 'hit' }, svg);
-      hover(hit, chart, svg, `${chart.id}${d.y}`, () => midtermTip(d), () => [cx, cy], c);
-      if (d.y === 2026) el('text', { x: cx, y: cy - r - 6, 'text-anchor': 'middle', class: 'ghost-label' }, svg).textContent = '2026';
-    }
-  }
-
-  const since1830 = scored.filter((m) => m.y >= 1830);
-  const houseDots = (chart) => drawDots(chart, since1830.concat(counted ? [{ ...now, seats1: now.house, size1: 435 }] : []), {
-    value: (d) => d.change, step: 5, domain: [-130, 15], rule: -2.5, axisStep: 25, unit: 'House seats, president’s party',
-    ruleLabel: ['← Republicans lose the House', 'Hold it →'],
-  });
-  const senateItems = all.filter((m) => m.senate && m.senate.change != null);
-  const senateDots = (chart) => drawDots(chart, senateItems.concat(counted && now.senate.change != null ? [now] : []), {
-    value: (d) => d.senate.change, step: 1, domain: [-14, 10], rule: -3.5, axisStep: 2, unit: 'Senate seats, president’s party',
-    ruleLabel: ['← Republicans lose the Senate', 'Keep it →'],
-  });
-
-  // ---------- 3. approval and seats ----------
-  function drawApproval(chart) {
-    const W = chart.clientWidth, H = Math.round(Math.max(300, Math.min(440, W * .62)));
-    const m = { t: 22, r: 16, b: 38, l: 40 };
-    chart.textContent = '';
-    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, chart);
-    const pts = scored.filter((d) => d.approval);
-    const x = scale([20, 80], [m.l, W - m.r]);
-    const y = scale([20, -80], [m.t, H - m.b]);
-    el('rect', { x: x(20), y: m.t, width: x(50) - x(20), height: H - m.t - m.b, class: 'band' }, svg);
-    axisY(svg, y, range(-75, 15, 25), m.l, W - m.r, (t) => (t === 0 ? '0' : signed(t)));
-    axisX(svg, x, range(20, 80, 10), H - m.b + 18, (t) => `${t}%`);
-    el('text', { x: W - m.r, y: H - 4, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'Approval before the vote';
-    el('text', { x: x(21), y: m.t + 14, class: 'rule-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = 'Under 50%: every one lost seats';
-
-    const ax = x(now.approval ? now.approval.v : 33);
-    el('line', { x1: ax, x2: ax, y1: m.t + 24, y2: H - m.b, class: 'rule-line' }, svg);
-    el('text', { x: ax + 6, y: H - m.b - 8, class: 'rule-label' }, svg).textContent = `2026, ${now.approval ? now.approval.v : 33}%`;
-
-    const named = new Set([1946, 1998, 2002, 2010, 2022, 1942]);
-    const marks = el('g', {}, svg);
-    for (const d of pts.concat(counted ? [{ ...now, seats1: now.house, size1: 435 }] : [])) {
-      const cx = x(d.approval.v), cy = y(d.change);
-      const c = el('circle', { cx, cy, r: 5.5, class: 'mark', style: `fill:${color(d.party)};stroke:var(--paper);stroke-width:1.5` }, marks);
-      if (d.y === 2026) { c.style.stroke = 'var(--ink)'; c.style.strokeWidth = 2; }
-      if (named.has(d.y) || d.y === 2026) {
-        el('text', { x: cx + 9, y: cy + 4, class: 'ghost-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = d.y;
-      }
-      const hit = el('circle', { cx, cy, r: 12, fill: 'transparent', class: 'hit' }, svg);
-      hover(hit, chart, svg, `ap${d.y}`, () => midtermTip(d), () => [cx, cy], c);
-    }
-  }
-
-  // ---------- 5. the seats each party has up ----------
+  // ---------- record 3. the seats each party has up ----------
   function drawExposure(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(280, Math.min(400, W * .58)));
     const m = { t: 22, r: 16, b: 38, l: 40 };
@@ -295,7 +207,7 @@
     }
   }
 
-  // ---------- 4. turnout ----------
+  // ---------- 2026: turnout ----------
   function drawTurnout(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(260, Math.min(380, W * .5)));
     const m = { t: 16, r: 46, b: 28, l: 36 };
@@ -420,7 +332,7 @@
       draw(chart);
     }).observe(chart);
   }
-  const charts = [['c-all', drawAll], ['c-three', houseDots], ['c-approval', drawApproval], ['c-turnout', drawTurnout], ['c-senate', senateDots], ['c-exposure', drawExposure]];
+  const charts = [['c-all', drawAll], ['c-turnout', drawTurnout], ['c-exposure', drawExposure]];
   for (const [id, draw] of charts) watch(document.getElementById(id), draw);
   fillBoard();
   fillTable();

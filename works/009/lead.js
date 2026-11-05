@@ -1,4 +1,4 @@
-// No. 009, the opening: six signals the record gave about 2026 before the vote, filled in with the result once it is in.
+// No. 009, the Senate result and the record behind the scorecard's signals, filled in with 2026 once it is in.
 (() => {
   'use strict';
   const M = window.MIDTERMS, S = window.STATES, T = window.TIDE;
@@ -14,7 +14,7 @@
   const label = (svg, x, y, text, anchor = 'start', strong) =>
     el('text', { x, y, 'text-anchor': anchor, class: 'ghost-label', style: strong ? null : 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = text;
 
-  // ---------- 1. approval and the majority ----------
+  // ---------- record 1. approval and the majority ----------
   const PLACE = { 1994: 'left', 2010: 'below', 1978: 'above' };
   function drawRule(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(260, Math.min(360, W * .55)));
@@ -26,7 +26,7 @@
     const y = scale([52, 22], [m.t, H - m.b]);
     axisY(svg, y, range(25, 50, 5), m.l, W - m.r, (t) => `${t}%`);
     axisX(svg, x, range(0, 80, 20), H - m.b + 18, String);
-    el('text', { x: W - m.r, y: H - 4, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'House seats to spare over a majority';
+    el('text', { x: W - m.r, y: H - 4, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'House seats over a majority';
     const cut = x(42.5);
     el('line', { x1: cut, x2: cut, y1: m.t - 18, y2: H - m.b, class: 'rule-line' }, svg);
     el('text', { x: cut - 8, y: m.t - 8, 'text-anchor': 'end', class: 'rule-label' }, svg).textContent = '40 or fewer: all lost';
@@ -44,7 +44,7 @@
       else label(svg, cx + 10, cy + 4, d.y, 'start', d.y === 2026);
       const hit = el('circle', { cx, cy, r: 13, fill: 'transparent', class: 'hit' }, svg);
       hover(hit, chart, svg, `ru${d.y}`, () => tip(String(d.y), `${d.president} · ${d.partyName}`, [
-        ['Approval', `${d.approval.v}%`], ['To spare', `${spare(d)} seats`], ['House', `${signed(d.change)}, ${lost ? 'lost it' : 'kept it'}`],
+        ['Approval', `${d.approval.v}%`], ['Over a majority', `${spare(d)} seats`], ['House', `${signed(d.change)}, ${lost ? 'lost it' : 'kept it'}`],
       ]), () => [cx, cy], dot);
     }
     if (!counted) {
@@ -54,7 +54,7 @@
     }
   }
 
-  // ---------- the Senate map ----------
+  // ---------- 2026: the Senate map ----------
   // The 35 seats up, lined up from Harris's best state to Trump's: columns on a wide screen, rows on a phone.
   function drawSenmap(chart) {
     const W = chart.clientWidth, seats = S.senate2026, calls = now.senateCalls || {};
@@ -108,7 +108,7 @@
     }
   }
 
-  // ---------- the night: each Senate race against the president's last margin ----------
+  // ---------- 2026: each Senate race against the president's last margin ----------
   // One row per midterm, one dot per race with both parties on the ballot; past zero, the president's party ran behind.
   function swings26() {
     const shares = now.senateShares || {};
@@ -153,7 +153,7 @@
     });
   }
 
-  // ---------- 3. the ballot ----------
+  // ---------- record 6. the ballot ----------
   function drawContest(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(260, Math.min(360, W * .55)));
     const m = { t: 24, r: 16, b: 38, l: 40 };
@@ -182,37 +182,7 @@
     }
   }
 
-  // ---------- 4. Cleveland ----------
-  function drawCleveland(chart) {
-    const W = chart.clientWidth;
-    const rows = [1886, 1894, 2018].map((yr) => scored.find((d) => d.y === yr)).concat([now26 || { ...now, y: 2026 }]);
-    const row = 46, m = { t: 4, r: 64, b: 4, l: 0 };
-    const H = m.t + m.b + row * rows.length;
-    chart.textContent = '';
-    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, chart);
-    const x = scale([0, 130], [m.l, W - m.r]);
-    const marks = el('g', {}, svg);
-    rows.forEach((d, i) => {
-      const cy = m.t + i * row + row / 2, loss = d.change != null ? -d.change : null;
-      const who = d.y === 2026 || d.y === 2018 ? 'Trump' : 'Cleveland';
-      // the name on its own line, the bar under it
-      el('text', { x: 0, y: cy - 8, class: 'ghost-label' }, svg).textContent = d.y;
-      label(svg, 40, cy - 8, `${who}, ${d.y === 1886 || d.y === 2018 ? 'first term' : 'second term'}`);
-      const by = cy + 2;
-      if (loss == null) {
-        el('rect', { x: x(0), y: by - 6, width: x(22) - x(0), height: 12, rx: 2, class: 'ghost-bar' }, svg);
-        label(svg, x(22) + 8, by + 4, 'counting');
-        return;
-      }
-      const w = Math.max(2, x(Math.max(0, loss)) - x(0));
-      const b = el('rect', { x: x(0), y: by - 6, width: w, height: 12, rx: 2, class: 'mark', style: `fill:${color(d.party)}` }, marks);
-      label(svg, x(0) + w + 8, by + 4, loss >= 0 ? `−${loss}` : `+${-loss}`, 'start', true);
-      const hit = el('rect', { x: 0, y: cy - row / 2, width: W, height: row, fill: 'transparent', class: 'hit' }, svg);
-      hover(hit, chart, svg, `cl${d.y}`, () => tip(String(d.y), `${d.president} · ${d.partyName}`, [['House', `${d.seats0} → ${d.seats1} of ${d.size1}`]]), () => [x(0) + w, cy - 6], b);
-    });
-  }
-
-  // ---------- 5. the calendar ----------
+  // ---------- record 4. the calendar ----------
   // One line of elections; changes of control in midterms are named above it, in presidential years below.
   function drawControl(chart) {
     const W = chart.clientWidth, H = 96;
@@ -246,7 +216,7 @@
     }
   }
 
-  // ---------- 6. the members ----------
+  // ---------- record 5. the members ----------
   function drawFresh(chart) {
     const W = chart.clientWidth;
     const years = Object.keys(S.freshmen).map(Number).sort((a, b) => a - b);
@@ -276,7 +246,7 @@
     });
   }
 
-  // ---------- 2. the margin, once it is in ----------
+  // ---------- record 2. the margin, once it is in ----------
   if (counted) {
     document.getElementById('cush-seats').textContent = signed(now.change);
     document.getElementById('cush-house').textContent = kept(now26) ? 'kept' : 'lost';
@@ -286,7 +256,6 @@
   watch(document.getElementById('c-rule'), drawRule);
   watch(document.getElementById('c-senmap'), drawSenmap);
   watch(document.getElementById('c-contest'), drawContest);
-  watch(document.getElementById('c-cleveland'), drawCleveland);
   watch(document.getElementById('c-control'), drawControl);
   watch(document.getElementById('c-fresh'), drawFresh);
 })();

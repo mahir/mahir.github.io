@@ -1,4 +1,4 @@
-// No. 009, part two: the states, drawn from states.js on a grid of tiles, one per state.
+// No. 009, the state-by-state charts, drawn from states.js, most on a grid of tiles, one per state.
 (() => {
   'use strict';
   const S = window.STATES, M = window.MIDTERMS, T = window.TIDE;
@@ -53,7 +53,7 @@
   };
   const tipHtml = (title, sub, rows) => `<b>${title}</b>${sub ? `<div class="who">${sub}</div>` : ''}<dl>${rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`;
 
-  // ---------- 7. where each wave broke ----------
+  // ---------- 2026: where each wave broke ----------
   const counted26 = Object.keys(now.byState || {}).length > 0;
   const waveYears = Object.keys(S.president).map(Number).filter((y) => y < 2026 || counted26);
   let waveYear = counted26 ? 2026 : 2018;
@@ -118,7 +118,7 @@
     drawWave(document.getElementById('c-wave'));
   });
 
-  // ---------- 8. one tide ----------
+  // ---------- record 7. one tide ----------
   function drawNational(chart) {
     const W = chart.clientWidth;
     const years = Object.keys(S.swing).map(Number).sort((a, b) => a - b);
@@ -147,7 +147,7 @@
     });
   }
 
-  // ---------- 9. the South ----------
+  // ---------- record 8. the South ----------
   function drawSouth(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(240, Math.min(340, W * .5)));
     const m = { t: 20, r: 40, b: 28, l: 40 };
@@ -177,10 +177,10 @@
     el('text', { x: W - m.r, y: y(50) - 6, 'text-anchor': 'end', class: 'rule-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = 'half the seats';
   }
 
-  // ---------- 10. who stays home ----------
+  // ---------- 2026: who stays home ----------
   const t26 = S.turnout2026 || {}, t24 = S.turnout['2024'] || {};
   const has26 = Object.keys(t26).length > 0;
-  let homeK = 'avg';
+  let homeK = has26 ? '2026' : 'avg';
   const BANDS = [[65, 18, 'under 65%'], [70, 36, '65–70'], [75, 56, '70–75'], [80, 76, '75–80'], [Infinity, 96, '80% or more']];
   const band = (v) => BANDS.find(([hi]) => v < hi);
   function drawHome(chart) {
@@ -217,34 +217,7 @@
     });
   }
 
-  // ---------- 11. where 2026 is fought ----------
-  let fightK = 0;
-  function drawFight(chart) {
-    const lines = new Set(S.newLines2026);
-    tiles(chart, (s) => {
-      const c = (S.close2024[s] || [0, 0])[fightK], seats = S.seats['2024'][s] || [0, 0, 0];
-      const tip = tipHtml(S.names[s], lines.has(s) ? 'New lines for 2026' : 'Same lines as 2024', [
-        ['2024', `${seats[0]} D · ${seats[1]} R`], [`R by < ${fightK ? 10 : 5} pts`, String(c)],
-      ]);
-      const fill = c ? mix('var(--R)', c === 1 ? 40 : c === 2 ? 66 : 92) : 'var(--paper-2)';
-      return { fill, dark: c >= 2, value: c ? String(c) : null, hatch: lines.has(s), tip };
-    }, `f${fightK}`);
-    legend('fight-key', [
-      [`background:${mix('var(--R)', 40)}`, '1 seat'], [`background:${mix('var(--R)', 66)}`, '2'], [`background:${mix('var(--R)', 92)}`, '3 or more'],
-      ['background:repeating-linear-gradient(45deg, var(--paper-2) 0 3px, #a9a397 3px 4px)', 'new lines for 2026'],
-    ]);
-  }
-  const fseg = document.getElementById('fight-seg');
-  fseg.addEventListener('click', (e) => {
-    const b = e.target.closest('button');
-    if (!b) return;
-    fightK = +b.dataset.k;
-    fseg.querySelectorAll('button').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
-    T.hideTip();
-    drawFight(document.getElementById('c-fight'));
-  });
-
-  // ---------- 12. one ballot ----------
+  // ---------- record 9. one ballot ----------
   function drawSplit(chart) {
     const W = chart.clientWidth, H = Math.round(Math.max(320, Math.min(460, W * .66)));
     const m = { t: 30, r: 12, b: 28, l: 44 };
@@ -293,5 +266,4 @@
   watch(document.getElementById('c-national'), drawNational);
   watch(document.getElementById('c-south'), drawSouth);
   watch(document.getElementById('c-home'), drawHome);
-  watch(document.getElementById('c-fight'), drawFight);
 })();
