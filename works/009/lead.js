@@ -5,6 +5,7 @@
   if (!M || !S || !T) return;
   const { el, scale, signed, hover, axisX, axisY, range, watch, color } = T;
   const now = M.y2026, counted = now.house != null;
+  const yr26 = (y) => (y === 2026 && now.estimate ? '2026 est.' : y);  // the House figure is an estimate until the count is final
   const scored = M.midterms.filter((m) => m.change != null);
   const majority = (size) => Math.floor(size / 2) + 1;
   const spare = (m) => m.seats0 - majority(m.size0);
@@ -38,10 +39,10 @@
       const lost = !kept(d);
       const dot = el('circle', { cx, cy, r: 6, class: 'mark', style: lost ? `fill:${c};stroke:var(--paper);stroke-width:1.5` : `fill:var(--paper);stroke:${c};stroke-width:2.2` }, marks);
       const at = PLACE[d.y] || 'right';  // a few labels move off the line or off a neighbour
-      if (at === 'left') label(svg, cx - 10, cy + 4, d.y, 'end', d.y === 2026);
-      else if (at === 'above') label(svg, cx, cy - 11, d.y, 'middle', d.y === 2026);
-      else if (at === 'below') label(svg, cx, cy + 19, d.y, 'middle', d.y === 2026);
-      else label(svg, cx + 10, cy + 4, d.y, 'start', d.y === 2026);
+      if (at === 'left') label(svg, cx - 10, cy + 4, yr26(d.y), 'end', d.y === 2026);
+      else if (at === 'above') label(svg, cx, cy - 11, yr26(d.y), 'middle', d.y === 2026);
+      else if (at === 'below') label(svg, cx, cy + 19, yr26(d.y), 'middle', d.y === 2026);
+      else label(svg, cx + 10, cy + 4, yr26(d.y), 'start', d.y === 2026);
       const hit = el('circle', { cx, cy, r: 13, fill: 'transparent', class: 'hit' }, svg);
       hover(hit, chart, svg, `ru${d.y}`, () => tip(String(d.y), `${d.president} · ${d.partyName}`, [
         ['Approval', `${d.approval.v}%`], ['Over a majority', `${spare(d)} seats`], ['House', `${signed(d.change)}, ${lost ? 'lost it' : 'kept it'}`],
@@ -144,7 +145,7 @@
     for (const d of pts) {
       const cx = x(d.u), cy = y(d.change);
       const dot = el('circle', { cx, cy, r: 5.5, class: 'mark', style: `fill:${color(d.party)};stroke:${d.y === 2026 ? 'var(--ink)' : 'var(--paper)'};stroke-width:${d.y === 2026 ? 2 : 1.5}` }, marks);
-      label(svg, cx + 9, cy + 4, d.y);
+      label(svg, cx + 9, cy + 4, yr26(d.y));
       const hit = el('circle', { cx, cy, r: 12, fill: 'transparent', class: 'hit' }, svg);
       hover(hit, chart, svg, `co${d.y}`, () => tip(String(d.y), `${d.president} · ${d.partyName}`, [
         ['Uncontested', `${d.u} seats`], ['House', `${signed(d.change)} seats`],
@@ -218,7 +219,7 @@
 
   // ---------- record 2. the margin, once it is in ----------
   if (counted) {
-    document.getElementById('cush-seats').textContent = signed(now.change);
+    document.getElementById('cush-seats').textContent = `${signed(now.change)}${now.estimate ? ' est.' : ''}`;
     document.getElementById('cush-house').textContent = kept(now26) ? 'kept' : 'lost';
   }
 

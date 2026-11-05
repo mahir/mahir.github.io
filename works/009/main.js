@@ -8,6 +8,7 @@
   const scored = all.filter((m) => m.change != null);
   const now = D.y2026;
   const counted = now.house != null;
+  const est = now.estimate ? ' est.' : '';  // the House figure is an estimate until the count is final
   const NS = 'http://www.w3.org/2000/svg';
 
   // ---------- small tools ----------
@@ -62,6 +63,7 @@
       rows.push(['House', `${m.seats0} → ${m.seats1} of ${m.size1}`], ['Change', `${signed(m.change)} seats`], ['Share', `${m.share0.toFixed(1)}% → ${m.share1.toFixed(1)}%`]);
     } else rows.push(['House', 'no party to score']);
     if (m.senate && m.senate.change != null) rows.push(['Senate', `${signed(m.senate.change)} seats`]);
+    if (m.y === 2026 && now.estimate) rows.push(['House figure', 'NBC News estimate']);
     if (m.approval) rows.push(['Approval', `${m.approval.v}%, ${m.approval.when}`]);
     const t = m.y === 2026 ? now.turnout && now.turnout.v : m.turnout;
     if (t != null) rows.push(['Turnout', pct(t)]);
@@ -144,8 +146,8 @@
     const slotW = Math.max(bw, 5);
     let p;
     if (counted) {
-      p = el('path', { d: bar(cx - slotW / 2, slotW, y(0), y(now[measure])), class: 'mark', style: `fill:${color('R')}` }, marks);
-      note(svg, cx, y(now[measure]) + (now[measure] < 0 ? 16 : -18), ['2026', share ? `${signed(now.shift, 1)} pts` : signed(now.change)], 'middle');
+      p = el('path', { d: bar(cx - slotW / 2, slotW, y(0), y(now[measure])), class: 'mark', style: `fill:${color('R')};opacity:${est ? .55 : 1}` }, marks);
+      note(svg, cx, y(now[measure]) + (now[measure] < 0 ? 16 : -18), [`2026${est}`, share ? `${signed(now.shift, 1)} pts` : signed(now.change)], 'middle');
     } else {
       p = el('rect', { x: cx - slotW / 2, y: y(0), width: slotW, height: y(typical[measure]) - y(0), rx: 1.5, class: 'ghost-bar mark' }, marks);
       el('text', { x: cx, y: y(typical[measure]) + 15, 'text-anchor': 'middle', class: 'ghost-label' }, svg).textContent = '2026';
@@ -271,8 +273,10 @@
     if (counted) {
       const keep = now.house >= now.majority;
       document.getElementById('legend-2026').hidden = true;
-      set('b-house', `${now.house}<small>${signed(now.change)}</small>`);
-      document.getElementById('b-house-p').textContent = `Republican seats of 435, from 220. ${keep ? 'They keep the House.' : 'The Democrats take the House.'}`;
+      set('b-house', `${now.house}<small>${signed(now.change)}${est}</small>`);
+      document.getElementById('b-house-p').textContent = now.estimate && now.houseCalled
+        ? `Republican seats in NBC News’s estimate of the final count, from 220. Called so far: ${now.houseCalled[0]} Democrats, ${now.houseCalled[1]} Republicans. ${keep ? 'They keep the House.' : 'The Democrats take the House.'}`
+        : `Republican seats of 435, from 220. ${keep ? 'They keep the House.' : 'The Democrats take the House.'}`;
     }
     // before a chamber is final: the seats called so far, Democrats first
     const sofar = (id, [d, r], size, majority, held, name) => {
@@ -304,7 +308,7 @@
       if (rank > 8) top.push(rows[rank - 1]);
       const widest = -rows[0].shift;
       document.querySelector('#waves tbody').innerHTML = top.map((d) => `<tr class="${d.y === 2026 ? 'now' : ''}">
-        <td class="y">${d.y}</td><td class="who">${d.president}<small>${d.partyName}${d.y === 2026 ? ` · ${rank} of ${rows.length}` : ''}</small></td>
+        <td class="y">${d.y}</td><td class="who">${d.president}<small>${d.partyName}${d.y === 2026 ? ` · ${rank} of ${rows.length}${est}` : ''}</small></td>
         <td class="bar"><div class="b ${d.party === 'D' ? 'cD' : d.party === 'R' ? 'cR' : 'cE'}" style="width:${Math.max(0, -d.shift / widest * 100).toFixed(0)}%"></div></td>
         <td class="v">${signed(d.shift, 1)} pts</td><td class="v">${signed(d.change)}</td></tr>`).join('');
     }
@@ -315,7 +319,7 @@
     document.querySelector('#data tbody').innerHTML = rows.map((d) => {
       const t = d.y === 2026 ? now.turnout && now.turnout.v : d.turnout;
       return `<tr><td>${d.y}</td><td>${d.president}</td><td>${d.partyName}</td>
-        <td>${d.seats0 ?? '—'}</td><td>${d.seats1 ?? (d.y === 2026 ? 'counting' : '—')}</td><td>${d.change != null ? signed(d.change) : '—'}</td>
+        <td>${d.seats0 ?? '—'}</td><td>${d.seats1 != null ? d.seats1 + (d.y === 2026 ? est : '') : d.y === 2026 ? 'counting' : '—'}</td><td>${d.change != null ? signed(d.change) : '—'}</td>
         <td>${d.shift != null ? signed(d.shift, 1) : '—'}</td><td>${d.senate && d.senate.change != null ? signed(d.senate.change) : '—'}</td>
         <td>${d.approval ? d.approval.v + '%' : '—'}</td><td>${t != null ? pct(t) : '—'}</td></tr>`;
     }).join('');

@@ -42,11 +42,13 @@ TURNOUT_2026 = 'https://election.lab.ufl.edu/data-downloads/turnoutdata/Turnout_
 # that won each Senate race called so far, as {'ME': 'D', ...}. house_called and senate_called: the national count so
 # far, as [Democrats, Republicans], shown until the chamber is final. senate_shares: each Senate race's vote so far.
 RESULTS_2026 = {
-    'by_state': {  # NBC News / AP, 9:49 a.m. 4 November: 28 states fully called
-        'AL': [2, 5], 'AR': [0, 4], 'CT': [5, 0], 'DE': [1, 0], 'GA': [5, 9], 'HI': [2, 0], 'ID': [0, 2], 'IL': [14, 3],
-        'IN': [3, 6], 'IA': [3, 1], 'KS': [1, 3], 'KY': [2, 4], 'MD': [7, 1], 'MA': [9, 0], 'MS': [1, 3], 'MO': [3, 5],
-        'NH': [2, 0], 'NM': [3, 0], 'ND': [0, 1], 'OK': [0, 5], 'OR': [5, 1], 'PA': [11, 6], 'RI': [2, 0], 'SD': [0, 1],
-        'VT': [1, 0], 'WV': [0, 2], 'WI': [4, 4], 'WY': [0, 1],
+    'by_state': {  # NBC News / AP, 3:57 p.m. 5 November: 36 states fully called
+        'AL': [2, 5], 'AR': [0, 4], 'CT': [5, 0], 'DE': [1, 0], 'GA': [5, 9], 'HI': [2, 0], 'ID': [0, 2],
+        'IL': [14, 3], 'IN': [3, 6], 'IA': [3, 1], 'KS': [1, 3], 'KY': [2, 4], 'MD': [7, 1], 'MA': [9, 0],
+        'MI': [9, 4], 'MS': [1, 3], 'MO': [3, 5], 'MT': [1, 1], 'NE': [1, 2], 'NV': [4, 0], 'NH': [2, 0],
+        'NM': [3, 0], 'ND': [0, 1], 'OH': [8, 7], 'OK': [0, 5], 'OR': [5, 1], 'PA': [11, 6], 'RI': [2, 0],
+        'SD': [0, 1], 'TX': [14, 24], 'UT': [1, 3], 'VT': [1, 0], 'VA': [8, 3], 'WV': [0, 2], 'WI': [4, 4],
+        'WY': [0, 1],
     },
     'senate_by_state': {  # AP calls via ABC News and CNBC; Alaska and Mississippi uncalled
         'CO': 'D', 'DE': 'D', 'GA': 'D', 'IL': 'D', 'MA': 'D', 'MI': 'D', 'MN': 'D', 'NH': 'D', 'NJ': 'D', 'NM': 'D',
@@ -55,19 +57,20 @@ RESULTS_2026 = {
         'AL': 'R', 'AR': 'R', 'FL': 'R', 'ID': 'R', 'KY': 'R', 'LA': 'R', 'MT': 'R', 'NE': 'R', 'OK': 'R', 'SD': 'R',
         'TN': 'R', 'WV': 'R', 'WY': 'R',
     },
-    'senate_shares': {  # percent of the vote, [Democrat, Republican], as ABC News showed it at 10:32 a.m. 4 November
-        'MA': [63, 32], 'DE': [64, 36], 'OR': [57, 41], 'RI': [67, 29], 'CO': [60, 36], 'IL': [61, 37], 'ME': [54, 46],
+    'senate_shares': {  # percent of the vote, [Democrat, Republican], as ABC News showed it at 3:57 p.m. 5 November
+        'MA': [63, 32], 'DE': [64, 36], 'OR': [57, 40], 'RI': [67, 29], 'CO': [60, 36], 'IL': [61, 38], 'ME': [53, 47],
         'NM': [63, 37], 'NJ': [62, 35], 'VA': [61, 39], 'MN': [54, 44], 'NH': [56, 42], 'MI': [53, 45], 'GA': [59, 41],
         'NC': [59, 39], 'OH': [50, 45], 'FL': [48, 51], 'IA': [51, 46], 'AK': [48.2, 47.9], 'TX': [55, 43],
-        'KS': [51, 46], 'SC': [51, 47], 'LA': [49, 51], 'MS': [48.9, 48.9], 'TN': [43, 55], 'AL': [45, 55],
+        'KS': [51, 46], 'SC': [51, 47], 'LA': [49, 51], 'MS': [49.0, 48.9], 'TN': [43, 55], 'AL': [45, 55],
         'KY': [43, 55], 'AR': [42, 54], 'OK': [39, 57], 'WV': [38, 58], 'WY': [35, 65],
     },  # Idaho, Montana, Nebraska and South Dakota had no Democrat on the ballot
-    'house_called': [231, 144],
+    'house_called': [247, 157],
     'senate_called': [54, 44],
     'house': None,
+    'house_estimate': 176,  # Republican seats in the NBC News Decision Desk's estimate, used until house is set
     'senate': None,
-    'as_of': '2026-11-04 10:32',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
-    'note': '60 House races and the Senate races in Alaska and Mississippi are still uncalled.',
+    'as_of': '2026-11-05 15:57',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
+    'note': '31 House races and the Senate races in Alaska and Mississippi are still uncalled. Until the House count is final, its 2026 figures are NBC News’s estimate.',
 }
 
 SENATE_DEFEND_2026 = 22  # Republican seats among the 35 up, with the Ohio and Florida specials (270toWin, 3 November 2026)
@@ -259,7 +262,9 @@ def main():
         'senate': {'defend': SENATE_DEFEND_2026, 'seats0': 53, 'majority': 51},  # the vice president breaks a 50-50 tie
         'approval': r26.get('approval'),
         'turnout': turnout_2026(),
-        'house': RESULTS_2026['house'], 'senateSeats': RESULTS_2026['senate'], 'byState': by_state,
+        'house': RESULTS_2026['house'] if RESULTS_2026['house'] is not None else RESULTS_2026['house_estimate'],
+        'estimate': RESULTS_2026['house'] is None and RESULTS_2026['house_estimate'] is not None,
+        'senateSeats': RESULTS_2026['senate'], 'byState': by_state,
         'senateCalls': RESULTS_2026['senate_by_state'],
         'senateShares': RESULTS_2026['senate_shares'], 'houseCalled': RESULTS_2026['house_called'], 'senateCalled': RESULTS_2026['senate_called'],
         'asOf': RESULTS_2026['as_of'], 'note': RESULTS_2026['note'],
