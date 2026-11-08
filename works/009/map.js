@@ -200,7 +200,7 @@
     }, `h${homeK}`);
     document.getElementById('home-cap').textContent = homeK === 'avg'
       ? 'Turnout of eligible voters at each midterm, as a share of that state’s turnout two years before, averaged over 2002 to 2022.'
-      : 'Turnout of eligible voters in 2026 as a share of the state’s 2024 turnout, from the UF Election Lab’s first estimates.';
+      : 'Turnout of eligible voters in 2026 as a share of the state’s 2024 turnout, from the UF Election Lab’s estimates as of 7 November.';
     legend('home-key', BANDS.map(([, pct, label]) => [`background:${mix('var(--E)', pct)}`, label])
       .concat([['background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--ink)', 'governor elected in odd years']]));
   }
