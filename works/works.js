@@ -16,7 +16,7 @@ window.Works = (() => {
     },
     {
       n: 2, title: 'Self-portrait in type', date: '2026-10-26', medium: 'Interactive canvas and type',
-      about: 'The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.',
+      about: 'The original homepage as a full screen of type: the page’s own text runs across it as one line, wound in a spiral from an eye, and sets a face that turns toward the pointer; click to spill the type and wind it again from there, or type to set it in your own words.',
     },
     {
       n: 3, title: 'Manhattan sundial', date: '2026-10-27', medium: 'Interactive WebGL and live solar data',

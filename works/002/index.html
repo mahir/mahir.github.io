@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mahir Yavuz · Self-portrait in type</title>
-<meta name="description" content="Self-portrait in type, No. 002 by Mahir Yavuz: his old homepage as a letterpress print, with his portrait set in the page’s own text.">
+<meta name="description" content="Self-portrait in type, No. 002 by Mahir Yavuz: his old homepage as a screen of running type, its own text wound into his portrait as one line.">
 <meta name="author" content="Mahir Yavuz">
 <link rel="canonical" href="https://mahiryavuz.com/works/002/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/profile.jpg">
-<meta name="theme-color" content="#f1ece2">
+<meta name="theme-color" content="#1b1915">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mahir Yavuz">
 <meta property="og:title" content="Self-portrait in type · Mahir Yavuz">
-<meta property="og:description" content="No. 002: the old homepage as a letterpress print, the portrait set in its own text.">
+<meta property="og:description" content="No. 002: the old homepage as a screen of running type, its own text wound into a portrait as one line. Click to spill the type.">
 <meta property="og:url" content="https://mahiryavuz.com/works/002/">
 <meta property="og:image" content="https://mahiryavuz.com/works/002/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A portrait of Mahir Yavuz set in type on a round ink plate, beside his name">
+<meta property="og:image:alt" content="A portrait of Mahir Yavuz set in one spiral line of the page’s text on a dark field of type, beside his name">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@mahir_nyc">
 <!-- gen:ld -->
@@ -132,7 +132,7 @@
         "@id": "https://mahiryavuz.com/#website"
       },
       "image": "https://mahiryavuz.com/works/002/og.jpg",
-      "description": "The original homepage as a letterpress print: a round plate whose face is set in the page’s own text, in Eczar from weight 400 to 800.",
+      "description": "The original homepage as a full screen of type: the page’s own text runs across it as one line, wound in a spiral from an eye, and sets a face that turns toward the pointer; click to spill the type and wind it again from there, or type to set it in your own words.",
       "artMedium": "Interactive canvas and type"
     },
     {
@@ -160,87 +160,86 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&display=swap" rel="stylesheet">
 <style>
-  /* The homepage as it was (a round photo, a name, three paragraphs in Eczar), pulled as a letterpress print.
-     The photo becomes a round ink plate; the face on it is the page's own text, knocked out in paper,
-     its weight and ink following the tones of the photograph. */
+  /* The homepage as it was (a photo, a name, three paragraphs in Eczar), as a forme of type the size of the screen.
+     The whole page is ink. The page's own text runs across it as one line, edge to edge, and where it passes
+     over the photograph each letter takes its weight and ink from the tone beneath, so a face stands in the
+     running text. The head turns toward the pointer, a click spills the type to the floor and sets it again as
+     one spiral wound from the click (or back in rows), scrolling pulls the line through, and typing sets the
+     face in other words. */
   :root {
     --paper: #f1ece2;
     --ink: #1b1915;
-    --ink-2: #48423a;
-    --faint: #6b645a;
-    --red: #b83519;
-    --hair: rgba(27, 25, 21, .18);
+    --text: #cdc7bb;
+    --faint: #968f84;
+    --red: #e0522c;
+    --hair: rgba(241, 236, 226, .2);
     --serif: "Eczar", Georgia, serif;
     --ease: cubic-bezier(.2, .7, .1, 1);
-    --pad: clamp(20px, 4vw, 56px);
-    --plate: min(42vw, 74svh, 620px);
-    color-scheme: light;
+    --pad: clamp(20px, 3.2vw, 44px);
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html { background: var(--paper); }
+  html { background: var(--ink); }
   body {
-    margin: 0; min-height: 100svh; background: var(--paper); color: var(--ink);
+    margin: 0; min-height: 100svh; background: var(--ink); color: var(--paper);
     font: 400 17px/1.6 var(--serif); font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   }
-  /* paper grain */
-  body::before {
-    content: ""; position: fixed; inset: 0; z-index: 10; pointer-events: none; opacity: .55; mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .09 0 0 0 0 .08 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  ::selection { background: var(--red); color: var(--paper); }
+  ::selection { background: var(--red); color: var(--ink); }
   a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: var(--hair); transition: text-decoration-color .25s ease, color .25s ease; }
   a:hover, a:focus-visible { text-decoration-color: var(--red); color: var(--red); }
   :focus-visible { outline: 1px solid var(--red); outline-offset: 4px; border-radius: 2px; }
 
-  /* the way back to the other works: an inked pill, with the work's label beside it */
+  /* the forme: the whole screen, behind everything */
+  .stage { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: 0; overflow: hidden; }
+  /* the type goes quiet where the page's text sits on it */
+  .stage::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(rgba(27, 25, 21, .8), rgba(27, 25, 21, 0) 15%),
+      linear-gradient(90deg, rgba(27, 25, 21, 0) 52%, rgba(27, 25, 21, .84) 69%, rgba(27, 25, 21, .92));
+  }
+  #plate { display: block; width: 100%; height: 100%; touch-action: pan-y; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  #plate.reading { cursor: none; }
+  .photo {
+    position: absolute; left: 34%; top: 50%; width: min(62vw, 108vh); height: auto; aspect-ratio: 1; transform: translate(-50%, -50%);
+    border-radius: 50%; object-fit: cover; filter: grayscale(1) contrast(1.15); opacity: .85;
+  }
+  .js .photo { display: none; }
+  .no-js #plate, .no-plate #plate { display: none; }
+  .no-plate .photo { display: block; }
+
+  /* the way back to the other works: a pill, with the work's label beside it */
   .nav {
     position: fixed; z-index: 5; top: calc(var(--pad) + env(safe-area-inset-top)); left: calc(var(--pad) + env(safe-area-inset-left));
     display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem;
   }
   .back {
-    display: inline-flex; align-items: center; gap: .55em; padding: .62em 1.15em .52em; border: 1px solid var(--ink); border-radius: 999px;
-    background: var(--paper); color: var(--ink); text-decoration: none;
+    display: inline-flex; align-items: center; gap: .55em; padding: .62em 1.15em .52em; border: 1px solid var(--paper); border-radius: 999px;
+    background: var(--ink); color: var(--paper); text-decoration: none;
     font-size: .72rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase;
     transition: background-color .25s ease, border-color .25s ease, color .25s ease;
   }
-  .back:hover, .back:focus-visible { background: var(--red); border-color: var(--red); color: var(--paper); outline: none; }
+  .back:hover, .back:focus-visible { background: var(--red); border-color: var(--red); color: var(--ink); outline: none; }
   .nav .label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
 
+  /* the page's text, set on the forme; everywhere else the pointer reaches the type */
   .page {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 34rem); column-gap: clamp(40px, 6vw, 112px);
-    align-items: center; align-content: center; min-height: 100svh; max-width: 1480px; margin: 0 auto;
-    padding: calc(var(--pad) * 2 + 1.5rem) clamp(24px, 6vw, 112px) calc(var(--pad) * 2);
+    position: relative; z-index: 1; pointer-events: none;
+    display: flex; justify-content: flex-end; align-items: center; min-height: 100svh;
+    padding: calc(var(--pad) * 2 + 1.5rem) clamp(24px, 5vw, 96px) calc(var(--pad) * 2);
   }
+  .text { pointer-events: auto; width: min(33rem, 40vw); }
 
-  /* the plate */
-  .figure { margin: 0; align-self: start; position: sticky; top: max(var(--pad), calc(50svh - var(--plate) / 2 - 2.5rem)); justify-self: center; }
-  .box { position: relative; width: var(--plate); aspect-ratio: 1; }
-  .disc { position: absolute; inset: 0; border-radius: 50%; background: var(--ink); }
-  .js .disc { animation: ink .8s var(--ease) both; }
-  @keyframes ink { from { opacity: 0; transform: scale(.97); } }
-  /* registration marks, as on a proof */
-  .box::before, .box::after {
-    content: ""; position: absolute; width: 22px; height: 22px; opacity: .5;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22' fill='none' stroke='%231b1915' stroke-width='.8'%3E%3Ccircle cx='11' cy='11' r='5.5'/%3E%3Cpath d='M11 0v22M0 11h22'/%3E%3C/svg%3E") no-repeat center / contain;
-  }
-  .box::before { top: -30px; left: -30px; }
-  .box::after { bottom: -30px; right: -30px; }
-  #plate, .photo { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
-  #plate { touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
-  #plate.reading { cursor: none; }
-  .photo { object-fit: cover; filter: grayscale(1) contrast(1.15); mix-blend-mode: luminosity; }
-  .js .photo { display: none; }
-  .no-js #plate, .no-plate #plate { display: none; }
-  .no-plate .photo { display: block; }
-
-  .caption { width: min(var(--plate), 30em); margin: 2.4rem auto 0; text-align: center; font-size: .8rem; line-height: 1.55; color: var(--faint); text-wrap: balance; }
-  .caption b { font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .68rem; margin-right: .5em; color: var(--ink-2); }
+  .caption { margin: 2rem 0 0; max-width: 36em; font-size: .76rem; line-height: 1.55; color: var(--faint); text-wrap: pretty; }
+  .caption b { font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .68rem; margin-right: .5em; color: var(--text); }
   .c-touch, .touch .c-hover, .no-js .hint, .no-plate .hint { display: none; }
   .touch .c-touch { display: inline; }
+  .still .c-move { display: none; }   /* nothing spills when motion is reduced */
+  .set { display: block; margin-top: .5em; color: var(--red); overflow-wrap: anywhere; }
+  .set:empty { display: none; }
 
-  /* the text */
-  .name { margin: 0 0 .75rem; font-weight: 720; font-size: clamp(3.1rem, 6.4vw, 6.25rem); line-height: .9; letter-spacing: -.025em; }
+  .name { margin: 0 0 .75rem; font-weight: 720; font-size: clamp(3.1rem, 6.1vw, 5.9rem); line-height: .9; letter-spacing: -.025em; }
   .name .word { white-space: nowrap; }
   .name .ch { transition: font-weight .5s var(--ease); }
   .name.live .ch { transition-duration: .14s; }
@@ -248,20 +247,20 @@
   .js .name.pressed .ch { animation: none; }
   @keyframes press { from { opacity: 0; font-weight: 400; } 55% { opacity: 1; } to { opacity: 1; font-weight: 720; } }
 
-  .role { margin: 0 0 2.4rem; font-size: .74rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--faint); }
+  .role { margin: 0 0 2.2rem; font-size: .74rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--faint); }
   /* when the line has to wrap, wrap it after the roles */
   .role span { display: inline-block; }
 
   .bio p {
     position: relative; margin: 0 0 1.05em; max-width: 34em;
-    font-size: clamp(1.04rem, 1.12vw, 1.17rem); line-height: 1.62; color: var(--ink-2);
+    font-size: clamp(1.02rem, 1.1vw, 1.15rem); line-height: 1.62; color: var(--text);
     hyphens: auto; text-wrap: pretty; transition: color .3s ease;
   }
   .bio p:first-child::first-letter {
     float: left; margin: .1em .09em 0 -.03em; font-size: 4.25em; font-weight: 800; line-height: .74; color: var(--red);
   }
-  .bio b { font-weight: 600; color: var(--ink); }
-  /* a pilcrow marks the paragraph being found in the plate */
+  .bio b { font-weight: 600; color: var(--paper); }
+  /* a pilcrow marks the paragraph being found in the type */
   .bio p::before { content: "¶"; position: absolute; left: -1.25em; top: 0; color: var(--red); opacity: 0; transition: opacity .25s ease; }
   .bio p.on::before { opacity: 1; }
   .bio.has-on p:not(.on) { color: var(--faint); }
@@ -271,20 +270,21 @@
   .js .rise { opacity: 0; transform: translateY(8px); animation: rise .9s var(--ease) forwards; animation-delay: calc(600ms + var(--i) * 90ms); }
   @keyframes rise { to { opacity: 1; transform: none; } }
 
-  /* one column until the plate fits beside the bio with a gutter to spare; narrower, it spills over the text */
-  @media (max-width: 1139px) {
-    :root { --plate: min(calc(100vw - 72px), 480px); }
-    .nav { position: static; padding: calc(var(--pad) + env(safe-area-inset-top)) 24px 0; }
-    .page { display: block; padding: 2.8rem 24px calc(var(--pad) * 2); }
-    .figure { position: static; margin: 0 auto 3.2rem; width: var(--plate); }
-    .box::before { top: -22px; left: -22px; }
-    .box::after { bottom: -22px; right: -22px; }
-    .caption { margin-top: 2rem; }
+  /* narrow: the face fills the first screen, and the text scrolls up over it */
+  @media (max-width: 999px) {
+    .stage::after { background: linear-gradient(rgba(27, 25, 21, .8), rgba(27, 25, 21, 0) 15%); }
+    .photo { left: 50%; top: 40%; width: min(130vw, 95vh); }
+    .nav { position: absolute; }
+    .page { display: block; min-height: 0; padding: 0; }
+    .text {
+      width: auto; margin-top: 58svh; padding: 6rem 24px 2.4rem;
+      background: linear-gradient(rgba(27, 25, 21, 0), rgba(27, 25, 21, .93) 10rem);
+    }
     .bio p::before { left: -.95em; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .js .disc, .js .name .ch, .js .rise { animation: none; opacity: 1; transform: none; }
+    .js .name .ch, .js .rise { animation: none; opacity: 1; transform: none; }
     .name .ch { transition: none; }
   }
 </style>
@@ -295,19 +295,12 @@
     <span class="label">No. 002 · Self-portrait in type, 2026</span>
   </nav>
 
-  <main class="page">
-    <figure class="figure" id="figure">
-      <div class="box">
-        <div class="disc"></div>
-        <img class="photo" src="/profile.jpg" alt="Mahir Yavuz" width="200" height="200">
-        <canvas id="plate" role="img" aria-label="Portrait of Mahir Yavuz, set in the text of this page"></canvas>
-      </div>
-      <figcaption class="caption">
-        <b>Fig.</b>The text of this page, set in Eczar at weights from 400 to 800 by the tones of a photograph.
-        <span class="hint"><span class="c-hover">Hover to read it; hover a paragraph to find it.</span><span class="c-touch">Touch to read it; tap a paragraph to find it.</span></span>
-      </figcaption>
-    </figure>
+  <div class="stage">
+    <img class="photo" src="/profile.jpg" alt="Mahir Yavuz" width="200" height="200">
+    <canvas id="plate" role="img" aria-label="Portrait of Mahir Yavuz, set in the text of this page"></canvas>
+  </div>
 
+  <main class="page">
     <article class="text">
       <h1 class="name" id="name">Mahir Yavuz</h1>
       <p class="role rise" style="--i: 0"><span>Product and engineering leader, educator and advisor,</span> <span>working with data since 1998</span></p>
@@ -321,6 +314,11 @@
         <a href="https://bsky.app/profile/mahiryavuz.bsky.social" rel="me">Bluesky&nbsp;↗</a>
         <a href="https://x.com/mahir_nyc" rel="me">X&nbsp;↗</a>
         <a href="https://mahir.substack.com/" rel="me">Substack&nbsp;↗</a>
+      </p>
+      <p class="caption rise" style="--i: 3">
+        <b>Fig.</b>The text of this page, running across the screen as one line. Where it passes over a photograph, each letter takes its weight, from 400 to 800 in Eczar, from the tone beneath it.
+        <span class="hint"><span class="c-hover">Hover to read it, <span class="c-move">click to spill the type and see it wound again from where you clicked, </span>hover a paragraph to find it, or type to set the face in your own words.</span><span class="c-touch">Hold to read it, <span class="c-move">tap to spill the type and see it wound again from where you tapped, </span>tap a paragraph to find it.</span></span>
+        <span class="set" id="set" aria-live="polite"></span>
       </p>
     </article>
   </main>
@@ -337,6 +335,7 @@
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!canHover) root.classList.add('touch');
+  if (reduceMotion) root.classList.add('still');
 
   const TAU = Math.PI * 2;
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -390,22 +389,27 @@
     });
   }
 
-  // ---------------------------------------------------------------- the plate: this page's text, set by the tones of a photograph
+  // ---------------------------------------------------------------- the plate: this page's text, running through a photograph
 
   const canvas = $('#plate'), ctx = canvas.getContext('2d');
-  const bio = $('.bio'), paras = [...bio.querySelectorAll('p')];
+  const bio = $('.bio'), paras = [...bio.querySelectorAll('p')], setNote = $('#set');
 
   const INK = '#1b1915', PAPER = [241, 236, 226], RED = [224, 82, 44];
   const rgb = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
   const PAPER_CSS = rgb(PAPER), RED_CSS = rgb(RED);
-  const WEIGHTS = [400, 500, 600, 700, 800];
+  const WEIGHTS = [400, 450, 500, 550, 600, 650, 700, 750, 800], NW = WEIGHTS.length;
+  const MAG = 2.5;   // how much the reading glass enlarges
   const fontOf = (wi, size) => `${WEIGHTS[wi]} ${size}px Eczar, Georgia, serif`;
 
   // The stream the plate is set from: the name, then each paragraph, divided by middle dots, over and over.
-  const chars = [], owner = [];
-  [['Mahir Yavuz', -1], ...paras.map((el, i) => [el.textContent.replace(/\s+/g, ' ').trim(), i])].forEach(([text, p]) => {
-    for (const ch of `${text}  ·  `) { chars.push(ch); owner.push(p); }
-  });
+  // Typing swaps it for the visitor's own words.
+  const PAGE = [['Mahir Yavuz', -2], ...paras.map((el, i) => [el.textContent.replace(/\s+/g, ' ').trim(), i])];
+  let chars = [], owner = [];
+  function stream(parts) {
+    chars = []; owner = [];
+    parts.forEach(([text, p]) => { for (const ch of `${text}  ·  `) { chars.push(ch); owner.push(p); } });
+  }
+  stream(PAGE);
 
   // The plate's circle in photo pixels: cap, face, beard and shoulders.
   const CX = 100, CY = 92, CR = 96;
@@ -456,103 +460,186 @@
     };
   }
 
-  // ---------------------------------------------------------------- typesetting
-
-  let tone = null, D = 0, R = 0, dpr = 1, fs = 0, G = null;
-
-  // Fill the circle row by row with the stream; each glyph's weight and ink come from the tone beneath it.
-  function typeset() {
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    const css = canvas.clientWidth;
-    D = Math.round(css * dpr); R = D / 2;
-    canvas.width = canvas.height = D;
-    fs = clamp(css / 72, 5, 9) * dpr;
-    const lead = fs * 0.94;
-    const width = WEIGHTS.map((_, wi) => {
-      const seen = new Map();
-      return (ch) => {
-        let w = seen.get(ch);
-        if (w === undefined) { ctx.font = fontOf(wi, fs); w = ctx.measureText(ch).width; seen.set(ch, w); }
-        return w;
-      };
-    });
-    const xs = [], ys = [], ws = [], wis = [], dens = [], ps = [], cs = [], rows = [];
-    let k = 0;
-    for (let y = lead; y < D; y += lead) {
-      const mid = y - fs * 0.3 - R;   // the row's optical middle, relative to the centre
-      if (Math.abs(mid) >= R) continue;
-      const half = Math.sqrt(R * R - mid * mid), end = R + half;
-      let x = R - half;
-      rows.push([y, xs.length]);
-      for (;;) {
-        const n = k % chars.length, ch = chars[n];
-        const t = tone((x + width[2](ch) / 2 - R) / R, mid / R);
-        const wi = Math.round(smooth(0.05, 0.85, t) * 4), w = width[wi](ch);
-        if (x + w > end) break;   // the word carries on at the start of the next row
-        k++;
-        if (ch !== ' ') { xs.push(x); ys.push(y); ws.push(w); wis.push(wi); dens.push(0.1 + 0.9 * Math.pow(t, 0.9)); ps.push(owner[n]); cs.push(ch); }
-        x += w;
-      }
-    }
-    rows.push([Infinity, xs.length]);
-    G = {
-      xs: Float32Array.from(xs), ys: Float32Array.from(ys), ws: Float32Array.from(ws), wis: Uint8Array.from(wis),
-      ink: Float32Array.from(dens), ps: Int8Array.from(ps), cs, rows, nRows: rows.length - 1,
-    };
+  // The head turns a little toward the pointer: the photograph is read as if wrapped on a ball,
+  // its middle sliding further than its rim. The type stays where it is; only the tones under it move.
+  const turn = { x: 0, y: 0, tx: 0, ty: 0 };
+  let tone = null;
+  function toneAt(u, v) {
+    const rr = u * u + v * v;
+    if (rr >= 1) return 0;   // past the photograph the type is only a field
+    const dv = v + 0.08, b = 1 - (u * u + dv * dv) / 0.9;
+    const t = b > 0 ? tone(u - turn.x * b, v - turn.y * b) : tone(u, v);
+    return t * smooth(1, 0.5, rr);   // and the photograph fades into it
   }
 
-  const sheet = () => { const c = document.createElement('canvas'); c.width = c.height = D; return c; };
+  // ---------------------------------------------------------------- setting the type
+
+  // the canvas in device pixels, the middle and radius of the photograph on it, and its size on the page
+  let W = 0, H = 0, PX = 0, PY = 0, R = 0, dpr = 1, fs = 0, rows = [], ready = false, cssW = 0, cssH = 0, face = 0;
+  // the stream, measured: where each character starts along one pass of the text, and which glyph it is
+  let n = 0, pos = null, code = null, L = 1, Wd = null, glyphCh = [], blank = -1;
+  // every glyph at every weight, drawn once in paper and once in red, then stamped from there each frame
+  let atlasP = null, atlasR = null, cw = 0, chh = 0, base = 0;
+  // and again at the reading glass's size, so what it enlarges stays sharp
+  let bigP = null, bigR = null, bcw = 0, bch = 0, bbase = 0;
+
+  // Each character keeps one advance whatever its weight, so the text can run without the row jittering.
+  function measure() {
+    const seen = new Map();
+    ctx.font = fontOf(4, fs);
+    n = chars.length; pos = new Float32Array(n + 1); code = new Uint16Array(n);
+    glyphCh = []; blank = -1;
+    const widths = [];
+    for (let k = 0; k < n; k++) {
+      const ch = chars[k];
+      let id = seen.get(ch);
+      if (id === undefined) {
+        id = glyphCh.length; glyphCh.push(ch); widths.push(ctx.measureText(ch).width); seen.set(ch, id);
+        if (ch === ' ') blank = id;
+      }
+      code[k] = id;
+      pos[k + 1] = pos[k] + widths[id];
+    }
+    Wd = Float32Array.from(widths);
+    L = pos[n];
+    const widest = Math.max(...widths);
+    const make = (colour, k) => {
+      const size = fs * k, w = Math.ceil(widest * k * 1.15 + 4), h = Math.ceil(size * 1.6), bl = Math.round(size * 1.15);
+      const c = document.createElement('canvas');
+      c.width = w * glyphCh.length; c.height = h * NW;
+      const g = c.getContext('2d');
+      g.fillStyle = colour; g.textAlign = 'center';
+      for (let wi = 0; wi < NW; wi++) {
+        g.font = fontOf(wi, size);
+        glyphCh.forEach((ch, id) => { if (id !== blank) g.fillText(ch, id * w + w / 2, wi * h + bl); });
+      }
+      return [c, w, h, bl];
+    };
+    [atlasP, cw, chh, base] = make(PAPER_CSS, 1); [atlasR] = make(RED_CSS, 1);
+    [bigP, bcw, bch, bbase] = make(PAPER_CSS, MAG); [bigR] = make(RED_CSS, MAG);
+  }
+
+  // The rows of the screen, and where along the stream each one begins. The type is sized so the face is
+  // about 75 rows tall, and larger than that when the screen would otherwise hold more letters than it can draw.
+  function layout() {
+    cssW = canvas.clientWidth; cssH = canvas.clientHeight;
+    const wide = cssW >= 1000;
+    dpr = Math.min(devicePixelRatio || 1, 2, Math.sqrt(8e6 / (cssW * cssH)));
+    W = Math.round(cssW * dpr); H = Math.round(cssH * dpr);
+    canvas.width = W; canvas.height = H;
+    face = wide ? Math.min(cssH * 1.08, cssW * 0.62) : Math.min(cssH * 0.95, cssW * 1.3);
+    R = face / 2 * dpr; PX = W * (wide ? 0.34 : 0.5); PY = H * (wide ? 0.5 : 0.4);
+    fs = Math.max(face / 80, Math.sqrt(cssW * cssH / (0.423 * (canHover ? 30000 : 13000))), 5) * coarse * dpr;
+    const lead = fs * 0.94;
+    rows = [];
+    for (let y = lead; y < H + lead; y += lead) rows.push({ y, start: rows.length * W });
+    centre = fromPhoto(80, 74);   // to begin with, wound from an eye
+    measure();
+  }
+
+  // This frame's glyphs. The text runs through the rows as one line; each glyph's weight and ink
+  // come from the tone it is passing over, so the face stands still while the words go through it.
+  const CAP = 44000;
+  // per glyph: its middle, the angle it stands at, and how far along the plate it is (the order it is set back in)
+  const gx = new Float32Array(CAP), gy = new Float32Array(CAP), ga = new Float32Array(CAP);
+  const gang = new Float32Array(CAP), god = new Float32Array(CAP);
+  const gid = new Uint16Array(CAP), gwi = new Uint8Array(CAP), gp = new Int8Array(CAP);
+  let gN = 0, flow = 0, mode = 1;   // mode: 0 rows, 1 a single spiral, read like a record
+  let centre = [0, 0];              // where the spiral is wound from: the last click
+  let coarse = 1, slow = 0, timed = 0;   // the type is set larger on a machine that can't keep up
+
+  // the character the stream is at, `a` along it
+  function seek(a) {
+    let lo = 0, hi = n - 1;
+    while (lo < hi) { const m = (lo + hi + 1) >> 1; if (pos[m] <= a) lo = m; else hi = m - 1; }
+    return lo;
+  }
+  function put(x, y, ang, k, order) {
+    const t = toneAt((x - PX) / R, (y - PY) / R);
+    gx[gN] = x; gy[gN] = y; gang[gN] = ang; god[gN] = order; gid[gN] = code[k]; gp[gN] = owner[k];
+    gwi[gN] = Math.round(smooth(0.05, 0.85, t) * (NW - 1));
+    ga[gN] = 0.1 + 0.9 * Math.pow(t, 0.9);
+    gN++;
+  }
+
+  // q: how much of it is set so far, 0 to 1
+  function compose(q) {
+    gN = 0;
+    if (mode === 1) return composeSpiral(q);
+    const limit = Math.ceil(q * rows.length);
+    const mid = fs * 0.3, nRows = rows.length;
+    for (let r = 0; r < limit; r++) {
+      const row = rows[r], y = row.y - mid;
+      let a = (row.start + flow) % L;
+      if (a < 0) a += L;
+      let k = seek(a), x = -(a - pos[k]);
+      while (x < W && gN < CAP) {
+        const w = Wd[code[k]];
+        if (code[k] !== blank) put(x + w / 2, y, 0, k, r / nRows + 0.085 * x / W);
+        x += w;
+        if (++k === n) k = 0;
+      }
+    }
+  }
+
+  // The same line wound from the middle outward, a row apart, the tops of the letters facing out.
+  const farCorner = () => Math.hypot(Math.max(centre[0], W - centre[0]), Math.max(centre[1], H - centre[1]));
+  function composeSpiral(q) {
+    const lead = fs * 0.94, wind = lead / (4 * Math.PI);   // length along the line ≈ wind · θ²
+    const [ox, oy] = centre, far = farCorner();   // out to the furthest corner
+    const t0 = fs * 1.6 * TAU / lead, s0 = wind * t0 * t0, t1 = far * TAU / lead, s1 = wind * t1 * t1;
+    let a = (s0 + flow) % L;
+    if (a < 0) a += L;
+    let k = seek(a), sAt = s0 - (a - pos[k]);
+    const sEnd = s1 * q * q;
+    while (sAt < sEnd && gN < CAP) {
+      const w = Wd[code[k]], sc = sAt + w / 2;
+      if (code[k] !== blank && sc > s0) {
+        const th = Math.sqrt(sc / wind), r = lead * th / TAU, x = ox + r * Math.cos(th), y = oy + r * Math.sin(th);
+        if (x > -fs && x < W + fs && y > -fs && y < H + fs) put(x, y, th + Math.PI / 2, k, sc / s1);
+      }
+      sAt += w;
+      if (++k === n) k = 0;
+    }
+  }
 
   // A faint, soft wash of the tones under the type. Thin glyphs cover only a third of their patch,
   // so without it the lit face never gets light enough to read from across the room.
+  const WS = 160, under = document.createElement('canvas');
+  under.width = under.height = WS;
+  const underCtx = under.getContext('2d'), underIm = underCtx.createImageData(WS, WS);
+  let washX = NaN, washY = NaN;
   function wash() {
-    const S = 160, c = document.createElement('canvas');
-    c.width = c.height = S;
-    const g = c.getContext('2d'), im = g.createImageData(S, S);
-    for (let y = 0; y < S; y++) {
-      for (let x = 0; x < S; x++) {
-        const t = tone((x + 0.5) / S * 2 - 1, (y + 0.5) / S * 2 - 1), i = (y * S + x) * 4;
-        im.data[i] = PAPER[0]; im.data[i + 1] = PAPER[1]; im.data[i + 2] = PAPER[2];
-        im.data[i + 3] = Math.round(255 * 0.24 * Math.pow(t, 1.4));
+    if (Math.abs(turn.x - washX) < 0.0015 && Math.abs(turn.y - washY) < 0.0015) return;
+    washX = turn.x; washY = turn.y;
+    const d = underIm.data;
+    for (let y = 0; y < WS; y++) {
+      for (let x = 0; x < WS; x++) {
+        const t = toneAt((x + 0.5) / WS * 2 - 1, (y + 0.5) / WS * 2 - 1), i = (y * WS + x) * 4;
+        d[i] = PAPER[0]; d[i + 1] = PAPER[1]; d[i + 2] = PAPER[2];
+        d[i + 3] = Math.round(255 * 0.3 * Math.pow(t, 1.4));
       }
     }
-    g.putImageData(im, 0, 0);
-    return c;
-  }
-  let under = null;
-  let base = null, found = [], printed = 0;   // printed: rows inked into the base sheet so far
-
-  // Ink rows [from, to) onto a sheet, a weight at a time so the font changes five times rather than per glyph.
-  function ink(target, from, to, colour, only = null) {
-    const g = target.getContext('2d'), i0 = G.rows[from][1], i1 = G.rows[to][1];
-    g.fillStyle = colour;
-    for (let wi = 0; wi < WEIGHTS.length; wi++) {
-      g.font = fontOf(wi, fs);
-      for (let i = i0; i < i1; i++) {
-        if (G.wis[i] !== wi || (only !== null && G.ps[i] !== only)) continue;
-        g.globalAlpha = only === null ? G.ink[i] : Math.max(G.ink[i], 0.45);
-        g.fillText(G.cs[i], G.xs[i], G.ys[i]);
-      }
-    }
-    g.globalAlpha = 1;
-  }
-
-  // One sheet per paragraph, its glyphs in red, laid over the base when that paragraph is found.
-  function foundSheet(p) {
-    if (!found[p]) { found[p] = sheet(); ink(found[p], 0, G.nRows, RED_CSS, p); }
-    return found[p];
+    underCtx.putImageData(underIm, 0, 0);
   }
 
   // ---------------------------------------------------------------- state
 
   const lens = { x: 0, y: 0, tx: 0, ty: 0, r: 0, tr: 0 };
   const glow = paras.map(() => 0), want = paras.map(() => 0);
-  let running = false, last = 0, printFrom = 0, touched = false, demoAt = 0, demo = null;
-  const lensSize = () => clamp(canvas.clientWidth * 0.16, 52, 104) * dpr;
-  const fromPhoto = (px, py) => [R + ((px - CX) / CR) * R, R + ((py - CY) / CR) * R];
+  let running = false, visible = true, last = 0, printFrom = 0, shown = 0, touched = false, demoAt = 0, demo = null;
+  let pace = 1, pointerAt = -1e9, spill = null, pull = 0, lastScroll = scrollY;
+  const lensSize = () => clamp(face * 0.14, 56, 124) * dpr;
+  const fromPhoto = (px, py) => [PX + ((px - CX) / CR) * R, PY + ((py - CY) / CR) * R];
+
+  // spilled type: thrown from the click, it falls into the bowl of the plate, then is set again in order,
+  // the other way from before: rows become one spiral line, and the spiral goes back to rows
+  const SPILL_HOLD = 1.1, SPILL_ROWS = 1.5, SPILL_BACK = 0.6;
+  const SPILL_END = SPILL_HOLD + SPILL_ROWS * 1.09 + SPILL_BACK + 0.05;
+  const hash = (i, s) => { const x = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453; return x - Math.floor(x); };
 
   function wake() {
-    if (running || !G) return;
+    if (running || !ready || !visible) return;
     running = true;
     last = performance.now();
     requestAnimationFrame(frame);
@@ -561,16 +648,12 @@
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    let busy = false;
+    let busy = !reduceMotion;   // the text keeps running
 
-    // printing: rows go down as a red press line passes
-    let press = -1;
-    if (printed < G.nRows) {
-      const q = reduceMotion ? 1 : smooth(0, 1, (now - printFrom) / 1800);
-      const to = Math.ceil(q * G.nRows);
-      if (to > printed) { ink(base, printed, to, PAPER_CSS); printed = to; }
-      if (printed < G.nRows) press = G.rows[printed][0];
-      else if (!touched && !reduceMotion) demoAt = now + 700;
+    // setting: the line is wound out from the eye
+    if (shown < 1) {
+      shown = reduceMotion ? 1 : smooth(0, 1, (now - printFrom) / 2400);
+      if (shown >= 1 && !touched && !reduceMotion) demoAt = now + 700;
       busy = true;
     }
 
@@ -604,65 +687,126 @@
       else glow[p] = want[p];
     }
 
-    draw(press);
-    if (busy) requestAnimationFrame(frame);
+    let tau = -1;
+    if (spill) {
+      tau = (now - spill.t0) / 1000;
+      if (tau >= SPILL_HOLD && !spill.swapped) { spill.swapped = true; mode = 1 - mode; centre = [spill.x, spill.y]; }   // everything is on the floor: change the forme
+      if (tau >= SPILL_END) { spill = null; tau = -1; }
+      busy = true;
+    }
+
+    if (!reduceMotion) {
+      // the text slows under the reading glass and stops while it is on the floor
+      pace += ((lens.tr > 0 ? 0.18 : 1) - pace) * (1 - Math.exp(-dt * 5));
+      // scrolling the page pulls the line through with it
+      const take = pull * (1 - Math.exp(-dt * 10));
+      pull -= take;
+      if (!spill) flow += dt * fs * 1.15 * pace + take * dpr * 0.8;
+      if (Math.abs(pull) < 0.01) pull = 0;
+      // with no pointer about, the head sways by itself
+      if (now - pointerAt > 3500) { turn.tx = 0.034 * Math.sin(now / 4300); turn.ty = 0.018 * Math.sin(now / 6100); }
+      const kt = 1 - Math.exp(-dt * 3.2);
+      turn.x += (turn.tx - turn.x) * kt;
+      turn.y += (turn.ty - turn.y) * kt;
+    }
+
+    draw(tau);
+    // too many letters for this machine: set the type a size larger, up to three times
+    if (!reduceMotion && tau < 0 && shown >= 1 && coarse < 1.6) {
+      timed++;
+      if (dt > 0.024) slow++;
+      if (timed >= 90) {
+        if (slow > 45) { const at = centre; coarse *= 1.17; layout(); centre = at; }
+        timed = slow = 0;
+      }
+    }
+    if (busy && visible) requestAnimationFrame(frame);
     else running = false;
   }
 
-  function draw(press) {
-    ctx.clearRect(0, 0, D, D);
+  function draw(tau) {
+    wash();
+    compose(shown);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, W, H);
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(R, R, R, 0, TAU);
-    ctx.fillStyle = INK;
-    ctx.fill();
-    ctx.clip();
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(0, 0, D, press >= 0 ? press + fs * 0.3 : D);   // the wash is printed with the rows
-    ctx.clip();
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(under, 0, 0, D, D);
-    ctx.restore();
-    ctx.drawImage(base, 0, 0);
-    for (let p = 0; p < glow.length; p++) {
-      if (glow[p] > 0.004) { ctx.globalAlpha = glow[p]; ctx.drawImage(foundSheet(p), 0, 0); }
+    if (shown < 1) {   // the wash is set with the line
+      ctx.beginPath();
+      ctx.arc(centre[0], centre[1], shown * farCorner(), 0, TAU);
+      ctx.clip();
     }
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(under, PX - R, PY - R, R * 2, R * 2);
+    ctx.restore();
+
+    const half = cw / 2, mid = fs * 0.3, top = mid - base;
+    // the line parts around the reading glass, as water does around a stone
+    const glass = lens.r > 0.5 && tau < 0, reach = lens.r * 1.7, reach2 = reach * reach;
+    for (let i = 0; i < gN; i++) {
+      const sx = gid[i] * cw, sy = gwi[i] * chh, p = gp[i], named = p === -2, h = p >= 0 ? glow[p] : 0;
+      let x = gx[i], y = gy[i], ang = gang[i], alpha = ga[i];
+      if (tau >= 0) {
+        const wait = SPILL_HOLD + SPILL_ROWS * god[i], back = smooth(0, 1, (tau - wait) / SPILL_BACK);
+        if (back < 1) {
+          const h1 = hash(i, 1), h2 = hash(i, 2), h3 = hash(i, 3);
+          const ox = x - spill.x, oy = y - spill.y, dist = Math.hypot(ox, oy);
+          const dir = Math.atan2(oy, ox) + (h1 - 0.5) * 1.3, tt = Math.min(tau, wait), out = 1 - Math.exp(-3.2 * tt);
+          const far = R * 0.5 * (0.2 + 0.8 * h2) / (0.3 + dist / R);
+          let px = x + Math.cos(dir) * far * out, py = y + Math.sin(dir) * far * out + H * 1.9 * tt * tt * (0.5 + h3);
+          // the floor of the screen catches what falls, each letter where it comes down
+          const floor = H - fs * (0.5 + 18 * h2 * h3);
+          if (py > floor) py = floor;
+          if (px < 0) px = -px; else if (px > W) px = 2 * W - px;
+          x = lerp(px, x, back); y = lerp(py, y, back);
+          ang += (h1 - 0.5) * 9 * out * (1 - back);
+          alpha = Math.max(alpha, 0.3 * (1 - back));
+        }
+      } else if (glass) {
+        const dx = x - lens.x, dy = y - lens.y, d2 = dx * dx + dy * dy;
+        if (d2 < reach2 && d2 > 1) { const d = Math.sqrt(d2), f = 0.45 * (reach - d) / d; x += dx * f; y += dy * f; }
+      }
+      if (ang) { const c = Math.cos(ang), sn = Math.sin(ang); ctx.setTransform(c, sn, -sn, c, x, y); }
+      else ctx.setTransform(1, 0, 0, 1, x, y);
+      if (named) {   // the name runs through in red
+        ctx.globalAlpha = Math.max(alpha, 0.36);
+        ctx.drawImage(atlasR, sx, sy, cw, chh, -half, top, cw, chh);
+        continue;
+      }
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(atlasP, sx, sy, cw, chh, -half, top, cw, chh);
+      if (h > 0.004) { ctx.globalAlpha = h * Math.max(alpha, 0.45); ctx.drawImage(atlasR, sx, sy, cw, chh, -half, top, cw, chh); }
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalAlpha = 1;
-    if (press >= 0) { ctx.fillStyle = RED_CSS; ctx.fillRect(0, press + fs * 0.3, D, Math.max(1, dpr)); }
-    if (lens.r > 0.5) drawLens();
+    if (lens.r > 0.5 && tau < 0) drawLens();
     ctx.restore();
   }
 
   // A reading glass: glyphs under it are pushed out by a fisheye and enlarged toward its middle, at full ink.
-  const MAG = 2.5;
+  const under_lens = new Int32Array(4000);
   function drawLens() {
-    const { x: lx, y: ly, r } = lens;
+    const { x: lx, y: ly, r } = lens, mid = fs * 0.3;
+    let m = 0;
+    for (let i = 0; i < gN && m < under_lens.length; i++) {
+      if (Math.abs(gy[i] - ly) < r && Math.abs(gx[i] - lx) < r) under_lens[m++] = i;
+    }
     ctx.save();
     ctx.beginPath();
     ctx.arc(lx, ly, r, 0, TAU);
     ctx.clip();
     ctx.fillStyle = INK;
     ctx.fillRect(lx - r, ly - r, r * 2, r * 2);
-    ctx.textAlign = 'center';
-    const lo = ly - r - fs, hi = ly + r + fs;
-    for (let wi = 0; wi < WEIGHTS.length; wi++) {
-      ctx.font = fontOf(wi, fs);
-      for (let row = 0; row < G.nRows; row++) {
-        const y = G.rows[row][0];
-        if (y < lo) continue;
-        if (y > hi) break;
-        for (let i = G.rows[row][1], end = G.rows[row + 1][1]; i < end; i++) {
-          if (G.wis[i] !== wi) continue;
-          const dx = G.xs[i] + G.ws[i] / 2 - lx, dy = y - fs * 0.3 - ly, d = Math.hypot(dx, dy);
-          if (d >= r) continue;
-          const t = d / r, s = MAG / (1 + (MAG - 1) * t), p = G.ps[i], h = p >= 0 ? glow[p] : 0;
-          ctx.fillStyle = h > 0.004 ? rgb(PAPER.map((v, c) => Math.round(lerp(v, RED[c], h)))) : PAPER_CSS;
-          ctx.globalAlpha = lerp(G.ink[i], 1, 0.65 * (1 - t));
-          ctx.setTransform(s, 0, 0, s, lx + dx * s, ly + (dy + fs * 0.3) * s);
-          ctx.fillText(G.cs[i], 0, 0);
-        }
-      }
+    const top = mid * MAG - bbase;
+    for (let j = 0; j < m; j++) {
+      const i = under_lens[j], dx = gx[i] - lx, dy = gy[i] - ly, d = Math.hypot(dx, dy);
+      if (d >= r) continue;
+      const t = d / r, s = MAG / (1 + (MAG - 1) * t), k = s / MAG, p = gp[i], h = p === -2 ? 1 : p >= 0 ? glow[p] : 0;
+      const c = Math.cos(gang[i]) * k, sn = Math.sin(gang[i]) * k, sx = gid[i] * bcw, sy = gwi[i] * bch;
+      const alpha = lerp(ga[i], 1, 0.65 * (1 - t));
+      ctx.setTransform(c, sn, -sn, c, lx + dx * s, ly + dy * s);
+      if (h < 0.996) { ctx.globalAlpha = alpha; ctx.drawImage(bigP, sx, sy, bcw, bch, -bcw / 2, top, bcw, bch); }
+      if (h > 0.004) { ctx.globalAlpha = alpha * h; ctx.drawImage(bigR, sx, sy, bcw, bch, -bcw / 2, top, bcw, bch); }
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalAlpha = 1;
@@ -678,12 +822,12 @@
 
   const onPlate = (e) => {
     const b = canvas.getBoundingClientRect();
-    return [(e.clientX - b.left) * D / b.width, (e.clientY - b.top) * D / b.height];
+    return [(e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height];
   };
-  let releaseTimer = 0;
+  let releaseTimer = 0, down = null;
   function aim(e) {
-    if (!G) return;
-    const [x, y] = onPlate(e), inside = Math.hypot(x - R, y - R) < R;
+    if (!ready) return;
+    const [x, y] = onPlate(e), inside = true;
     if (lens.r < 1) { lens.x = x; lens.y = y; }   // appear under the pointer rather than slide in from the last spot
     lens.tx = x; lens.ty = y;
     lens.tr = inside ? lensSize() : 0;
@@ -697,11 +841,41 @@
     wake();
   }
   canvas.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' || e.buttons) aim(e); });
-  canvas.addEventListener('pointerdown', (e) => { clearTimeout(releaseTimer); aim(e); });
+  canvas.addEventListener('pointerdown', (e) => {
+    clearTimeout(releaseTimer);
+    aim(e);
+    down = { x: e.clientX, y: e.clientY, t: performance.now() };
+  });
   canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') lift(); });
-  const release = (e) => { if (e.pointerType !== 'mouse') releaseTimer = setTimeout(lift, 900); };
-  canvas.addEventListener('pointerup', release);
-  canvas.addEventListener('pointercancel', release);
+  canvas.addEventListener('pointerup', (e) => {
+    // a click or a tap spills the type; a held touch only reads
+    const tap = down && performance.now() - down.t < 400 && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 10;
+    down = null;
+    if (tap && ready && !spill && !reduceMotion && shown >= 1) {
+      const [x, y] = onPlate(e);
+      spill = { x, y, t0: performance.now() };
+      if (e.pointerType !== 'mouse') lift();
+      wake();
+      return;
+    }
+    if (e.pointerType !== 'mouse') releaseTimer = setTimeout(lift, 900);
+  });
+  canvas.addEventListener('pointercancel', (e) => { down = null; if (e.pointerType !== 'mouse') releaseTimer = setTimeout(lift, 900); });
+
+  // the head turns toward the pointer, wherever on the page it is
+  if (canHover && !reduceMotion) {
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || !ready) return;
+      const b = canvas.getBoundingClientRect();
+      turn.tx = 0.062 * clamp((e.clientX - (b.left + PX * b.width / W)) / (innerWidth * 0.5), -1, 1);
+      turn.ty = 0.04 * clamp((e.clientY - (b.top + PY * b.height / H)) / (innerHeight * 0.5), -1, 1);
+      pointerAt = performance.now();
+    }, { passive: true });
+  }
+
+  if (!reduceMotion) {
+    addEventListener('scroll', () => { pull += scrollY - lastScroll; lastScroll = scrollY; wake(); }, { passive: true });
+  }
 
   // paragraphs → their glyphs in the plate
   function find(p, on) {
@@ -721,6 +895,36 @@
     });
   });
 
+  // typing sets the face in the visitor's own words; Escape gives the page back
+  let typed = '';
+  function reset() {
+    const own = typed.trim();
+    stream(own ? [[own, -1]] : PAGE);
+    measure();
+    root.classList.toggle('own', !!own);
+    setNote.textContent = own ? `Now set in “${own}”. Esc gives the page its text back.` : '';
+    if (reduceMotion) draw(-1);
+    wake();
+  }
+  addEventListener('keydown', (e) => {
+    if (!ready || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    const el = e.target;
+    if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
+    if (e.key === 'Escape') { if (typed) { typed = ''; reset(); } return; }
+    if (e.key === 'Backspace') {
+      if (!typed) return;
+      typed = [...typed].slice(0, -1).join('');
+      e.preventDefault();
+      reset();
+      return;
+    }
+    if ([...e.key].length !== 1 || (e.key === ' ' && !typed.trim())) return;   // a first space still scrolls the page
+    e.preventDefault();
+    if ([...typed].length >= 120) return;
+    typed += e.key;
+    reset();
+  });
+
   // ---------------------------------------------------------------- start: once the photo is read and Eczar has loaded
 
   const fontsReady = document.fonts
@@ -730,9 +934,8 @@
   img.src = '/profile.jpg';
   Promise.all([img.decode(), fontsReady]).then(() => {
     tone = toneOf(img);
-    under = wash();
-    typeset();
-    base = sheet();
+    layout();
+    ready = true;
     printFrom = performance.now();
     wake();
   }).catch((err) => {
@@ -740,18 +943,25 @@
     root.classList.add('no-plate');
   });
 
+  // the text only runs while the plate is on screen
+  let onScreen = true;
+  const see = () => { visible = onScreen && !document.hidden; wake(); };
+  document.addEventListener('visibilitychange', see);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((es) => { onScreen = es[es.length - 1].isIntersecting; see(); }).observe(canvas);
+  }
+
   let resizeTimer = 0;
   addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      if (!tone || Math.round(canvas.clientWidth * Math.min(devicePixelRatio || 1, 2)) === D) return;
-      typeset();
-      base = sheet();
-      found = [];
-      ink(base, 0, G.nRows, PAPER_CSS);
-      printed = G.nRows;
+      if (!ready || (canvas.clientWidth === cssW && canvas.clientHeight === cssH)) return;
+      layout();
+      shown = 1;
       lens.r = lens.tr = 0;
+      spill = null;
       draw(-1);
+      wake();
     }, 150);
   });
 })();
