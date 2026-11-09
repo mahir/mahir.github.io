@@ -65,7 +65,9 @@
       return { ...d, r: (rep - dem) / (dem + rep) * 100, won: calls[d.s] };
     }).sort((a, b) => b.m - a.m);
   };
-  const lead = (v, r, d) => (Math.abs(v) < .5 ? 'even' : v > 0 ? `${r} +${v.toFixed(0)}` : `${d} +${(-v).toFixed(0)}`);
+  // Tooltips show one decimal, and the move is worked out from the two shown figures so the sum always checks.
+  const r1 = (v) => Math.round(v * 10) / 10;
+  const lead1 = (v, r, d) => (r1(v) === 0 ? 'even' : v > 0 ? `${r} +${r1(v).toFixed(1)}` : `${d} +${r1(-v).toFixed(1)}`);
   function drawMoves(chart) {
     const W = chart.clientWidth, narrow = W < 520, rows = races26();
     const row = 20, m = { t: 30, r: narrow ? 10 : 104, b: 30, l: narrow ? 30 : 116 };
@@ -94,8 +96,8 @@
       if (flip && !narrow) el('text', { x: W - m.r + 12, y: cy + 4, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--ink)' }, svg).textContent = 'changed hands';
       const hit = el('rect', { x: 0, y: cy - row / 2, width: W, height: row, fill: 'transparent', class: 'hit' }, svg);
       hover(hit, chart, svg, `mv${d.s}`, () => tip(S.names[d.s], flip ? 'Changed hands' : d.won ? 'Held' : 'Still counting', [
-        ['2024, president', lead(d.m, 'Trump', 'Harris')], ['2026, Senate', lead(d.r, 'Republican', 'Democrat')],
-        ['Moved', `${Math.abs(d.m - d.r).toFixed(0)} pts toward the ${d.r < d.m ? 'Democrats' : 'Republicans'}`],
+        ['2024, president', lead1(d.m, 'Trump', 'Harris')], ['2026, Senate', lead1(d.r, 'Republican', 'Democrat')],
+        ['Moved', `${Math.abs(r1(d.m) - r1(d.r)).toFixed(1)} pts toward the ${d.r < d.m ? 'Democrats' : 'Republicans'}`],
       ]), () => [x1, cy - 6], g);
     });
   }
