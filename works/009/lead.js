@@ -80,15 +80,17 @@
     }
     el('text', { x: x(0) - 8, y: 14, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = '← more Democratic';
     el('text', { x: x(0) + 8, y: 14, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'more Republican →';
-    const marks = el('g', {}, svg);
+    const bands = el('g', {}, svg), marks = el('g', {}, svg);
+    svg.insertBefore(bands, ax);
     rows.forEach((d, i) => {
       const cy = m.t + i * row + row / 2, x0 = x(d.m), x1 = x(d.r);
       const flip = d.won && d.won !== d.h;
+      if (flip) el('rect', { x: 0, y: cy - row / 2 + 1, width: W, height: row - 2, rx: 2, class: 'band' }, bands);
       el('text', { x: m.l - 12, y: cy + 4, 'text-anchor': 'end', class: 'ghost-label', style: flip ? null : 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = narrow ? d.s : S.names[d.s];
       const g = el('g', {}, marks);
       el('line', { x1: x0, x2: x1, y1: cy, y2: cy, style: 'stroke:var(--ink-2);stroke-width:1.5' }, g);
       el('circle', { cx: x0, cy, r: 4, style: 'fill:var(--paper);stroke:var(--ink-2);stroke-width:1.5' }, g);
-      el('circle', { cx: x1, cy, r: 5.5, class: 'mark', style: `fill:${color(d.won || (d.r < 0 ? 'D' : 'R'))};opacity:${d.won ? 1 : .45};stroke:${flip ? 'var(--ink)' : 'var(--paper)'};stroke-width:${flip ? 2 : 1.5}` }, g);
+      el('circle', { cx: x1, cy, r: 5.5, class: 'mark', style: `fill:${color(d.won || (d.r < 0 ? 'D' : 'R'))};opacity:${d.won ? 1 : .45};stroke:var(--paper);stroke-width:1.5` }, g);
       if (flip && !narrow) el('text', { x: W - m.r + 12, y: cy + 4, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--ink)' }, svg).textContent = 'changed hands';
       const hit = el('rect', { x: 0, y: cy - row / 2, width: W, height: row, fill: 'transparent', class: 'hit' }, svg);
       hover(hit, chart, svg, `mv${d.s}`, () => tip(S.names[d.s], flip ? 'Changed hands' : d.won ? 'Held' : 'Still counting', [
