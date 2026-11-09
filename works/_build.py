@@ -41,13 +41,14 @@ BIO = (
     'Product Management with AI. His work has been shown '
     'at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at '
     'events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
-    'Innovation Festival.'
+    'Innovation Festival. He publishes a new data visualization every day at casualdata.com.'
 )
 AIROPS = 'https://www.airops.com/'
 ETSY = 'https://www.etsy.com/'
 TOPOS = 'https://topos.com/'
 RGA = 'https://rga.com/'
 FUTURELAB = 'https://ars.electronica.art/futurelab/en/'
+CASUALDATA = 'https://casualdata.com/'
 TEDX_VIENNA = 'https://www.youtube.com/watch?v=gY36Sm2uI6k'
 MICROSOFT_BUILD = 'https://www.youtube.com/watch?v=dvC4dK9c7nQ'
 GOOGLE_CLOUD_NEXT = 'https://www.youtube.com/watch?v=yUK4XUggdQw'
@@ -66,6 +67,7 @@ SHORT_BIO = (
     'Applications of LLMs and Product Management with AI. He has spoken at events such as '
     f'[TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), [Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and '
     'the Fast Company Innovation Festival.',
+    f'He publishes a new data visualization every day at [casualdata.com]({CASUALDATA}).',
 )
 SUBSTACK = 'https://mahir.substack.com/'
 POSTS_SHOWN = 3  # the newest posts listed under Writing on the homepage
