@@ -42,7 +42,7 @@ TURNOUT_2026 = 'https://election.lab.ufl.edu/data-downloads/turnoutdata/Turnout_
 # that won each Senate race called so far, as {'ME': 'D', ...}. house_called and senate_called: the national count so
 # far, as [Democrats, Republicans], shown until the chamber is final. senate_shares: each Senate race's vote so far.
 RESULTS_2026 = {
-    'by_state': {  # NBC News / AP, 8 November: 38 states fully called
+    'by_state': {  # AP race calls, 6:30 p.m. 8 November: 38 states fully called
         'AL': [2, 5], 'AR': [0, 4], 'CT': [5, 0], 'DE': [1, 0], 'GA': [5, 9], 'HI': [2, 0], 'ID': [0, 2],
         'IL': [14, 3], 'IN': [3, 6], 'IA': [3, 1], 'KS': [1, 3], 'KY': [2, 4], 'MD': [7, 1], 'MA': [9, 0],
         'MI': [9, 4], 'MS': [1, 3], 'MO': [3, 5], 'MT': [1, 1], 'NE': [1, 2], 'NV': [4, 0], 'NH': [2, 0],
@@ -50,27 +50,29 @@ RESULTS_2026 = {
         'SD': [0, 1], 'TX': [14, 24], 'UT': [1, 3], 'VT': [1, 0], 'VA': [8, 3], 'WV': [0, 2], 'WI': [4, 4],
         'WY': [0, 1],
     },
-    'senate_by_state': {  # AP calls via ABC News and CNBC; Alaska and Mississippi uncalled
+    'senate_by_state': {  # AP race calls; Alaska and Mississippi uncalled
         'CO': 'D', 'DE': 'D', 'GA': 'D', 'IL': 'D', 'MA': 'D', 'MI': 'D', 'MN': 'D', 'NH': 'D', 'NJ': 'D', 'NM': 'D',
         'OR': 'D', 'RI': 'D', 'VA': 'D',
         'IA': 'D', 'KS': 'D', 'ME': 'D', 'NC': 'D', 'OH': 'D', 'SC': 'D', 'TX': 'D',
         'AL': 'R', 'AR': 'R', 'FL': 'R', 'ID': 'R', 'KY': 'R', 'LA': 'R', 'MT': 'R', 'NE': 'R', 'OK': 'R', 'SD': 'R',
         'TN': 'R', 'WV': 'R', 'WY': 'R',
     },
-    'senate_shares': {  # percent of the vote, [Democrat, Republican], as ABC News showed it on 8 November
-        'MA': [63, 32], 'DE': [64, 36], 'OR': [58, 39], 'RI': [67, 29], 'CO': [60, 35], 'IL': [61, 37], 'ME': [53, 47],
-        'NM': [63, 37], 'NJ': [62, 35], 'VA': [61, 39], 'MN': [54, 44], 'NH': [56, 42], 'MI': [53, 45], 'GA': [59, 41],
-        'NC': [59, 39], 'OH': [50, 45], 'FL': [48, 51], 'IA': [51, 46], 'AK': [48.2, 47.9], 'TX': [55, 43],
-        'KS': [51, 46], 'SC': [51, 47], 'LA': [49, 51], 'MS': [49.1, 48.8], 'TN': [43, 55], 'AL': [45, 55],
-        'KY': [43, 55], 'AR': [42, 54], 'OK': [39, 57], 'WV': [38, 58], 'WY': [35, 65],
+    'senate_shares': {  # percent of the vote, [Democrat, Republican], from AP's vote count at 6:30 p.m. 8 November
+        'MA': [63.4, 32.1], 'DE': [63.6, 36.4], 'OR': [58.1, 38.7], 'RI': [66.8, 29.3], 'CO': [60.4, 35.0],
+        'IL': [61.4, 37.1], 'ME': [53.1, 46.8], 'NM': [63.3, 36.7], 'NJ': [62.3, 35.1], 'VA': [61.2, 38.5],
+        'MN': [53.7, 43.6], 'NH': [55.9, 42.2], 'MI': [52.5, 45.5], 'GA': [59.0, 41.0], 'NC': [58.7, 39.1],
+        'OH': [50.0, 45.2], 'FL': [48.0, 50.9], 'IA': [50.5, 46.4], 'AK': [48.2, 47.9], 'TX': [55.1, 43.0],
+        'KS': [51.0, 46.0], 'SC': [51.1, 46.6], 'LA': [49.1, 50.9], 'MS': [49.1, 48.8], 'TN': [42.9, 55.1],
+        'AL': [45.3, 54.7], 'KY': [42.9, 55.0], 'AR': [42.4, 54.3], 'OK': [39.3, 57.2], 'WV': [37.9, 58.3],
+        'WY': [34.8, 65.2],
     },  # Idaho, Montana, Nebraska and South Dakota had no Democrat on the ballot
-    'house_called': [252, 162],
+    'house_called': [252, 161],
     'senate_called': [54, 44],
     'house': None,
     'house_estimate': 176,  # Republican seats in the NBC News Decision Desk's estimate, used until house is set
     'senate': None,
-    'as_of': '2026-11-08 16:00',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
-    'note': '21 House races and the Senate races in Alaska and Mississippi are still uncalled. Until the House count is final, its 2026 figures are NBC News’s estimate.',
+    'as_of': '2026-11-08 18:30',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
+    'note': '22 House races and the Senate races in Alaska and Mississippi are still uncalled. Until the House count is final, its 2026 figures are NBC News’s estimate.',
 }
 
 SENATE_DEFEND_2026 = 22  # Republican seats among the 35 up, with the Ohio and Florida specials (270toWin, 3 November 2026)
