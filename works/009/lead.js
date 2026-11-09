@@ -70,7 +70,7 @@
   const lead1 = (v, r, d) => (r1(v) === 0 ? 'even' : v > 0 ? `${r} +${r1(v).toFixed(1)}` : `${d} +${r1(-v).toFixed(1)}`);
   function drawMoves(chart) {
     const W = chart.clientWidth, narrow = W < 520, rows = races26();
-    const row = 20, m = { t: 30, r: narrow ? 10 : 104, b: 30, l: narrow ? 30 : 116 };
+    const row = 20, m = { t: 40, r: narrow ? 10 : 104, b: 30, l: narrow ? 30 : 116 };
     const H = m.t + m.b + row * rows.length;
     chart.textContent = '';
     const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, chart);
@@ -80,8 +80,8 @@
       el('line', { x1: x(t), x2: x(t), y1: m.t - 4, y2: H - m.b + 4, ...(t === 0 ? { style: 'stroke:var(--ink);stroke-width:1' } : {}) }, ax);
       el('text', { x: x(t), y: H - 8, 'text-anchor': 'middle' }, ax).textContent = t === 0 ? 'even' : t < 0 ? `D +${-t}` : `R +${t}`;
     }
-    el('text', { x: x(0) - 8, y: 14, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = '← more Democratic';
-    el('text', { x: x(0) + 8, y: 14, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'more Republican →';
+    el('text', { x: x(0) - 8, y: 22, 'text-anchor': 'end', class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = '← more Democratic';
+    el('text', { x: x(0) + 8, y: 22, class: 'axis', style: 'font:400 11px var(--mono);fill:var(--mute)' }, svg).textContent = 'more Republican →';
     const bands = el('g', {}, svg), marks = el('g', {}, svg);
     svg.insertBefore(bands, ax);
     rows.forEach((d, i) => {

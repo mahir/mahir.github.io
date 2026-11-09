@@ -23,7 +23,7 @@
   // Draws the tile grid; cell(state) returns { fill, stroke, dash, hatch, dark, value, tip }.
   function tiles(chart, cell, key) {
     const W = chart.clientWidth;
-    const size = Math.min(58, Math.floor((W - 2) / 12)), gap = Math.max(2, Math.round(size * .06));
+    const size = Math.min(66, Math.floor((W - 2) / 12)), gap = Math.max(2, Math.round(size * .06));
     const H = size * 8;
     chart.textContent = '';
     const svg = el('svg', { viewBox: `0 0 ${size * 12} ${H}`, width: size * 12, height: H }, chart);
@@ -90,7 +90,7 @@
     const gained = ch.filter(([, v]) => v > 0);
     const most = lost.filter(([, v]) => v === lost[0]?.[1]).map(([s]) => S.names[s]);
     const list = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]);
-    const pending = y === 2026 && ch.length < 50 ? ` With ${50 - ch.length} states still counting.` : '';
+    const pending = y === 2026 && ch.length < 50 ? ` Still counting: ${50 - ch.length} states.` : '';
     if (!lost.length) return `In ${y} the ${partyName(p)} lost no seats in any state, and gained ${total} in all.${pending}`;
     return `In ${y} the ${partyName(p)} ${total < 0 ? `lost ${-total} seats` : `gained ${total} seats`} ${pending ? 'so far' : 'across the country'}: down in ${lost.length} ${lost.length === 1 ? 'state' : 'states'}, up in ${gained.length || 'none'}. ` +
       `The most went in ${list(most)}, ${-lost[0][1]}${most.length > 1 ? ' each' : ''}.` + pending;
@@ -170,8 +170,8 @@
       hover(hit, chart, svg, `s${p.y}`, () => tipHtml(String(p.y), p.y % 4 === 2 ? 'Midterm' : 'Presidential year', [['Democrats', `${p.d} of ${p.t} seats`], ['Share', `${p.v.toFixed(1)}%`]]), () => [x(p.y), y(p.v)], c);
     }
     const at = (yr) => pts.find((p) => p.y === yr);
-    note(svg, x(1994) + 8, y(at(1994).v) - 22, ['1994', '−12.8 pts']);
-    note(svg, x(2010) + 8, y(at(2010).v) - 26, ['2010', '−16.8 pts']);
+    note(svg, x(1994) + 8, y(at(1994).v) - 22, ['1994', '62% → 49%']);
+    note(svg, x(2010) + 8, y(at(2010).v) - 26, ['2010', '45% → 28%']);
     note(svg, x(1976), y(at(1976).v) - 10, ['75%'], 'start');
     note(svg, x(2024), y(at(2024).v) + 20, ['30%'], 'middle');
     el('text', { x: W - m.r, y: y(50) - 6, 'text-anchor': 'end', class: 'rule-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = 'half the seats';
@@ -189,7 +189,7 @@
       const v = homeK === 'avg' ? S.kept[s] : t26[s] && t24[s] ? t26[s] / t24[s] * 100 : null;
       const gov = odd.has(s) ? 'in odd years' : pres.has(s) ? 'in presidential years' : s === 'NH' || s === 'VT' ? 'every two years' : 'in the midterm';
       if (v == null) return { fill: 'var(--paper-2)', hatch: true, tip: tipHtml(S.names[s], 'Counting', []) };
-      const [, pct] = band(v);
+      const [, pct] = band(Math.round(v));  // shade by the number printed on the tile
       return {
         fill: mix('var(--E)', pct), dark: pct >= 56, value: `${Math.round(v)}`,
         stroke: odd.has(s) ? 'var(--ink)' : null,

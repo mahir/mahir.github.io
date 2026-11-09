@@ -226,15 +226,16 @@
     const last = series.m[series.m.length - 1];
     const t26 = now.turnout && now.turnout.v;
     if (t26 != null) {
-      el('path', { d: `M${x(last.y)},${y(last.v)}L${x(2026)},${y(t26)}`, fill: 'none', stroke: 'var(--R)', 'stroke-width': 2 }, svg);
-      el('circle', { cx: x(2026), cy: y(t26), r: 4.5, fill: 'var(--R)', stroke: 'var(--paper)', 'stroke-width': 1.5 }, svg);
-      el('text', { x: x(2026) + 8, y: y(t26) + 4, class: 'ghost-label' }, svg).textContent = `${t26.toFixed(0)}%`;
+      // 2026 is an estimate until the count is certified: a dashed segment in the midterm line's ink, not a party color
+      el('path', { d: `M${x(last.y)},${y(last.v)}L${x(2026)},${y(t26)}`, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2, 'stroke-dasharray': '3 3' }, svg);
+      el('circle', { cx: x(2026), cy: y(t26), r: 4.5, fill: 'var(--ink)', stroke: 'var(--paper)', 'stroke-width': 1.5 }, svg);
+      el('text', { x: x(2026) + 8, y: y(t26) + 4, class: 'ghost-label' }, svg).textContent = `${t26.toFixed(1)}%`;
     } else {
       el('circle', { cx: x(2026), cy: y(last.v), r: 4.5, class: 'ghost-bar' }, svg);
       el('text', { x: x(2026) + 8, y: y(last.v) + 4, class: 'ghost-label' }, svg).textContent = '2026';
     }
-    note(svg, x(2018), y(50) - 14, ['2018', '50%'], 'middle');
-    note(svg, x(1926), y(32.9) + 18, ['1926', '33%'], 'middle');
+    note(svg, x(2018), y(50) - 14, ['2018', '50.0%'], 'middle');
+    note(svg, x(1926), y(32.9) + 18, ['1926', '32.9%'], 'middle');
 
     // a crosshair that finds the nearest election
     const cross = el('line', { y1: m.t, y2: H - m.b, stroke: 'var(--ink)', 'stroke-width': 1, opacity: 0 }, svg);

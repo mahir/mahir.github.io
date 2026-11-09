@@ -42,7 +42,7 @@ TURNOUT_2026 = 'https://election.lab.ufl.edu/data-downloads/turnoutdata/Turnout_
 # that won each Senate race called so far, as {'ME': 'D', ...}. house_called and senate_called: the national count so
 # far, as [Democrats, Republicans], shown until the chamber is final. senate_shares: each Senate race's vote so far.
 RESULTS_2026 = {
-    'by_state': {  # AP race calls, 6:30 p.m. 8 November: 38 states fully called
+    'by_state': {  # AP race calls, 9 p.m. 8 November: 38 states fully called
         'AL': [2, 5], 'AR': [0, 4], 'CT': [5, 0], 'DE': [1, 0], 'GA': [5, 9], 'HI': [2, 0], 'ID': [0, 2],
         'IL': [14, 3], 'IN': [3, 6], 'IA': [3, 1], 'KS': [1, 3], 'KY': [2, 4], 'MD': [7, 1], 'MA': [9, 0],
         'MI': [9, 4], 'MS': [1, 3], 'MO': [3, 5], 'MT': [1, 1], 'NE': [1, 2], 'NV': [4, 0], 'NH': [2, 0],
@@ -57,7 +57,7 @@ RESULTS_2026 = {
         'AL': 'R', 'AR': 'R', 'FL': 'R', 'ID': 'R', 'KY': 'R', 'LA': 'R', 'MT': 'R', 'NE': 'R', 'OK': 'R', 'SD': 'R',
         'TN': 'R', 'WV': 'R', 'WY': 'R',
     },
-    'senate_shares': {  # percent of the vote, [Democrat, Republican], from AP's vote count at 6:30 p.m. 8 November
+    'senate_shares': {  # percent of the vote, [Democrat, Republican], from AP's vote count at 9 p.m. 8 November
         'MA': [63.4, 32.1], 'DE': [63.6, 36.4], 'OR': [58.1, 38.7], 'RI': [66.8, 29.3], 'CO': [60.4, 35.0],
         'IL': [61.4, 37.1], 'ME': [53.1, 46.8], 'NM': [63.3, 36.7], 'NJ': [62.3, 35.1], 'VA': [61.2, 38.5],
         'MN': [53.7, 43.6], 'NH': [55.9, 42.2], 'MI': [52.5, 45.5], 'GA': [59.0, 41.0], 'NC': [58.7, 39.1],
@@ -71,7 +71,7 @@ RESULTS_2026 = {
     'house': None,
     'house_estimate': 176,  # Republican seats in the NBC News Decision Desk's estimate, used until house is set
     'senate': None,
-    'as_of': '2026-11-08 18:30',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
+    'as_of': '2026-11-08 21:05',  # 'YYYY-MM-DD HH:MM' New York time, when the numbers above were last checked
     'note': '22 House races and the Senate races in Alaska and Mississippi are still uncalled. Until the House count is final, its 2026 figures are NBC News’s estimate.',
 }
 
