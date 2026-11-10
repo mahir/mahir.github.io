@@ -46,6 +46,10 @@ window.Works = (() => {
       n: 9, title: 'The midterm tide', date: '2026-11-04', medium: 'Interactive SVG charts and election data',
       about: 'Every US midterm since 1790 set against 2026: what the record said before the vote, the results as they were called, and state-by-state maps since 1978.',
     },
+    {
+      n: 10, title: 'The S&P 500, by weight', date: '2026-11-09', medium: 'Interactive canvas chart and SEC filing data',
+      about: 'Every company’s share of the S&P 500 from 1995 to 2026, stacked by rank: the twenty largest drawn one by one as they rise and fall, with all 500 a click away.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');

@@ -16,6 +16,10 @@ On the site they are called experiments ("Experiments", "Open the experiment"); 
 
 No. 005 draws a year of a company's closing prices, from `works/005/prices.json`. The daily Action runs `works/005/_prices.py` before the build, so the file follows each trading day and the Action commits it ("Refresh No. 005's prices") even on days no work goes up. If Nasdaq doesn't answer, yesterday's file stays and the build still runs. The companies are listed at the top of `_prices.py`; one that leaves the S&P 500 drops out by itself, and one whose price falls more than 40% in a day, which is almost always a spin-off Nasdaq doesn't adjust for, is left out while that day is in the file. To refresh by hand: `python3 works/005/_prices.py`.
 
+## No. 010's weights
+
+No. 010 draws each company's share of the S&P 500 from `works/010/weights.js`, which `works/010/_weights.py` builds from the holdings the SPDR S&P 500 ETF Trust reports to the SEC (one report a year from 1995 to 2009, two a year to 2019, four a year since). The fund files a new quarter about two months after it ends. To add it, run `python3 works/010/_weights.py` and commit `weights.js`; the page's opening numbers follow the data. Filings are kept in `works/010/_cache/`, which is not committed. Renames and mergers of large companies are listed at the top of the script (`ALIAS`, `SPLIT`, `SHOW`); when a top-20 company changes its name, add it there. The Action does not run this.
+
 ## After a new Substack post
 
 The Writing list is refreshed by hand. Substack refuses GitHub's servers, so the daily Action can't read the feed and keeps the posts already listed. After a post goes up, run `python3 works/_build.py` on your own machine, check the homepage, and commit what it changed (`index.html` and `llms.txt`, and `sitemap.xml` when the post is newer than the latest work).
