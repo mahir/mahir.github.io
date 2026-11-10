@@ -59,7 +59,7 @@ Most crawlers, and almost all AI ones, read the HTML without running JavaScript.
 
 The facts about Mahir that the build writes (role, bio, short bio, profiles, photo, talks and press) live at the top of `_build.py`; change them there and run it again. The bios name examples, not every school, show or talk. Talks and press go to search engines as pieces about Mahir, never among his profiles. The homepage's title, description, role line and the Elsewhere links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
 
-Not published, though they stay in the repository: these notes, `llms/CLAUDE.md` and the old Kaleidoscope project (see `/_config.yml`). The lecture decks under `/llms/` and `/pm/` are published but kept out of search engines by `/robots.txt` until they are updated. Addresses that don't exist get `/404.html`.
+Not published, though they stay in the repository: these notes, `llms/CLAUDE.md` and the old Kaleidoscope project (see `/_config.yml`). The lecture decks under `/llms/` and `/pm/` are published but kept out of search engines until they are updated: each deck's page (`/llms/`, `/pm/`, `/pm/v1/` and so on) carries `<meta name="robots" content="noindex">`, and `/robots.txt` lets crawlers read those pages only, so the slides' text stays closed. A new deck page needs the same `noindex` line in its `<head>`; a blocked page can still be listed in search results by its address alone, which is why the pages are open and say `noindex` themselves. Addresses that don't exist get `/404.html`.
 
 ## Preview a day
 

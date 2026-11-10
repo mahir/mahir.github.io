@@ -37,8 +37,8 @@ BIO = (
     'Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including '
     'Nike, SAP, Siemens, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia '
     'University, the University of Pennsylvania, Pratt, the University of Art and Design Linz and Istanbul Bilgi '
-    'University, with guest lectures at MIT, NYU and SVA. He currently lectures on Business Applications of LLMs and '
-    'Product Management with AI. His work has been shown '
+    'University, with guest lectures at MIT, NYU and SVA. At Columbia Engineering he lectures on Business '
+    'Applications of LLMs and Product Management with AI. His work has been shown '
     'at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at '
     'events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
     'Innovation Festival. He publishes a new data visualization every day at casualdata.com.'
@@ -54,6 +54,8 @@ MICROSOFT_BUILD = 'https://www.youtube.com/watch?v=dvC4dK9c7nQ'
 GOOGLE_CLOUD_NEXT = 'https://www.youtube.com/watch?v=yUK4XUggdQw'
 GOOGLE_CLOUD_STORY = 'https://cloud.google.com/customers/etsy-ai'
 STACK_OVERFLOW_PODCAST = 'https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/'
+COLUMBIA = 'https://www.columbia.edu/'
+COLUMBIA_NEWS = 'https://www.engineering.columbia.edu/about/news/preparing-engineers-ai-driven-world'
 # The short version opens the homepage: what Mahir does now and did before, and the press about it, then teaching,
 # lectures and talks. Its lists are examples, not every one. [words](url) becomes a link.
 SHORT_BIO = (
@@ -63,8 +65,9 @@ SHORT_BIO = (
     'companies including Nike, SAP, Siemens, PwC, Google and Microsoft, and his work at Etsy has been featured in '
     f'[a Google Cloud customer story]({GOOGLE_CLOUD_STORY}) and on [the Stack Overflow podcast]({STACK_OVERFLOW_PODCAST}).',
     'He has taught since 2003, at schools including Columbia University, the University of Pennsylvania, Pratt, the '
-    'University of Art and Design Linz and Istanbul Bilgi University, and he currently lectures on Business '
-    'Applications of LLMs and Product Management with AI. He has spoken at events such as '
+    'University of Art and Design Linz and Istanbul Bilgi University. At Columbia Engineering he lectures on '
+    f'Business Applications of LLMs and [Product Management with AI]({COLUMBIA_NEWS}). '
+    'He has spoken at events such as '
     f'[TEDx Vienna]({TEDX_VIENNA}), [Microsoft Build]({MICROSOFT_BUILD}), [Google Cloud Next]({GOOGLE_CLOUD_NEXT}) and '
     'the Fast Company Innovation Festival.',
     f'He publishes a new data visualization every day at [casualdata.com]({CASUALDATA}).',
@@ -95,6 +98,8 @@ PRESS = [
      'name': 'That custom gift for your mom takes more work than you think'},
     {'url': GOOGLE_CLOUD_STORY, 'by': 'Google Cloud',
      'name': 'Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"'},
+    {'url': COLUMBIA_NEWS, 'type': 'NewsArticle', 'by': 'Columbia Engineering', 'date': '2026-02-16',
+     'name': 'Preparing Engineers for an AI-Driven World'},
 ]
 
 
@@ -106,6 +111,13 @@ def piece(p):
     return node
 
 
+def org(name, link, kind='Organization'):
+    return {'@type': kind, 'name': name, 'url': link}
+
+
+# What search engines and AI assistants are told about Mahir. Only what the bios above already say: where he works
+# now, where he teaches, and where he worked before (schema.org has no "former employer", so those go under alumniOf,
+# which takes any organization). His degrees are not here; add the schools to alumniOf as CollegeOrUniversity.
 PERSON = {
     '@type': 'Person',
     '@id': f'{SITE}/#person',
@@ -115,13 +127,23 @@ PERSON = {
     'image': f'{SITE}/portrait.jpg',
     'description': ROLE,
     'jobTitle': 'Head of Engineering',
-    'worksFor': {'@type': 'Organization', 'name': 'AirOps', 'url': AIROPS},
+    'worksFor': org('AirOps', AIROPS),
+    'affiliation': org('Columbia University', COLUMBIA, 'CollegeOrUniversity'),
+    'alumniOf': [org('Etsy', ETSY), org('Topos', TOPOS), org('R/GA', RGA), org('Ars Electronica Futurelab', FUTURELAB)],
     'knowsAbout': [
         'AI products', 'Search', 'Recommendation systems', 'Advertising platforms', 'Data science',
         'Machine learning', 'Product management', 'Data visualization', 'Media art',
     ],
     'sameAs': [link for _, link in PROFILES],
     'subjectOf': [piece(p) for p in TALKS + PRESS if p.get('url')],
+}
+# casualdata is Mahir's own; its site names him as founder, and this is the same statement from his side
+CASUALDATA_ORG = {
+    '@type': 'Organization',
+    '@id': f'{CASUALDATA}#org',
+    'name': 'casualdata',
+    'url': CASUALDATA,
+    'founder': {'@id': PERSON['@id']},
 }
 WEBSITE = {
     '@type': 'WebSite',
@@ -278,6 +300,7 @@ def main():
         {'@type': 'ProfilePage', '@id': f'{SITE}/#page', 'url': f'{SITE}/', 'name': 'Mahir Yavuz',
          'isPartOf': {'@id': WEBSITE['@id']}, 'mainEntity': {'@id': PERSON['@id']}, 'dateModified': updated},
         PERSON,
+        CASUALDATA_ORG,
         {'@type': 'ItemList', '@id': f'{SITE}/#experiments', 'name': 'Experiments by Mahir Yavuz',
          'itemListOrder': 'https://schema.org/ItemListOrderDescending',
          'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': url(w), 'name': w['title']}

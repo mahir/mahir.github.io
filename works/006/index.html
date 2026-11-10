@@ -49,6 +49,33 @@
         "name": "AirOps",
         "url": "https://www.airops.com/"
       },
+      "affiliation": {
+        "@type": "CollegeOrUniversity",
+        "name": "Columbia University",
+        "url": "https://www.columbia.edu/"
+      },
+      "alumniOf": [
+        {
+          "@type": "Organization",
+          "name": "Etsy",
+          "url": "https://www.etsy.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Topos",
+          "url": "https://topos.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "R/GA",
+          "url": "https://rga.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Ars Electronica Futurelab",
+          "url": "https://ars.electronica.art/futurelab/en/"
+        }
+      ],
       "knowsAbout": [
         "AI products",
         "Search",
@@ -116,6 +143,16 @@
             "@type": "Organization",
             "name": "Google Cloud"
           }
+        },
+        {
+          "@type": "NewsArticle",
+          "name": "Preparing Engineers for an AI-Driven World",
+          "url": "https://www.engineering.columbia.edu/about/news/preparing-engineers-ai-driven-world",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Columbia Engineering"
+          },
+          "datePublished": "2026-02-16"
         }
       ]
     },
@@ -232,6 +269,7 @@
     .where { font-size: .85rem; }
     .hint .tap { display: none; }
   }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -249,6 +287,13 @@
     <div class="clock" aria-hidden="true"><i id="clock"></i></div>
     <p class="hint" style="margin:0"><span class="albers" id="albers" aria-hidden="true"><i><b></b></i><i><b></b></i></span>One ink on two grounds, after Josef Albers<span class="tap"> · tap for the next</span></p>
   </div>
+
+  <!-- the work in words, for screen readers, search engines and AI assistants, which see no drawing -->
+  <section class="about sr-only">
+    <h1>New York, interlocked</h1>
+    <p>No. 006 by Mahir Yavuz. The names of New York neighborhoods, drawn stroke by stroke in nested block letters: short letters are held in the arms of tall ones, so each name locks into one block. A new name is drawn every 15 seconds, or on a tap, from 88 neighborhoods in Manhattan, Brooklyn, Queens, the Bronx and Staten Island, among them Harlem, Tribeca, Dumbo, Bushwick, Astoria, Flushing, Mott Haven and Tottenville.</p>
+    <p>The colors follow Josef Albers’ Interaction of Color. Each ink is shown on two grounds, one name after the other, so the same color reads as two: navy on ochre and on sage gray, yellow on ultramarine and on plum, orange on midnight blue and on bottle green, aubergine on peach and on warm gray, pale rose on brick and on slate, black on vermilion and on olive.</p>
+  </section>
 
 <script>
 (() => {

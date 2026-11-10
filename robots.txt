@@ -1,7 +1,11 @@
 User-agent: *
 Allow: /
-# lecture decks, kept out of search until they are updated
+# Lecture decks, kept out of search until they are updated. Each deck's own page says noindex, and a crawler has to
+# be let in to read that, so only those pages are open; the slides' text under them stays closed.
 Disallow: /llms/
+Allow: /llms/$
 Disallow: /pm/
+Allow: /pm/$
+Allow: /pm/*/$
 
 Sitemap: https://mahiryavuz.com/sitemap.xml

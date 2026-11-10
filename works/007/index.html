@@ -49,6 +49,33 @@
         "name": "AirOps",
         "url": "https://www.airops.com/"
       },
+      "affiliation": {
+        "@type": "CollegeOrUniversity",
+        "name": "Columbia University",
+        "url": "https://www.columbia.edu/"
+      },
+      "alumniOf": [
+        {
+          "@type": "Organization",
+          "name": "Etsy",
+          "url": "https://www.etsy.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Topos",
+          "url": "https://topos.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "R/GA",
+          "url": "https://rga.com/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Ars Electronica Futurelab",
+          "url": "https://ars.electronica.art/futurelab/en/"
+        }
+      ],
       "knowsAbout": [
         "AI products",
         "Search",
@@ -116,6 +143,16 @@
             "@type": "Organization",
             "name": "Google Cloud"
           }
+        },
+        {
+          "@type": "NewsArticle",
+          "name": "Preparing Engineers for an AI-Driven World",
+          "url": "https://www.engineering.columbia.edu/about/news/preparing-engineers-ai-driven-world",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Columbia Engineering"
+          },
+          "datePublished": "2026-02-16"
         }
       ]
     },
@@ -197,6 +234,7 @@
     .what b { font-size: .95rem; }
     .what span { font-size: .85rem; }
   }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -217,6 +255,13 @@
       <button id="next" type="button">New plate<i class="bar" id="bar"></i></button>
     </div>
   </div>
+
+  <!-- the work in words, for screen readers, search engines and AI assistants, which see no painting -->
+  <section class="about sr-only">
+    <h1>Iznik, plate by plate</h1>
+    <p>No. 007 by Mahir Yavuz. An Ottoman Iznik dish painted on a 3D plate in the order the workshop worked: the outline first, then the ground, cobalt, turquoise, green and red, and last the glaze. Every plate is a new pattern, generated as it is painted.</p>
+    <p>The well of the dish holds one of six compositions: a bouquet rising from a tuft, a rosette, saz leaves, a cypress with a flowering plum wound around it, çintamani (three spots over tiger stripes), or a spiral scroll of the kind once called Golden Horn ware. The rim carries the wave-and-rock border, cloud bands, flowers or lozenges. The colors follow the workshop’s own decades: blue and turquoise of about 1530, sage and purple of about 1550, and the red and green of about 1570 and 1590.</p>
+  </section>
 
   <script src="patterns.js"></script>
   <script src="plate.js"></script>
