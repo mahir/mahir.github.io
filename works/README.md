@@ -5,6 +5,7 @@ The homepage is Mahir's, and features whichever work is up today. Every work is 
 On the site they are called experiments ("Experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
 
 - `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then the works that are up, newest first (the three before today's, with a button beside the heading that shows them all, today's included; every one is in the HTML, and a link to `/#experiments` arrives with the list open), then his latest three Substack posts, then his profiles elsewhere. The talks, press and lectures are part of the short bio. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
+- `/press/` lists his talks, podcasts, press, papers and art projects, each linked to where it was published. The page is written by hand like the homepage; `_build.py` fills its list from the facts at its top (see "Add a talk or an article").
 - `/works/` only sends old links on to the list on `/` (`/#experiments`). It can become an archive of its own once there are many works.
 - `/works/NNN/` is one work. It can look like anything.
 - `works.js` is the schedule, and the only list of works.
@@ -48,6 +49,10 @@ The Writing list is refreshed by hand. Substack refuses GitHub's servers, so the
    ```
 
 The work's own page is public as soon as it is pushed, even when its date is still ahead; only the homepage and the list wait for the date.
+
+## Add a talk or an article
+
+The list on `/press/` lives at the top of `_build.py`, in `TALKS`, `PODCASTS`, `PRESS`, `PAPERS` and `PROJECTS`. Add an entry to the right one: the address, the piece's own title, who published it, the date (a year or a month is enough when the day isn't known) and one plain sentence on what it is. Open the address first and check that the piece is there and says what the sentence says. Then set `PRESS_UPDATED` to today, run the build and commit. The same entry goes to search engines and into `/llms.txt`; to link it from the short bio as well, add it to `SHORT_BIO`.
 
 ## Search engines and AI assistants
 

@@ -28,12 +28,49 @@ Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Se
 
 ## Talks and press
 
-- [Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon](https://www.youtube.com/watch?v=gY36Sm2uI6k) (TEDx Talks)
-- [Five lessons Etsy learned building on Microsoft AI | BRK258](https://www.youtube.com/watch?v=dvC4dK9c7nQ) (Microsoft Developer)
-- [New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI](https://www.youtube.com/watch?v=yUK4XUggdQw) (Google Cloud)
-- [That custom gift for your mom takes more work than you think](https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/) (Stack Overflow)
-- [Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"](https://cloud.google.com/customers/etsy-ai) (Google Cloud)
-- [Preparing Engineers for an AI-Driven World](https://www.engineering.columbia.edu/about/news/preparing-engineers-ai-driven-world) (Columbia Engineering)
+The same list, with dates, is a page of its own: https://mahiryavuz.com/press/
+
+### Talks
+
+- [New Way Now: Etsy keeps human connection at the heart of commerce with Google Cloud AI](https://www.youtube.com/watch?v=yUK4XUggdQw) (Google Cloud, 11 Jul 2025): Google Cloud’s film on how Etsy uses AI in search and discovery, with Mahir interviewed.
+- [Five lessons Etsy learned building on Microsoft AI | BRK258](https://www.youtube.com/watch?v=dvC4dK9c7nQ) (Microsoft, 24 May 2024): Session at Microsoft Build 2024, given with colleagues from Etsy and Microsoft.
+- [The New Real: Experiental AI and the AI Lab](https://ars.electronica.art/keplersgardens/en/experiental-ai/) (Ars Electronica, 10 Sep 2020): Panel at the Ars Electronica Festival 2020 with Jake Elwes, Caroline Sinders and Anna Ridler, moderated by Drew Hemment.
+- [Speak to the Eyes - Mahir Yavuz | Studio-X Istanbul](https://www.youtube.com/watch?v=RanjusPDRqk) (Columbia GSAPP, 8 Jun 2017): Talk on data visualization at Studio-X Istanbul.
+- [Chemistry of Intelligence / Ars Electronica 2016 / FIS Stage](https://vimeo.com/199769134) (Ars Electronica, Sep 2016): Talk at the Ars Electronica Festival 2016 in Linz.
+- [Data Visualization Projects for Cities and Citizens](https://www.nyc.gov/site/cidi/about/innovation-lecture-series.page) (NYC CIDI, 2 Jun 2016): Lecture in the Innovation Lecture Series of New York City’s Center for Innovation through Data Intelligence.
+- [Who will govern "smart" cities? | Mahir Yavuz | TEDxViennaSalon](https://www.youtube.com/watch?v=gY36Sm2uI6k) (TEDx Talks, 9 Jul 2015): Talk at TEDxVienna’s CityX salon.
+- [Veri arayan adam: Mahir Yavuz at TEDxReset 2014](https://www.youtube.com/watch?v=U1D6aZTfhS8) (TEDx Talks, 1 Jun 2014): TEDx talk in Istanbul, “The man seeking the data”. In Turkish.
+
+### Podcasts
+
+- [That custom gift for your mom takes more work than you think](https://stackoverflow.blog/2025/07/29/that-custom-gift-for-your-mom-takes-more-work-than-you-think/) (Stack Overflow, 29 Jul 2025): The Stack Overflow Podcast, on the engineering behind Etsy’s marketplace.
+- [Adaptasyon](https://manifold.press/diziler/adaptasyon-podcast) (Manifold, 2016–2020): A podcast on new technology that Mahir made with Onur Akmehmet. In Turkish.
+- [081 | The Hustle with Mahir Yavuz and Jan Willem Tulp](https://datastori.es/81-the-hustle-with-mahir-yavuz-and-jan-willem-tulp/) (Data Stories, 25 Aug 2016): Data Stories episode 81, on the business side of data visualization.
+- [Inspiration or Plagiarism? w/ Bryan Connor and Mahir Yavuz](https://datastori.es/data-stories-23-inspiration-or-plagiarism/) (Data Stories, 30 May 2013): Data Stories episode 23, with Bryan Connor of The Why Axis.
+
+### Press
+
+- [Preparing Engineers for an AI-Driven World](https://www.engineering.columbia.edu/about/news/preparing-engineers-ai-driven-world) (Columbia Engineering, 16 Feb 2026): On Columbia Engineering’s AI workshops, among them Mahir’s Product Management with AI.
+- [Maps, pandemics, and reckoning with history](https://penntoday.upenn.edu/news/maps-pandemics-and-reckoning-history) (Penn Today, 10 Aug 2020): On mapping at Penn, with Mahir on the COVID-19 data compiler that Topos built.
+- [Topos Utilizes A.I. to Understand Cities and Map Micro-Neighborhoods](https://www.inverse.com/article/46287-transforming-data-collection-with-artificial-intelligence) (Inverse, 8 Jul 2018): On how Topos reads cities with machine learning, with Mahir and co-founder Will Shapiro.
+- [How one data-driven art and technology company is understanding cities with AI](https://www.storybench.org/one-data-driven-art-technology-company-understanding-cities-ai/) (Storybench, 3 Nov 2017): A write-up of Mahir’s talk on Topos at Northeastern University.
+- [Here’s How N.Y.C.’s Five Boroughs Should Really Be Defined](https://www.fastcompany.com/90131540/this-startup-used-ai-to-redefine-n-y-c-s-five-boroughs-for-today) (Fast Company, 29 Jun 2017): On Topos, which used AI to redraw New York’s five boroughs.
+- [Sense of Patterns](https://www.metalocus.es/en/news/sense-patterns) (Metalocus, 24 Oct 2011): On Sense of Patterns, Mahir’s series of printed data visualizations.
+- [Newsknitter](https://makezine.com/article/craft/newsknitter/) (Make:, 5 Sep 2007): On News Knitter, made with Ebru Kurbak, which knits the day’s headlines into sweaters.
+- [Etsy: Connecting nearly 90 million buyers with special items using gen AI and "algotorial curation"](https://cloud.google.com/customers/etsy-ai) (Google Cloud): Google Cloud’s customer story on Etsy, which quotes Mahir.
+
+### Papers and essays
+
+- [Efficient Large-Scale Visual Representation Learning And Evaluation](https://arxiv.org/abs/2305.13399) (arXiv, 22 May 2023): Paper with colleagues at Etsy on visual representation learning at scale.
+- [adSformers: Personalization from Short-Term Sequences and Diversity of Representations in Etsy Ads](https://arxiv.org/abs/2302.01255) (arXiv, 2 Feb 2023): Paper with colleagues at Etsy on personalizing Etsy Ads from a shopper’s recent activity.
+- [Rethinking ‘distance’ in New York City](https://medium.com/topos-ai/rethinking-distance-in-new-york-city-d17212d24919) (Topos, 10 Apr 2017): Essay with Will Shapiro on new ways to understand a city’s neighborhoods.
+- [News Knitter](https://dl.acm.org/doi/10.1145/1667265.1667298) (ACM, 2009): Paper with Ebru Kurbak on News Knitter.
+
+### Art projects
+
+- [Orkan Telhan & Mahir M. Yavuz: United Colors of Dissent](https://vimeo.com/106298010) (ARTE Creative, 16 Sep 2014): Short film on United Colors of Dissent, from the Connecting Cities series.
+- [United Colors of Dissent](https://www.connectingcities.net/projects/united-colors-dissent/) (Connecting Cities, 2 Sep 2013): A data-driven performance for public screens, made with Orkan Telhan.
+- [Work 2007–2011](https://casualdata.com/work/) (casualdata, 2007–2011): Mahir’s own archive of News Knitter, Value Machine, Newshaper, Social Bits and Sense of Patterns.
 
 ## Elsewhere
 
