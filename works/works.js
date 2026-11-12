@@ -58,6 +58,10 @@ window.Works = (() => {
       n: 12, title: 'Ebru, sheet by sheet', date: '2026-11-12', medium: 'Interactive WebGL',
       about: 'A marbler’s tray seen from above: drop the colours, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.',
     },
+    {
+      n: 13, title: 'Turkish, suffix by suffix', date: '2026-11-13', medium: 'Interactive type',
+      about: 'One Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; change the root and every suffix changes its vowels to match.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
