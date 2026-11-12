@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mahir Yavuz · Turkish, suffix by suffix</title>
-<meta name="description" content="Turkish, suffix by suffix, No. 013 by Mahir Yavuz: one Turkish word grows a suffix at each tap, to 44 letters, while its English grows into a sentence.">
+<meta name="description" content="Turkish, suffix by suffix, No. 013 by Mahir Yavuz: a Turkish word grows a suffix at each tap, up to 44 letters, while its English grows into a sentence.">
 <meta name="author" content="Mahir Yavuz">
 <link rel="canonical" href="https://mahiryavuz.com/works/013/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mahir Yavuz">
 <meta property="og:title" content="Turkish, suffix by suffix · Mahir Yavuz">
-<meta property="og:description" content="No. 013: one Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence.">
+<meta property="og:description" content="No. 013: a Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows into a sentence. Four words to build.">
 <meta property="og:url" content="https://mahiryavuz.com/works/013/">
 <meta property="og:image" content="https://mahiryavuz.com/works/013/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -270,7 +270,7 @@
         "@id": "https://mahiryavuz.com/#website"
       },
       "image": "https://mahiryavuz.com/works/013/og.jpg",
-      "description": "One Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; change the root and every suffix changes its vowels to match.",
+      "description": "A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.",
       "artMedium": "Interactive type"
     },
     {
@@ -323,6 +323,12 @@
     font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; transition: border-color .2s, background-color .2s; }
   .back:hover { border-color: var(--chalk); background: rgba(244, 240, 227, .08); }
   .nav .label { font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  /* the words to build, named by how each one ends up */
+  .tabs { margin-left: auto; display: flex; flex-wrap: wrap; gap: 0 22px; }
+  .tab { padding: 9px 0 7px; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--soft);
+    font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; transition: color .2s, border-color .2s; }
+  .tab:hover { color: var(--chalk); }
+  .tab[aria-pressed="true"] { color: var(--chalk); border-bottom-color: var(--chalk); }
 
   /* the board: the word, a line under it, the English */
   .stage { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; padding: clamp(14px, 3.2vh, 34px) var(--pad) 12px; cursor: pointer;
@@ -388,6 +394,7 @@
   .chip:hover, #place:hover { border-color: var(--chalk); }
   .chip[aria-pressed="true"], #place.on { color: var(--deep); background: var(--chalk); border-color: var(--chalk); }
   #place { width: 9.2em; caret-color: var(--s3); }
+  #place[hidden] { display: none; }
   #place::placeholder { color: var(--soft); opacity: 1; }
   #place.on { caret-color: var(--deep); }
   .keys { grid-area: keys; align-self: start; margin: 0; padding-top: .2em; }
@@ -403,7 +410,7 @@
   .sr-only, .js .about { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   /* without script the whole word stands lit, and the steps are written out under it */
   .no-js .stage { cursor: auto; }
-  .no-js .dock, .no-js .meta { display: none; }
+  .no-js .dock, .no-js .meta, .no-js .tabs { display: none; }
   .no-js .en { margin-top: 1.4rem; }
   .no-js .about { max-width: 46rem; padding: 0 var(--pad) 40px; color: var(--soft); }
   .no-js .about h1 { font-size: 1.3rem; font-weight: 600; color: var(--chalk); }
@@ -424,6 +431,8 @@
     .ear { justify-content: flex-start; }
     .ear button { padding: 7px 15px; }
     .nav .label { font-size: .7rem; }
+    .tabs { flex-basis: 100%; margin: 0; justify-content: space-between; gap: 0 5px; }
+    .tab { padding: 12px 0 8px; font-size: .7rem; letter-spacing: .02em; }
   }
   @media (prefers-reduced-motion: reduce) {
     .ch, .sx.on .ch { transition: none; }
@@ -436,6 +445,12 @@
   <nav class="nav" aria-label="Experiments">
     <a class="back" href="/"><span aria-hidden="true">←</span> Home</a>
     <span class="label">No. 013 · Turkish, suffix by suffix, 2026</span>
+    <div class="tabs" role="group" aria-label="Which word to build">
+      <button type="button" class="tab" aria-pressed="true">One of those</button>
+      <button type="button" class="tab" aria-pressed="false">We were</button>
+      <button type="button" class="tab" aria-pressed="false">We won’t</button>
+      <button type="button" class="tab" aria-pressed="false">You shouldn’t</button>
+    </div>
   </nav>
 
   <main class="stage" id="stage">
@@ -454,7 +469,7 @@
       <button type="button" class="add" id="add" style="--c:var(--s1)">Add <span lang="tr">‑lı</span></button>
       <button type="button" class="take" id="take" disabled>Take one off</button>
     </div>
-    <div class="roots" role="group" aria-label="Root">
+    <div class="roots" id="roots" role="group" aria-label="Root">
       <span class="cap" aria-hidden="true">Root</span>
       <button type="button" class="chip" lang="tr" aria-pressed="true">Çekoslovakya</button>
       <button type="button" class="chip" lang="tr" aria-pressed="false">Afyonkarahisar</button>
@@ -470,7 +485,7 @@
   <!-- the work in words, for screen readers, search engines and AI assistants -->
   <section class="about">
     <h1>Turkish, suffix by suffix</h1>
-    <p>No. 013 by Mahir Yavuz. Turkish builds a long word by adding suffixes to a root, one after another, and each suffix adds one piece of meaning. This page builds one word that way. It opens on the root, Çekoslovakya, with its English under it, Czechoslovakia. Each tap adds the next suffix, and the English is rewritten to match. After ten suffixes the word has 44 letters and its English is a whole sentence.</p>
+    <p>No. 013 by Mahir Yavuz. Turkish builds a long word by adding suffixes to a root, one after another, and each suffix adds one piece of meaning. This page builds four words that way, and each of them ends up as a whole sentence. It opens on the root of the first, Çekoslovakya, with its English under it, Czechoslovakia. Each tap adds the next suffix, and the English is rewritten to match. After ten suffixes the word has 44 letters.</p>
     <ol>
       <li><span lang="tr">Çekoslovakya</span>: Czechoslovakia</li>
       <li><span lang="tr">Çekoslovakyalı</span>: Czechoslovakian</li>
@@ -484,8 +499,36 @@
       <li><span lang="tr">Çekoslovakyalılaştıramadıklarımızdanmış</span>: is reportedly one of those that we could not make Czechoslovakian</li>
       <li><span lang="tr">Çekoslovakyalılaştıramadıklarımızdanmışsınız</span>: you are reportedly one of those that we could not make Czechoslovakian</li>
     </ol>
-    <p>Each suffix has its own colour, and the English words it adds are in the same colour. Turkish adds at the end of the word; English has to be rewritten from the front.</p>
-    <p>The vowels in the suffixes are not fixed. Each one follows the vowel before it, which is called vowel harmony, so the root’s last vowel sets all of them. The root can be changed to Afyonkarahisar, İzmir or Bodrum, or to any place the visitor types, and every suffix changes its vowels to match: after İzmir, lı becomes li, laş becomes leş and dık becomes dik.</p>
+    <p>The second word is about a trade, and takes five suffixes:</p>
+    <ol>
+      <li><span lang="tr">simit</span>: simit</li>
+      <li><span lang="tr">simitçi</span>: simit seller</li>
+      <li><span lang="tr">simitçilik</span>: simit selling</li>
+      <li><span lang="tr">simitçilikte</span>: in simit selling</li>
+      <li><span lang="tr">simitçilikteydi</span>: was in simit selling</li>
+      <li><span lang="tr">simitçilikteydik</span>: we were in simit selling</li>
+    </ol>
+    <p>The third starts from a verb and takes seven. Its first suffixes change the verb itself: to know becomes to meet, then to introduce, then to be introduced.</p>
+    <ol>
+      <li><span lang="tr">tanı</span>: to know</li>
+      <li><span lang="tr">tanış</span>: to meet</li>
+      <li><span lang="tr">tanıştır</span>: to introduce someone</li>
+      <li><span lang="tr">tanıştırıl</span>: to be introduced</li>
+      <li><span lang="tr">tanıştırılama</span>: to be unable to be introduced</li>
+      <li><span lang="tr">tanıştırılamayacak</span>: will not be able to be introduced</li>
+      <li><span lang="tr">tanıştırılamayacakmış</span>: reportedly will not be able to be introduced</li>
+      <li><span lang="tr">tanıştırılamayacakmışız</span>: reportedly we will not be able to be introduced</li>
+    </ol>
+    <p>The fourth is short, four suffixes:</p>
+    <ol>
+      <li><span lang="tr">gel</span>: to come</li>
+      <li><span lang="tr">gelme</span>: to not come</li>
+      <li><span lang="tr">gelmemeli</span>: should not come</li>
+      <li><span lang="tr">gelmemeliydi</span>: should not have come</li>
+      <li><span lang="tr">gelmemeliydiniz</span>: you should not have come</li>
+    </ol>
+    <p>Each suffix has its own colour, and the English words it adds are in the same colour. A suffix that comes back in another word keeps its colour. Turkish adds at the end of the word; English has to be rewritten from the front.</p>
+    <p>The vowels in the suffixes are not fixed. Each one follows the vowel before it, which is called vowel harmony, so the root’s last vowel sets all of them. Every word has other roots to try: places for the first, things to sell for the second (fish, milk, yoghurt, tea), verbs for the other two. The first two also take whatever the visitor types. Every suffix changes its vowels to match the new root: after İzmir, lı becomes li, laş becomes leş and dık becomes dik. Some consonants follow too: after the t of simit, ci becomes çi.</p>
   </section>
 
 <script>
@@ -501,54 +544,66 @@
   const still = matchMedia('(prefers-reduced-motion: reduce)');
   const OUT = 'cubic-bezier(.16, 1, .3, 1)';
   const stage = $('stage'), word = $('word'), en = $('en'), says = $('says'), count = $('count'), status = $('status');
-  const add = $('add'), take = $('take'), place = $('place'), note = $('note');
-  const chips = [...document.querySelectorAll('.chip')];
+  const add = $('add'), take = $('take'), rootsBox = $('roots'), place = $('place'), note = $('note');
+  const tabs = [...document.querySelectorAll('.tab')];
 
-  // The ten suffixes, in the order the word takes them. A capital is a vowel that harmony fills in:
-  // A is a or e, I is ı or i, U is ı, i, u or ü. In Turkish every I can also come out u or ü after a rounded vowel,
-  // but in this word only the first suffix ever stands next to the root; the others follow an a, an e, an ı or an i.
-  const SUFFIXES = [
-    { t: 'lU', says: 'of a place, from it' },
-    { t: 'lAş', says: 'to become' },
-    { t: 'tIr', says: 'to make it happen' },
-    { t: 'AmA', says: 'not able to' },
-    { t: 'dIk', says: 'the one that: it turns the verb into a clause' },
-    { t: 'lAr', says: 'more than one' },
-    { t: 'ImIz', says: 'ours: the ones who tried are “we”' },
-    { t: 'dAn', says: 'from, out of, one of' },
-    { t: 'mIş', says: 'so I hear' },
-    { t: 'sInIz', says: 'you are, said to several people or politely' },
-  ];
-  const LAST = SUFFIXES.length;
-
-  // The two rules. The root's last vowel gives U, A and I.
-  const HARMONY = { a: 'ıaı', ı: 'ıaı', o: 'uaı', u: 'uaı', e: 'iei', i: 'iei', ö: 'üei', ü: 'üei' };
+  // ---- how a suffix joins a word ----------------------------------------------------------------------------------
+  // A suffix is written as a pattern. Small letters stay as they are. A capital is a letter the word before it decides:
+  //   A  a or e, after a back or a front vowel
+  //   I  ı, i, u or ü, the same and rounded or not: the two rules of vowel harmony
+  //   D  d, or t after a voiceless consonant        C  c, or ç after a voiceless consonant
+  // A letter in brackets is only there when it is needed: (y) between two vowels, (I) between two consonants.
+  const HARMONY = { a: 'ıa', ı: 'ıa', o: 'ua', u: 'ua', e: 'ie', i: 'ie', ö: 'üe', ü: 'üe' }; // the vowel before → I, A
+  const HARD = 'fstkçşhpx';
   // What a written vowel sounds like, near enough, for names that are not spelled the Turkish way.
   const SOUND = { a: 'a', à: 'a', á: 'a', â: 'a', ã: 'a', å: 'a', ä: 'e', æ: 'e', e: 'e', è: 'e', é: 'e', ê: 'e', ë: 'e', ı: 'ı',
     i: 'i', ì: 'i', í: 'i', î: 'i', ï: 'i', o: 'o', ò: 'o', ó: 'o', ô: 'o', õ: 'o', ö: 'ö', ø: 'ö', œ: 'ö', u: 'u', ù: 'u', ú: 'u', û: 'u', ü: 'ü' };
 
-  function lastVowel(name) {
+  // The end of a root: its last vowel and where it is, its last letter, and whether that letter is a vowel.
+  function ending(name) {
     const turkish = /[ıİşŞğĞçÇöÖüÜ]/.test(name); // a capital I is ı in a Turkish name and i anywhere else
-    for (let i = name.length - 1; i >= 0; i--) {
-      const c = name[i] === 'I' ? (turkish ? 'ı' : 'i') : name[i] === 'İ' ? 'i' : name[i].toLowerCase();
-      if (SOUND[c]) return { v: SOUND[c], at: i };
-    }
-    return { v: null, at: -1 };
+    const low = (c) => c === 'I' ? (turkish ? 'ı' : 'i') : c === 'İ' ? 'i' : c.toLowerCase();
+    let v = null, at = -1;
+    for (let i = name.length - 1; i >= 0 && at < 0; i--) if (SOUND[low(name[i])]) { v = SOUND[low(name[i])]; at = i; }
+    const last = low(name[name.length - 1]);
+    return { v, at, last, open: !!SOUND[last] };
   }
-  const soundOf = (r) => r.sound || lastVowel(r.tr).v;
-  const formsOf = (r) => {
-    const [U, A, I] = HARMONY[soundOf(r) || 'ı'];
-    return SUFFIXES.map((s) => [...s.t].map((c) => ({ U, A, I })[c] || c).join(''));
+  function attach(end, pattern) {
+    let out = '';
+    for (let i = 0; i < pattern.length; i++) {
+      let c = pattern[i];
+      if (c === '(') {
+        c = pattern[i + 1];
+        i += 2;
+        if ((c === 'A' || c === 'I') === end.open) continue; // a vowel after a vowel, or a consonant after a consonant: not needed
+      }
+      c = c === 'A' ? HARMONY[end.v][1] : c === 'I' ? HARMONY[end.v][0]
+        : c === 'D' ? (HARD.includes(end.last) ? 't' : 'd') : c === 'C' ? (HARD.includes(end.last) ? 'ç' : 'c') : c;
+      out += c;
+      end.last = c;
+      end.open = !!HARMONY[c];
+      if (end.open) end.v = c;
+    }
+    return out;
+  }
+  const formsOf = (w, r, sound) => {
+    const end = ending(r.tr);
+    end.v = sound || r.sound || end.v || 'ı';
+    return w.suffixes.map((s) => attach(end, s.t));
   };
 
-  // Roots. `en` is the place in English; `dem` is an English word for someone from there, split where English adds
-  // its own suffix. Places without one get “…’s own”, which works for any name.
-  const PRESETS = [
-    { tr: 'Çekoslovakya', en: 'Czechoslovakia', dem: ['Czechoslovakia', 'n'] },
-    { tr: 'Afyonkarahisar', en: 'Afyonkarahisar' },
-    { tr: 'İzmir', en: 'Izmir' },
-    { tr: 'Bodrum', en: 'Bodrum' },
-  ];
+  // ---- the words --------------------------------------------------------------------------------------------------
+  // Each word is a root and its suffixes, in order. `c` is the suffix's chalk: a suffix that comes back in another word
+  // keeps its colour, and so do the endings that say who (sınız, ız, k, nız) and the ones that say no (ama, ma).
+  // english(n, root) is the English after n suffixes, as a list of words. In a word, `o` names the suffixes that paid
+  // for it (0 is the root; none means English needed it and Turkish did not), and `k` follows it from one step to the
+  // next, so it can move instead of blink. `glue` joins a word to the next one. A | in the text says where a word paid
+  // for by several parts changes colour; without one it is cut evenly.
+  const f = (t) => ({ k: 'f-' + t, t, o: [] });
+  const s = (n, t) => ({ k: 's' + n, t, o: [n] });
+  const w = (k, t, o, glue) => ({ k, t, o, glue });
+  const phrase = (list) => list.map(([t, o], i) => (o.length ? w('v' + i, t, o) : f(t)));
+
   // Turkey's 81 provinces and a few towns, so a name typed without Turkish letters still gets them: izmir is İzmir.
   const PLACES = ('Adana Adıyaman Afyonkarahisar Ağrı Aksaray Amasya Ankara Antalya Ardahan Artvin Aydın Balıkesir Bartın Batman Bayburt Bilecik ' +
     'Bingöl Bitlis Bolu Burdur Bursa Çanakkale Çankırı Çorum Denizli Diyarbakır Düzce Edirne Elazığ Erzincan Erzurum Eskişehir Gaziantep ' +
@@ -556,45 +611,189 @@
     'Kırklareli Kırşehir Kocaeli Konya Kütahya Malatya Manisa Mardin Mersin Muğla Muş Nevşehir Niğde Ordu Osmaniye Rize Sakarya Samsun ' +
     'Şanlıurfa Siirt Sinop Sivas Şırnak Tekirdağ Tokat Trabzon Tunceli Uşak Van Yalova Yozgat Zonguldak ' +
     'Bodrum Kadıköy Beşiktaş Beyoğlu Üsküdar Ürgüp Göreme Çeşme Alaçatı Kaş Fethiye Marmaris Kuşadası Ayvalık Datça Türkiye Anadolu').split(' ');
-  const fold = (s) => s.replace(/[İIı]/g, 'i').toLowerCase().replace(/ş/g, 's').replace(/ç/g, 'c').replace(/ğ/g, 'g')
+
+  const WORDS = [
+    { // you are reportedly one of those that we could not make Czechoslovakian
+      id: 'place',
+      suffixes: [
+        { t: 'lI', c: 1, says: 'of a place, from it' },
+        { t: 'lAş', c: 2, says: 'to become' },
+        { t: 'DIr', c: 3, says: 'to make it happen' },
+        { t: '(y)AmA', c: 4, says: 'not able to' },
+        { t: 'DIk', c: 5, says: 'the one that: it turns the verb into a clause' },
+        { t: 'lAr', c: 6, says: 'more than one' },
+        { t: '(I)mIz', c: 7, says: 'ours: the ones who tried are “we”' },
+        { t: 'DAn', c: 8, says: 'from, out of, one of' },
+        { t: '(y)mIş', c: 9, says: 'so I hear' },
+        { t: 'sInIz', c: 10, says: 'you are, said to several people or politely' },
+      ],
+      // `dem` is an English word for someone from there, split where English adds its own suffix.
+      // Places without one get “…’s own”, which works for any name.
+      roots: [
+        { tr: 'Çekoslovakya', en: 'Czechoslovakia', dem: ['Czechoslovakia', 'n'] },
+        { tr: 'Afyonkarahisar', en: 'Afyonkarahisar' },
+        { tr: 'İzmir', en: 'Izmir' },
+        { tr: 'Bodrum', en: 'Bodrum' },
+      ],
+      type: { hint: 'type a place', label: 'Type a place to use as the root', names: PLACES, capitals: true },
+      english(n, r) {
+        const from = [w('root', r.dem ? r.dem[0] : r.en, [0], true), s(1, r.dem ? r.dem[1] : '’s own')];
+        const make = (t) => w('verb', t, [2, 3]);
+        const tail = [s(6, 'those'), s(5, 'that'), s(7, 'we'), s(4, 'could not'), make('make'), ...from];
+        switch (n) {
+          case 0: return [w('root', r.en, [0])];
+          case 1: return from;
+          case 2: return [f('to'), w('verb', 'become', [2]), ...from];
+          case 3: return [f('to'), make('make'), f('someone'), ...from];
+          case 4: return [f('to'), s(4, 'be unable to'), make('make'), f('someone'), ...from];
+          case 5: return [f('one'), s(5, 'that'), s(4, 'could not'), f('be'), make('made'), ...from];
+          case 6: return [s(6, 'those'), s(5, 'that'), s(4, 'could not'), f('be'), make('made'), ...from];
+          case 7: return tail;
+          case 8: return [s(8, 'one of'), ...tail];
+          case 9: return [f('is'), s(9, 'reportedly'), s(8, 'one of'), ...tail];
+          default: return [s(10, 'you are'), s(9, 'reportedly'), s(8, 'one of'), ...tail];
+        }
+      },
+    },
+    { // we were in simit selling
+      id: 'trade',
+      suffixes: [
+        { t: 'CI', c: 1, says: 'someone who makes it or sells it' },
+        { t: 'lIk', c: 2, says: 'the trade of one, the state of being one' },
+        { t: 'DA', c: 8, says: 'in, at, on' },
+        { t: '(y)DI', c: 9, says: 'was: the past' },
+        { t: 'k', c: 10, says: 'we' },
+      ],
+      roots: [
+        { tr: 'simit', en: 'simit' },
+        { tr: 'balık', en: 'fish' },
+        { tr: 'süt', en: 'milk' },
+        { tr: 'yoğurt', en: 'yoghurt' },
+        { tr: 'çay', en: 'tea' },
+      ],
+      type: { hint: 'type a thing', label: 'Type a thing to sell, to use as the root', names: [] },
+      english(n, r) {
+        const thing = w('root', r.en, [0]);
+        const selling = [w('s1', 'sell', [1], true), s(2, 'ing')];
+        switch (n) {
+          case 0: return [thing];
+          case 1: return [thing, s(1, 'seller')];
+          case 2: return [thing, ...selling];
+          case 3: return [s(3, 'in'), thing, ...selling];
+          case 4: return [s(4, 'was'), s(3, 'in'), thing, ...selling];
+          default: return [s(5, 'we'), s(4, 'were'), s(3, 'in'), thing, ...selling];
+        }
+      },
+    },
+    { // reportedly we will not be able to be introduced
+      id: 'each',
+      suffixes: [
+        { t: '(I)ş', c: 2, says: 'each other' },
+        { t: 'DIr', c: 3, says: 'to make it happen' },
+        { t: 'Il', c: 7, says: 'it is done to you: the passive' },
+        { t: '(y)AmA', c: 4, says: 'not able to' },
+        { t: '(y)AcAk', c: 5, says: 'will: the future' },
+        { t: '(y)mIş', c: 9, says: 'so I hear' },
+        { t: '(y)Iz', c: 10, says: 'we' },
+      ],
+      // The first three suffixes change the verb itself, so each root brings its own English for them:
+      // `a` after ‑ş, `b` after ‑tır, `c` after ‑ıl, as it reads after “be”.
+      roots: [
+        { tr: 'tanı', en: 'know', a: [['meet', [0, 1]]], b: [['introduce', [0, 1, 2]], ['someone', []]], c: [['introduced', [0, 1, 2]]] },
+        { tr: 'bul', en: 'find', a: [['meet| up', [0, 1]]], b: [['bring', [2]], ['people', []], ['together', [0, 1]]], c: [['brought', [2]], ['together', [0, 1]]] },
+        { tr: 'gör', en: 'see', a: [['see', [0]], ['each other', [1]]], b: [['put', [2]], ['people', []], ['in| touch', [0, 1]]], c: [['put', [2]], ['in| touch', [0, 1]]] },
+        { tr: 'değ', en: 'touch', a: [['change', [0, 1]]], b: [['change', [0, 1, 2]], ['someone', []]], c: [['changed', [0, 1, 2]]] },
+        { tr: 'karşıla', en: 'welcome', a: [['cross| paths', [0, 1]]], b: [['compare', [0, 1, 2]], ['people', []]], c: [['compared', [0, 1, 2]]] },
+      ],
+      english(n, r) {
+        const done = [s(3, 'be'), ...phrase(r.c)];
+        const tail = [s(5, 'will'), s(4, 'not be able to'), ...done];
+        switch (n) {
+          case 0: return [f('to'), w('v0', r.en, [0])];
+          case 1: return [f('to'), ...phrase(r.a)];
+          case 2: return [f('to'), ...phrase(r.b)];
+          case 3: return [f('to'), ...done];
+          case 4: return [f('to'), s(4, 'be unable to'), ...done];
+          case 5: return tail;
+          case 6: return [s(6, 'reportedly'), ...tail];
+          default: return [s(6, 'reportedly'), s(7, 'we'), ...tail];
+        }
+      },
+    },
+    { // you should not have come
+      id: 'should',
+      suffixes: [
+        { t: 'mA', c: 4, says: 'not' },
+        { t: 'mAlI', c: 5, says: 'should, must' },
+        { t: '(y)DI', c: 9, says: 'was: the past' },
+        { t: 'nIz', c: 10, says: 'you, said to several people or politely' },
+      ],
+      // `pp` is the English verb as it reads after “have”.
+      roots: [
+        { tr: 'gel', en: 'come', pp: 'come' },
+        { tr: 'unut', en: 'forget', pp: 'forgotten' },
+        { tr: 'gül', en: 'laugh', pp: 'laughed' },
+        { tr: 'sor', en: 'ask', pp: 'asked' },
+        { tr: 'bak', en: 'look', pp: 'looked' },
+      ],
+      english(n, r) {
+        const verb = w('root', n > 2 ? r.pp : r.en, [0]);
+        switch (n) {
+          case 0: return [f('to'), verb];
+          case 1: return [f('to'), s(1, 'not'), verb];
+          case 2: return [s(2, 'should'), s(1, 'not'), verb];
+          case 3: return [s(2, 'should'), s(1, 'not'), s(3, 'have'), verb];
+          default: return [s(4, 'you'), s(2, 'should'), s(1, 'not'), s(3, 'have'), verb];
+        }
+      },
+    },
+  ];
+
+  // A typed root is matched to the ones the word knows, without minding Turkish letters.
+  const fold = (t) => t.replace(/[İIı]/g, 'i').toLowerCase().replace(/ş/g, 's').replace(/ç/g, 'c').replace(/ğ/g, 'g')
     .replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/â/g, 'a').replace(/î/g, 'i').replace(/û/g, 'u').replace(/\s+/g, ' ').trim();
-  const KNOWN = new Map(PLACES.map((p) => [fold(p), { tr: p, en: p }]));
-  PRESETS.forEach((p) => { KNOWN.set(fold(p.tr), p); KNOWN.set(fold(p.en), p); });
-  KNOWN.set('istanbul', { tr: 'İstanbul', en: 'Istanbul' });
-  KNOWN.set('turkey', KNOWN.get('turkiye'));
+  WORDS.forEach((x) => {
+    x.known = new Map(((x.type && x.type.names) || []).map((p) => [fold(p), { tr: p, en: p }]));
+    x.roots.forEach((r) => { x.known.set(fold(r.tr), r); if (x.type) x.known.set(fold(r.en), r); });
+  });
+  WORDS[0].known.set('istanbul', { tr: 'İstanbul', en: 'Istanbul' });
+  WORDS[0].known.set('turkey', WORDS[0].known.get('turkiye'));
+
+  let W = WORDS[0];        // the word being built
+  let base = W.roots[0];   // the root to fall back to when the box is emptied
+  let R = base;            // the root on the board
+  let forms = formsOf(W, R);
+  let step = 0;            // how many suffixes are on
+  const chalk = (n) => `var(--s${W.suffixes[n - 1].c})`;
 
   function typed(text) {
+    if (!W.type) return null;
     const name = text.normalize('NFC').replace(/[^\p{L}\p{M} .'’-]/gu, '').replace(/\s+/g, ' ').trim();
     if (!/\p{L}/u.test(name)) return null;
-    const known = KNOWN.get(fold(name));
+    const known = W.known.get(fold(name));
     if (known) return known;
-    const shown = name.replace(/(^|[ -])(\p{Ll})/gu, (m, gap, c) => gap + c.toUpperCase());
+    const shown = W.type.capitals ? name.replace(/(^|[ -])(\p{Ll})/gu, (m, gap, c) => gap + c.toUpperCase()) : name;
     return { tr: shown, en: shown, typed: true };
   }
 
-  let base = PRESETS[0];   // the preset to fall back to when the box is emptied
-  let R = base;            // the root on the board
-  let forms = formsOf(R);
-  let step = 0;            // how many suffixes are on
-
   // ---- the Turkish line -------------------------------------------------------------------------------------------
   function drawWord(before, quiet) {
-    const key = R.sound ? -1 : lastVowel(R.tr).at;
+    const key = R.sound ? -1 : ending(R.tr).at;
     const root = el('span', 'sx root on');
     root.dataset.s = 0;
     if (key < 0) root.textContent = R.tr;
     else root.append(R.tr.slice(0, key), el('span', 'ch key', R.tr[key]), R.tr.slice(key + 1));
-    if (before && !quiet) root.classList.add('fresh');
+    if (!quiet) root.classList.add('fresh');
     let n = 0;
     const parts = forms.map((form, k) => {
       const sx = el('span', k < step ? 'sx on' : 'sx');
       sx.dataset.s = k + 1;
-      sx.style.setProperty('--c', `var(--s${k + 1})`);
+      sx.style.setProperty('--c', chalk(k + 1));
+      const was = before && before[k].length === form.length ? before[k] : null;
       [...form].forEach((c, j) => {
         const ch = el('span', 'ch', c);
         ch.style.setProperty('--i', j);
-        const was = before && before[k][j];
-        if (was && was !== c) { ch.classList.add('swap'); ch.dataset.old = was; ch.style.setProperty('--d', `${80 + n * 22}ms`); }
+        if (was && was[j] !== c) { ch.classList.add('swap'); ch.dataset.old = was[j]; ch.style.setProperty('--d', `${80 + n * 22}ms`); }
         n++;
         sx.append(ch);
       });
@@ -611,53 +810,25 @@
   }
 
   // ---- the English line -------------------------------------------------------------------------------------------
-  // Each step is a list of words. `o` names the suffixes that paid for a word (0 is the root, none means English
-  // needed it and Turkish did not); `k` follows a word from one step to the next, so it can move instead of blink.
-  function english() {
-    const place = { k: 'root', t: R.en, o: [0] };
-    const from = [{ k: 'root', t: R.dem ? R.dem[0] : R.en, o: [0], glue: true }, { k: 's1', t: R.dem ? R.dem[1] : '’s own', o: [1] }];
-    const f = (t) => ({ k: 'f-' + t, t, o: [] });
-    const s = (n, t) => ({ k: 's' + n, t, o: [n] });
-    const verb = (t, caused) => ({ k: 'verb', t, o: caused ? [2, 3] : [2] });
-    const tail = [s(6, 'those'), s(5, 'that'), s(7, 'we'), s(4, 'could not'), verb('make', true), ...from];
-    switch (step) {
-      case 0: return [place];
-      case 1: return from;
-      case 2: return [f('to'), verb('become'), ...from];
-      case 3: return [f('to'), verb('make', true), f('someone'), ...from];
-      case 4: return [f('to'), s(4, 'be unable to'), verb('make', true), f('someone'), ...from];
-      case 5: return [f('one'), s(5, 'that'), s(4, 'could not'), f('be'), verb('made', true), ...from];
-      case 6: return [s(6, 'those'), s(5, 'that'), s(4, 'could not'), f('be'), verb('made', true), ...from];
-      case 7: return tail;
-      case 8: return [s(8, 'one of'), ...tail];
-      case 9: return [f('is'), s(9, 'reportedly'), s(8, 'one of'), ...tail];
-      default: return [s(10, 'you are'), s(9, 'reportedly'), s(8, 'one of'), ...tail];
-    }
-  }
   function wordEl(tok) {
-    const w = el('span', 'w');
-    w.dataset.k = tok.k;
-    if (!tok.o.length) { w.classList.add('f'); w.textContent = tok.t; }
-    else if (tok.o.length === 1) {
-      w.dataset.o = tok.o[0];
-      if (tok.o[0]) w.style.setProperty('--c', `var(--s${tok.o[0]})`);
-      w.textContent = tok.t;
-    } else {
-      // one English word doing the work of two suffixes: half in each colour
-      const cut = Math.ceil(tok.t.length / 2);
-      tok.o.forEach((n, i) => {
-        const half = el('span', 'half', i ? tok.t.slice(cut) : tok.t.slice(0, cut));
-        half.dataset.o = n;
-        half.style.setProperty('--c', `var(--s${n})`);
-        w.append(half);
-      });
-    }
-    return w;
+    const x = el('span', 'w');
+    x.dataset.k = tok.k;
+    if (!tok.o.length) { x.classList.add('f'); x.textContent = tok.t; return x; }
+    // one English word can do the work of several parts: it is cut, and each piece takes a part's colour
+    const size = Math.ceil(tok.t.length / tok.o.length);
+    const cuts = tok.t.includes('|') ? tok.t.split('|') : tok.o.map((n, i) => tok.t.slice(i * size, i < tok.o.length - 1 ? (i + 1) * size : undefined));
+    tok.o.forEach((n, i) => {
+      const piece = el('span', 'half', cuts[i] || '');
+      piece.dataset.o = n;
+      if (n) piece.style.setProperty('--c', chalk(n));
+      x.append(piece);
+    });
+    return x;
   }
   function drawEnglish(move) {
     const was = new Map();
-    en.querySelectorAll('[data-k]').forEach((w) => was.set(w.dataset.k, { box: w.getBoundingClientRect(), text: w.textContent }));
-    const toks = english(), nodes = [];
+    en.querySelectorAll('[data-k]').forEach((x) => was.set(x.dataset.k, { box: x.getBoundingClientRect(), text: x.textContent }));
+    const toks = W.english(step, R), nodes = [];
     for (let i = 0; i < toks.length; i++) {
       if (nodes.length) nodes.push(' ');
       if (toks[i].glue) { const pair = el('span', 'pair'); pair.append(wordEl(toks[i]), wordEl(toks[++i])); nodes.push(pair); }
@@ -665,47 +836,44 @@
     }
     en.replaceChildren(...nodes);
     if (!move || still.matches) return;
-    en.querySelectorAll('[data-k]').forEach((w) => {
-      const old = was.get(w.dataset.k), now = w.getBoundingClientRect();
-      if (!old) { w.animate([{ opacity: 0, transform: 'translateY(.4em)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 140, easing: OUT, fill: 'backwards' }); return; }
+    en.querySelectorAll('[data-k]').forEach((x) => {
+      const old = was.get(x.dataset.k), now = x.getBoundingClientRect();
+      if (!old) { x.animate([{ opacity: 0, transform: 'translateY(.4em)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 140, easing: OUT, fill: 'backwards' }); return; }
       const dx = old.box.left - now.left, dy = old.box.top - now.top;
       const frames = [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }];
-      if (old.text !== w.textContent) { frames[0].opacity = 0; frames[1].opacity = 1; }
-      if (dx || dy || old.text !== w.textContent) w.animate(frames, { duration: 560, easing: OUT });
+      if (old.text !== x.textContent) { frames[0].opacity = 0; frames[1].opacity = 1; }
+      if (dx || dy || old.text !== x.textContent) x.animate(frames, { duration: 560, easing: OUT });
     });
   }
 
   // ---- everything that follows the step ---------------------------------------------------------------------------
-  const letters = (s) => (s.match(/\p{L}/gu) || []).length;
+  const letters = (t) => (t.match(/\p{L}/gu) || []).length;
   const hyphen = (form) => '‑' + form; // a hyphen that does not break
+  const turkish = (text) => { const x = el('span', '', text); x.lang = 'tr'; return x; };
   function paint(move) {
+    const last = W.suffixes.length;
     drawEnglish(move);
     const built = R.tr + forms.slice(0, step).join(''), whole = R.tr + forms.join('');
-    count.textContent = step === LAST ? `${letters(whole)} letters, one word` : `${letters(built)} of ${letters(whole)} letters`;
+    count.textContent = step === last ? `${letters(whole)} letters, one word` : `${letters(built)} of ${letters(whole)} letters`;
     if (step) {
       const b = el('b', '', hyphen(forms[step - 1]));
       b.lang = 'tr';
-      says.replaceChildren(b, SUFFIXES[step - 1].says);
-      says.style.setProperty('--c', `var(--s${step})`);
+      says.replaceChildren(b, W.suffixes[step - 1].says);
+      says.style.setProperty('--c', chalk(step));
     } else says.textContent = 'Tap the word to add its first suffix.';
 
-    if (step < LAST) {
-      const sx = el('span', '', hyphen(forms[step]));
-      sx.lang = 'tr';
-      add.replaceChildren('Add ', sx);
-      add.style.setProperty('--c', `var(--s${step + 1})`);
-    } else { add.textContent = 'Start over'; add.style.removeProperty('--c'); }
+    if (step < last) {
+      add.replaceChildren('Add ', turkish(hyphen(forms[step])));
+      add.style.setProperty('--c', chalk(step + 1));
+    } else { add.textContent = 'Next word'; add.style.removeProperty('--c'); }
     take.disabled = !step;
-    if (step) {
-      const sx = el('span', '', hyphen(forms[step - 1]));
-      sx.lang = 'tr';
-      take.replaceChildren('Take ', sx, ' off');
-    } else take.textContent = 'Take one off';
-    status.textContent = `${built}: ${en.textContent}. ${step} of ${LAST} suffixes.`;
+    if (step) take.replaceChildren('Take ', turkish(hyphen(forms[step - 1])), ' off');
+    else take.textContent = 'Take one off';
+    status.textContent = `${built}: ${en.textContent}. ${step} of ${last} suffixes.`;
   }
 
   function go(to) {
-    to = Math.max(0, Math.min(LAST, to));
+    to = Math.max(0, Math.min(W.suffixes.length, to));
     if (to === step) return;
     const up = to > step;
     step = to;
@@ -724,32 +892,35 @@
   function setRoot(r, quiet) {
     const before = forms;
     R = r;
-    forms = formsOf(R);
-    chips.forEach((c, i) => c.setAttribute('aria-pressed', String(PRESETS[i] === R)));
-    place.classList.toggle('on', !PRESETS.includes(R));
+    forms = formsOf(W, R);
+    rootsBox.querySelectorAll('.chip').forEach((c, i) => c.setAttribute('aria-pressed', String(W.roots[i] === R)));
+    place.classList.toggle('on', !W.roots.includes(R));
     drawWord(before, quiet);
     drawNote();
     paint(!quiet);
   }
-  const ENDS = [['a', 'lı'], ['e', 'li'], ['o', 'lu'], ['ö', 'lü']];
+  const list = (items) => items.length > 1 ? items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1] : items[0];
   function drawNote() {
-    const v = soundOf(R), [U, A, I] = HARMONY[v || 'ı'];
-    note.innerHTML = !v ? `This root has no vowel to follow, so the suffixes fall back to <b>${A}</b> and <b>${I}</b>.`
-      : R.sound ? `Set by ear: the suffix beside the root takes <b>${U}</b>, the rest take <b>${A}</b> and <b>${I}</b>.`
-      : 'ouöü'.includes(v) ? `The root’s last vowel is <b>${v}</b>, a rounded one. The suffix beside it takes <b>${U}</b>; the rest take <b>${A}</b> and <b>${I}</b>.`
-      : `The root’s last vowel is <b>${v}</b>, so every suffix takes <b>${A}</b> or <b>${I}</b>.`;
+    const end = ending(R.tr);
+    const vowels = [...new Set(forms.join('').split('').filter((c) => HARMONY[c]))].map((c) => `<b>${c}</b>`);
+    let text = R.sound ? 'Set by ear.' : end.v ? `The root’s last vowel is <b>${end.v}</b>.` : 'This root has no vowel, so the suffixes start from <b>ı</b>.';
+    text += ` Each suffix takes its vowel from the one before it: here ${list(vowels)}.`;
+    // the first suffix of the trade word also listens to the root's last consonant
+    if (W.suffixes[0].t[0] === 'C' && HARD.includes(end.last)) text += ` After <b>${end.last}</b>, ‑c${forms[0].slice(1)} hardens to <b>‑${forms[0]}</b>.`;
+    note.innerHTML = text;
     if (!R.typed) return;
-    // Harmony goes by sound, and a typed name is only read as it is spelled.
+    // Harmony goes by sound, and a typed root is only read as it is spelled.
     const ear = el('span', 'ear'), ends = el('span', 'ends');
     ear.append(el('span', '', 'Said another way?'), ends);
     ends.setAttribute('role', 'group');
     ends.setAttribute('aria-label', 'Pick the ending by ear');
-    const read = lastVowel(R.tr).v;
-    ENDS.forEach(([sound, end]) => {
-      const b = el('button', '', end);
+    const read = end.v;
+    ['a', 'e', 'o', 'ö'].forEach((sound) => {
+      const first = formsOf(W, { tr: R.tr }, sound)[0];
+      const b = el('button', '', first);
       b.type = 'button';
       b.lang = 'tr';
-      b.setAttribute('aria-pressed', String(forms[0] === end));
+      b.setAttribute('aria-pressed', String(forms[0] === first));
       b.addEventListener('click', () => {
         const same = read && HARMONY[read] === HARMONY[sound];
         setRoot({ ...R, sound: same ? undefined : sound }, true);
@@ -757,6 +928,35 @@
       ends.append(b);
     });
     note.append(ear);
+  }
+
+  // ---- the word ---------------------------------------------------------------------------------------------------
+  function setWord(i, r, at, quiet) {
+    W = WORDS[i];
+    base = W.roots[0];
+    R = r || base;
+    if (W.roots.includes(R)) base = R;
+    step = Math.max(0, Math.min(W.suffixes.length, at || 0));
+    forms = formsOf(W, R);
+    tabs.forEach((t, j) => t.setAttribute('aria-pressed', String(j === i)));
+    rootsBox.querySelectorAll('.chip').forEach((c) => c.remove());
+    W.roots.forEach((root) => {
+      const chip = el('button', 'chip', root.tr);
+      chip.type = 'button';
+      chip.lang = 'tr';
+      chip.setAttribute('aria-pressed', String(root === R));
+      chip.addEventListener('click', () => { place.value = ''; base = root; setRoot(root); });
+      rootsBox.insertBefore(chip, place);
+    });
+    place.hidden = !W.type;
+    place.value = W.roots.includes(R) ? '' : R.tr;
+    place.classList.toggle('on', !W.roots.includes(R));
+    if (W.type) { place.placeholder = W.type.hint; place.setAttribute('aria-label', W.type.label); }
+    light(null);
+    drawWord(null, quiet);
+    drawNote();
+    paint(false);
+    if (!quiet && !still.matches) en.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: OUT });
   }
 
   // ---- pointing at a part lights its share of the other line ----------------------------------------------------
@@ -774,9 +974,9 @@
 
   // ---- hands ------------------------------------------------------------------------------------------------------
   if (!html.classList.contains('bare')) stage.addEventListener('click', next);
-  add.addEventListener('click', () => go(step < LAST ? step + 1 : 0));
+  add.addEventListener('click', () => { if (step < W.suffixes.length) next(); else setWord((WORDS.indexOf(W) + 1) % WORDS.length); });
   take.addEventListener('click', () => go(step - 1));
-  chips.forEach((c, i) => c.addEventListener('click', () => { place.value = ''; base = PRESETS[i]; setRoot(base); }));
+  tabs.forEach((t, i) => t.addEventListener('click', () => setWord(i)));
   place.addEventListener('input', () => setRoot(typed(place.value) || base, true));
   place.addEventListener('keydown', (e) => { if (e.key === 'Enter') place.blur(); });
   addEventListener('keydown', (e) => {
@@ -789,19 +989,11 @@
   addEventListener('resize', fit);
   if (document.fonts) document.fonts.ready.then(fit);
 
-  // ---- begin: at the root, or where the address says (?root=İzmir&step=4) ---------------------------------------
-  const asked = typed(params.get('root') || '');
-  if (asked) {
-    R = asked;
-    if (PRESETS.includes(R)) base = R; else place.value = R.tr;
-  }
-  step = Math.max(0, Math.min(LAST, parseInt(params.get('step'), 10) || 0));
-  forms = formsOf(R);
-  chips.forEach((c, i) => c.setAttribute('aria-pressed', String(PRESETS[i] === R)));
-  place.classList.toggle('on', !PRESETS.includes(R));
-  drawWord(null);
-  drawNote();
-  paint(false);
+  // ---- begin: the first word at its root, or where the address says (?word=2&root=süt&step=3) --------------------
+  const first = Math.max(0, Math.min(WORDS.length - 1, (parseInt(params.get('word'), 10) || 1) - 1));
+  W = WORDS[first];
+  const asked = params.get('root') || '';
+  setWord(first, W.known.get(fold(asked)) || typed(asked), parseInt(params.get('step'), 10), true);
   requestAnimationFrame(() => requestAnimationFrame(() => html.classList.add('ready')));
 })();
 </script>

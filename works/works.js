@@ -60,7 +60,7 @@ window.Works = (() => {
     },
     {
       n: 13, title: 'Turkish, suffix by suffix', date: '2026-11-13', medium: 'Interactive type',
-      about: 'One Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; change the root and every suffix changes its vowels to match.',
+      about: 'A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.',
     },
   ];
 
