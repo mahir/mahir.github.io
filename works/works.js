@@ -50,6 +50,14 @@ window.Works = (() => {
       n: 10, title: 'The S&P 500, by weight', date: '2026-11-09', medium: 'Interactive canvas chart and SEC filing data',
       about: 'Every company’s share of the S&P 500 from 1995 to 2026, stacked by rank: the twenty largest drawn one by one as they rise and fall, with all 500 a click away.',
     },
+    {
+      n: 11, title: 'A piano, tuned by ear', date: '2026-11-11', medium: 'Interactive WebGL and Web Audio',
+      about: 'One octave of a grand piano’s strings, each a little flat, tuned in the tuner’s own order: turn the lever on a pin until the beat between two notes slows to the right pace, then move to the next string.',
+    },
+    {
+      n: 12, title: 'Ebru, sheet by sheet', date: '2026-11-12', medium: 'Interactive WebGL',
+      about: 'A marbler’s tray seen from above: drop the colours, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
