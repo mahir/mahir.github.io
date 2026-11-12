@@ -889,7 +889,7 @@ void main(){
     halt(); clearTray();
     runNow(recipe(CLASSICS[i], rng(seed), +q.get('upto') || 99)); made = CLASSICS[i].name;
   }
-  if (bare) atOnce(+q.get('classic') || 0, +q.get('seed') || 7);
+  if (bare) atOnce(q.has('classic') ? +q.get('classic') : 1, +q.get('seed') || 21);   // og.jpg is plain ?bare
   else if (calm) runNow(ground());
   else auto = ground();
   setBusy(false);

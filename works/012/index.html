@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://mahiryavuz.com/works/012/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A marbling tray seen from above: indigo, ochre, red and white paint combed into feathered rows on the water">
+<meta property="og:image:alt" content="A marbling tray seen from above: turquoise, ochre, indigo and white paint drawn into rows of spirals on the water">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@mahir_nyc">
 <!-- gen:ld -->
@@ -365,6 +365,9 @@
     .nav .label { flex-basis: 100%; font-size: .7rem; }
     /* the tag goes up beside the way home, and leaves the bench to the tray */
     .demo { position: fixed; z-index: 5; top: max(13px, env(safe-area-inset-top)); right: 16px; }
+    /* the nav lies over the tag (the dock is a lower layer), so only its link takes taps */
+    .nav { pointer-events: none; }
+    .back { pointer-events: auto; }
     .bench { grid-template: "hint hint" auto "pigs pigs" auto "work work" auto "skim main" auto / auto minmax(0, 1fr); gap: 10px 16px; }
     .hint { font-size: 1rem; }
     .pigs { justify-content: space-between; }
@@ -396,7 +399,7 @@
           <circle id="cDrop" r="7"/>
           <circle id="cAwl" r="3.4"/>
         </svg>
-        <noscript><img class="still" src="og.jpg" alt="A marbling tray seen from above, its colours combed into feathered rows"></noscript>
+        <noscript><img class="still" src="og.jpg" alt="A marbling tray seen from above, its colours drawn into rows of spirals"></noscript>
       </div>
     </div>
   </main>
