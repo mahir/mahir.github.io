@@ -339,7 +339,7 @@
   })();
 </script>
 <style>
-  /* Who Mahir is first, then the experiment on view today, every experiment, and the ways to reach him, his talks and press.
+  /* Who Mahir is first, then the experiment on view today, the newest experiments (all of them on request), and the ways to reach him, his talks and press.
      At night, the same ground, type and accent as No. 001. */
   :root {
     --bg: #06070b;
@@ -455,8 +455,10 @@
   .row dt { color: var(--faint); }
   .row dd { margin: 0; display: flex; flex-wrap: wrap; column-gap: 1.5rem; }
   .row dd > * { padding: .45rem 0; }
-  footer dd a, a.more { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
-  footer dd a:hover, footer dd a:focus-visible, a.more:hover, a.more:focus-visible { text-decoration-color: var(--accent); }
+  footer dd a, .more { text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: .45em; transition: text-decoration-color .25s ease; }
+  footer dd a:hover, footer dd a:focus-visible, .more:hover, .more:focus-visible { text-decoration-color: var(--accent); }
+  /* the button that opens the whole list of experiments reads like the link beside Writing, with more room to press */
+  button.more { margin: -.6rem 0; padding: .6rem 0; border: 0; background: none; color: inherit; cursor: pointer; }
   .row dd span { color: var(--dim); }
 
   @media (max-width: 699px) {
@@ -502,7 +504,10 @@
       <!-- /gen:today -->
     </section>
     <section id="experiments" aria-labelledby="experiments-title">
-      <h2 class="label mono" id="experiments-title">Experiments</h2>
+      <div class="head">
+        <h2 class="label mono" id="experiments-title">Experiments</h2>
+        <button class="more mono" id="all" type="button" aria-controls="list" aria-expanded="false" hidden></button>
+      </div>
       <ol class="list" id="list" reversed>
         <!-- gen:works -->
         <li><a href="/works/012/"><span class="n mono">No. 012</span><span class="t">Ebru, sheet by sheet</span><time class="d mono" datetime="2026-11-12">12 Nov 2026</time></a></li>
@@ -587,6 +592,25 @@
     return li;
   }));
   if (!live.length) list.append(el('li', 'empty', 'Nothing up yet.'));
+
+  // The list opens on the three works before today's, which is already on view just above, and a button beside the
+  // heading shows every one, today's included. A link to #experiments (old /works/ links, the 404 page) asks for the
+  // list itself, so it arrives open. Without script every row shows.
+  const SHOWN = 3, all = document.getElementById('all'), rows = [...list.children];
+  if (live.length > SHOWN + 1) {
+    const onView = current && Works.url(current);
+    const first = rows.filter((li) => li.firstChild.getAttribute('href') !== onView).slice(0, SHOWN);
+    const show = (open) => {
+      rows.forEach((li) => { li.hidden = !open && !first.includes(li); });
+      all.setAttribute('aria-expanded', open);
+      all.textContent = open ? 'Show fewer ↑' : `All ${live.length} experiments ↓`;
+    };
+    const asked = () => location.hash === '#experiments';
+    all.addEventListener('click', () => show(all.getAttribute('aria-expanded') !== 'true'));
+    addEventListener('hashchange', () => { if (asked()) show(true); });
+    show(asked());
+    all.hidden = false;
+  }
 
   // ?on=YYYY-MM-DD shows the site as it will be that day; say so, so a preview is never mistaken for the real thing.
   if (new URLSearchParams(location.search).get('on') === day) {

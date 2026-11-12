@@ -4,7 +4,7 @@ The homepage is Mahir's, and features whichever work is up today. Every work is 
 
 On the site they are called experiments ("Experiments", "Open the experiment"); in the code, these notes and the addresses they are works (`/works/NNN/`, `works.js`), so the pages already out there keep their addresses.
 
-- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then every work that is up, newest first, then his latest three Substack posts, then his profiles elsewhere. The talks, press and lectures are part of the short bio. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
+- `/` opens on Mahir (photo, name, role, short bio), then the work on view today, then the works that are up, newest first (the three before today's, with a button beside the heading that shows them all, today's included; every one is in the HTML, and a link to `/#experiments` arrives with the list open), then his latest three Substack posts, then his profiles elsewhere. The talks, press and lectures are part of the short bio. The page itself is written by hand; `_build.py` fills in the parts between `<!-- gen:… -->` markers.
 - `/works/` only sends old links on to the list on `/` (`/#experiments`). It can become an archive of its own once there are many works.
 - `/works/NNN/` is one work. It can look like anything.
 - `works.js` is the schedule, and the only list of works.
