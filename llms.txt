@@ -6,6 +6,7 @@ Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Se
 
 ## Experiments
 
+- [No. 013 · Turkish, suffix by suffix](https://mahiryavuz.com/works/013/) (13 Nov 2026): A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.
 - [No. 012 · Ebru, sheet by sheet](https://mahiryavuz.com/works/012/) (12 Nov 2026): A marbler’s tray seen from above: drop the colours, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.
 - [No. 011 · A piano, tuned by ear](https://mahiryavuz.com/works/011/) (11 Nov 2026): One octave of a grand piano’s strings, each a little flat, tuned in the tuner’s own order: turn the lever on a pin until the beat between two notes slows to the right pace, then move to the next string.
 - [No. 010 · The S&P 500, by weight](https://mahiryavuz.com/works/010/) (9 Nov 2026): Every company’s share of the S&P 500 from 1995 to 2026, stacked by rank: the twenty largest drawn one by one as they rise and fall, with all 500 a click away.
