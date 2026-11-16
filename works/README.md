@@ -21,6 +21,14 @@ No. 005 draws a year of a company's closing prices, from `works/005/prices.json`
 
 No. 010 draws each company's share of the S&P 500 from `works/010/weights.js`, which `works/010/_weights.py` builds from the holdings the SPDR S&P 500 ETF Trust reports to the SEC (one report a year from 1995 to 2009, two a year to 2019, four a year since). The fund files a new quarter about two months after it ends. To add it, run `python3 works/010/_weights.py` and commit `weights.js`; the page's opening numbers follow the data. Filings are kept in `works/010/_cache/`, which is not committed. Renames and mergers of large companies are listed at the top of the script (`ALIAS`, `SPLIT`, `SHOW`); when a top-20 company changes its name, add it there. The Action does not run this.
 
+## No. 014's streets
+
+No. 014 walks fifteen minutes from one spot in each of twelve cities, over street graphs in `works/014/data/`. `works/014/_streets.py` builds them from OpenStreetMap through the Overpass API: `<city>.json` covers 1.3 km around the start and is what the page opens with, `<city>-wide.json` covers 2.6 km and is loaded when a city is opened, so the start can be dragged. The cities and their start points are listed at the top of the script; the text about each city is in the page itself. Overpass replies are kept in `works/014/_cache/`, which is not committed, and the public Overpass servers are often busy, so the script retries. After the data changes, run `node works/014/_numbers.js`: it writes each city's reach into `index.html`, for readers without scripts. The Action does not run either.
+
+## No. 015's streets
+
+No. 015 puts two of the same twelve cities side by side, coloured by the direction their streets run. `works/015/_shape.py` builds `works/015/data/` from the Overpass replies No. 014's script keeps in `works/014/_cache/` (run `python3 works/014/_streets.py` first if that folder is gone), takes its cities and start points from that script, and writes the table of all twelve into `works/015/index.html`, between the `<!-- rows -->` markers; the page reads its numbers from that table. The "What shows up" paragraphs quote some of those numbers by hand, so read them again after the data changes. The Action does not run it.
+
 ## After a new Substack post
 
 The Writing list is refreshed by hand. Substack refuses GitHub's servers, so the daily Action can't read the feed and keeps the posts already listed. After a post goes up, run `python3 works/_build.py` on your own machine, check the homepage, and commit what it changed (`index.html` and `llms.txt`, and `sitemap.xml` when the post is newer than the latest work).

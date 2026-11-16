@@ -62,6 +62,14 @@ window.Works = (() => {
       n: 13, title: 'Turkish, suffix by suffix', date: '2026-11-13', medium: 'Interactive type',
       about: 'A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.',
     },
+    {
+      n: 14, title: 'Cities, step by step', date: '2026-11-14', medium: 'Interactive canvas and OpenStreetMap data',
+      about: 'Fifteen minutes on foot from one spot in each of twelve cities, drawn at one scale: the streets light up as the walker reaches them, against the ring a straight line would reach; open a city and drag the map to start somewhere else.',
+    },
+    {
+      n: 15, title: 'Cities, two by two', date: '2026-11-15', medium: 'Interactive canvas and OpenStreetMap data',
+      about: 'Two cities side by side at one scale, each street coloured by the compass direction it runs: a grid shows as a single colour and a city whose streets point every way as every colour, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
