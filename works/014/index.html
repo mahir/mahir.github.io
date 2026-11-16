@@ -296,20 +296,20 @@
 <!-- /gen:ld -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;1,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   /* Twelve cities seen from above at night: the streets dim, and lit from the start outward as the walker reaches them. */
   :root {
     --ground: #0a0d13; --ink: #eef1f6; --soft: #9aa5b8; --dim: #8490a4;
     --line: rgba(238, 241, 246, .18); --hot: #ffc247;
-    --sans: 'Barlow', 'Helvetica Neue', system-ui, sans-serif;
-    --cond: 'Barlow Condensed', 'Barlow', 'Arial Narrow', system-ui, sans-serif;
+    --serif: 'Old Standard TT', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --sans: 'Public Sans', 'Helvetica Neue', system-ui, sans-serif;
     --pad: clamp(16px, 3.4vw, 48px);
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
-  body { min-height: 100dvh; color: var(--ink); background: var(--ground); font: 400 16px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+  body { min-height: 100dvh; color: var(--ink); background: var(--ground); font: 400 16px/1.5 var(--sans); font-synthesis: none; -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--hot); color: var(--ground); }
   :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   button { font: inherit; color: inherit; cursor: pointer; }
@@ -319,21 +319,22 @@
   /* the way back to the other works: a pill, with the work's label beside it */
   .nav { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: max(16px, env(safe-area-inset-top)) var(--pad) 0; }
   .back, .pill { color: var(--ink); text-decoration: none; padding: 9px 14px; border: 1px solid var(--line); border-radius: 99px; background: none;
-    font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; transition: border-color .2s, background-color .2s; }
+    font-size: .9rem; font-weight: 500; line-height: 1; white-space: nowrap; transition: border-color .2s, background-color .2s; }
+  .back { font-weight: 600; }
   .back:hover, .pill:hover { border-color: var(--ink); background: rgba(238, 241, 246, .08); }
-  .label { font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  .label { font-size: .9rem; color: var(--soft); }
 
   .head { padding: clamp(28px, 5vw, 64px) var(--pad) clamp(8px, 1.4vw, 16px); display: grid; gap: clamp(14px, 2vw, 24px) clamp(24px, 5vw, 80px); grid-template-columns: minmax(0, auto) minmax(0, 34rem); align-items: end; justify-content: start; }
-  .head h1 { font: 600 clamp(2.6rem, 7.4vw, 5.6rem)/.9 var(--cond); letter-spacing: .005em; text-transform: uppercase; }
-  .head h1 span { display: block; color: var(--hot); }
-  .lede { color: var(--soft); font-size: clamp(.98rem, 1.25vw, 1.1rem); text-wrap: pretty; }
+  .head h1 { font: 400 clamp(2.3rem, 5.4vw, 4.4rem)/1.02 var(--serif); letter-spacing: -.01em; }
+  .head h1 span { display: block; }
+  .lede { color: var(--soft); font-size: clamp(1rem, 1.25vw, 1.1rem); text-wrap: pretty; }
   .lede b { color: var(--ink); font-weight: 500; }
 
   /* the clock: its track is the key to the colours, a band a minute */
   .dock { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px clamp(14px, 2vw, 28px); flex-wrap: wrap;
     padding: 12px var(--pad) 10px; background: var(--ground); box-shadow: 0 10px 14px -4px var(--ground); }
   .play { min-width: 8.6em; text-align: center; }
-  .time { position: relative; flex: 1 1 240px; max-width: 520px; padding: 6px 0 20px; }
+  .time { position: relative; flex: 1 1 240px; max-width: 520px; padding: 6px 0 22px; }
   .ramp { position: relative; height: 8px; border-radius: 2px; overflow: hidden; }
   .ramp i { position: absolute; inset: 0 0 0 0; background: rgba(10, 13, 19, .8); }
   .time input { position: absolute; left: -8px; right: -8px; top: 0; width: calc(100% + 16px); height: 20px; margin: 0; background: none; -webkit-appearance: none; appearance: none; cursor: pointer; }
@@ -341,14 +342,14 @@
   .time input::-moz-range-track { height: 20px; background: none; }
   .time input::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; background: var(--ink); border: 3px solid var(--ground); box-shadow: 0 0 0 1px var(--ink); }
   .time input::-moz-range-thumb { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); border: 3px solid var(--ground); box-shadow: 0 0 0 1px var(--ink); }
-  .ticks { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; font-size: .7rem; line-height: 14px; color: var(--dim); letter-spacing: .06em; }
+  .ticks { position: absolute; left: 0; right: 0; bottom: 0; height: 16px; font-size: .8rem; line-height: 16px; color: var(--dim); font-variant-numeric: tabular-nums; }
   .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
   .ticks span:first-child { transform: none; } .ticks span:last-child { transform: translateX(-100%); }
-  .clock { font: 500 1.5rem/1 var(--cond); font-variant-numeric: tabular-nums; letter-spacing: .02em; min-width: 3.2em; }
-  .clock small { font: 500 .7rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-left: .4em; }
+  .clock { font: 400 1.6rem/1 var(--serif); font-variant-numeric: tabular-nums; min-width: 3.2em; white-space: nowrap; }
+  .clock small { font: 400 .9rem/1 var(--sans); font-variant-numeric: tabular-nums; color: var(--dim); margin-left: .4em; }
   .order { display: flex; gap: 0 22px; flex-wrap: wrap; padding: 10px var(--pad) 0; }
   .tab { padding: 9px 0 7px; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--soft);
-    font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; transition: color .2s, border-color .2s; }
+    font-size: .9rem; font-weight: 500; line-height: 1; transition: color .2s, border-color .2s; }
   .tab:hover { color: var(--ink); }
   .tab[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
 
@@ -362,20 +363,20 @@
   .open { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 50%; background: none; }
   .open:focus-visible { outline-offset: -4px; }
   .cap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 12px; align-items: start; padding-top: 10px; }
-  .city h2 { font: 600 clamp(1.2rem, 1.9vw, 1.6rem)/1.05 var(--cond); letter-spacing: .05em; text-transform: uppercase; transition: color .2s; }
+  .city h2 { font: 400 clamp(1.5rem, 2.1vw, 1.9rem)/1.1 var(--serif); transition: color .2s; }
   .city:hover h2 { color: var(--hot); }
-  .from { color: var(--soft); font-size: .86rem; line-height: 1.3; margin-top: 3px; }
+  .from { color: var(--soft); font: italic 400 1rem/1.25 var(--serif); margin-top: 3px; }
   .reach { grid-column: 2; grid-row: 1 / span 2; text-align: right; line-height: 1; }
-  .reach b { display: block; font: 500 clamp(1.7rem, 2.9vw, 2.5rem)/.9 var(--cond); font-variant-numeric: tabular-nums; }
-  .reach span { display: block; margin-top: 5px; font-size: .78rem; color: var(--soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .since { grid-column: 1 / -1; margin-top: 7px; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+  .reach b { display: block; font: 400 clamp(1.7rem, 2.9vw, 2.5rem)/.9 var(--serif); font-variant-numeric: tabular-nums; }
+  .reach span { display: block; margin-top: 6px; font-size: .8rem; color: var(--soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .since { grid-column: 1 / -1; margin-top: 7px; font-size: .8rem; color: var(--dim); }
   .js .city .note { display: none; }
   .note { grid-column: 1 / -1; margin-top: 8px; color: var(--soft); font-size: .9rem; }
   .failed .dot { display: none; }
-  .failed .map::after { content: 'The map did not load.'; position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); font-size: .85rem; }
+  .failed .map::after { content: 'The map did not load.'; position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); font-size: .9rem; }
 
-  .about { max-width: 46rem; padding: 0 var(--pad) max(48px, env(safe-area-inset-bottom)); color: var(--soft); font-size: .92rem; display: grid; gap: .8em; }
-  .about h2 { font: 600 1.05rem/1.2 var(--cond); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+  .about { max-width: 46rem; padding: 0 var(--pad) max(48px, env(safe-area-inset-bottom)); color: var(--soft); font-size: .9rem; display: grid; gap: .8em; }
+  .about h2 { font: 400 1.5rem/1.2 var(--serif); color: var(--ink); margin-top: .4em; }
 
   /* one city, opened: the map can be dragged under the start */
   dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; color: var(--ink); background: var(--ground); overflow: auto; }
@@ -387,17 +388,16 @@
   .f-map .dot { width: 13px; height: 13px; margin: -6.5px; box-shadow: 0 0 0 3px var(--ground); }
   .f-side { display: grid; gap: 14px; align-content: center; min-width: 0; }
   .f-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .f-side h2 { font: 600 clamp(2.2rem, 4.4vw, 3.6rem)/.92 var(--cond); letter-spacing: .02em; text-transform: uppercase; }
-  .f-side .from { font-size: 1rem; margin: 0; }
+  .f-side h2 { font: 400 clamp(2.3rem, 4.4vw, 3.6rem)/1 var(--serif); letter-spacing: -.01em; }
+  .f-side .from { font-size: 1.25rem; margin: 0; }
   .f-reach { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-  .f-reach b { font: 500 clamp(3.4rem, 7vw, 5.4rem)/.82 var(--cond); font-variant-numeric: tabular-nums; color: var(--hot); min-width: 2.1ch; }
-  .f-reach span { color: var(--soft); font-size: .95rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
-  .f-side .note { margin: 0; font-size: .98rem; text-wrap: pretty; }
+  .f-reach b { font: 400 clamp(3.4rem, 7vw, 5.4rem)/.82 var(--serif); font-variant-numeric: tabular-nums; color: var(--hot); min-width: 2.1ch; }
+  .f-reach span { color: var(--soft); font-size: 1rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+  .f-side .note { margin: 0; font-size: 1rem; text-wrap: pretty; }
   .f-side .since { margin: 0; }
-  .hint { color: var(--ink); font-size: .92rem; }
+  .hint { color: var(--ink); font-size: .9rem; }
   .f-side .dock { position: static; padding: 6px 0 0; background: none; box-shadow: none; }
   .f-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 4px; }
-  .f-nav .tab { letter-spacing: .12em; }
   [hidden] { display: none !important; }
 
   @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
@@ -415,7 +415,7 @@
     .dock { gap: 6px 14px; padding-top: 10px; }
     .time { order: -1; flex: 1 1 100%; max-width: none; }
     .play { min-width: 0; padding: 8px 12px; }
-    .clock { min-width: 0; font-size: 1.3rem; }
+    .clock { min-width: 0; font-size: 1.4rem; }
   }
 
   /* without scripts: the cities as a list, with the numbers the page had when it was built */
@@ -426,11 +426,11 @@
   /* ?bare: only the maps, at the end of the walk, for the share image */
   .bare .nav, .bare .head, .bare .dock, .bare .order, .bare .about, .bare .from, .bare .since, .bare .reach span { display: none; }
   .bare body { display: grid; align-content: center; }
-  .bare body::before { content: 'Fifteen minutes on foot'; padding: 0 30px 2px; font: 600 2.1rem/1 var(--cond); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); }
+  .bare body::before { content: 'Fifteen minutes on foot'; padding: 0 30px 2px; font: 400 2.3rem/1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
   .bare .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px 18px; padding: 20px 30px 8px; }
   .bare .cap { padding-top: 6px; align-items: baseline; }
-  .bare .city h2 { font-size: 1.15rem; }
-  .bare .reach b { font-size: 1.15rem; color: var(--hot); }
+  .bare .city h2 { font-size: 1.2rem; }
+  .bare .reach b { font-size: 1.2rem; color: var(--hot); }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>

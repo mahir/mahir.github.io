@@ -57,7 +57,7 @@
       this.key = key; this.city = null; this.drawn = 0;
       this.mapBox = $('map-' + key); this.roseBox = $('rose-' + key);
       this.map = this.mapBox.querySelector('canvas'); this.rose = this.roseBox.querySelector('canvas');
-      this.pick = $('pick-' + key); this.from = $('from-' + key); this.score = $('score-' + key);
+      this.pick = $('pick-' + key); this.name = $('name-' + key); this.from = $('from-' + key); this.score = $('score-' + key);
     }
     measure() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -79,7 +79,7 @@
         const d = this.dpr, x = 2 * d, y = s - 5 * d;
         ctx.beginPath(); ctx.moveTo(x, y - 4 * d); ctx.lineTo(x, y); ctx.lineTo(x + 500 * k, y); ctx.lineTo(x + 500 * k, y - 4 * d);
         ctx.strokeStyle = 'rgba(154,165,184,.9)'; ctx.stroke();
-        ctx.fillStyle = 'rgba(154,165,184,1)'; ctx.font = `500 ${10.5 * d}px Barlow, system-ui, sans-serif`; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = 'rgba(154,165,184,1)'; ctx.font = `500 ${10.5 * d}px 'Public Sans', system-ui, sans-serif`; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
         ctx.fillText('500 m', x + 5 * d, y - 6 * d);
       }
       this.picked = pick != null; this.drawn = upto;
@@ -123,7 +123,7 @@
         ctx.beginPath(); ctx.moveTo(h - rim * Math.cos(a), h - rim * Math.sin(a)); ctx.lineTo(h + rim * Math.cos(a), h + rim * Math.sin(a));
         ctx.lineWidth = d; ctx.strokeStyle = 'rgba(238,241,246,.85)'; ctx.stroke();
       }
-      ctx.fillStyle = 'rgba(154,165,184,1)'; ctx.font = `600 ${10 * d}px Barlow, system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(154,165,184,1)'; ctx.font = `600 ${10 * d}px 'Public Sans', system-ui, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText('N', h, 7 * d);
     }
   }
@@ -248,7 +248,7 @@
     sides.a.city = a; sides.b.city = b; pick = null;
     for (const side of both) {
       const c = side.city;
-      side.pick.value = c.slug; side.from.textContent = c.place; side.score.textContent = c.s.grid + '%'; side.drawn = -1;
+      side.pick.value = c.slug; if (side.name) side.name.textContent = c.name; side.from.textContent = c.place; side.score.textContent = c.s.grid + '%'; side.drawn = -1;
       side.mapBox.setAttribute('aria-label', `Street map of ${c.name}, 3 km across, each street coloured by its direction`);
       side.roseBox.setAttribute('aria-label', `Compass of street directions in ${c.name}: ${c.s.grid}% of street runs along its two main directions`);
     }
@@ -264,6 +264,8 @@
   const fromHash = () => { const [a, b] = location.hash.slice(1).split('-').map((s) => bySlug[s]); return a && b && a !== b ? [a, b] : null; };
   addEventListener('hashchange', () => { const p = fromHash(); if (p && (p[0] !== sides.a.city || p[1] !== sides.b.city)) set(p[0], p[1], true); });
 
+  // the canvas labels are drawn in Public Sans: draw again once it has come
+  if (document.fonts) Promise.all([document.fonts.load("500 10px 'Public Sans'"), document.fonts.load("600 10px 'Public Sans'")]).then(() => { for (const side of both) side.drawn = -1; if (!playing) paint(); }, () => {});
   const measure = () => { for (const side of both) side.measure(); if (!playing) paint(); };
   new ResizeObserver(measure).observe($('duel'));
   for (const side of both) side.measure();

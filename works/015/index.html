@@ -296,20 +296,20 @@
 <!-- /gen:ld -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;1,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   /* Two street maps on a dark table, every street in the colour of the direction it runs. A sibling of No. 014. */
   :root {
     --ground: #0a0d13; --ink: #eef1f6; --soft: #9aa5b8; --dim: #8490a4;
     --line: rgba(238, 241, 246, .18); --hot: #ffc247;
-    --sans: 'Barlow', 'Helvetica Neue', system-ui, sans-serif;
-    --cond: 'Barlow Condensed', 'Barlow', 'Arial Narrow', system-ui, sans-serif;
+    --serif: 'Old Standard TT', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --sans: 'Public Sans', 'Helvetica Neue', system-ui, sans-serif;
     --pad: clamp(16px, 3.4vw, 48px);
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
-  body { min-height: 100dvh; color: var(--ink); background: var(--ground); font: 400 16px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+  body { min-height: 100dvh; color: var(--ink); background: var(--ground); font: 400 16px/1.5 var(--sans); font-synthesis: none; -webkit-font-smoothing: antialiased; }
   ::selection { background: var(--hot); color: var(--ground); }
   :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   button, select { font: inherit; color: inherit; cursor: pointer; }
@@ -319,19 +319,20 @@
   /* the way back to the other works: a pill, with the work's label beside it, then the pairs to try */
   .nav { display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; padding: max(16px, env(safe-area-inset-top)) var(--pad) 0; }
   .back, .pill { color: var(--ink); text-decoration: none; padding: 9px 14px; border: 1px solid var(--line); border-radius: 99px; background: none;
-    font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; transition: border-color .2s, background-color .2s; }
+    font-size: .85rem; font-weight: 500; line-height: 1; white-space: nowrap; transition: border-color .2s, background-color .2s; }
+  .back { font-weight: 600; }
   .back:hover, .pill:hover { border-color: var(--ink); background: rgba(238, 241, 246, .08); }
-  .label { font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  .label { font-size: .85rem; color: var(--soft); }
 
   .head { padding: clamp(24px, 4vw, 52px) var(--pad) 0; display: grid; gap: clamp(12px, 2vw, 24px) clamp(24px, 5vw, 80px); grid-template-columns: minmax(0, auto) minmax(0, 36rem); align-items: end; justify-content: start; }
-  .head h1 { font: 600 clamp(2.4rem, 6.4vw, 4.8rem)/.9 var(--cond); letter-spacing: .005em; text-transform: uppercase; }
-  .head h1 span { display: block; color: var(--hot); }
+  .head h1 { font: 400 clamp(2.3rem, 5.4vw, 4.4rem)/1.02 var(--serif); letter-spacing: -.01em; }
+  .head h1 span { display: block; }
   .lede { color: var(--soft); font-size: clamp(.98rem, 1.25vw, 1.1rem); text-wrap: pretty; }
   .lede b { color: var(--ink); font-weight: 500; }
 
   .pairs { display: flex; flex-wrap: wrap; gap: 0 22px; padding: clamp(14px, 2vw, 22px) var(--pad) 0; }
   .tab { padding: 9px 0 7px; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--soft);
-    font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; transition: color .2s, border-color .2s; }
+    font-size: .9rem; font-weight: 500; line-height: 1; white-space: nowrap; transition: color .2s, border-color .2s; }
   .tab:hover { color: var(--ink); }
   .tab[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
 
@@ -341,15 +342,21 @@
     padding: clamp(18px, 3vw, 36px) var(--pad) 0; }
   .pick { display: grid; gap: 2px; align-content: start; min-width: 0; padding-bottom: 10px; }
   .pick.a { grid-area: pa; } .pick.b { grid-area: pb; justify-items: end; text-align: right; }
-  .pick select { max-width: 100%; padding: 0 1.1em 0 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; -webkit-appearance: none; appearance: none;
-    font: 600 clamp(1.7rem, 4.6vw, 3.4rem)/1.05 var(--cond); letter-spacing: .03em; text-transform: uppercase;
+  /* the big name is drawn; the real select lies over it, unseen, so its list opens at the system's own size */
+  .choose { position: relative; justify-self: start; max-width: 100%; }
+  .pick.b .choose { justify-self: end; }
+  .name { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 .9em 0 0; border-bottom: 1px solid var(--line);
+    font: 400 clamp(2rem, 4.6vw, 3.4rem)/1.15 var(--serif); letter-spacing: -.01em; transition: border-color .2s;
     background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
-    background-size: .22em .22em, .22em .22em; background-position: calc(100% - .5em) 58%, calc(100% - .28em) 58%; background-repeat: no-repeat; }
-  .pick select:hover { border-color: var(--ink); }
-  .pick option { font: 400 1rem var(--sans); color: #111; text-transform: none; }
-  .from { color: var(--soft); font-size: .9rem; line-height: 1.3; }
-  .score { margin-top: 4px; color: var(--soft); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
-  .score b { margin-right: .15em; font: 500 clamp(1.5rem, 2.6vw, 2.2rem)/1 var(--cond); letter-spacing: .02em; color: var(--hot); font-variant-numeric: tabular-nums; }
+    background-size: .18em .18em, .18em .18em; background-position: calc(100% - .38em) 58%, calc(100% - .2em) 58%; background-repeat: no-repeat; }
+  .choose select { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; font-size: 16px; cursor: pointer; }
+  .choose:hover .name { border-color: var(--ink); }
+  .choose:focus-within { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .choose:has(select) { outline: none; }
+  .choose:has(select:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .from { color: var(--soft); font: italic 400 1.05rem/1.3 var(--serif); margin-top: 4px; }
+  .score { margin-top: 4px; color: var(--soft); font-size: .85rem; }
+  .score b { margin-right: .2em; font: 400 clamp(1.6rem, 2.6vw, 2.2rem)/1 var(--serif); color: var(--hot); font-variant-numeric: tabular-nums; }
   .btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .map { position: relative; aspect-ratio: 1; width: min(100%, 68dvh); cursor: crosshair; }
   .map.a { grid-area: ma; justify-self: end; } .map.b { grid-area: mb; justify-self: start; }
@@ -357,34 +364,34 @@
   .rose { position: relative; aspect-ratio: 1; align-self: end; touch-action: none; cursor: crosshair; }
   .rose.a { grid-area: ra; } .rose.b { grid-area: rb; }
   .ctl { grid-area: ct; display: grid; gap: 12px; justify-items: center; align-content: start; padding-top: 12px; text-align: center; }
-  .read { color: var(--soft); font-size: .86rem; line-height: 1.35; min-height: 2.7em; max-width: 26em; font-variant-numeric: tabular-nums; }
+  .read { color: var(--soft); font-size: .9rem; line-height: 1.35; min-height: 2.7em; max-width: 26em; font-variant-numeric: tabular-nums; }
   .read b { color: var(--ink); font-weight: 500; }
 
   /* the numbers, city against city */
   .tape { display: grid; gap: clamp(14px, 2vw, 22px); max-width: 1100px; margin: 0 auto; padding: clamp(28px, 4vw, 56px) var(--pad) 0; }
   .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(8.5em, 15em) minmax(0, 1fr); gap: 0 clamp(10px, 2vw, 28px); align-items: center; }
   .what { text-align: center; }
-  .what b { display: block; font: 600 clamp(.95rem, 1.5vw, 1.2rem)/1.1 var(--cond); letter-spacing: .1em; text-transform: uppercase; }
-  .what span { display: block; margin-top: 3px; color: var(--dim); font-size: .76rem; line-height: 1.3; text-wrap: balance; }
+  .what b { display: block; font: 500 clamp(.95rem, 1.4vw, 1.1rem)/1.2 var(--sans); }
+  .what span { display: block; margin-top: 3px; color: var(--dim); font-size: .8rem; line-height: 1.3; text-wrap: balance; }
   .val { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .val.a { flex-direction: row-reverse; }
-  .val b { flex: none; min-width: 2.7em; font: 500 clamp(1.5rem, 3.2vw, 2.4rem)/1 var(--cond); font-variant-numeric: tabular-nums; }
+  .val b { flex: none; min-width: 2.7em; font: 400 clamp(1.6rem, 3.2vw, 2.4rem)/1 var(--serif); font-variant-numeric: tabular-nums; }
   .val.a b { text-align: left; } .val.b b { text-align: right; }
-  .val b small { font: 500 .45em/1 var(--sans); color: var(--soft); margin-left: .25em; letter-spacing: .04em; }
+  .val b small { font: 400 max(.8rem, .4em)/1 var(--sans); color: var(--soft); margin-left: .25em; }
   .bar { flex: 1 1 0; height: 6px; min-width: 0; display: flex; background: rgba(238, 241, 246, .08); border-radius: 1px; }
   .val.a .bar { justify-content: flex-end; }
   .bar i { display: block; height: 100%; background: var(--ink); border-radius: 1px; transition: width .6s cubic-bezier(.16, 1, .3, 1); }
 
   .about { max-width: 1100px; margin: 0 auto; padding: clamp(36px, 5vw, 72px) var(--pad) max(48px, env(safe-area-inset-bottom)); color: var(--soft); font-size: .92rem; display: grid; gap: .8em; }
   .about p { max-width: 46rem; }
-  .about h2 { font: 600 1.05rem/1.2 var(--cond); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin-top: .8em; }
+  .about h2 { font: 400 1.4rem/1.2 var(--serif); color: var(--ink); margin-top: .8em; }
   .scroll { overflow-x: auto; margin: .4em 0; }
   table { border-collapse: collapse; width: 100%; min-width: 640px; font-variant-numeric: tabular-nums; }
   th, td { padding: 7px 14px 7px 0; text-align: right; border-bottom: 1px solid rgba(238, 241, 246, .1); font-weight: 400; white-space: nowrap; }
-  thead th { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); vertical-align: bottom; white-space: normal; }
+  thead th { font-size: .8rem; color: var(--dim); vertical-align: bottom; white-space: normal; }
   th:first-child { text-align: left; }
-  tbody th { color: var(--ink); font: 600 1rem/1.2 var(--cond); letter-spacing: .06em; text-transform: uppercase; }
-  tbody th small { display: block; font: 400 .78rem/1.3 var(--sans); letter-spacing: 0; text-transform: none; color: var(--dim); }
+  tbody th { color: var(--ink); font: 400 1.15rem/1.2 var(--serif); }
+  tbody th small { display: block; font: 400 .8rem/1.3 var(--sans); color: var(--dim); }
   tbody td { color: var(--ink); }
   tr.on th, tr.on td { border-bottom-color: var(--hot); }
   tr.on th { color: var(--hot); }
@@ -411,10 +418,10 @@
   /* ?bare: the two maps and their compasses, for the share image */
   .bare .nav, .bare .head, .bare .pairs, .bare .tape, .bare .about, .bare .ctl, .bare .from { display: none; }
   .bare body { display: grid; align-content: center; }
-  .bare body::before { content: 'Which way the streets run'; padding: 0 34px 10px; font: 600 1.25rem/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--hot); }
+  .bare body::before { content: 'Which way the streets run'; padding: 0 34px 10px; font: 400 1.6rem/1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
   .bare .duel { padding: 0 34px; gap: 0 14px; grid-template-columns: minmax(0, 1fr) 150px 150px minmax(0, 1fr); grid-template-areas: 'pa pa pb pb' 'ma ra rb mb'; grid-template-rows: auto auto; }
   .bare .rose { align-self: center; }
-  .bare .pick select { font-size: 2.5rem; border: 0; background-image: none; padding: 0; }
+  .bare .name { font-size: 2.6rem; border: 0; background-image: none; padding: 0; }
   .bare .map { width: 100%; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -442,8 +449,8 @@
   </div>
 
   <main class="duel" id="duel">
-    <div class="pick a"><select id="pick-a" aria-label="City on the left"></select><p class="from" id="from-a"></p><p class="score"><b id="score-a"></b> on the grid</p></div>
-    <div class="pick b"><select id="pick-b" aria-label="City on the right"></select><p class="from" id="from-b"></p><p class="score"><b id="score-b"></b> on the grid</p></div>
+    <div class="pick a"><div class="choose"><span class="name" id="name-a" aria-hidden="true"></span><select id="pick-a" aria-label="City on the left"></select></div><p class="from" id="from-a"></p><p class="score"><b id="score-a"></b> on the grid</p></div>
+    <div class="pick b"><div class="choose"><span class="name" id="name-b" aria-hidden="true"></span><select id="pick-b" aria-label="City on the right"></select></div><p class="from" id="from-b"></p><p class="score"><b id="score-b"></b> on the grid</p></div>
     <div class="map a" id="map-a" role="img"><canvas></canvas></div>
     <div class="map b" id="map-b" role="img"><canvas></canvas></div>
     <div class="rose a" id="rose-a" role="img"><canvas></canvas></div>
