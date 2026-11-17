@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<title>No. 017 · contact sheet (build only)</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Red+Hat+Mono:wght@300;400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Build only: every card at once, in wall order, 9 across at 240px, to judge the rag and the palette together. */
+  body { width: 2168px; }
+  .sheet { display: grid; grid-template-columns: repeat(9, 240px); gap: 1px; }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+<script>
+(async () => {
+  const html = await (await fetch('index.html', { cache: 'no-store' })).text();
+  const tiles = [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('.wall .tile')];
+  await Promise.all(['400 40px "EB Garamond"', 'italic 400 40px "EB Garamond"', '300 10px "Red Hat Mono"'].map(f => document.fonts.load(f, tiles.map(t => t.textContent).join(' '))));
+  for (const t of tiles) document.getElementById('sheet').append(document.importNode(t.querySelector('.card'), true));
+})();
+</script>
+</body>
+</html>

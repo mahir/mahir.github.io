@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<title>No. 017 · fit (build only)</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Red+Hat+Mono:wght@300;400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style> #host { position: absolute; left: 0; top: 0; width: 1080px; } </style>
+</head>
+<body>
+<!-- Build only (_cards.js opens it headless). For every card in index.html it chooses a size, in cqw, and the line breaks:
+     the largest size at which the saying stays above the footer with a good rag. The generator bakes both into the page. -->
+<div id="host"></div>
+<pre id="out"></pre>
+<script>
+(async () => {
+  const out = document.getElementById('out');
+  try {
+    const q = new URLSearchParams(location.search);
+    const MAX = parseFloat(q.get('max') || 25), SAFETY = parseFloat(q.get('safety') || 0.985), BOTTOM = 107;
+    const RANGE = 0.88;   // how far below the largest fitting size to look for a better rag
+    const html = await (await fetch('index.html', { cache: 'no-store' })).text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const tiles = [...doc.querySelectorAll('.wall .tile')];
+    const text = tiles.map(t => t.textContent).join(' ');
+    await Promise.all(['400 50px "EB Garamond"', 'italic 400 50px "EB Garamond"', '300 20px "Red Hat Mono"'].map(f => document.fonts.load(f, text)));
+    await document.fonts.ready;
+    const fonts = document.fonts.check('400 50px "EB Garamond"', 'Aa') && document.fonts.check('italic 400 50px "EB Garamond"', 'Aa');
+    const host = document.getElementById('host');
+    const sizes = {};
+
+    for (const tile of tiles) {
+      const card = document.importNode(tile.querySelector('.card'), true);
+      host.replaceChildren(card);
+      const p = card.querySelector('.q p');
+      // undo any baked lines: the composition is chosen afresh every run
+      const lns = [...p.querySelectorAll('.ln')];
+      if (lns.length) p.innerHTML = lns.map(l => l.innerHTML).join(' ');
+
+      // the words, as ranges over the text nodes, each knowing whether it is (partly) italic
+      const nodes = [], walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+      for (let n; (n = walker.nextNode());) nodes.push(n);
+      let flat = '', map = [];
+      for (const n of nodes) for (let i = 0; i < n.data.length; i++) { flat += n.data[i]; map.push([n, i]); }
+      const words = [];
+      for (const m of flat.matchAll(/\S+/g)) {
+        const [sn, so] = map[m.index], [en, eo] = map[m.index + m[0].length - 1];
+        const r = document.createRange(); r.setStart(sn, so); r.setEnd(en, eo + 1);
+        let it = false;
+        for (let k = m.index; k < m.index + m[0].length; k++) if (map[k][0].parentElement.closest('em')) it = true;
+        words.push({ r, it, text: m[0] });
+      }
+
+      const layout = (fs, mode) => {
+        card.style.setProperty('--fs', fs);
+        p.style.textWrap = mode;
+        const unit = card.getBoundingClientRect().width / 100, top = card.getBoundingClientRect().top;
+        const fits = (p.getBoundingClientRect().bottom - top) / unit <= BOTTOM && p.scrollWidth <= p.clientWidth + 0.5;
+        const left = p.getBoundingClientRect().left, M = p.clientWidth;
+        const lines = [];
+        let lastTop = null;
+        for (const w of words) {
+          const rects = [...w.r.getClientRects()].filter(x => x.width > 0);
+          const a = rects[0], b = rects.at(-1);
+          if (lastTop === null || Math.abs(a.top - lastTop) > 2) { lines.push({ n: 0, w: 0, it: false, words: [] }); lastTop = a.top; }
+          const ln = lines.at(-1);
+          ln.n++; ln.w = b.right - left; ln.words.push(w);
+          if (w.it) ln.it = true;
+        }
+        return { fs, mode, fits: fits && lines.every(l => l.w <= M + 0.5), lines, M };
+      };
+
+      // How good is the rag? Hard rules make a layout fail; their shortfalls also make a score for when nothing passes.
+      const judge = ({ lines, M }) => {
+        const L = Math.max(...lines.map(l => l.w));
+        let pen = 0, articles = 0; const why = [];
+        lines.forEach((l, i) => {
+          const last = i === lines.length - 1;
+          if (!last && lines.length > 1 && l.w < 0.6 * L) { pen += (0.6 * L - l.w) / M; why.push('short line'); }
+          if (!last && l.n === 1 && l.w < 0.45 * M) { pen += 1 + (0.45 * M - l.w) / M; why.push('lone word'); }
+          if (last && lines.length > 1 && l.n === 1 && l.w < 0.3 * M) { pen += 0.6 + (0.3 * M - l.w) / M; why.push('widow'); }
+          // an article left hanging at the end of a line
+          if (!last && /^(a|an|the)$/i.test(l.words.at(-1).text.replace(/[“”‘’]/g, ''))) articles++;
+        });
+        const itLines = lines.filter(l => l.it).length;
+        const broken = itLines > 1;
+        return { pass: !why.length, pen, why: why.join(', '), broken, articles };
+      };
+
+      // the largest size that fits at all, with ordinary wrapping
+      let lo = 3, hi = MAX;
+      if (layout(hi, 'wrap').fits) lo = hi;
+      else while (hi - lo > 0.005) { const mid = (lo + hi) / 2; if (layout(mid, 'wrap').fits) lo = mid; else hi = mid; }
+      const top = lo;
+
+      // every candidate down to 88% of it, in two wrapping styles
+      const cands = [];
+      for (let fs = top; fs >= top * RANGE - 1e-9; fs *= 0.996) {
+        for (const mode of ['wrap', 'pretty']) {
+          const l = layout(fs, mode);
+          if (!l.fits) continue;
+          cands.push({ ...l, ...judge(l) });
+        }
+      }
+      const passing = cands.filter(c => c.pass).sort((a, b) => b.fs - a.fs);
+      let pick;
+      if (passing.length) {
+        // softer wishes, each worth a few percent of size: no article left at a line's end, the italic phrase whole
+        const worth = c => c.fs / passing[0].fs - 0.035 * c.articles - 0.025 * c.broken;
+        pick = passing.slice().sort((a, b) => worth(b) - worth(a))[0];
+      } else {
+        pick = cands.slice().sort((a, b) => (a.pen + 0.035 * a.articles + 2 * (1 - a.fs / top)) - (b.pen + 0.035 * b.articles + 2 * (1 - b.fs / top)))[0];
+      }
+      sizes[tile.id] = {
+        fs: Math.floor(pick.fs * SAFETY * 100) / 100,
+        breaks: pick.lines.map(l => l.n),
+        pass: pick.pass, why: pick.why, broken: pick.broken,
+        top: Math.round(top * 100) / 100,
+        lines: pick.lines.map(l => l.words.map(w => w.text).join(' ')),
+      };
+    }
+    out.textContent = JSON.stringify({ fonts, sizes });
+  } catch (e) {
+    out.textContent = JSON.stringify({ error: String(e && e.stack || e) });
+  }
+})();
+</script>
+</body>
+</html>

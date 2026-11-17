@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<title>No. 017 · share image (build only)</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Red+Hat+Mono:wght@300;400&display=block" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Build only: og.jpg is a screenshot of this page at 1200 x 630. Ten real cards: the wall's first card (deep lapis, the reference blue) at top left, whole; then the shortest saying of each other theme. The right edge crops. */
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: var(--ground); }
+  .og { position: absolute; left: 0; top: 0; width: 1264px; display: grid; grid-template-columns: repeat(5, 252px); gap: 1px; }
+</style>
+</head>
+<body>
+<div class="og" id="og"></div>
+<script>
+(async () => {
+  const html = await (await fetch('index.html', { cache: 'no-store' })).text();
+  const tiles = [...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('.wall .tile')];
+  const words = t => t.querySelector('.q').textContent.trim().split(/\s+/).length;
+  const lead = tiles[0];
+  const pick = new Set([lead]);
+  for (const theme of new Set(tiles.map(t => t.dataset.theme))) if (theme !== lead.dataset.theme) pick.add(tiles.filter(t => t.dataset.theme === theme).sort((a, b) => words(a) - words(b))[0]);
+  pick.add(tiles.filter(t => !pick.has(t)).sort((a, b) => words(a) - words(b))[0]);
+  const og = document.getElementById('og');
+  const text = tiles.map(t => t.textContent).join(' ');
+  await Promise.all(['400 40px "EB Garamond"', 'italic 400 40px "EB Garamond"', '300 10px "Red Hat Mono"'].map(f => document.fonts.load(f, text)));
+  for (const t of tiles.filter(t => pick.has(t))) og.append(document.importNode(t.querySelector('.card'), true));
+  await document.fonts.ready;
+})();
+</script>
+</body>
+</html>

@@ -74,6 +74,10 @@ window.Works = (() => {
       n: 16, title: 'A coffee, ordered by color', date: '2026-11-16', medium: 'Interactive WebGL',
       about: 'A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colors shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.',
     },
+    {
+      n: 17, title: 'Sufi sayings, card by card', date: '2026-11-17', medium: 'Interactive type and color',
+      about: 'Forty-five sayings of Sufi poets and teachers, from Rabia to Yunus Emre, each set large on a card in the color of its theme, nine themes from love to loss; open a card for its source and its original words, recolor it, or save it as a picture.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
