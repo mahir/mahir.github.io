@@ -6,6 +6,7 @@ Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Se
 
 ## Experiments
 
+- [No. 016 · A coffee, ordered by colour](https://mahiryavuz.com/works/016/) (16 Nov 2026): A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colours shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.
 - [No. 015 · Cities, two by two](https://mahiryavuz.com/works/015/) (15 Nov 2026): Two cities side by side at one scale, each street coloured by the compass direction it runs: a grid shows as a single colour and a city whose streets point every way as every colour, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.
 - [No. 014 · Cities, step by step](https://mahiryavuz.com/works/014/) (14 Nov 2026): Fifteen minutes on foot from one spot in each of twelve cities, drawn at one scale: the streets light up as the walker reaches them, against the ring a straight line would reach; open a city and drag the map to start somewhere else.
 - [No. 013 · Turkish, suffix by suffix](https://mahiryavuz.com/works/013/) (13 Nov 2026): A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.

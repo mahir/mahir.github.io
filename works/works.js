@@ -70,6 +70,10 @@ window.Works = (() => {
       n: 15, title: 'Cities, two by two', date: '2026-11-15', medium: 'Interactive canvas and OpenStreetMap data',
       about: 'Two cities side by side at one scale, each street coloured by the compass direction it runs: a grid shows as a single colour and a city whose streets point every way as every colour, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.',
     },
+    {
+      n: 16, title: 'A coffee, ordered by colour', date: '2026-11-16', medium: 'Interactive WebGL',
+      about: 'A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colours shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
