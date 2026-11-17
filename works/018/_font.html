@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>No. 018 · lettering specimen</title>
+<style>
+  html, body { margin: 0; background: #e8e7e1; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+import { strokeText, GLYPHS } from './font.js';
+const W = 1400, H = 1500, dpr = Math.min(2.5, devicePixelRatio || 1);
+const c = document.getElementById('c');
+c.width = W * dpr; c.height = H * dpr; c.style.width = W + 'px'; c.style.height = H + 'px';
+const g = c.getContext('2d');
+g.scale(dpr, dpr);
+g.fillStyle = '#e8e7e1'; g.fillRect(0, 0, W, H);
+g.strokeStyle = '#1b1a18'; g.lineCap = 'round'; g.lineJoin = 'round';
+
+function text(str, x, y, size, lw, spacing) {
+  const t = strokeText(str, { spacing });
+  g.lineWidth = lw;
+  g.beginPath();
+  for (const p of t.paths) {
+    g.moveTo(x + p[0] * size, y - p[1] * size);
+    for (let i = 2; i < p.length; i += 2) g.lineTo(x + p[i] * size, y - p[i + 1] * size);
+  }
+  g.stroke();
+  return t.width * size;
+}
+
+// big glyph grid with guide lines
+const all = Object.keys(GLYPHS).filter((k) => k !== ' ').slice(+(new URLSearchParams(location.search).get('from') || 0));
+const S = +(new URLSearchParams(location.search).get('s') || 64);
+let x = 30, y = 30 + S;
+for (const ch of all) {
+  const w = GLYPHS[ch].w * S;
+  if (x + w > W - 30) { x = 30; y += S * 1.75; }
+  g.save(); g.strokeStyle = 'rgba(160,60,40,.35)'; g.lineWidth = 0.5;
+  g.beginPath(); g.moveTo(x - 4, y); g.lineTo(x + w + 4, y); g.moveTo(x - 4, y - S); g.lineTo(x + w + 4, y - S);
+  g.moveTo(x - 4, y - S / 2); g.lineTo(x + w + 4, y - S / 2); g.stroke(); g.restore();
+  text(ch, x, y, S, S / 15);
+  x += w + S * 0.42;
+}
+y += 70;
+const lines = [
+  'LUNAR SURVEY LANDER', 'KESTREL  HB-XFP  MK IV  TYPE 14-B', 'LANDS SIX CREW AND A HELICOPTER ON CRATER FLOORS.',
+  'LENGTH 12 400 MM  MASS 38 T  POWER 2 × 340 KW  SCALE 1:120', 'DRG NO. 018-48213  SHEET 1 OF 1  18 NOV 2026',
+  'SQUARE GRASS 0123456789 & ?! (R) 25° #4 A=B', 'MAHIRYAVUZ.COM · NO. 018',
+];
+for (const [size, lw] of [[30, 1.6], [18, 1.2], [12, 0.9], [9, 0.75], [7, 0.6]]) {
+  for (const l of lines.slice(0, size > 20 ? 3 : 7)) {
+    text(l, 30, y, size, lw);
+    y += size * 1.7;
+  }
+  y += 14;
+}
+</script>
+</body>
+</html>

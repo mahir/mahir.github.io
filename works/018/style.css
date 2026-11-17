@@ -1,0 +1,63 @@
+/* No. 018: a drafting sheet fills the window; the page chrome is small and quiet on top */
+:root {
+  --paper: #e8e7e1; --ink: #1b1a18; --soft: #5d5b55; --line: rgba(27, 26, 24, .24);
+  --chip: rgba(236, 235, 229, .9);
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: var(--paper); color: var(--ink); overflow: hidden;
+  font: 400 16px/1.4 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* the desk: two sheets stacked, the top one slides away at the turn */
+.desk { position: fixed; inset: 0; overflow: hidden; background: #d9d8d1; }
+.sheet { position: absolute; left: 0; top: 0; display: block; width: 100%; height: 100%;
+  transform-origin: 30% 100%; will-change: transform; }
+.sheet[hidden] { display: none; }
+.sheet.away { transition: transform .7s cubic-bezier(.55, .06, .68, .19), box-shadow .7s ease-in;
+  transform: translate3d(-108%, 4%, 0) rotate(-5deg); box-shadow: 0 30px 60px -20px rgba(27, 26, 24, .45); }
+.desk img.still { display: block; width: 100%; height: 100%; object-fit: cover; }
+.nojs { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 32rem; margin: 0; padding: 12px 14px;
+  background: var(--chip); border-radius: 3px; font-size: .95rem; }
+
+/* the way back to the other works: a pill, with the work's label beside it */
+.nav { position: fixed; z-index: 4; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left));
+  display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; max-width: calc(100% - 200px); pointer-events: none; }
+.nav > * { pointer-events: auto; }
+.back { color: var(--ink); text-decoration: none; padding: 8px 13px; border: 1px solid var(--line); border-radius: 99px;
+  background: var(--chip); font-size: .7rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(27, 26, 24, .1); transition: border-color .2s; white-space: nowrap; }
+.back:hover { border-color: var(--ink); }
+.nav .label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+  padding: 5px 8px; background: rgba(236, 235, 229, .72); border-radius: 3px; }
+
+/* controls, top right */
+.controls { position: fixed; z-index: 4; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
+  display: flex; gap: 6px; }
+.controls button { appearance: none; cursor: pointer; color: var(--ink); background: var(--chip); border: 1px solid var(--line);
+  border-radius: 99px; padding: 8px 12px; font: 600 .7rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(27, 26, 24, .1); transition: border-color .2s, background-color .2s; -webkit-user-select: none; user-select: none; }
+.controls button:hover { border-color: var(--ink); }
+.controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.back:focus-visible, .controls button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* the hold: a hairline along the foot of the window */
+.hold { position: fixed; z-index: 3; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none; }
+.hold i { display: block; height: 100%; background: rgba(27, 26, 24, .32); transform-origin: 0 0; transform: scaleX(0); }
+
+.bare .nav, .bare .controls, .bare .hold { display: none !important; }
+.still .hold { display: none; }
+
+@media (max-width: 720px) {
+  /* the label goes under the pill, the controls stay top right */
+  .nav { flex-direction: column; align-items: flex-start; max-width: calc(100% - 28px); gap: 6px; }
+  .nav .label { font-size: .7rem; letter-spacing: .1em; padding: 4px 7px; }
+  .controls { gap: 4px; }
+  .controls button { padding: 8px 9px; font-size: .7rem; letter-spacing: .1em; }
+  .controls .png { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet.away { transition: none; }
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
