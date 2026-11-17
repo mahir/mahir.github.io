@@ -16,8 +16,8 @@ What it measures, all inside that circle:
   cross, tee, dead   junctions where four or more streets meet, where three meet, and dead ends,
            as shares of all three. Junctions within 15 m of each other count as one, so a street
            crossing both sides of a divided road is one crossroads, not two.
-  corner   the median length of street between one junction and the next, in metres
-  km       kilometres of street per square kilometre
+  corner   the median length of street between one junction and the next, in meters
+  km       kilometers of street per square kilometer
   rose     the share of street length in each 5 degree band of direction, 36 bands from north round to south
 
 Run from the repository root:   python3 works/015/_shape.py
@@ -28,7 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 spec = importlib.util.spec_from_file_location('streets', os.path.join(HERE, '..', '014', '_streets.py'))
 streets = importlib.util.module_from_spec(spec); spec.loader.exec_module(streets)
 
-R = 1500                      # metres around the start
+R = 1500                      # meters around the start
 EDGE = 40                     # junctions this close to the circle's edge are not counted: the cut makes false dead ends
 NEAR = 15                     # junctions this close together are one junction
 ROADS = {'trunk', 'primary', 'secondary', 'tertiary', 'unclassified', 'residential', 'living_street', 'pedestrian', 'road'}

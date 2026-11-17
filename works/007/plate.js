@@ -6,7 +6,7 @@
   const HOLD = 12;            // seconds a finished plate stays before the next one starts
   const CLEAR = 1.1;          // seconds to wipe it back to bare clay
   const INK_TIME = 8.5;       // seconds of outline
-  const COLOR_TIME = 2.6;     // seconds per colour
+  const COLOR_TIME = 2.6;     // seconds per color
   const GLAZE_TIME = 3.2;
   const STAGES = [['ground', 'Ground'], ['blue', 'Cobalt'], ['turq', 'Turquoise'], ['green', 'Green'], ['red', 'Red']];
 
@@ -41,7 +41,7 @@
     return `rgb(${A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',')})`;
   };
 
-  // A tile of slightly uneven colour: pigment settling thick and thin under the brush.
+  // A tile of slightly uneven color: pigment settling thick and thin under the brush.
   function pigment(hex, light, dark, rand) {
     const c = makeCanvas(512), x = c.getContext('2d');
     x.fillStyle = hex; x.fillRect(0, 0, 512, 512);
@@ -113,7 +113,7 @@
     rctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
-  // The whole plate as it stands once colours up to `done` are on. Anything later is left as reserved clay.
+  // The whole plate as it stands once colors up to `done` are on. Anything later is left as reserved clay.
   function renderStage(done) {
     const P = plate.palette;
     bctx.globalAlpha = 1;
@@ -469,7 +469,7 @@
   const U = {};
   for (const n of ['uVP', 'uModel', 'uSeed', 'uPaint', 'uRelief', 'uEye', 'uBody', 'uGlaze', 'uClear', 'uFloor']) U[n] = gl.getUniformLocation(prog, n);
 
-  // The dish's profile, centre outward over the top and back underneath: radius, height, top of the dish or not.
+  // The dish's profile, center outward over the top and back underneath: radius, height, top of the dish or not.
   const smooth = (e0, e1, x) => { const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); };
   const PROFILE = [];
   const topH = (r) => 0.004 * (1 - r / 0.72) + 0.128 * smooth(0.68, 0.815, r) + 0.03 * smooth(0.8, 1, r);

@@ -3,7 +3,7 @@
 
 For each city in CITIES it takes every way tagged `highway` within 2.6 km of the start point, keeps
 the ones a person can walk along, and writes them as a graph: junctions, and the edges between them
-with their shape. Coordinates are whole metres east and north of the start point. <city>.json covers
+with their shape. Coordinates are whole meters east and north of the start point. <city>.json covers
 1.3 km around the start, enough for the walk from it; <city>-wide.json covers all 2.6 km.
 
 What counts as walkable: streets and paths of every class except motorways, minus anything tagged
@@ -116,7 +116,7 @@ def simplify(pts, tol=1.5):
 
 
 def build(slug, radius, name):
-    """Writes data/<name>.json: the walkable graph within `radius` metres of the city's start point."""
+    """Writes data/<name>.json: the walkable graph within `radius` meters of the city's start point."""
     lat0, lon0 = CITIES[slug]
     kx, ky = 111320 * math.cos(math.radians(lat0)), 110540
     els = fetch(slug)['elements']
@@ -182,7 +182,7 @@ def build(slug, radius, name):
     edges = [e for e in edges if total[find(e[1][0])] >= 3000]
 
     # An edge is written as: junction, junction, n, then n shape points, each as a step from the point before.
-    # A sidewalk or crossing is never drawn, so it is written as: junction, junction, -1, its length in metres.
+    # A sidewalk or crossing is never drawn, so it is written as: junction, junction, -1, its length in meters.
     ids, nodes, out, km = {}, [], [], 0
     def node(n):
         if n not in ids:

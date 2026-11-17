@@ -11,7 +11,7 @@ import { PALETTE } from './models.js';
 const CROSSING = 25, PAUSE = 4; // seconds
 const GULL_SPOTS = [[41.0195, 28.9760], [41.0222, 28.9785]];
 const MORE_GULLS = [[41.0256, 28.9741], [41.0211, 29.0041], [41.0086, 28.9802]]; // over Galata, Maiden's Tower, Sultanahmet
-const CAR_COLOURS = [0xf2c12e, 0xf2c12e, 0xf8f4ec, 0xc1381e, 0x3d6f9a, 0x2c2a2a]; // taxis first
+const CAR_COLORS = [0xf2c12e, 0xf2c12e, 0xf8f4ec, 0xc1381e, 0x3d6f9a, 0x2c2a2a]; // taxis first
 
 export function createLife(THREE, view, { reducedMotion }) {
   const mat = (color) => new THREE.MeshStandardMaterial({ color, roughness: 0.7 });
@@ -126,7 +126,7 @@ export function createLife(THREE, view, { reducedMotion }) {
     for (const [offset, reverse] of [[-14, false], [-7, false], [7, true], [14, true]]) {
       const tr = lane(id === 'galata-bridge' ? offset * 1.6 : offset, reverse);
       for (let k = 0; k < 4; k++) {
-        const car = box(9, 4, 4.5, mat(CAR_COLOURS[(k + cars.length) % CAR_COLOURS.length]));
+        const car = box(9, 4, 4.5, mat(CAR_COLORS[(k + cars.length) % CAR_COLORS.length]));
         group.add(car);
         cars.push({ mesh: car, track: tr, d: (k / 4 + (offset > 0 ? 0.1 : 0)) * tr.length, speed: 16 + ((k * 7) % 5) * 2 });
       }

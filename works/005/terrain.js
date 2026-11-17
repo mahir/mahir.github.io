@@ -1,4 +1,4 @@
-// The land, as a heightfield in metres. The main ridge's crest is the year of closing prices, exactly: day i stands
+// The land, as a heightfield in meters. The main ridge's crest is the year of closing prices, exactly: day i stands
 // at x = dayX(i), z = 0, at the altitude of its close, and between days it follows a monotone cubic, so it never
 // rises above a close it didn't reach. The 50- and 200-day averages make two ranges behind it. Erosion only ever
 // carves down from each ridge's envelope and stays off the crest, so the line survives every bit of noise.
@@ -36,7 +36,7 @@ export function grid(L, quality = 'high') {
   return { xs, zs, cols, rows: zs.length, zero: down.length, dayCol: (i) => left + i * sub };
 }
 
-// Fritsch–Carlson: through every point, never overshooting between neighbours. Points are h apart from x = 0.
+// Fritsch–Carlson: through every point, never overshooting between neighbors. Points are h apart from x = 0.
 export function monotone(ys, h) {
   const n = ys.length;
   const d = new Float64Array(n - 1), m = new Float64Array(n);

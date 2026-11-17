@@ -237,7 +237,7 @@
       const split = rs.filter((d) => d.win !== d.houseWin).length;
       el('text', { x: cx0(i), y: H - 10, 'text-anchor': 'middle', class: 'ghost-label', style: `font-size:${col < 34 ? 9.5 : 11}px` }, svg).textContent = col < 34 ? `’${String(yr).slice(2)}` : yr;
       el('text', { x: cx0(i), y: m.t - 12, 'text-anchor': 'middle', class: 'ghost-label', style: 'font-weight:400;fill:var(--ink-2)' }, svg).textContent = split;
-      // a small beeswarm: each dot takes the nearest free slot beside its column's centre line
+      // a small beeswarm: each dot takes the nearest free slot beside its column's center line
       const placed = [];
       for (const d of rs) {
         const py = y(d.gap);

@@ -56,7 +56,7 @@ window.Works = (() => {
     },
     {
       n: 12, title: 'Ebru, sheet by sheet', date: '2026-11-12', medium: 'Interactive WebGL',
-      about: 'A marbler’s tray seen from above: drop the colours, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.',
+      about: 'A marbler’s tray seen from above: drop the colors, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.',
     },
     {
       n: 13, title: 'Turkish, suffix by suffix', date: '2026-11-13', medium: 'Interactive type',
@@ -68,11 +68,11 @@ window.Works = (() => {
     },
     {
       n: 15, title: 'Cities, two by two', date: '2026-11-15', medium: 'Interactive canvas and OpenStreetMap data',
-      about: 'Two cities side by side at one scale, each street coloured by the compass direction it runs: a grid shows as a single colour and a city whose streets point every way as every colour, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.',
+      about: 'Two cities side by side at one scale, each street colored by the compass direction it runs: a grid shows as a single color and a city whose streets point every way as every color, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.',
     },
     {
-      n: 16, title: 'A coffee, ordered by colour', date: '2026-11-16', medium: 'Interactive WebGL',
-      about: 'A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colours shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.',
+      n: 16, title: 'A coffee, ordered by color', date: '2026-11-16', medium: 'Interactive WebGL',
+      about: 'A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colors shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.',
     },
   ];
 

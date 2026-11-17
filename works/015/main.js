@@ -1,4 +1,4 @@
-// No. 015: two cities side by side, every street in the colour of the direction it runs.
+// No. 015: two cities side by side, every street in the color of the direction it runs.
 // _shape.py measures the cities; this draws two of them and sweeps a compass hand across both.
 (() => {
   'use strict';
@@ -11,12 +11,12 @@
   const $ = (id) => document.getElementById(id);
   const el = (tag, cls, text) => { const x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; };
 
-  const R = 1500, VIEW = R + 20;       // metres: the circle of streets, and from the middle of a map to its edge
+  const R = 1500, VIEW = R + 20;       // meters: the circle of streets, and from the middle of a map to its edge
   const SWEEP_MS = 5200;               // the hand takes this long to go from north round to south
   const FULL = 0.65;                   // a petal reaches the compass's rim when it holds this share of the street
   const EVEN = 1 / 36;                 // each petal's share if streets ran every way alike
 
-  // A colour for each direction. Streets at right angles share one, so the wheel turns once in 90 degrees.
+  // A color for each direction. Streets at right angles share one, so the wheel turns once in 90 degrees.
   function oklch(L, C, h) {
     const a = C * Math.cos(h * Math.PI / 180), b = C * Math.sin(h * Math.PI / 180);
     const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3, s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3;
@@ -99,7 +99,7 @@
       const c = this.city; if (!c || !c.rose || !this.rose.width) return;
       const ctx = this.rose.getContext('2d'), s = this.rose.width, h = s / 2, d = this.dpr, rim = h - 19 * d, rad = Math.PI / 180;
       ctx.clearRect(0, 0, s, s);
-      // the rim is the key: the colour of a street that runs toward that point of the compass
+      // the rim is the key: the color of a street that runs toward that point of the compass
       ctx.lineWidth = 3 * d;
       for (let b = 0; b < 360; b += 2) {
         ctx.strokeStyle = HUE[b % 90]; ctx.globalAlpha = pick == null || near(b, pick, 7.5) ? 1 : .25;
@@ -249,7 +249,7 @@
     for (const side of both) {
       const c = side.city;
       side.pick.value = c.slug; if (side.name) side.name.textContent = c.name; side.from.textContent = c.place; side.score.textContent = c.s.grid + '%'; side.drawn = -1;
-      side.mapBox.setAttribute('aria-label', `Street map of ${c.name}, 3 km across, each street coloured by its direction`);
+      side.mapBox.setAttribute('aria-label', `Street map of ${c.name}, 3 km across, each street colored by its direction`);
       side.roseBox.setAttribute('aria-label', `Compass of street directions in ${c.name}: ${c.s.grid}% of street runs along its two main directions`);
     }
     const pair = `${a.slug}-${b.slug}`;

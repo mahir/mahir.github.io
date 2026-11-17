@@ -38,7 +38,7 @@
       const cx = x(spare(d)), cy = y(d.approval.v), c = color(d.party);
       const lost = !kept(d);
       const dot = el('circle', { cx, cy, r: 6, class: 'mark', style: lost ? `fill:${c};stroke:var(--paper);stroke-width:1.5` : `fill:var(--paper);stroke:${c};stroke-width:2.2` }, marks);
-      const at = PLACE[d.y] || 'right';  // a few labels move off the line or off a neighbour
+      const at = PLACE[d.y] || 'right';  // a few labels move off the line or off a neighbor
       if (at === 'left') label(svg, cx - 10, cy + 4, yr26(d.y), 'end', d.y === 2026);
       else if (at === 'above') label(svg, cx, cy - 11, yr26(d.y), 'middle', d.y === 2026);
       else if (at === 'below') label(svg, cx, cy + 19, yr26(d.y), 'middle', d.y === 2026);
@@ -173,7 +173,7 @@
     }
     const changes = new Map(M.control.map((c) => [c.y, c]));
     if (now26 && !kept(now26)) changes.set(2026, { y: 2026, kind: 'midterm', to: 'D' });
-    const yr2 = (yr) => `’${String(yr).slice(2)}`;  // four-year neighbours sit too close for full years
+    const yr2 = (yr) => `’${String(yr).slice(2)}`;  // four-year neighbors sit too close for full years
     for (let yr = 1946; yr <= 2026; yr += 2) {
       const c = changes.get(yr);
       if (!c) {

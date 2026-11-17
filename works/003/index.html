@@ -586,9 +586,9 @@ function findNext() {
 findNext();
 
 // ---------- the two rails: the day at this date, the year at this hour ----------
-// Each is drawn as a band coloured by how high the sun stands, so you can read night, dusk and noon off it.
+// Each is drawn as a band colored by how high the sun stands, so you can read night, dusk and noon off it.
 
-const STOPS = [   // elevation, colour
+const STOPS = [   // elevation, color
   [-18, [11, 14, 26]], [-12, [18, 24, 48]], [-6, [36, 46, 88]], [-2, [92, 74, 108]], [0, [196, 108, 76]],
   [3, [226, 156, 100]], [8, [236, 200, 152]], [20, [240, 226, 204]], [60, [246, 240, 230]],
 ];
@@ -1329,7 +1329,7 @@ async function startScene(canvas, view) {
     [20, [0.1, 0.2, 0.44], [0.6, 0.64, 0.7], [0.32, 0.27, 0.2]],
     [60, [0.11, 0.24, 0.54], [0.58, 0.66, 0.76], [0.22, 0.2, 0.16]],
   ];
-  const SUN_KEYS = [   // elevation, colour, intensity
+  const SUN_KEYS = [   // elevation, color, intensity
     [-1, [1.0, 0.4, 0.18], 0], [0.5, [1.0, 0.45, 0.2], 3.0], [4, [1.0, 0.56, 0.3], 4.2],
     [12, [1.0, 0.76, 0.55], 4.0], [30, [1.0, 0.92, 0.82], 4.4], [70, [1.0, 0.97, 0.92], 4.6],
   ];

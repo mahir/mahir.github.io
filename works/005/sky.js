@@ -46,8 +46,8 @@ export function createSky(U) {
           col = mix(col, mix(horizon * 1.05, uSunCol * 1.3, pow(s, 3.0) * 0.6 + 0.25), wisps * 0.6);
           float m = fbm(uv * 0.5 + vec2(uSkyTime * 0.002, uSkyTime * 0.001));
           float ceiling = smoothstep(1.0 - uSkyCover, 1.0 - uSkyCover + 0.35, m) * smoothstep(-0.02, 0.15, h);
-          vec3 grey = mix(horizon, horizon * 0.5, uCloudDark) * (0.82 + 0.36 * m) + uSunGlow * pow(s, 4.0) * 0.35;
-          col = mix(col, grey, ceiling);
+          vec3 gray = mix(horizon, horizon * 0.5, uCloudDark) * (0.82 + 0.36 * m) + uSunGlow * pow(s, 4.0) * 0.35;
+          col = mix(col, gray, ceiling);
         }
         col += uSunCol * smoothstep(0.99975, 0.9999, s) * uDisk * 18.0;
         col = mix(col, uNightCol, uNight);

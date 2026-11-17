@@ -17,8 +17,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 WEST, SOUTH, EAST, NORTH = 28.945, 40.976, 29.052, 41.057
-MX = 111320 * math.cos(math.radians((SOUTH + NORTH) / 2))  # metres per degree east
-MY = 110950  # metres per degree north
+MX = 111320 * math.cos(math.radians((SOUTH + NORTH) / 2))  # meters per degree east
+MY = 110950  # meters per degree north
 WIDTH, HEIGHT = (EAST - WEST) * MX, (NORTH - SOUTH) * MY
 CELL = 40
 # the frame plus 0.01° on every side, so ways run past its edges
@@ -36,7 +36,7 @@ SHORES = [
 
 
 def project(lat, lon):
-    """Metres east of the frame's west edge and north of its south edge."""
+    """Meters east of the frame's west edge and north of its south edge."""
     return ((lon - WEST) * MX, (lat - SOUTH) * MY)
 
 
@@ -91,7 +91,7 @@ def land_side(px, py, buckets):
 
 
 def rasterize(ways, cell):
-    """Land (True) or water for every cell, rows from north to south, each sampled at its centre."""
+    """Land (True) or water for every cell, rows from north to south, each sampled at its center."""
     buckets = bucket(ways, cell * 5)
     cols, rows = math.ceil(WIDTH / cell), math.ceil(HEIGHT / cell)
     return [[land_side((c + .5) * cell, HEIGHT - (r + .5) * cell, buckets) for c in range(cols)] for r in range(rows)]

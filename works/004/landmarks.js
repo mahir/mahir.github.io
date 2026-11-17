@@ -2,7 +2,7 @@
 // European shore, across the Bosphorus and down the Asian side. The tray and "Build it for me" follow this order.
 // Each year is when the building standing today was finished. A landmark that owns land raises the neighborhood
 // around it on its own shore (region, as in land.json); the bridges and Maiden's Tower stand on the water.
-// Bridge ends are from OpenStreetMap. `clear` is the open ground kept round a landmark, in metres (150 when not given).
+// Bridge ends are from OpenStreetMap. `clear` is the open ground kept round a landmark, in meters (150 when not given).
 
 const bridge = (from, to) => ({ from, to, lat: (from[0] + to[0]) / 2, lon: (from[1] + to[1]) / 2 });
 

@@ -193,7 +193,7 @@ scene.environment = pmrem.fromScene(studio(), 0.02).texture;
 scene.environmentIntensity = 1.0;
 const camera = new THREE.PerspectiveCamera(30, 1, 1, 260);
 
-// Where things are, in centimetres or so. x runs up the keyboard, z comes toward the tuner, y is up.
+// Where things are, in centimeters or so. x runs up the keyboard, z comes toward the tuner, y is up.
 const PITCH = 1.55;                    // from one note to the next
 const SP = 0.34;                       // between the three strings of a note
 const X0 = (i) => (i - 6) * PITCH;     // the thirteen notes that get tuned
@@ -229,7 +229,7 @@ const castGrain = canvasTex(512, 512, speckle(80, 0.006)); castGrain.repeat.set(
 const feltGrain = canvasTex(256, 256, speckle(150, 0)); feltGrain.repeat.set(1.6, 1.6);
 const spruce = canvasTex(1024, 1024, (g, w, h) => {
   g.fillStyle = '#c99b58'; g.fillRect(0, 0, w, h);
-  for (let i = 0; i < 26; i++) {       // broad bands of colour
+  for (let i = 0; i < 26; i++) {       // broad bands of color
     g.fillStyle = `rgba(${i % 2 ? 150 : 225},${i % 2 ? 100 : 180},${i % 2 ? 40 : 110},${rnd(0.03, 0.09)})`;
     g.fillRect(rnd(w), 0, rnd(20, 90), h);
   }

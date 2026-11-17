@@ -305,7 +305,7 @@
     const target = { ...to };
     { const v = { ...view }; Object.assign(view, target); clamp(); Object.assign(target, view); Object.assign(view, v); }
     if (reduceMotion || ms === 0) { Object.assign(view, target); apply(); return; }
-    // zoom out a little on the way when travelling far
+    // zoom out a little on the way when traveling far
     const far = Math.hypot((target.x - from.x) / r.width, (target.y - from.y) / r.height);
     const dip = Math.min(.45, far * .12);
     const step = (now) => {

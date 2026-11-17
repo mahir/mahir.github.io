@@ -8,14 +8,14 @@
   if (bare) html.classList.add('bare');
 
   const W = window.Walk, { REACH, SECONDS, GRID, NEAR } = W;
-  const VIEW = REACH + 100;          // metres from the middle of a map to its edge
+  const VIEW = REACH + 100;          // meters from the middle of a map to its edge
   const FREE = 1200;                 // how far the start can be moved
   const PLAY_MS = 12000;             // the fifteen minutes take twelve seconds
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (id) => document.getElementById(id);
   const el = (tag, cls) => { const x = document.createElement(tag); if (cls) x.className = cls; return x; };
 
-  // a colour for each minute, from the start outward
+  // a color for each minute, from the start outward
   const STOPS = [[0, [255, 241, 184]], [.25, [255, 194, 71]], [.5, [255, 122, 61]], [.72, [240, 69, 126]], [1, [143, 91, 255]]];
   const BANDS = Array.from({ length: 15 }, (_, i) => {
     const f = i / 14, k = STOPS.findIndex((s) => s[0] >= f), [f1, c1] = STOPS[Math.max(0, k - 1)], [f2, c2] = STOPS[k];

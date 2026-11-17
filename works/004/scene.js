@@ -17,7 +17,7 @@ const ELEVATION = 40 * Math.PI / 180;
 const TO_CAMERA = new THREE.Vector3(-Math.sin(HEADING) * Math.cos(ELEVATION), Math.sin(ELEVATION), Math.cos(HEADING) * Math.cos(ELEVATION));
 const SUN = new THREE.Vector3(-0.844, 0.407, 0.350).normalize(); // west-southwest, 24° up: late afternoon
 const DISTANCE = 14000;
-const MIN_VIEW = 500; // the closest view, in metres of view height
+const MIN_VIEW = 500; // the closest view, in meters of view height
 const LANDMARK_VIEW = 1400, LANDMARK_ACROSS = 1000;
 // every screen opens close in, on the mouth of the Golden Horn: the peninsula's tip, Galata and Üsküdar
 const START = { lat: 41.0195, lon: 28.9895, view: 2600, across: 3600 };
@@ -37,7 +37,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
 
   // ---------- light and air ----------
   // a low, warm late-afternoon sun against a cool sky, so every block has a lit face and a shaded one;
-  // a haze the colour of the paper softens what is farther away, as over the Bosphorus
+  // a haze the color of the paper softens what is farther away, as over the Bosphorus
   scene.add(new THREE.HemisphereLight(0xe4ecf2, 0xc9a77c, 1.55));
   const sun = new THREE.DirectionalLight(0xffd8a6, 3.4);
   scene.fog = new THREE.Fog(0xefd9b6, DISTANCE - 600, DISTANCE + 15000);
@@ -56,13 +56,13 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   const landCells = [];
   land.region.forEach((r, i) => { if (r) landCells.push(i); });
   const ground = new THREE.InstancedMesh(new THREE.BoxGeometry(land.cell, LAND_TOP, land.cell),
-    new THREE.MeshStandardMaterial({ roughness: 1 }), landCells.length); // coloured per cell below
+    new THREE.MeshStandardMaterial({ roughness: 1 }), landCells.length); // colored per cell below
   const m = new THREE.Matrix4();
   const dirt = new THREE.Color();
   landCells.forEach((i, k) => {
     const c = land.center(i);
     ground.setMatrixAt(k, m.makeTranslation(c.x, LAND_TOP / 2, c.z));
-    // a little unevenness in the ground, so bare land is not one flat colour
+    // a little unevenness in the ground, so bare land is not one flat color
     const n = Math.sin(c.x * 0.013 + Math.cos(c.z * 0.009) * 2) * 0.5 + Math.sin(c.z * 0.021 + c.x * 0.004) * 0.5;
     ground.setColorAt(k, dirt.setHex(COLORS.land).offsetHSL(0, 0, n * 0.025));
   });
@@ -121,7 +121,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
     mesh.setMatrixAt(i, o3.matrix);
   };
   houses.forEach((h, i) => {
-    const roofH = h.roof === 4 ? 1.5 : Math.min(h.w, h.d) * 0.38; // the last roof colour is a flat grey roof
+    const roofH = h.roof === 4 ? 1.5 : Math.min(h.w, h.d) * 0.38; // the last roof color is a flat gray roof
     put(walls, i, h.x, LAND_TOP, h.z, h.w, h.h, h.d, h.rot);
     put(roofs, i, h.x, LAND_TOP + h.h, h.z, h.w, roofH, h.d, h.rot);
     walls.setColorAt(i, tint.setHex(PALETTE.walls[h.wall]));
@@ -185,7 +185,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_PAN };
 
   let base = 1; // the frustum's height at zoom 1: the widest view allowed
-  const view = () => base / camera.zoom; // the visible height, in metres of the view plane
+  const view = () => base / camera.zoom; // the visible height, in meters of the view plane
   const setView = (v) => { camera.zoom = base / v; camera.updateProjectionMatrix(); };
   const look = (target) => {
     controls.target.set(target.x, 0, target.z);
@@ -261,7 +261,7 @@ export async function startScene(canvas, { land, landmarks, city, reducedMotion,
   let glide = null;
   controls.addEventListener('start', () => { if (glide) { glide.done(); glide = null; } });
 
-  // views are sized to show at least so many metres across as well as up, so a tall phone sees enough
+  // views are sized to show at least so many meters across as well as up, so a tall phone sees enough
   function destination(target) {
     const aspect = innerWidth / innerHeight;
     if (target === 'all') return { x: 0, z: 0, v: allView() };
@@ -412,7 +412,7 @@ function slabEdge(land) {
   return new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, side: THREE.DoubleSide }));
 }
 
-// Darken a geometry toward its base: vertex colours from `dark` at y = 0 up to full at the top.
+// Darken a geometry toward its base: vertex colors from `dark` at y = 0 up to full at the top.
 function shadeBase(geo, dark) {
   const pos = geo.attributes.position, col = [];
   for (let i = 0; i < pos.count; i++) { const k = dark + (1 - dark) * Math.min(1, Math.max(0, pos.getY(i))); col.push(k, k, k); }

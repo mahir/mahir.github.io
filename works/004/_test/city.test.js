@@ -52,7 +52,7 @@ test('real map: Gülhane is trees, and houses grow by landmark', () => {
   }
 });
 
-// points every step metres along a route's stops, leaving out the first and last `skip` metres (the piers)
+// points every step meters along a route's stops, leaving out the first and last `skip` meters (the piers)
 function sampleRoute(stops, step, skip) {
   const pts = stops.map(([lat, lon]) => toWorld(lat, lon));
   const out = [];

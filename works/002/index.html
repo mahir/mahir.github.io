@@ -508,20 +508,20 @@
   letters[letters.length - 1].addEventListener('animationend', () => name.classList.add('pressed'));
 
   if (canHover && !reduceMotion) {
-    let centres = null;
+    let centers = null;
     name.addEventListener('pointerenter', () => {
-      centres = letters.map((s) => { const r = s.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; });
+      centers = letters.map((s) => { const r = s.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; });
       name.classList.add('live');
     });
     name.addEventListener('pointermove', (e) => {
-      if (!centres || !name.classList.contains('pressed')) return;
+      if (!centers || !name.classList.contains('pressed')) return;
       letters.forEach((s, i) => {
-        const d = Math.hypot(e.clientX - centres[i][0], (e.clientY - centres[i][1]) * 0.5);
+        const d = Math.hypot(e.clientX - centers[i][0], (e.clientY - centers[i][1]) * 0.5);
         s.style.fontWeight = Math.round(400 + 400 * Math.exp(-(d * d) / (2 * 75 * 75)));
       });
     });
     name.addEventListener('pointerleave', () => {
-      centres = null;
+      centers = null;
       name.classList.remove('live');
       for (const s of letters) s.style.fontWeight = '';
     });
@@ -573,7 +573,7 @@
     return a;
   }
 
-  // Tone 0–1 at plate coordinates (−1…1): luminance with the coloured stage lights muted, eyes and beard sharpened.
+  // Tone 0–1 at plate coordinates (−1…1): luminance with the colored stage lights muted, eyes and beard sharpened.
   function toneOf(img) {
     const S = 200, c = document.createElement('canvas');
     c.width = c.height = S;
@@ -641,12 +641,12 @@
     Wd = Float32Array.from(widths);
     L = pos[n];
     const widest = Math.max(...widths);
-    const make = (colour, k) => {
+    const make = (color, k) => {
       const size = fs * k, w = Math.ceil(widest * k * 1.15 + 4), h = Math.ceil(size * 1.6), bl = Math.round(size * 1.15);
       const c = document.createElement('canvas');
       c.width = w * glyphCh.length; c.height = h * NW;
       const g = c.getContext('2d');
-      g.fillStyle = colour; g.textAlign = 'center';
+      g.fillStyle = color; g.textAlign = 'center';
       for (let wi = 0; wi < NW; wi++) {
         g.font = fontOf(wi, size);
         glyphCh.forEach((ch, id) => { if (id !== blank) g.fillText(ch, id * w + w / 2, wi * h + bl); });
@@ -671,7 +671,7 @@
     const lead = fs * 0.94;
     rows = [];
     for (let y = lead; y < H + lead; y += lead) rows.push({ y, start: rows.length * W });
-    centre = fromPhoto(80, 74);   // to begin with, wound from an eye
+    center = fromPhoto(80, 74);   // to begin with, wound from an eye
     measure();
   }
 
@@ -683,7 +683,7 @@
   const gang = new Float32Array(CAP), god = new Float32Array(CAP);
   const gid = new Uint16Array(CAP), gwi = new Uint8Array(CAP), gp = new Int8Array(CAP);
   let gN = 0, flow = 0, mode = 1;   // mode: 0 rows, 1 a single spiral, read like a record
-  let centre = [0, 0];              // where the spiral is wound from: the last click
+  let center = [0, 0];              // where the spiral is wound from: the last click
   let coarse = 1, slow = 0, timed = 0;   // the type is set larger on a machine that can't keep up
 
   // the character the stream is at, `a` along it
@@ -721,10 +721,10 @@
   }
 
   // The same line wound from the middle outward, a row apart, the tops of the letters facing out.
-  const farCorner = () => Math.hypot(Math.max(centre[0], W - centre[0]), Math.max(centre[1], H - centre[1]));
+  const farCorner = () => Math.hypot(Math.max(center[0], W - center[0]), Math.max(center[1], H - center[1]));
   function composeSpiral(q) {
     const lead = fs * 0.94, wind = lead / (4 * Math.PI);   // length along the line ≈ wind · θ²
-    const [ox, oy] = centre, far = farCorner();   // out to the furthest corner
+    const [ox, oy] = center, far = farCorner();   // out to the furthest corner
     const t0 = fs * 1.6 * TAU / lead, s0 = wind * t0 * t0, t1 = far * TAU / lead, s1 = wind * t1 * t1;
     let a = (s0 + flow) % L;
     if (a < 0) a += L;
@@ -828,7 +828,7 @@
     let tau = -1;
     if (spill) {
       tau = (now - spill.t0) / 1000;
-      if (tau >= SPILL_HOLD && !spill.swapped) { spill.swapped = true; mode = 1 - mode; centre = [spill.x, spill.y]; }   // everything is on the floor: change the forme
+      if (tau >= SPILL_HOLD && !spill.swapped) { spill.swapped = true; mode = 1 - mode; center = [spill.x, spill.y]; }   // everything is on the floor: change the forme
       if (tau >= SPILL_END) { spill = null; tau = -1; }
       busy = true;
     }
@@ -854,7 +854,7 @@
       timed++;
       if (dt > 0.024) slow++;
       if (timed >= 90) {
-        if (slow > 45) { const at = centre; coarse *= 1.17; layout(); centre = at; }
+        if (slow > 45) { const at = center; coarse *= 1.17; layout(); center = at; }
         timed = slow = 0;
       }
     }
@@ -871,7 +871,7 @@
     ctx.save();
     if (shown < 1) {   // the wash is set with the line
       ctx.beginPath();
-      ctx.arc(centre[0], centre[1], shown * farCorner(), 0, TAU);
+      ctx.arc(center[0], center[1], shown * farCorner(), 0, TAU);
       ctx.clip();
     }
     ctx.imageSmoothingQuality = 'high';

@@ -1,8 +1,8 @@
-// A coffee, ordered by colour. A mokka on a marble table in a Viennese café, seen from the guest's chair.
-// The visitor pours milk (and more mokka) until it is the coffee they drink every day; a card of colours then
+// A coffee, ordered by color. A mokka on a marble table in a Viennese café, seen from the guest's chair.
+// The visitor pours milk (and more mokka) until it is the coffee they drink every day; a card of colors then
 // comes to the table and shows which one it is, and its name.
-// Drawn with three.js. Units are centimetres; y is up, the table top is y = 0, the guest sits toward +z.
-// The milk on the surface is a 2D fluid (stable fluids) run on the GPU. Its colour, and the card's, come from
+// Drawn with three.js. Units are centimeters; y is up, the table top is y = 0, the guest sits toward +z.
+// The milk on the surface is a 2D fluid (stable fluids) run on the GPU. Its color, and the card's, come from
 // one Kubelka–Munk function, below.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -36,7 +36,7 @@ const SEED = seed;
 function rand() { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
 const rr = (a, b) => a + (b - a) * rand();
 
-/* ---------- Colour: Kubelka–Munk, the one place it is defined ---------- */
+/* ---------- Color: Kubelka–Munk, the one place it is defined ---------- */
 
 // A thick turbid layer, per linear-RGB channel, with milk fraction c. Coffee absorbs, milk scatters.
 const KM = { Kc: [0.34, 0.93, 2.40], Sc: [0.010, 0.010, 0.010], Km: [0.002, 0.004, 0.012], Sm: [1.0, 1.0, 1.0] };
@@ -165,7 +165,7 @@ const GLASS_AT = V3(-6.6, TRAY_Y, -3.9);                   // behind, to the lef
 const RIM_W = 8.5;                                         // the cup's rim, across
 
 // The camera: someone at the table, about 36° above it, a longer lens, close. A framing says how wide the cup's rim
-// is in the picture, where the cup sits in it (sx, sy, from the centre, in fractions of the picture) and from where.
+// is in the picture, where the cup sits in it (sx, sy, from the center, in fractions of the picture) and from where.
 const FRAMES = {
   land: {
     play: { c: V3(1.3, 4.9, -2.2), frac: 0.24, el: 43, az: 10, fov: 24, sx: 0.0, sy: 0.14 },
@@ -312,7 +312,7 @@ const scratches = (g, w, h) => {
 };
 const scratchTray = canvasTex(1024, 1024, (g, w, h) => { scratches(g, w, h); for (let i = 0; i < 1400; i++) { const x = rr(0, w), y = rr(0, h), a = rr(0, TAU), l = rr(20, 160); g.strokeStyle = `rgba(255,255,255,${rr(0.15, 0.4)})`; g.lineWidth = rr(0.5, 1.1); g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); } }, false, 1 / 7);
 const scratchSmall = canvasTex(1024, 1024, scratches, false, 2);
-// old silver: soft smudges and a little warm tarnish, in colour
+// old silver: soft smudges and a little warm tarnish, in color
 const patina = canvasTex(512, 512, (g, w, h) => {
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
   for (let i = 0; i < 70; i++) {
@@ -388,7 +388,7 @@ float snoise(vec2 v) {
 float fbm(vec2 p) { float s = 0.0, a = 0.5; mat2 r = mat2(0.8, -0.6, 0.6, 0.8); for (int i = 0; i < 5; i++) { s += a * snoise(p); p = r * p * 2.03 + 17.1; a *= 0.5; } return s; }
 float fbm3(vec2 p) { float s = 0.0, a = 0.5; mat2 r = mat2(0.8, -0.6, 0.6, 0.8); for (int i = 0; i < 3; i++) { s += a * snoise(p); p = r * p * 2.03 + 17.1; a *= 0.5; } return s; }`;
 
-// White marble with soft grey veins, computed from where the pixel is on the table, so it never repeats.
+// White marble with soft gray veins, computed from where the pixel is on the table, so it never repeats.
 const marbleMat = new P({ color: 0xffffff, roughness: 0.2, clearcoat: 0.55, clearcoatRoughness: 0.09 });
 marbleMat.onBeforeCompile = (sh) => {
   sh.uniforms.uMirror = { value: mirror.rt.texture }; sh.uniforms.uMirrorMat = mirror.mat; sh.uniforms.uMirrorTexel = mirror.texel;
@@ -401,7 +401,7 @@ ${NOISE_GLSL}
 ${PLANAR_GLSL}
 float veinLine(float f, float w) { float d = abs(fract(f + 0.5) - 0.5); float aa = fwidth(f) * 1.2; return 1.0 - smoothstep(w, w + aa + 0.002, d); }
 float ridge(vec2 p) { return 1.0 - abs(snoise(p)); }
-// Carrara: a white-grey ground with cloudy grey, veins that run one way (a diagonal), some broad and soft,
+// Carrara: a white-gray ground with cloudy gray, veins that run one way (a diagonal), some broad and soft,
 // and thin sharp threads that branch off them
 vec4 marble(vec2 p) {
   const vec2 dir = vec2(0.80, -0.60);                 // the run of the veins
@@ -424,9 +424,9 @@ vec4 marble(vec2 p) {
   float r3 = ridge(q * vec2(0.08, 0.32) + 11.0);
   float t3 = smoothstep(0.985 - fwidth(r3), 0.998, r3) * smoothstep(0.15, 0.55, fbm3(q * 0.06 + 2.0)) * (t1 * 0.0 + 0.7);
   float halo = pow(r1, 14.0) * 0.5 * smoothstep(-0.2, 0.35, fbm3(q * 0.02 + 1.0));
-  vec3 grey = vec3(0.34, 0.35, 0.36);
+  vec3 gray = vec3(0.34, 0.35, 0.36);
   float v = clamp(band * 0.32 + halo * 0.26 + t1 * 0.62 + t2 * 0.42 + t3 * 0.3, 0.0, 0.8);
-  return vec4(mix(base, grey, v), t1 + t2 * 0.5);
+  return vec4(mix(base, gray, v), t1 + t2 * 0.5);
 }`)
     .replace('#include <color_fragment>', `#include <color_fragment>
 vec4 mb = marble(vWP.xz);
@@ -784,7 +784,7 @@ const glass = new THREE.Group();
 }
 if (!q.has('noglass')) scene.add(glass);
 
-/* the colour card, and the brass ring that marks a colour on it */
+/* the color card, and the brass ring that marks a color on it */
 const CARD = { w: 10, h: 19, px: 80 };
 const cardCanvas = document.createElement('canvas');
 cardCanvas.width = CARD.w * CARD.px; cardCanvas.height = CARD.h * CARD.px;
@@ -804,7 +804,7 @@ ring.visible = false;
 cardGroup.add(ring);
 scene.add(cardGroup);
 
-// the layout of the swatches on the card, in centimetres from its top-left corner
+// the layout of the swatches on the card, in centimeters from its top-left corner
 const LAYOUT = (() => {
   const h = 1.42, gIn = 0.12, gOut = 0.46, x = 0.85, w = 3.7;
   let y = 0; const rows = [];
@@ -815,7 +815,7 @@ const LAYOUT = (() => {
 })();
 const swatchLocal = (i) => { const r = LAYOUT[i]; return V3(r.x + r.w / 2 - CARD.w / 2, 0.09, r.y + r.h / 2 - CARD.h / 2); };
 
-// paper fibres and the painted swatches are drawn once; the names are drawn on top as they are found
+// paper fibers and the painted swatches are drawn once; the names are drawn on top as they are found
 const paper = document.createElement('canvas');
 {
   const W = cardCanvas.width, H = cardCanvas.height, g = paper.getContext('2d');
@@ -869,7 +869,7 @@ function drawCard() {
     const yc = ((a.y + b.y + b.h) / 2) * px;
     const k = now ? clamp(writing.t, 0, 1) : 1;
     g.save();
-    // a pen line beside the group's colours
+    // a pen line beside the group's colors
     const lx = (a.x + a.w + 0.28) * px, ly0 = a.y * px + 6, ly1 = (b.y + b.h) * px - 6;
     g.strokeStyle = 'rgba(38,26,18,.85)'; g.lineWidth = 2.2; g.lineCap = 'round';
     g.beginPath(); g.moveTo(lx, ly0); g.lineTo(lx, ly0 + (ly1 - ly0) * clamp(k * 3, 0, 1)); g.stroke();
@@ -1353,7 +1353,7 @@ function makeVessel(obj, at, kind) {
 }
 const vessels = { milk: makeVessel(jug, JUG_AT, 'milk') };
 function pourPose(v) {
-  // aim: the stream should go in about a third of the way from the centre toward the vessel
+  // aim: the stream should go in about a third of the way from the center toward the vessel
   const S = v.obj.userData.spout.clone().applyQuaternion(v.pourQ);
   const aimXZ = V3(CUP.x, 0, CUP.z).addScaledVector(v.dirH, -level.r * 0.3);
   const top = CUP.y + BRIM_Y + 2.8;
@@ -1455,7 +1455,7 @@ function addLiquid(kind, ml) {
   const before = cup.c;
   cup[kind] += ml;
   setLevel();
-  // how far from even the cup now is: new liquid of another colour, in proportion
+  // how far from even the cup now is: new liquid of another color, in proportion
   const differs = Math.abs((kind === 'milk' ? 1 : 0) - before);
   cup.unmix = clamp(cup.unmix + (ml / (cup.mokka + cup.milk)) * differs * 6, 0, 1);
   updateCaption();
@@ -1652,7 +1652,7 @@ function fitFrame(kind, aspect) {
     d *= Math.pow(sc, 0.85);
   }
   const dx = (Rx0 + Rx1) / 2 - (bx0 + bx1) / 2;
-  // at the table the tray sits low, so the room above it goes to the jug; at the reveal everything is centred
+  // at the table the tray sits low, so the room above it goes to the jug; at the reveal everything is centerd
   const dy = kind === 'reveal' ? (Ry0 + Ry1) / 2 - (by0 + by1) / 2 : Ry0 - by0;
   return { pos: cam.position.clone(), t, fov: f.fov, ox: -dx / 2, oy: dy / 2, d, kind };
 }
@@ -1835,7 +1835,7 @@ function hintNow() {
 /* ---------- The flow of a visit ---------- */
 
 let state = 'intro';
-// "Point at a colour": the guest points, the waiter makes it. A fresh single mokka, milk poured to that shade, stirred.
+// "Point at a color": the guest points, the waiter makes it. A fresh single mokka, milk poured to that shade, stirred.
 const making = { on: false, target: 0, rate: 14 };
 function setControls(on) { $('milkBtn').disabled = !on; $('mine').disabled = !on; }
 const chainQ = (q.get('chain') || '').split(',').map(Number).filter((n) => n >= 1 && n <= 9);

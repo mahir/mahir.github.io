@@ -1,17 +1,17 @@
 // The landmarks as toys: simple solids, a little larger than life so they read from above, each with the few
 // features that make it itself (Hagia Sophia's flattened dome and buttresses, the Blue Mosque's six minarets,
-// Galata Tower's cone). Metres, origin at the ground under the landmark's centre, +x east, -z north.
+// Galata Tower's cone). Meters, origin at the ground under the landmark's center, +x east, -z north.
 
 import { toWorld } from './geo.js';
 
 export const PALETTE = {
   water: 0x2a8c99,
-  roofs: [0xdd6a44, 0xc9603c, 0xe8845a, 0xb8714a, 0x9aa0a0], // the last: a flat grey roof
+  roofs: [0xdd6a44, 0xc9603c, 0xe8845a, 0xb8714a, 0x9aa0a0], // the last: a flat gray roof
   red: 0xc1381e,
   trees: [0x5caa3b, 0x546647, 0x7d9f45],
   walls: [0xf6ebdc, 0xeee6d6, 0xebd3a3, 0xe8b9a6, 0xbcd0d4, 0xcfdcbc], // cream, stone, ochre, rose, pale blue, sage
   stone: 0xece2cf,
-  greyStone: 0xdedad2,
+  grayStone: 0xdedad2,
   hagia: 0xd7a07a,
   white: 0xf8f4ec,
   lead: 0x6a747c,
@@ -123,9 +123,9 @@ const MODELS = {
     for (const [x, z] of [[-112, -92], [112, -92], [-112, 92], [112, 92]]) g.add(k.minaret(150, 4.5, x, z));
   },
   'blue-mosque'(k, g) {
-    mosque(k, g, { w: 150, d: 150, h: 46, color: PALETTE.greyStone, domeR: 46, drum: 16, halfDomes: [E, N, W, S], squash: 0.9,
+    mosque(k, g, { w: 150, d: 150, h: 46, color: PALETTE.grayStone, domeR: 46, drum: 16, halfDomes: [E, N, W, S], squash: 0.9,
       small: [[-58, -58, 17], [58, -58, 17], [-58, 58, 17], [58, 58, 17]] });
-    g.add(k.box(150, 20, 80, PALETTE.greyStone, 0, 0, -118)); // courtyard to the north
+    g.add(k.box(150, 20, 80, PALETTE.grayStone, 0, 0, -118)); // courtyard to the north
     for (let i = -2; i <= 2; i++) g.add(k.dome(9, PALETTE.leadLight, i * 28, 20, -150, 0.9));
     for (const [x, z] of [[-90, -90], [90, -90], [-90, 90], [90, 90], [-90, -160], [90, -160]]) g.add(k.minaret(190, 5, x, z, 0, 3));
   },
@@ -138,10 +138,10 @@ const MODELS = {
     g.add(k.box(240, 8, 230, PALETTE.sand, 0, -2, -50)); // the terrace it stands on
   },
   'yeni-cami'(k, g) {
-    g.add(k.box(130, 12, 110, PALETTE.greyStone)); // the raised base, at the foot of Galata Bridge
+    g.add(k.box(130, 12, 110, PALETTE.grayStone)); // the raised base, at the foot of Galata Bridge
     const top = new k.THREE.Group();
     top.position.y = 12;
-    mosque(k, top, { w: 96, d: 88, h: 34, color: PALETTE.greyStone, domeR: 32, drum: 10, halfDomes: [E, N, W, S], squash: 0.9,
+    mosque(k, top, { w: 96, d: 88, h: 34, color: PALETTE.grayStone, domeR: 32, drum: 10, halfDomes: [E, N, W, S], squash: 0.9,
       small: [[-38, -36, 10], [38, -36, 10], [-38, 36, 10], [38, 36, 10]] });
     g.add(top);
     for (const [x, z] of [[-56, -48], [56, -48]]) g.add(k.minaret(130, 4, x, z, 12, 2));
@@ -172,7 +172,7 @@ const MODELS = {
     front.add(k.box(110, 60, 110, PALETTE.white));
     front.add(k.box(516, 6, 86, PALETTE.leadLight, 0, 40, 0));
     front.add(k.dome(30, PALETTE.leadLight, 0, 60, 0, 0.6));
-    for (let i = -6; i <= 6; i++) if (Math.abs(i) > 1) front.add(k.box(6, 34, 92, PALETTE.greyStone, i * 38, 0, 0)); // pilasters
+    for (let i = -6; i <= 6; i++) if (Math.abs(i) > 1) front.add(k.box(6, 34, 92, PALETTE.grayStone, i * 38, 0, 0)); // pilasters
     body.add(front);
     g.add(body);
     g.userData.footprint = { w: 520, d: 110, angle: SHORE.dolmabahce };
@@ -182,7 +182,7 @@ const MODELS = {
     g.add(k.cyl(24, 10, PALETTE.white, 0, 32, 0));
     g.add(k.dome(24, PALETTE.leadLight, 0, 42, 0, 0.95));
     for (const [x, z] of [[-40, 30], [40, 30]]) g.add(k.minaret(84, 3.5, x, z, 0, 1));
-    g.add(k.box(110, 3, 110, PALETTE.greyStone, 0, 0, 0)); // the square on the water's edge
+    g.add(k.box(110, 3, 110, PALETTE.grayStone, 0, 0, 0)); // the square on the water's edge
   },
   mihrimah(k, g) {
     mosque(k, g, { w: 92, d: 92, h: 36, color: PALETTE.stone, domeR: 38, drum: 14, squash: 0.95, small: [] });
@@ -209,7 +209,7 @@ const MODELS = {
     g.add(k.cyl(46, 9, PALETTE.rock, 0, -3, 0, 14, 40));
     g.add(k.box(60, 14, 30, PALETTE.white, -8, 6, 6));
     g.add(k.cyl(11, 62, PALETTE.white, 14, 6, -6, 8));
-    g.add(k.cyl(12.5, 3, PALETTE.greyStone, 14, 68, -6, 8));
+    g.add(k.cyl(12.5, 3, PALETTE.grayStone, 14, 68, -6, 8));
     g.add(k.cyl(8, 10, PALETTE.white, 14, 71, -6, 8));
     g.add(k.cone(9.5, 28, PALETTE.lead, 14, 81, -6, 8));
   },
@@ -217,7 +217,7 @@ const MODELS = {
     const { length, angle } = span(lm);
     const deck = new k.THREE.Group();
     deck.rotation.y = angle;
-    deck.add(k.box(length, 6, 64, PALETTE.greyStone, 0, 3, 0)); // the lower level of shops and arches
+    deck.add(k.box(length, 6, 64, PALETTE.grayStone, 0, 3, 0)); // the lower level of shops and arches
     deck.add(k.box(length, 5, 60, PALETTE.road, 0, 13, 0));
     deck.add(k.box(length, 1, 6, PALETTE.leadLight, 0, 18, 0)); // the tram's way
     for (let x = -length / 2 + 30; x < length / 2; x += 60) deck.add(k.box(10, 5, 56, PALETTE.slate, x, -2, 0));
@@ -246,7 +246,7 @@ const MODELS = {
       for (const z of [-w / 2, w / 2]) b.add(k.box(8, top, 8, PALETTE.white, x, 0, z));
       for (const y of [deckY + 30, top - 20]) b.add(k.box(8, 8, w + 8, PALETTE.white, x, y, 0));
     }
-    for (const x of [-half, half]) b.add(k.box(30, 30, w + 10, PALETTE.greyStone, x, 0, 0)); // anchorages
+    for (const x of [-half, half]) b.add(k.box(30, 30, w + 10, PALETTE.grayStone, x, 0, 0)); // anchorages
     // main cables: from each anchorage up to a tower top, a sag across the middle, and down again
     const cableMat = new T.MeshStandardMaterial({ color: 0xc8c2b8, roughness: 0.6 });
     const hangerPts = [];

@@ -9,7 +9,7 @@ export const ROUTES = [
 ];
 
 // Small boats idling in loops on open water from the start, so the city never opens on dead water.
-// rx runs east–west and rz north–south, in metres.
+// rx runs east–west and rz north–south, in meters.
 export const BOAT_LOOPS = [
   { id: 'golden-horn', lat: 41.0212, lon: 28.9675, rx: 140, rz: 35 },
   { id: 'the-mouth', lat: 41.0200, lon: 28.9880, rx: 250, rz: 140 },

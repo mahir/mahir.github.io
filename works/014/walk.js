@@ -3,7 +3,7 @@
 (function (root) {
   'use strict';
 
-  const REACH = 1250;            // metres walked in fifteen minutes at 5 km/h
+  const REACH = 1250;            // meters walked in fifteen minutes at 5 km/h
   const SECONDS = 900;
   const CELL = 10;               // the ground is counted on a 10 m grid
   const NEAR = 50;               // ground within 50 m of a street reached counts as reached
@@ -58,7 +58,7 @@
     return g;
   }
 
-  // The point on a drawn street nearest to (x, y): { edge, along (metres from the edge's first junction), x, y }.
+  // The point on a drawn street nearest to (x, y): { edge, along (meters from the edge's first junction), x, y }.
   function nearest(g, x, y) {
     let best = Infinity, out = null;
     for (let k = 0; k < g.E; k++) {

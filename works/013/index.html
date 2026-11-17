@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://mahiryavuz.com/works/013/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="One Turkish word of 44 letters on a green board, each of its ten suffixes in its own colour, and under it the English sentence it means, in the same colours">
+<meta property="og:image:alt" content="One Turkish word of 44 letters on a green board, each of its ten suffixes in its own color, and under it the English sentence it means, in the same colors">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@mahir_nyc">
 <!-- gen:ld -->
@@ -378,7 +378,7 @@
   button { cursor: pointer; }
   .add, .take { border-radius: 99px; padding: 13px 22px; font-size: .98rem; font-weight: 600; line-height: 1.15; white-space: nowrap; }
   .add { min-width: 9.6em; color: var(--deep); background: var(--c, var(--chalk)); border: 1px solid var(--c, var(--chalk)); }
-  /* colours only start to move once the page has opened, so a page opened part-way stands still */
+  /* colors only start to move once the page has opened, so a page opened part-way stands still */
   .ready .add { transition: background-color .35s, border-color .35s, transform .2s var(--out); }
   .add:hover { transform: translateY(-1px); }
   .add:active { transform: translateY(1px); }
@@ -527,7 +527,7 @@
       <li><span lang="tr">gelmemeliydi</span>: should not have come</li>
       <li><span lang="tr">gelmemeliydiniz</span>: you should not have come</li>
     </ol>
-    <p>Each suffix has its own colour, and the English words it adds are in the same colour. A suffix that comes back in another word keeps its colour. Turkish adds at the end of the word; English has to be rewritten from the front.</p>
+    <p>Each suffix has its own color, and the English words it adds are in the same color. A suffix that comes back in another word keeps its color. Turkish adds at the end of the word; English has to be rewritten from the front.</p>
     <p>The vowels in the suffixes are not fixed. Each one follows the vowel before it, which is called vowel harmony, so the root’s last vowel sets all of them. Every word has other roots to try: places for the first, things to sell for the second (fish, milk, yoghurt, tea), verbs for the other two. The first two also take whatever the visitor types. Every suffix changes its vowels to match the new root: after İzmir, lı becomes li, laş becomes leş and dık becomes dik. Some consonants follow too: after the t of simit, ci becomes çi.</p>
   </section>
 
@@ -594,11 +594,11 @@
 
   // ---- the words --------------------------------------------------------------------------------------------------
   // Each word is a root and its suffixes, in order. `c` is the suffix's chalk: a suffix that comes back in another word
-  // keeps its colour, and so do the endings that say who (sınız, ız, k, nız) and the ones that say no (ama, ma).
+  // keeps its color, and so do the endings that say who (sınız, ız, k, nız) and the ones that say no (ama, ma).
   // english(n, root) is the English after n suffixes, as a list of words. In a word, `o` names the suffixes that paid
   // for it (0 is the root; none means English needed it and Turkish did not), and `k` follows it from one step to the
   // next, so it can move instead of blink. `glue` joins a word to the next one. A | in the text says where a word paid
-  // for by several parts changes colour; without one it is cut evenly.
+  // for by several parts changes color; without one it is cut evenly.
   const f = (t) => ({ k: 'f-' + t, t, o: [] });
   const s = (n, t) => ({ k: 's' + n, t, o: [n] });
   const w = (k, t, o, glue) => ({ k, t, o, glue });
@@ -814,7 +814,7 @@
     const x = el('span', 'w');
     x.dataset.k = tok.k;
     if (!tok.o.length) { x.classList.add('f'); x.textContent = tok.t; return x; }
-    // one English word can do the work of several parts: it is cut, and each piece takes a part's colour
+    // one English word can do the work of several parts: it is cut, and each piece takes a part's color
     const size = Math.ceil(tok.t.length / tok.o.length);
     const cuts = tok.t.includes('|') ? tok.t.split('|') : tok.o.map((n, i) => tok.t.slice(i * size, i < tok.o.length - 1 ? (i + 1) * size : undefined));
     tok.o.forEach((n, i) => {

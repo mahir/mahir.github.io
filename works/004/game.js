@@ -21,7 +21,7 @@ export function createGame(ids) {
   };
 }
 
-// a drop lands on its outline when it falls within radius metres of it on the ground
+// a drop lands on its outline when it falls within radius meters of it on the ground
 export function onTarget(point, target, radius) {
   return !!point && Math.hypot(point.x - target.x, point.z - target.z) <= radius;
 }

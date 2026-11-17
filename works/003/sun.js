@@ -80,7 +80,7 @@ export const gridBearing = (azimuth) => mod(azimuth - GRID, 360);
 // how far, in degrees, the sun is from looking straight down a cross street (either way)
 export const offGrid = (azimuth) => { const g = gridBearing(azimuth); return Math.min(Math.abs(g - 270), Math.abs(g - 90)); };
 
-// The moment the sun's centre stands at an apparent elevation, on a New York calendar day, rising or setting
+// The moment the sun's center stands at an apparent elevation, on a New York calendar day, rising or setting
 function crossing(y, m, d, setting, elevation) {
   let a = nyMoment(y, m, d, setting ? 12 * 60 : 0);
   let b = nyMoment(y, m, d, setting ? 23 * 60 + 59 : 12 * 60);
@@ -103,7 +103,7 @@ export const sunset = (y, m, d) => crossing(y, m, d, true, -0.27);
 const HORIZON = { west: 0.5, east: 0 };
 
 // The days the sun rises or sets in line with the cross streets, from a New York calendar day onward:
-// [{ ms, setting }], the moment the sun's centre meets that horizon on the day closer to exact.
+// [{ ms, setting }], the moment the sun's center meets that horizon on the day closer to exact.
 // Each alignment spans a pair of days.
 export function henges(y, m, d, days) {
   const out = [];

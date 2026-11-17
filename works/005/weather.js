@@ -43,7 +43,7 @@ export function weatherFor(change) {
   return out;
 }
 
-// Where the deck actually sits for a range whose highest ground is `top` metres. Scattered cloud stays at the
+// Where the deck actually sits for a range whose highest ground is `top` meters. Scattered cloud stays at the
 // weather's height, and big years break through it; a heavy deck lifts to just above the highest ground, so the
 // whole crest reads under a low ceiling instead of vanishing into it.
 export function deckFor(weather, top) {

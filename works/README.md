@@ -27,7 +27,7 @@ No. 014 walks fifteen minutes from one spot in each of twelve cities, over stree
 
 ## No. 015's streets
 
-No. 015 puts two of the same twelve cities side by side, coloured by the direction their streets run. `works/015/_shape.py` builds `works/015/data/` from the Overpass replies No. 014's script keeps in `works/014/_cache/` (run `python3 works/014/_streets.py` first if that folder is gone), takes its cities and start points from that script, and writes the table of all twelve into `works/015/index.html`, between the `<!-- rows -->` markers; the page reads its numbers from that table. The "What shows up" paragraphs quote some of those numbers by hand, so read them again after the data changes. The Action does not run it.
+No. 015 puts two of the same twelve cities side by side, colored by the direction their streets run. `works/015/_shape.py` builds `works/015/data/` from the Overpass replies No. 014's script keeps in `works/014/_cache/` (run `python3 works/014/_streets.py` first if that folder is gone), takes its cities and start points from that script, and writes the table of all twelve into `works/015/index.html`, between the `<!-- rows -->` markers; the page reads its numbers from that table. The "What shows up" paragraphs quote some of those numbers by hand, so read them again after the data changes. The Action does not run it.
 
 ## After a new Substack post
 

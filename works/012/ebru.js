@@ -1,8 +1,8 @@
 // No. 012 · Ebru, sheet by sheet.
 // The tray is never stored as pixels that get smeared. It is a short list of what the marbler did, a drop here,
 // a pull of the awl there, and every pixel is found by walking that list backwards to the paint it came from.
-// So edges stay sharp however far the colours are drawn. When the list grows long, its oldest part is set down
-// and the walk ends there: drops as colour in a texture (the "base"), passes of the awl and comb as a warp of it.
+// So edges stay sharp however far the colors are drawn. When the list grows long, its oldest part is set down
+// and the walk ends there: drops as color in a texture (the "base"), passes of the awl and comb as a warp of it.
 (() => {
   'use strict';
 
@@ -19,7 +19,7 @@
     // No WebGL 2: the still, and the words.
     document.body.classList.add('nogl');
     const img = new Image(); img.className = 'still'; img.src = 'og.jpg';
-    img.alt = 'A marbling tray seen from above, its colours combed into feathered rows';
+    img.alt = 'A marbling tray seen from above, its colors combed into feathered rows';
     basin.append(img);
     hintEl.textContent = 'This experiment needs WebGL 2, which this browser does not offer.';
     for (const el of document.querySelectorAll('.dock input, .dock button')) el.disabled = true;
@@ -57,8 +57,8 @@ uniform vec2 uTray, uRes, uBaseSize;
 in vec2 vUv; out vec4 o;
 ${NOISE}
 const vec2 OFF[4] = vec2[4](vec2(.125,.375), vec2(-.375,.125), vec2(-.125,-.375), vec2(.375,-.125));
-// Since the colours were last set down, the awl and the comb may have moved them. The warp says, for each place, how far
-// away the paint that is there now lay then. So colour is never copied from a copy: it is always looked up where it fell.
+// Since the colors were last set down, the awl and the comb may have moved them. The warp says, for each place, how far
+// away the paint that is there now lay then. So color is never copied from a copy: it is always looked up where it fell.
 vec2 unwarp(vec2 p){
   vec2 t = clamp(vec2(p.x/uTray.x, 1. - p.y/uTray.y), 0., 1.)*uBaseSize - .5, f = fract(t);
   ivec2 i = ivec2(floor(t)), lo = ivec2(0), hi = ivec2(uBaseSize) - 1;
@@ -84,7 +84,7 @@ vec4 pigment(vec3 c, vec2 u, float seed){
   lum *= mix(1.04, .84, smoothstep(.93, 1., t));
   return vec4(clamp(c*lum, 0., 1.), 1.);
 }
-// Walk the list from the newest act to the oldest. True if the walk ends inside a drop, whose colour is then c.
+// Walk the list from the newest act to the oldest. True if the walk ends inside a drop, whose color is then c.
 bool walk(inout vec2 p, out vec4 c){
   c = vec4(0.);
   for (int i = uCount - 1; i >= 0; i--) {
@@ -92,7 +92,7 @@ bool walk(inout vec2 p, out vec4 c){
     if (a.x < .5) {                                 // a drop made room for itself
       vec2 d = p - a.yz; float r2 = a.w*a.w, d2 = dot(d, d), q = a.x*2.5;
       if (d2 < r2) { c = pigment(b.rgb, d/a.w, b.a); return true; }
-      // On open water it pushes everything outward and every colour keeps its area. On a crowded tray (q) it takes most of
+      // On open water it pushes everything outward and every color keeps its area. On a crowded tray (q) it takes most of
       // its room from the paint right beside it, which is squeezed into a vein around the drop.
       p = a.yz + d*sqrt(1. - r2*(1. - q + q*exp(-(d2 - r2)/(r2*.3)))/d2);
     } else {                                        // a tine moved a short way and dragged what was near it
@@ -172,7 +172,7 @@ void main(){
     float s = mix(-.2, uTray.x + .2, uLay) - .10*pow(abs(vUv.y - .45)*1.6, 2.) - p.x;
     if (s > 0.) {
       vec3 pap = paper(p)*.985, ink = c.a > 0. ? c.rgb/c.a : vec3(1.);
-      pap *= mix(vec3(1.), mix(vec3(1.), ink, c.a), smoothstep(.04, .5, s)*(.06 + .11*uSoak));   // the colours show faintly through
+      pap *= mix(vec3(1.), mix(vec3(1.), ink, c.a), smoothstep(.04, .5, s)*(.06 + .11*uSoak));   // the colors show faintly through
       float k = clamp(s/.11, 0., 1.);
       pap *= mix(.76, 1., smoothstep(0., 1., k));
       pap += .05*exp(-pow((k - .45)/.22, 2.))*(1. - k);
@@ -237,11 +237,11 @@ void main(){
     return gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE ? { tex, fbo, w: BW, h: BH } : null;
   }
   const warps = [warpTarget(), warpTarget()], canWarp = !!(warps[0] && warps[1]);
-  let wcur = 0, warped = false;                    // which warp is current; has anything been moved since the colours were set down
+  let wcur = 0, warped = false;                    // which warp is current; has anything been moved since the colors were set down
 
   // ---------------------------------------------------------------- the list of what was done
   const ops = [];
-  let paint = false, drops = 0;                    // is there colour on the water; how many drops so far
+  let paint = false, drops = 0;                    // is there color on the water; how many drops so far
   let dirty = true, refined = false, lastChange = 0, scale = 1, slow = 0, agit = 0, instant = bare || calm;
   const rip = new Float32Array(24); let ripAt = 0;
   const T0 = performance.now(), now = () => (performance.now() - T0)/1000;
@@ -278,7 +278,7 @@ void main(){
   // tight, and it opens out again when the tine has gone by; set down while bunched, it would open out blurred.
   function bake(all) {
     let n = 0; while (n < ops.length && settled(ops[n]) && (all || !(ops[n].pass && ops[n].pass.open))) n++;
-    // Drops are set down as colour. Passes are set down as warp, so that the colours themselves are left alone.
+    // Drops are set down as color. Passes are set down as warp, so that the colors themselves are left alone.
     while (n > 0) {
       const strokes = canWarp && ops[0].k === 1;
       let m = 1; if (canWarp) while (m < n && (ops[m].k === 1) === strokes) m++; else m = n;
@@ -452,8 +452,8 @@ void main(){
 
   // ---------------------------------------------------------------- pigments and tools
   const HINTS = {
-    drop: 'Tap the water to drop colour. Hold for a wider drop, drag to sprinkle.',
-    draw: 'Drag the awl through the colours, back and forth.',
+    drop: 'Tap the water to drop color. Hold for a wider drop, drag to sprinkle.',
+    draw: 'Drag the awl through the colors, back and forth.',
     comb: 'Drag the comb across the tray in one pass.',
   };
   let tool = 'drop', pig = [0.11, 0.21, 0.34], pigHex = '#1d3557';
@@ -520,7 +520,7 @@ void main(){
   // ---------------------------------------------------------------- the marbler's own hand
   function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0)/4294967296; }; }
 
-  // Drops of each colour in turn, each one falling where the water is emptiest.
+  // Drops of each color in turn, each one falling where the water is emptiest.
   function scatter(groups, start, span, rand) {
     const list = [], pts = [];
     let sofar = 0; const total = groups.reduce((s, g) => s + g[1], 0);
@@ -589,20 +589,20 @@ void main(){
 
   $('turn').addEventListener('click', () => {
     if (busy || auto) return;
-    if (tool !== 'drop' && !paint) { say('There is no colour on the water yet.'); return; }
+    if (tool !== 'drop' && !paint) { say('There is no color on the water yet.'); return; }
     made = '';
     const run = tool === 'drop' ? scatter([[pig, 14, 0.06]], 0, 1.5, Math.random) : tool === 'draw' ? gelgit() : tarak();
     if (calm) { runNow(run); wake(); } else { auto = run; setBusy(busy); wake(); }
   });
 
-  // ---------------------------------------------------------------- the classics, made from clean water by a practised hand
+  // ---------------------------------------------------------------- the classics, made from clean water by a practiced hand
   const css = (c) => `rgb(${c.map((v) => Math.round(v*255)).join(' ')})`;
-  const pale = (c, k) => c.map((v, i) => v + ([0.955, 0.94, 0.895][i] - v)*k);   // a colour let down with water
+  const pale = (c, k) => c.map((v, i) => v + ([0.955, 0.94, 0.895][i] - v)*k);   // a color let down with water
   const FINE = { lam: 0.028, gap: 0, grip: 0.97 }, BROAD = { lam: 0.05, gap: 0, grip: 0.95 }, POINT = { lam: 0.03, gap: 0, grip: 0.93 };
   const TEETH = { lam: 0.011, gap: 0.046, grip: 0.985 };
 
-  // The ground: colour after colour shaken from a brush that sweeps along the top half of the tray and back along the bottom.
-  // Each drop falls where the water is emptiest. A layer is [colour, how many, how wide, how uneven].
+  // The ground: color after color shaken from a brush that sweeps along the top half of the tray and back along the bottom.
+  // Each drop falls where the water is emptiest. A layer is [color, how many, how wide, how uneven].
   function rain(layers, rand) {
     const list = [], pts = [];
     let t = 0.25;
@@ -637,7 +637,7 @@ void main(){
     } };
   }
 
-  // The first colour: one drop that opens right across the tray. Every colour after it lands on paint, not on water.
+  // The first color: one drop that opens right across the tray. Every color after it lands on paint, not on water.
   function flood(c) {
     let dropped = false;
     return { step() { if (!dropped) { addDrop(A/2, 0.5, 0.52*Math.hypot(A, 1) + 0.06, c, false); dropped = true; if (!instant) { hand.tint(css(c)); hand.show('drop', A/2, 0.5); } } return ops.every(settled); } };
@@ -676,7 +676,7 @@ void main(){
     return draw('draw', paths, tine, 0, speed, 0.14);
   }
 
-  // Hatip: rings of colour dropped one inside the other, set out in rows, then pulled into hearts.
+  // Hatip: rings of color dropped one inside the other, set out in rows, then pulled into hearts.
   function places() {
     const cols = Math.round(A/0.3), rows = 3, list = [];
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) list.push({ x: (c + 0.5)/cols*A, y: (r + 0.5)/rows, c, r });
@@ -710,40 +710,40 @@ void main(){
   const N = byName;
   const CLASSICS = [
     { name: 'Taraklı ebru', steps: (rand) => [
-      { say: 'Taraklı, the combed pattern. First the ground: one colour opens across the whole tray.', make: () => flood(N['Lamp black']) },
-      { say: 'Each colour after it is sprinkled over the last, and crowds it into veins.',
+      { say: 'Taraklı, the combed pattern. First the ground: one color opens across the whole tray.', make: () => flood(N['Lamp black']) },
+      { say: 'Each color after it is sprinkled over the last, and crowds it into veins.',
         make: () => rain([[N['Indigo'], 50, 0.07], [N['Red ochre'], 64, 0.055], [N['Yellow ochre'], 80, 0.045], [N['White'], 80, 0.03]], rand) },
       { make: () => rest(0.5) },
       { say: 'Gel-git, come and go. The awl crosses the tray, each line the other way from the last.', make: () => comeAndGo(12, FINE, 2.8) },
       { say: 'Then the comb, once, square across the lines.', make: () => combDown(TEETH, 0.5) },
     ] },
     { name: 'Bülbül yuvası', steps: (rand) => [
-      { say: 'Bülbül yuvası, the nightingale’s nest. First the ground: one colour across the whole tray.', make: () => flood(N['Tobacco']) },
+      { say: 'Bülbül yuvası, the nightingale’s nest. First the ground: one color across the whole tray.', make: () => flood(N['Tobacco']) },
       { say: 'Then the others over it, in small stones.',
         make: () => rain([[N['Indigo'], 50, 0.066], [N['Turquoise'], 64, 0.053], [N['Yellow ochre'], 76, 0.042], [N['White'], 80, 0.028]], rand) },
       { make: () => rest(0.5) },
       { say: 'The awl turns a spiral into each place, from the outside in, row after row.', make: () => nests(FINE, 1.9) },
     ] },
     { name: 'Şal ebrusu', steps: (rand) => [
-      { say: 'Şal, the shawl. First the ground: one colour across the whole tray.', make: () => flood(N['Lamp black']) },
+      { say: 'Şal, the shawl. First the ground: one color across the whole tray.', make: () => flood(N['Lamp black']) },
       { say: 'Then the others, each sprinkled over the last.',
         make: () => rain([[N['Red ochre'], 50, 0.07], [N['Tobacco'], 56, 0.055], [N['Yellow ochre'], 70, 0.045], [N['White'], 76, 0.03]], rand) },
       { make: () => rest(0.5) },
-      { say: 'Gel-git, come and go, to draw the colours out into fine lines.', make: () => comeAndGo(12, FINE, 2.8) },
-      { say: 'Then a few slow waves across the lines. Too many and the colours break up.', make: () => waves(BROAD, 1.1) },
+      { say: 'Gel-git, come and go, to draw the colors out into fine lines.', make: () => comeAndGo(12, FINE, 2.8) },
+      { say: 'Then a few slow waves across the lines. Too many and the colors break up.', make: () => waves(BROAD, 1.1) },
     ] },
     { name: 'Hatip ebrusu', steps: (rand, at = places()) => [
       { say: 'Hatip, named for a preacher of Hagia Sophia in the 1700s. First a pale ground.', make: () => flood(pale(N['Indigo'], 0.6)) },
       { make: () => rain([[pale(N['Turquoise'], 0.7), 54, 0.062], [pale(N['Indigo'], 0.8), 70, 0.05]], rand) },
       { make: () => rest(0.6) },
-      { say: 'Rings of colour, each dropped inside the last, set out in rows.',
+      { say: 'Rings of color, each dropped inside the last, set out in rows.',
         make: () => rings(at, [[N['Red ochre'], 0.07], [N['Yellow ochre'], 0.052], [N['Indigo'], 0.036], [N['White'], 0.018]], 0.085) },
       { make: () => rest(0.5) },
       { say: 'The awl goes through each line of rings and pulls them into hearts.', make: () => hearts(at, POINT, 1.0) },
     ] },
     { name: 'Battal ebru', steps: (rand) => [
-      { say: 'Battal, the oldest pattern: colour and nothing else. One colour opens across the whole tray.', make: () => flood(N['Indigo']) },
-      { say: 'Each colour after it crowds the last into veins. No awl, no comb.',
+      { say: 'Battal, the oldest pattern: color and nothing else. One color opens across the whole tray.', make: () => flood(N['Indigo']) },
+      { say: 'Each color after it crowds the last into veins. No awl, no comb.',
         make: () => rain([[N['Green'], 30, 0.085, 0.45], [N['Yellow ochre'], 44, 0.065, 0.55], [N['Red ochre'], 50, 0.05, 0.55], [N['White'], 44, 0.036, 0.6]], rand) },
       { say: 'Last, a fine sprinkle of white.', make: () => rain([[N['White'], 150, 0.0075, 0.7]], rand) },
       { make: () => rest(0.4) },
@@ -827,7 +827,7 @@ void main(){
 
   $('lay').addEventListener('click', async () => {
     if (busy || auto) return;
-    if (!paint) { say('There is no colour on the water yet.'); return; }
+    if (!paint) { say('There is no color on the water yet.'); return; }
     setBusy(true); hand.hide(); settleAll();
     renderPattern(true); refined = true; dirty = false;
     const print = makePrint(), name = made;
@@ -840,7 +840,7 @@ void main(){
     }
 
     await tween(1500, (v) => { fx.lay = v; });
-    say('A moment for the paper to take the colour.');
+    say('A moment for the paper to take the color.');
     await tween(650, (v) => { fx.soak = v; }, (u) => u);
 
     // the laid sheet becomes a thing of its own, exactly where it lies, and the water under it is already clean

@@ -113,7 +113,7 @@ export function makePath({ scale, crest, aspect, cloudBase, ceiling = false, gro
       fov: portrait ? 64 : 48,
     });
   }
-  // heights eased between neighbours, so the camera glides over the year rather than bobbing from key to key
+  // heights eased between neighbors, so the camera glides over the year rather than bobbing from key to key
   const soften = (field, i) => {
     const y = (j) => raw[clamp(j, 0, n - 1)][field][1];
     return (y(i - 2) + 4 * y(i - 1) + 6 * y(i) + 4 * y(i + 1) + y(i + 2)) / 16;

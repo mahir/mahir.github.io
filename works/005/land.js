@@ -1,5 +1,5 @@
 // The land: the heightfield from the worker as a mesh, painted by altitude and slope (grass and forest low, rock on
-// steep ground and above the trees, snow above the snow line where it can lie) in the colours of its kind of land
+// steep ground and above the trees, snow above the snow line where it can lie) in the colors of its kind of land
 // (kinds.js), with fine rock detail in the light,
 // cloud shadows and the shared haze. Before the land rises it lies flat on the plain; the opening chart's stretch
 // applies to it as it does to the line, so the two meet exactly.
@@ -28,7 +28,7 @@ const PAINT = /* glsl */ `
   float h = vWorld.y;
   float top = smoothstep(0.55, 0.85, up.y);
   bool sideX = abs(up.x) > abs(up.z);
-  float fw = length(fwidth(vWorld)); // metres a pixel: fine noise fades out before it can shimmer
+  float fw = length(fwidth(vWorld)); // meters a pixel: fine noise fades out before it can shimmer
   float n1 = fbm(vWorld.xz / 420.0);
   float n2 = mix(0.5, tfbm(vWorld, top, sideX, 47.0), 1.0 - smoothstep(8.0, 40.0, fw));
   float n3 = mix(0.5, tnoise(vWorld, top, sideX, 6.0), 1.0 - smoothstep(1.5, 6.0, fw));
@@ -43,7 +43,7 @@ const PAINT = /* glsl */ `
   rockMask = clamp(smoothstep(0.36 + grip, 0.58 + grip, slope + (n2 - 0.5) * 0.14)
     + smoothstep(uTreeLine + 100.0, uTreeLine + 800.0, h + (n1 - 0.5) * 500.0) * smoothstep(0.12, 0.32, slope), 0.0, 1.0);
   vec3 rock = mix(uRockDark, uRockLight, n2) * (0.85 + 0.3 * n3);
-  // layers of another colour, as thick as the kind's beds, fading out before they're finer than a pixel
+  // layers of another color, as thick as the kind's beds, fading out before they're finer than a pixel
   float bed = smoothstep(0.35, 0.65, 0.5 + 0.5 * sin(h / uBandH + n1 * 6.0 + (n2 - 0.5) * 1.5));
   rock = mix(rock, uBand * (0.85 + 0.3 * n3), bed * uStrata * (1.0 - smoothstep(uBandH, 4.0 * uBandH, fw)));
   rock *= 0.9 + 0.12 * sin(h / 19.0 + n1 * 6.0); // strata

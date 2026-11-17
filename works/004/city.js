@@ -6,10 +6,10 @@ import { toWorld } from './geo.js';
 
 export const HOUSE_CHANCE = 0.82;
 export const TREE_CHANCE = 0.08;
-export const STOREY = 3.2;
+export const STORY = 3.2;
 export const HEIGHT_SCALE = 2; // a little taller than true, so the city reads as packed from above
 export const CLEAR = 150;
-export const MOSQUE_CHANCE = 0.04, MOSQUE_GAP = 350; // metres between neighborhood mosques // metres kept open around a landmark, unless it names its own `clear`
+export const MOSQUE_CHANCE = 0.04, MOSQUE_GAP = 350; // meters between neighborhood mosques // meters kept open around a landmark, unless it names its own `clear`
 const GULHANE = { lat: 41.0130, lon: 28.9813, radius: 260 }; // the park below Topkapı: trees, never houses
 
 export function mulberry32(seed) {
@@ -63,10 +63,10 @@ export function makeCity(land, owners, landmarks, seed = 4) {
     // draw every number for every cell, so one cell's outcome never shifts another's
     const kind = rnd(), w = land.cell * (0.6 + 0.3 * rnd()), d = land.cell * (0.6 + 0.3 * rnd());
     const jx = (rnd() - 0.5) * (land.cell - w), jz = (rnd() - 0.5) * (land.cell - d);
-    const storeys = 3 + Math.floor(rnd() * 4), roofPick = rnd(), wall = Math.floor(rnd() * 6);
+    const stories = 3 + Math.floor(rnd() * 4), roofPick = rnd(), wall = Math.floor(rnd() * 6);
     const rot = (rnd() - 0.5) * 0.36, special = rnd();
     if (keepClear.some((p) => near(c, p))) continue;
-    // a flat grey roof on about one building in eight, terracotta on the rest
+    // a flat gray roof on about one building in eight, terracotta on the rest
     const roof = roofPick < 0.12 ? 4 : Math.floor(((roofPick - 0.12) / 0.88) * 4);
     if (near(c, park) || (kind >= HOUSE_CHANCE && kind < HOUSE_CHANCE + TREE_CHANCE)) {
       trees.push({ x: c.x + jx, z: c.z + jz, r: land.cell * (0.3 + 0.15 * (w / land.cell)), owner, kind: special < 0.35 ? 'cypress' : 'round' });
@@ -77,7 +77,7 @@ export function makeCity(land, owners, landmarks, seed = 4) {
         const k = key(c.x, c.z);
         spaced.set(k, [...(spaced.get(k) || []), m]);
       } else {
-        houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: storeys * STOREY * HEIGHT_SCALE, roof, wall, rot, owner });
+        houses.push({ x: c.x + jx, z: c.z + jz, w, d, h: stories * STORY * HEIGHT_SCALE, roof, wall, rot, owner });
       }
     }
   }

@@ -31,7 +31,7 @@ test('decode works on every company in prices.json', () => {
   }
 });
 
-test('pick honours ?t=, falls back to random, and avoids the last one shown', () => {
+test('pick honors ?t=, falls back to random, and avoids the last one shown', () => {
   const json = fakeJson();
   assert.equal(pick(json, { param: 'aaa' }), 'AAA');
   assert.equal(pick(json, { param: 'brk-b' }), 'BRK.B');

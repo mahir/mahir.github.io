@@ -92,7 +92,7 @@ export function createScene(canvas, { small }) {
     scene.environment = sky.environment(renderer);
   }
 
-  // the land's colours, from its kind (kinds.js); linear RGB
+  // the land's colors, from its kind (kinds.js); linear RGB
   function setPaint(p) {
     for (const k of ['grassLo', 'grassHi', 'dry', 'forest', 'forestAlt', 'rockDark', 'rockLight', 'band']) {
       U[`u${k[0].toUpperCase()}${k.slice(1)}`].value.setRGB(...p[k], THREE.LinearSRGBColorSpace);

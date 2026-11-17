@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mahir Yavuz · A coffee, ordered by colour</title>
-<meta name="description" content="A coffee, ordered by colour, No. 016 by Mahir Yavuz: pour milk into a mokka until it is your coffee, then find its colour and its Viennese name.">
+<title>Mahir Yavuz · A coffee, ordered by color</title>
+<meta name="description" content="A coffee, ordered by color, No. 016 by Mahir Yavuz: pour milk into a mokka until it is your coffee, then find its color and its Viennese name.">
 <meta name="author" content="Mahir Yavuz">
 <link rel="canonical" href="https://mahiryavuz.com/works/016/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -12,8 +12,8 @@
 <meta name="theme-color" content="#e6e2da">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mahir Yavuz">
-<meta property="og:title" content="A coffee, ordered by colour · Mahir Yavuz">
-<meta property="og:description" content="No. 016: a mokka on a marble table. Pour milk until it looks like the coffee you drink every day, then see its colour on the card and what to ask for in Vienna.">
+<meta property="og:title" content="A coffee, ordered by color · Mahir Yavuz">
+<meta property="og:description" content="No. 016: a mokka on a marble table. Pour milk until it looks like the coffee you drink every day, then see its color on the card and what to ask for in Vienna.">
 <meta property="og:url" content="https://mahiryavuz.com/works/016/">
 <meta property="og:image" content="https://mahiryavuz.com/works/016/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -260,7 +260,7 @@
     {
       "@type": "VisualArtwork",
       "@id": "https://mahiryavuz.com/works/016/#work",
-      "name": "A coffee, ordered by colour",
+      "name": "A coffee, ordered by color",
       "url": "https://mahiryavuz.com/works/016/",
       "datePublished": "2026-11-16",
       "creator": {
@@ -270,7 +270,7 @@
         "@id": "https://mahiryavuz.com/#website"
       },
       "image": "https://mahiryavuz.com/works/016/og.jpg",
-      "description": "A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colours shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.",
+      "description": "A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colors shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.",
       "artMedium": "Interactive WebGL"
     },
     {
@@ -285,7 +285,7 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "No. 016 · A coffee, ordered by colour",
+          "name": "No. 016 · A coffee, ordered by color",
           "item": "https://mahiryavuz.com/works/016/"
         }
       ]
@@ -347,7 +347,7 @@
   .result .name { margin: 0 0 12px; font-size: 2.35rem; font-style: italic; font-weight: 400; line-height: 1.05; font-variation-settings: 'opsz' 96; }
   .result.enter { animation: rise .7s var(--out) both; }
   .stage canvas.can-pick { cursor: pointer; }
-  /* point at a colour: nine painted swatches, darkest first */
+  /* point at a color: nine painted swatches, darkest first */
   .pick-label { margin: 16px 0 0; }
   .swatches { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 8px; }
   .swatch { width: 32px; height: 32px; min-width: 32px; padding: 0; border-radius: 2px; background: var(--c); border: 1px solid rgba(31,24,18,.28);
@@ -465,7 +465,7 @@
 <body class="waiting">
   <nav class="nav" aria-label="Experiments">
     <a class="back" href="/"><span aria-hidden="true">←</span> Home</a>
-    <span class="label">No. 016 · A coffee, ordered by colour</span>
+    <span class="label">No. 016 · A coffee, ordered by color</span>
   </nav>
 
   <main class="stage" id="stage">
@@ -488,13 +488,13 @@
 
   <section class="card intro" id="intro" aria-labelledby="introTitle">
     <div class="rule" aria-hidden="true"></div>
-    <h2 id="introTitle">A coffee, ordered by colour</h2>
-    <p>Before Vienna’s coffee houses had names for their coffees, the waiter handed over a card of colours, from black to milky white. The guest pointed at one.</p>
-    <p>Make the coffee you drink every day. Then see which colour it is, and what to ask for in Vienna.</p>
-    <p>Or point at a colour, as the guests did, and it is made for you.</p>
+    <h2 id="introTitle">A coffee, ordered by color</h2>
+    <p>Before Vienna’s coffee houses had names for their coffees, the waiter handed over a card of colors, from black to milky white. The guest pointed at one.</p>
+    <p>Make the coffee you drink every day. Then see which color it is, and what to ask for in Vienna.</p>
+    <p>Or point at a color, as the guests did, and it is made for you.</p>
     <p class="small">Hold the jug to pour; a tap gives a few drops. Drag in the cup to stir. There is no taking milk back out.</p>
     <div class="row"><button type="button" class="start" data-ml="40">A single mokka</button><button type="button" class="start" data-ml="70">A double</button></div>
-    <span class="label-sm pick-label" id="pickIntroLabel">Or point at a colour</span>
+    <span class="label-sm pick-label" id="pickIntroLabel">Or point at a color</span>
     <div class="swatches" role="group" aria-labelledby="pickIntroLabel"></div>
   </section>
 
@@ -505,7 +505,7 @@
     <p class="small" id="facts">&nbsp;</p>
     <span class="label-sm again-label" id="againLabel">Another cup</span>
     <div class="row again-row" role="group" aria-labelledby="againLabel"><button type="button" class="quiet again" data-ml="40">A single mokka</button><button type="button" class="quiet again" data-ml="70">A double</button></div>
-    <span class="label-sm pick-label" id="pickResultLabel">Or point at a colour</span>
+    <span class="label-sm pick-label" id="pickResultLabel">Or point at a color</span>
     <div class="swatches" role="group" aria-labelledby="pickResultLabel"></div>
     <div class="row about-row"><button type="button" class="quiet" id="aboutBtn">About</button></div>
   </section>
@@ -513,13 +513,13 @@
   <dialog id="about" aria-labelledby="aboutTitle">
     <div class="inner">
       <span class="label-sm">No. 016 · Mahir Yavuz</span>
-      <h2 id="aboutTitle">A coffee, ordered by colour</h2>
-      <p>A mokka stands on a marble table, on a silver tray, with a jug of milk and a glass of water beside it. Choose a single or a double, pour milk until the cup looks like the coffee you drink every day, stir, and say it is yours. A card of colours then comes to the table, from black to milky white, and shows which colour your coffee is and what to ask for in Vienna. The card has five names on it, and each one you find is written beside its colours. You can also point at a shade on the card, and the coffee is mixed to it.</p>
-      <p>The card on this page is its own. Two Viennese sources describe ordering by a colour card; neither shows one, and no surviving card was found.</p>
-      <p>Milk scatters light and coffee absorbs it, so the first drops of milk change the colour most. The cup and the card are coloured by the same formula (Kubelka–Munk), not by blending two colours.</p>
+      <h2 id="aboutTitle">A coffee, ordered by color</h2>
+      <p>A mokka stands on a marble table, on a silver tray, with a jug of milk and a glass of water beside it. Choose a single or a double, pour milk until the cup looks like the coffee you drink every day, stir, and say it is yours. A card of colors then comes to the table, from black to milky white, and shows which color your coffee is and what to ask for in Vienna. The card has five names on it, and each one you find is written beside its colors. You can also point at a shade on the card, and the coffee is mixed to it.</p>
+      <p>The card on this page is its own. Two Viennese sources describe ordering by a color card; neither shows one, and no surviving card was found.</p>
+      <p>Milk scatters light and coffee absorbs it, so the first drops of milk change the color most. The cup and the card are colored by the same formula (Kubelka–Munk), not by blending two colors.</p>
       <ul>
-        <li><a href="https://www.fabia.at/news/die-farben-der-wiener-kaffeehauskultur/" rel="noopener">Fabia</a>, on the colour card</li>
-        <li><a href="https://www.viennapass.de/mehr-wien/tipps/wiener-kaffeehauskultur" rel="noopener">Vienna Pass</a>, on the colour card and the names</li>
+        <li><a href="https://www.fabia.at/news/die-farben-der-wiener-kaffeehauskultur/" rel="noopener">Fabia</a>, on the color card</li>
+        <li><a href="https://www.viennapass.de/mehr-wien/tipps/wiener-kaffeehauskultur" rel="noopener">Vienna Pass</a>, on the color card and the names</li>
         <li><a href="https://www.vollpension.wien/en/coffee-house-guide/coffee-lexicon/" rel="noopener">Vollpension</a>, the coffee lexicon</li>
       </ul>
       <div class="row"><form method="dialog"><button class="quiet" id="aboutClose">Close</button></form></div>
@@ -528,12 +528,12 @@
 
   <!-- the work in words, for screen readers, search engines and AI assistants, which see no table -->
   <section class="about sr-only" id="aboutText">
-    <h1>A coffee, ordered by colour</h1>
+    <h1>A coffee, ordered by color</h1>
     <p>No. 016 by Mahir Yavuz. A mokka stands on a marble table, in a white porcelain cup on a small oval silver tray, with a teaspoon, a porcelain milk jug and a glass of water. The visitor chooses a single or a double mokka, holds the jug to pour milk, a few drops or a stream, and drags in the cup to stir. When the cup looks like the coffee they drink every day, they say it is theirs.</p>
-    <p>A card of nine painted colours, from black to milky white, then comes to the table, and a ring settles on the colour of their coffee. The page names it, and tells them what to ask for in Vienna: a Kleiner or Großer Schwarzer, a Kapuziner, a Kleiner or Großer Brauner, a Melange, or a Kaffee verkehrt. Each name they find is written on the card beside its colours. The visitor can also point at a shade on the card, and the coffee is mixed to it.</p>
-    <p>The card on this page is its own. Two Viennese sources describe ordering by a colour card; neither shows one, and no surviving card was found.</p>
-    <p>Milk scatters light and coffee absorbs it, so the first drops of milk change the colour most. The cup and the card are coloured by the same formula (Kubelka–Munk), not by blending two colours.</p>
-    <p>Sources: <a href="https://www.fabia.at/news/die-farben-der-wiener-kaffeehauskultur/">Fabia, on the colour card</a>; <a href="https://www.viennapass.de/mehr-wien/tipps/wiener-kaffeehauskultur">Vienna Pass, on the colour card and the names</a>; <a href="https://www.vollpension.wien/en/coffee-house-guide/coffee-lexicon/">Vollpension, the coffee lexicon</a>.</p>
+    <p>A card of nine painted colors, from black to milky white, then comes to the table, and a ring settles on the color of their coffee. The page names it, and tells them what to ask for in Vienna: a Kleiner or Großer Schwarzer, a Kapuziner, a Kleiner or Großer Brauner, a Melange, or a Kaffee verkehrt. Each name they find is written on the card beside its colors. The visitor can also point at a shade on the card, and the coffee is mixed to it.</p>
+    <p>The card on this page is its own. Two Viennese sources describe ordering by a color card; neither shows one, and no surviving card was found.</p>
+    <p>Milk scatters light and coffee absorbs it, so the first drops of milk change the color most. The cup and the card are colored by the same formula (Kubelka–Munk), not by blending two colors.</p>
+    <p>Sources: <a href="https://www.fabia.at/news/die-farben-der-wiener-kaffeehauskultur/">Fabia, on the color card</a>; <a href="https://www.viennapass.de/mehr-wien/tipps/wiener-kaffeehauskultur">Vienna Pass, on the color card and the names</a>; <a href="https://www.vollpension.wien/en/coffee-house-guide/coffee-lexicon/">Vollpension, the coffee lexicon</a>.</p>
   </section>
 
   <pre class="err" id="err"></pre>

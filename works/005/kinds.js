@@ -1,13 +1,13 @@
 // Kinds of land, so the ranges don't all look alike: each company always stands in the same one, picked from its
 // ticker. A kind is a shape for the terrain (how deep the erosion, how round or flat-topped the slopes, whether they
 // step down in terraces) and a paint for the land (ground, forest, rock and its layers). The tree and snow lines stay
-// the same in every kind, so height still reads as price. Colours are linear RGB.
+// the same in every kind, so height still reads as price. Colors are linear RGB.
 
 const ALPINE_SHAPE = { erode: 0.42, detail: 0.03, gully: 1, round: 0, wide: 1, terrace: 0, riser: 0.35 };
 
 export const KINDS = [
   {
-    name: 'granite', // green meadows, dark conifers, grey granite
+    name: 'granite', // green meadows, dark conifers, gray granite
     shape: ALPINE_SHAPE,
     paint: {
       grassLo: [0.13, 0.16, 0.05], grassHi: [0.24, 0.21, 0.09], dry: [0.2, 0.19, 0.09],
