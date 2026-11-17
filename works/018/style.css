@@ -31,6 +31,21 @@ html, body { height: 100%; margin: 0; background: var(--paper); color: var(--ink
 .nav .label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
   padding: 5px 8px; background: rgba(236, 235, 229, .72); border-radius: 3px; }
 
+/* the label and, beside it, the button that opens a few lines about the work */
+.nav .title { display: flex; align-items: center; gap: 6px; }
+.info { appearance: none; cursor: pointer; color: var(--ink); background: var(--chip); border: 1px solid var(--line);
+  border-radius: 99px; padding: 6px 10px; font: 600 .7rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  transition: border-color .2s, background-color .2s; white-space: nowrap; }
+.info:hover { border-color: var(--ink); }
+.info[aria-expanded="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.info .glyph { display: none; text-transform: none; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: .85rem; letter-spacing: 0; }
+.card { position: fixed; z-index: 5; left: max(14px, env(safe-area-inset-left)); top: 56px; width: min(23rem, calc(100% - 28px));
+  padding: 14px 16px 15px; background: rgba(240, 239, 233, .97); border: 1px solid var(--line); border-radius: 4px;
+  box-shadow: 0 10px 30px -12px rgba(27, 26, 24, .4); font-size: .9rem; line-height: 1.5; color: var(--ink); }
+.card[hidden] { display: none; }
+.card p { margin: 0; }
+.card p + p { margin-top: .7em; }
+
 /* controls, top right */
 .controls { position: fixed; z-index: 4; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
   display: flex; gap: 6px; }
@@ -39,19 +54,24 @@ html, body { height: 100%; margin: 0; background: var(--paper); color: var(--ink
   box-shadow: 0 1px 2px rgba(27, 26, 24, .1); transition: border-color .2s, background-color .2s; -webkit-user-select: none; user-select: none; }
 .controls button:hover { border-color: var(--ink); }
 .controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.back:focus-visible, .controls button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.back:focus-visible, .controls button:focus-visible, .info:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
 /* the hold: a hairline along the foot of the window */
 .hold { position: fixed; z-index: 3; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none; }
 .hold i { display: block; height: 100%; background: rgba(27, 26, 24, .32); transform-origin: 0 0; transform: scaleX(0); }
 
-.bare .nav, .bare .controls, .bare .hold { display: none !important; }
+.bare .nav, .bare .controls, .bare .hold, .bare .card { display: none !important; }
 .still .hold { display: none; }
 
 @media (max-width: 720px) {
   /* the label goes under the pill, the controls stay top right */
   .nav { flex-direction: column; align-items: flex-start; max-width: calc(100% - 28px); gap: 6px; }
-  .nav .label { font-size: .7rem; letter-spacing: .1em; padding: 4px 7px; }
+  .nav .label { font-size: .7rem; letter-spacing: .08em; padding: 4px 7px; }
+  /* phones: the number is dropped from the label and About becomes a small round i */
+  .nav .label .no { display: none; }
+  .info { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; }
+  .info .word { display: none; }
+  .info .glyph { display: block; }
   .controls { gap: 4px; }
   .controls button { padding: 8px 9px; font-size: .7rem; letter-spacing: .1em; }
   .controls .png { display: none; }

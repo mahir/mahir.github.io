@@ -1,4 +1,4 @@
-// No. 018 · Vehicles, sheet by sheet: boot, the cycle, controls, URL parameters.
+// No. 018 · Imaginary vehicles, drawn to scale: boot, the cycle, controls, URL parameters.
 //
 //   #48213 or ?seed=48213   start with that sheet
 //   ?bare                   no page chrome
@@ -86,8 +86,10 @@ function measure() {
 
 const drawT = () => (atParam != null ? atParam : stillMode || reduced ? 1 : Math.min(1, t / drawS));
 
-function show(seed) {
-  cur = prepare(seed, L);
+// show a sheet on the front plate. `ready` is a sheet prepared earlier (the turn passes the
+// one made during the hold, so it is not made a second time)
+function show(seed, ready) {
+  cur = ready || prepare(seed, L);
   const p = plates[front];
   p.load(cur.sheet);
   p.advance(drawT());
@@ -95,7 +97,7 @@ function show(seed) {
   c.setAttribute('aria-label', cur.sheet.label);
   status.textContent = cur.sheet.label;
   history.replaceState(null, '', '#' + cur.seed);
-  document.title = `Mahir Yavuz · Vehicles, sheet by sheet · ${cur.d.meta.name || ''}`.replace(/ · $/, '');
+  document.title = `Mahir Yavuz · Imaginary vehicles, drawn to scale · ${cur.d.meta.name || ''}`.replace(/ · $/, '');
   window.__sheet = { seed, source, drawing: cur.d, sheet: cur.sheet, L };
 }
 
@@ -126,30 +128,33 @@ function turn() {
   if (!next) prepareNext();
   const back = 1 - front;
   const old = plates[front], neu = plates[back];
-  neu.load(next.sheet);
-  neu.advance(0);
-  neu.c.classList.remove('away');
-  neu.c.style.zIndex = 1;
-  old.c.style.zIndex = 2;
-  neu.c.hidden = false;
-  const nextSeed = next.seed;
-  front = back;
+  const ready = next;
   next = null;
+  front = back;
+  // the pen starts from nothing: reset the clock BEFORE the new sheet is shown, or the
+  // sheet underneath is drawn finished for a moment and then wiped
+  t = 0; holdT = 0;
   if (reduced || stillMode) {
+    show(ready.seed, ready);
+    neu.c.classList.remove('away');
+    neu.c.style.zIndex = 1;
+    neu.c.hidden = false;
     old.c.hidden = true;
-    show(nextSeed);
     startDraw();
     return;
   }
   phase = 'turn'; turnT = 0;
+  show(ready.seed, ready);          // loads the sheet and leaves it blank (t is 0)
+  neu.c.classList.remove('away');
+  neu.c.style.zIndex = 1;
+  old.c.style.zIndex = 2;
+  neu.c.hidden = false;
   old.c.classList.add('away');
   setTimeout(() => {
     old.c.hidden = true;
     old.c.classList.remove('away');
     old.c.style.zIndex = 0;
   }, TURN * 1000 + 40);
-  show(nextSeed);
-  t = 0;
 }
 
 function frame(now) {
@@ -212,6 +217,21 @@ addEventListener('keydown', (e) => {
   } else if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
 });
 
+// a few lines about the work, opened from the button beside the label
+const infoBtn = $('info'), card = $('about-card'), nav = $('nav');
+function setCard(open) {
+  if (!infoBtn || !card) return;
+  if (open) card.style.top = Math.round(nav.getBoundingClientRect().bottom + 8) + 'px';
+  card.hidden = !open;
+  infoBtn.setAttribute('aria-expanded', String(open));
+}
+if (infoBtn && card) {
+  infoBtn.addEventListener('click', (e) => { e.stopPropagation(); setCard(card.hidden); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !card.hidden) { setCard(false); infoBtn.focus(); } });
+  addEventListener('pointerdown', (e) => { if (!card.hidden && !card.contains(e.target) && !infoBtn.contains(e.target)) setCard(false); });
+  addEventListener('resize', () => setCard(false));
+}
+
 function save() {
   if (!cur) return;
   const c = S.still(L, cur.sheet, 2);
@@ -248,7 +268,7 @@ function relayout() {
     const p = plates[front];
     cur = prepare(seed, L);
     p.load(cur.sheet);
-    p.advance(phase === 'draw' ? drawT() : 1);
+    p.advance(phase === 'hold' ? 1 : drawT()); // during a turn the new sheet stays blank
     window.__sheet = { seed, source, drawing: cur.d, sheet: cur.sheet, L };
   }
 }

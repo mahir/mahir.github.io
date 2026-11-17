@@ -79,7 +79,7 @@ window.Works = (() => {
       about: 'Forty-five sayings of Sufi poets and teachers, from Rabia to Yunus Emre, each set large on a card in the color of its theme, nine themes from love to loss; open a card for its source and its original words, recolor it, or save it as a picture.',
     },
     {
-      n: 18, title: 'Vehicles, sheet by sheet', date: '2026-11-18', medium: 'Generative canvas drawing',
+      n: 18, title: 'Imaginary vehicles, drawn to scale', date: '2026-11-18', medium: 'Generative canvas drawing',
       about: 'A drafting table that does not stop: it invents a vehicle, letters its name and purpose, and draws it in ink, line by line, as an old technical illustration with a parts list and a title block, then turns to a fresh sheet; landers, crawlers, locomotives, airships, tugs and rockets, each sheet numbered so it can be opened again.',
     },
   ];
