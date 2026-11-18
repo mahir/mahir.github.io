@@ -1,16 +1,20 @@
 /* No. 017 · Sufi sayings, card by card */
 :root {
-  --ground: #131211; --raise: #1c1a18; --text: #eee8dc; --soft: #a39d91; --line: rgba(238, 232, 220, .16);
+  /* the ground: warm paper, a table the cards are laid out on */
+  --ground: #ebe6dc; --text: #25211c; --soft: #6b645a; --line: rgba(37, 33, 28, .2); --hover: rgba(37, 33, 28, .06);
+  --edge: rgba(37, 33, 28, .16);   /* the hairline round a card whose field is close to the ground */
   --serif: 'EB Garamond', Garamond, 'Iowan Old Style', 'Times New Roman', serif;
   --mono: 'Red Hat Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --naskh: 'Noto Naskh Arabic', 'Geeza Pro', 'Times New Roman', serif;
   --gut: clamp(16px, 2.6vw, 36px);
   --out: cubic-bezier(.2, .7, .2, 1);
-  color-scheme: dark;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--ground); color: var(--text); font: 400 17px/1.45 var(--serif); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { scrollbar-color: var(--line) var(--ground); }
+::selection { background: var(--text); color: var(--ground); }
 :focus-visible { outline: 1.5px solid var(--text); outline-offset: 3px; }
 button { font: inherit; color: inherit; }
 
@@ -19,6 +23,7 @@ button { font: inherit; color: inherit; }
   position: relative; display: block; aspect-ratio: 4 / 5; container-type: inline-size; overflow: hidden;
   background: var(--f); color: var(--i); text-decoration: none; -webkit-tap-highlight-color: transparent;
 }
+.card.edge { box-shadow: inset 0 0 0 1px var(--edge); }
 .card::selection, .card *::selection { background: var(--i); color: var(--f); }
 /* the saying: EB Garamond, about 110px on 116px leading at 1080 wide; the ascender line sits at 6.85cqw whatever the size */
 .q {
@@ -44,41 +49,83 @@ button { font: inherit; color: inherit; }
 }
 .ft span { overflow: hidden; text-overflow: clip; }
 
-/* ---------- the page ---------- */
-.top { padding: max(14px, env(safe-area-inset-top)) var(--gut) 18px; }
-.nav { display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; }
-.back { color: var(--text); text-decoration: none; padding: 9px 14px 8px; border: 1px solid var(--line); border-radius: 99px;
-  font: 400 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: border-color .2s, background-color .2s; }
-.back:hover { border-color: var(--text); background: rgba(238, 232, 220, .07); }
-.no { font: 400 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
-h1 { margin: 18px 0 0; font: 400 clamp(1.9rem, 1.2rem + 2.6vw, 3.1rem) / 1.02 var(--serif); letter-spacing: -.015em; }
-h1 em { font-style: italic; }
-.lede { margin: 8px 0 0; max-width: 40rem; color: var(--soft); font-size: 1.08rem; line-height: 1.4; }
-.filter { display: flex; gap: 6px 18px; margin: 18px 0 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
-.filter::-webkit-scrollbar { display: none; }
-.filter button { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 8px 0 7px; border: 0; border-bottom: 1px solid transparent; background: none; cursor: pointer;
-  font: 400 .7rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); transition: color .2s, border-color .2s; }
-.filter button:hover { color: var(--text); }
-.filter button[aria-pressed="true"] { color: var(--text); border-bottom-color: var(--text); }
-.filter i { width: 9px; height: 9px; background: var(--sw); border-radius: 1px; }
-.no-js .filter { display: none; }
+/* ---------- the page: cards laid out on a table, with air round them ---------- */
+/* one column (capped, so a card stays a card) to 780px; two to 1216px; three to 1840px; four above. Never five. */
+:root { --cols: 1; --gap: 28px; --margin: 20px; --max: 520px; --sec: 72px; }
+@media (min-width: 780px) { :root { --cols: 2; --gap: 32px; --margin: 32px; --max: 1040px; --sec: 104px; } }
+@media (min-width: 1216px) { :root { --cols: 3; --gap: clamp(48px, 3.9vw, 56px); --margin: 48px; --max: 1264px; --sec: 128px; } }
+@media (min-width: 1840px) { :root { --cols: 4; --gap: 56px; --max: 1680px; } }
+.top, .jump-in, .theme, .foot { width: min(var(--max), 100% - 2 * var(--margin)); margin-inline: auto; }
 
-/* the wall: tiles flush, hairline grout on a dark ground */
-.wall { --cols: 1; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 1px; }
-/* 45 cards: one, three or five across, so the full wall ends on a full row */
-/* cards stay at least about 365px wide (except the phone's single column): two across from 700px, the odd card centerd;
-   three across from 1095px; five across from 1840px. A theme's five cards: three over two, centerd, or one row of five. */
-@media (min-width: 700px) { .wall { --cols: 2; } }
-@media (min-width: 1095px) { .wall { --cols: 3; } }
-@media (min-width: 1840px) { .wall { --cols: 5; } }
-.tile { min-width: 0; flex: 0 0 calc((100% - (var(--cols) - 1) * 1px) / var(--cols)); }
-.tile[hidden] { display: none; }
+.top { padding: max(14px, env(safe-area-inset-top)) 0 0; }
+.nav { display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; }
+.back { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; color: var(--text); text-decoration: none; padding: 1px 16px 0; border: 1px solid var(--line); border-radius: 99px;
+  font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: border-color .2s, background-color .2s; }
+.back:hover { border-color: var(--text); background: var(--hover); }
+.no { font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+h1 { margin: clamp(32px, 4.4vw, 64px) 0 0; font: 400 clamp(2.6rem, 1.2rem + 4.4vw, 4.75rem) / .98 var(--serif); letter-spacing: -.02em; text-wrap: balance; }
+h1 em { font-style: italic; }
+/* about 60 characters a line */
+.lede { margin: clamp(14px, 1.6vw, 22px) 0 0; max-width: 27em; color: var(--soft); font-size: clamp(1.0625rem, 1rem + .25vw, 1.1875rem); line-height: 1.45; text-wrap: pretty; }
+
+/* the themes: a small index that stays at the top, for a page of nine long sections */
+.jump { position: sticky; top: 0; z-index: 2; margin-top: clamp(28px, 4vw, 48px); background: var(--ground); }
+.jump-in { border-bottom: 1px solid var(--line); }
+.jump ol { display: flex; gap: 4px 26px; margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: none; }
+.jump ol::-webkit-scrollbar { display: none; }
+/* a row of themes wider than the screen scrolls; its cut edge fades so it reads as more, not as a crop */
+.jump ol.over { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
+.jump ol.over.end { -webkit-mask-image: none; mask-image: none; }
+.jump a { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 1px 0 0; border-bottom: 1px solid transparent; margin-bottom: -1px;
+  font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); text-decoration: none; white-space: nowrap; transition: color .2s, border-color .2s; }
+.jump a:hover { color: var(--text); }
+.jump a[aria-current="true"] { color: var(--text); border-bottom-color: var(--text); }
+.jump i { width: 9px; height: 9px; background: var(--sw); border-radius: 1px; box-shadow: inset 0 0 0 1px var(--edge); }
+.jump a:focus-visible { outline-offset: -2px; }
+
+/* a section a theme: its name, its count, one row of cards, the rest behind "Show all" */
+/* a hairline over each section, so the eye finds the next one in a long, opened page */
+.theme { margin-top: var(--sec); padding-top: 28px; border-top: 1px solid var(--line); scroll-margin-top: 58px; }
+.theme:first-child { margin-top: clamp(40px, 5vw, 72px); padding-top: 0; border-top: 0; }
+.th { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 20px; margin: 0 0 clamp(22px, 2.4vw, 34px); }
+.th h2 { margin: 0; font: 400 clamp(2rem, 3.2vw, 2.9rem) / 1 var(--serif); letter-spacing: -.018em; }
+.th-n { margin: 0; font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+
+.wall { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--gap); }
+/* off screen a card costs nothing to lay out; this is its height at three across */
+.tile { min-width: 0; content-visibility: auto; contain-intrinsic-size: auto 480px; }
 .tile figure { margin: 0; }
 .wall .card:focus-visible { outline: 2px solid var(--i); outline-offset: -7px; }
 .js .wall .card { cursor: zoom-in; }
 
+/* with script, a closed section shows one row: two cards (stacked on a phone), three, or four */
+.js .theme:not(.open) .tile:nth-child(n + 3) { display: none; }
+.js .theme:not(:has(.tile:nth-child(3))) .more { display: none; }
+@media (min-width: 1216px) {
+  .js .theme:not(.open) .tile:nth-child(n + 3) { display: block; }
+  .js .theme:not(.open) .tile:nth-child(n + 4) { display: none; }
+  .js .theme:has(.tile:nth-child(3)) .more { display: inline-flex; }
+  .js .theme:not(:has(.tile:nth-child(4))) .more { display: none; }
+}
+@media (min-width: 1840px) {
+  .js .theme:not(.open) .tile:nth-child(n + 4) { display: block; }
+  .js .theme:not(.open) .tile:nth-child(n + 5) { display: none; }
+  .js .theme:has(.tile:nth-child(4)) .more { display: inline-flex; }
+  .js .theme:not(:has(.tile:nth-child(5))) .more { display: none; }
+}
+/* under the cards, so after "Show all" it is where the reader ends up; while a section is open it stays at the foot
+   of the screen until the section's end scrolls into view */
+.more { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-top: clamp(24px, 2.6vw, 36px); padding: 1px 20px 0; border: 1px solid var(--line); border-radius: 99px; background: var(--ground); cursor: pointer;
+  font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text); transition: border-color .2s, background-color .2s; }
+.more[hidden] { display: none !important; }
+.more:hover { border-color: var(--text); background: color-mix(in srgb, var(--text) 6%, var(--ground)); }
+/* open, it keeps to the right, where a saying's ragged lines leave room */
+.js .theme.open:has(.tile:nth-child(3)) .more { position: sticky; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 1; display: flex; width: fit-content; margin-left: auto; border-color: var(--text); }
+.more::after { content: ""; width: 6px; height: 6px; margin-top: -3px; border: solid currentColor; border-width: 0 1px 1px 0; transform: rotate(45deg); transition: transform .25s var(--out); }
+.more[aria-expanded="true"]::after { margin-top: 3px; transform: rotate(-135deg); }
+
 /* the source under each card: shown without script; with script it lives in the large view */
-.src { padding: 14px var(--gut) 34px; color: var(--soft); font-size: 1rem; line-height: 1.4; }
+.src { padding: 14px 0 0; color: var(--soft); font-size: 1rem; line-height: 1.4; }
 .src p { margin: 0 0 4px; }
 .js .wall .src { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; }
 .src-author { color: var(--text); }
@@ -86,9 +133,11 @@ h1 em { font-style: italic; }
 .src-dates { color: var(--soft); white-space: nowrap; }
 .src-orig { margin-top: 10px !important; color: var(--text); font-size: 1.12rem; line-height: 1.45; }
 .src-orig[dir="rtl"] { font-family: var(--naskh); font-size: 1.12rem; line-height: 1.9; }
+/* Baba Farid's verses in Gurmukhi, left to right, in Noto Serif Gurmukhi (loaded only when one is shown) */
+.src-orig[lang="pa-Guru"] { font-family: 'Noto Serif Gurmukhi', var(--serif); font-size: 1.08rem; line-height: 1.75; }
 .src-note { margin-top: 12px !important; font-size: .9rem; line-height: 1.45; color: var(--soft); max-width: 34rem; }
 .src a { color: var(--text); text-underline-offset: 3px; text-decoration-thickness: 1px; }
-.foot { padding: 28px var(--gut) max(32px, env(safe-area-inset-bottom)); color: var(--soft); font-size: .98rem; }
+.foot { margin-top: var(--sec); padding: 22px 0 max(40px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); color: var(--soft); font-size: .98rem; }
 .foot p { margin: 0; }
 .foot a { color: var(--text); }
 
@@ -106,7 +155,7 @@ h1 em { font-style: italic; }
 .frame .card.enter { animation: enter .32s var(--out) both; }
 @keyframes enter { from { opacity: 0; transform: scale(.985); } }
 .bar { grid-area: bar; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 2px; }
-.count { font: 400 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+.count { font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
 .info { grid-area: info; padding: 0 0 26px; }
 .info .src { padding: 0; font-size: 1.12rem; }
 .info .src-who { font-size: 1.6rem; line-height: 1.15; margin-bottom: 8px; }
@@ -117,8 +166,8 @@ h1 em { font-style: italic; }
 .act { grid-area: act; display: flex; flex-wrap: wrap; gap: 6px; }
 @media (min-width: 861px) { .act .btn { padding-inline: 12px; letter-spacing: .08em; } }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px 9px; border: 1px solid var(--line); border-radius: 99px; background: none; cursor: pointer;
-  font: 400 .72rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text); transition: border-color .2s, background-color .2s; }
-.btn:hover { border-color: var(--text); background: rgba(238, 232, 220, .07); }
+  font: 400 .75rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text); transition: border-color .2s, background-color .2s; }
+.btn:hover { border-color: var(--text); background: var(--hover); }
 .btn[disabled] { opacity: .45; cursor: default; }
 .btn .sw { width: 10px; height: 10px; border-radius: 1px; background: var(--f); box-shadow: inset 0 0 0 2px var(--i); }
 
@@ -133,7 +182,7 @@ h1 em { font-style: italic; }
 @media (max-width: 480px) { .act .lbl { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .frame .card { transition: none; }
+  .frame .card, .more::after { transition: none; }
   .frame .card.enter { animation: none; }
 }
-.src-note .rtl { font-family: var(--naskh); }
+.src .rtl { font-family: var(--naskh); }

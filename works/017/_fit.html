@@ -8,8 +8,31 @@
 <style> #host { position: absolute; left: 0; top: 0; width: 1080px; } </style>
 </head>
 <body>
-<!-- Build only (_cards.js opens it headless). For every card in index.html it chooses a size, in cqw, and the line breaks:
-     the largest size at which the saying stays above the footer with a good rag. The generator bakes both into the page. -->
+<!-- Build only (_cards.js opens it headless, a batch of cards at a time: ?from=&to=). For every card in index.html it
+     chooses a size, in cqw, and the line breaks; the generator bakes both into the page.
+
+     How: each word is measured once, laid out on one line. A size gives a measure (the line's width) and a number of
+     lines that fit above the footer. For every size from the largest that fits down to 75% of it, the breaks are
+     chosen by dynamic programming over the words, as the cheapest set by the costs below; then size and cost are
+     weighed together, every cost counting as that fraction of size given up. The pick is laid out for real and
+     stepped down if any line or the last baseline does not fit.
+
+     Costs (a fraction of the size):
+       a line ending on a, an, the or I .......... .12     ("truth is a / mute devil", "without a / frown")
+       a line ending on a short preposition or and  .015
+       a last line of one word .................... .08     (.04 if the word is long, 9 letters or more)
+       a last line under 30% of the longest ....... .05
+       a line other than the last under half
+         the longest .............................. .10 and more
+       a line of one short word, not the last ..... .08
+       the italic phrase broken when it would fit
+         on one line .............................. .10
+       rag: the lines short of the measure ........ .08 x the sum of squares of the shortfall
+       a break after , ; : . ? ! ................ -.008 (a small reward: lines end on the sense)
+       each line that would fit above the footer
+         and is left empty ........................ .025
+     ?force={"id":[3,2,2]} sets a card's breaks by hand (the generator's override table); the size is then the largest
+     at which those lines fit. -->
 <div id="host"></div>
 <pre id="out"></pre>
 <script>
@@ -18,10 +41,12 @@
   try {
     const q = new URLSearchParams(location.search);
     const MAX = parseFloat(q.get('max') || 25), SAFETY = parseFloat(q.get('safety') || 0.985), BOTTOM = 107;
-    const RANGE = 0.88;   // how far below the largest fitting size to look for a better rag
+    const RANGE = 0.75;
+    const FORCE = JSON.parse(q.get('force') || '{}');
     const html = await (await fetch('index.html', { cache: 'no-store' })).text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
-    const tiles = [...doc.querySelectorAll('.wall .tile')];
+    // one batch: the generator runs several of these side by side
+    const tiles = [...doc.querySelectorAll('.wall .tile')].slice(parseInt(q.get('from') || 0), q.has('to') ? parseInt(q.get('to')) : undefined);
     const text = tiles.map(t => t.textContent).join(' ');
     await Promise.all(['400 50px "EB Garamond"', 'italic 400 50px "EB Garamond"', '300 20px "Red Hat Mono"'].map(f => document.fonts.load(f, text)));
     await document.fonts.ready;
@@ -29,15 +54,26 @@
     const host = document.getElementById('host');
     const sizes = {};
 
+    const ARTICLE = /^(a|an|the|i)$/i;
+    const SMALL = /^(of|to|in|on|at|by|for|from|with|and|or|but|as|into|nor|if|so|than|that)$/i;
+    const bare = w => w.replace(/^[“‘(]+|[”’),.;:!?]+$/g, '');
+    const PUNCT = /[,.;:!?][”’]?$/;
+    // the saying's top line sits at 6.85cqw whatever the size; lines are 1.055em apart
+    const linesThatFit = fs => Math.floor((BOTTOM - 6.85 + 0.1775 * fs) / (1.055 * fs) + 1e-9);
+
     for (const tile of tiles) {
       const card = document.importNode(tile.querySelector('.card'), true);
       host.replaceChildren(card);
       const p = card.querySelector('.q p');
-      // undo any baked lines: the composition is chosen afresh every run
       const lns = [...p.querySelectorAll('.ln')];
       if (lns.length) p.innerHTML = lns.map(l => l.innerHTML).join(' ');
 
-      // the words, as ranges over the text nodes, each knowing whether it is (partly) italic
+      // ---- measure every word once, on one line, at 10cqw ----
+      const F0 = 10;
+      card.style.setProperty('--fs', F0);
+      p.style.whiteSpace = 'nowrap';
+      const unit = card.getBoundingClientRect().width / 100;
+      const M = p.clientWidth / unit;                  // the measure, in cqw
       const nodes = [], walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
       for (let n; (n = walker.nextNode());) nodes.push(n);
       let flat = '', map = [];
@@ -46,77 +82,129 @@
       for (const m of flat.matchAll(/\S+/g)) {
         const [sn, so] = map[m.index], [en, eo] = map[m.index + m[0].length - 1];
         const r = document.createRange(); r.setStart(sn, so); r.setEnd(en, eo + 1);
+        const b = r.getBoundingClientRect();
         let it = false;
         for (let k = m.index; k < m.index + m[0].length; k++) if (map[k][0].parentElement.closest('em')) it = true;
-        words.push({ r, it, text: m[0] });
+        words.push({ text: m[0], it, l: b.left / unit, r: b.right / unit });
       }
+      p.style.whiteSpace = '';
+      const N = words.length;
+      // width per 1cqw of type: a line from word a to word b (inclusive) is (words[b].r - words[a].l) / F0 * fs
+      const span = (a, b) => (words[b].r - words[a].l) / F0;
+      const itIdx = words.map((w, i) => w.it ? i : -1).filter(i => i >= 0);
+      const itW = itIdx.length ? span(itIdx[0], itIdx.at(-1)) : 0;
 
-      const layout = (fs, mode) => {
-        card.style.setProperty('--fs', fs);
-        p.style.textWrap = mode;
-        const unit = card.getBoundingClientRect().width / 100, top = card.getBoundingClientRect().top;
-        const fits = (p.getBoundingClientRect().bottom - top) / unit <= BOTTOM && p.scrollWidth <= p.clientWidth + 0.5;
-        const left = p.getBoundingClientRect().left, M = p.clientWidth;
-        const lines = [];
-        let lastTop = null;
-        for (const w of words) {
-          const rects = [...w.r.getClientRects()].filter(x => x.width > 0);
-          const a = rects[0], b = rects.at(-1);
-          if (lastTop === null || Math.abs(a.top - lastTop) > 2) { lines.push({ n: 0, w: 0, it: false, words: [] }); lastTop = a.top; }
-          const ln = lines.at(-1);
-          ln.n++; ln.w = b.right - left; ln.words.push(w);
-          if (w.it) ln.it = true;
+      // ---- the costs of one line, words a..b, at measure T (in units of 1cqw of type) ----
+      const lineCost = (a, b, T, last) => {
+        const w = span(a, b), end = bare(words[b].text);
+        let c = 0;
+        if (!last) {
+          if (ARTICLE.test(end)) c += 0.12;
+          else if (SMALL.test(end)) c += 0.015;
+          if (PUNCT.test(words[b].text)) c -= 0.008;
+          const short = (T - w) / T;
+          c += 0.08 * short * short;
+          if (a === b && w < 0.45 * T) c += 0.08;
+        } else if (a > 0) {
+          if (a === b) c += bare(words[b].text).length >= 9 ? 0.04 : 0.08;
         }
-        return { fs, mode, fits: fits && lines.every(l => l.w <= M + 0.5), lines, M };
+        return c;
       };
-
-      // How good is the rag? Hard rules make a layout fail; their shortfalls also make a score for when nothing passes.
-      const judge = ({ lines, M }) => {
-        const L = Math.max(...lines.map(l => l.w));
-        let pen = 0, articles = 0; const why = [];
-        lines.forEach((l, i) => {
+      // the whole set: lines are [start, end] pairs
+      const setCost = (lines, T) => {
+        let c = 0;
+        const ws = lines.map(([a, b]) => span(a, b)), L = Math.max(...ws);
+        lines.forEach(([a, b], i) => {
           const last = i === lines.length - 1;
-          if (!last && lines.length > 1 && l.w < 0.6 * L) { pen += (0.6 * L - l.w) / M; why.push('short line'); }
-          if (!last && l.n === 1 && l.w < 0.45 * M) { pen += 1 + (0.45 * M - l.w) / M; why.push('lone word'); }
-          if (last && lines.length > 1 && l.n === 1 && l.w < 0.3 * M) { pen += 0.6 + (0.3 * M - l.w) / M; why.push('widow'); }
-          // an article left hanging at the end of a line
-          if (!last && /^(a|an|the)$/i.test(l.words.at(-1).text.replace(/[“”‘’]/g, ''))) articles++;
+          c += lineCost(a, b, T, last);
+          if (!last && lines.length > 1 && ws[i] < 0.5 * L) c += 0.10 + 2 * (0.5 * L - ws[i]) / L;
+          if (last && lines.length > 1 && ws[i] < 0.3 * L) c += 0.05;
         });
-        const itLines = lines.filter(l => l.it).length;
-        const broken = itLines > 1;
-        return { pass: !why.length, pen, why: why.join(', '), broken, articles };
+        if (itIdx.length && itW <= T) {
+          const a = lines.findIndex(([x, y]) => itIdx[0] >= x && itIdx[0] <= y), b = lines.findIndex(([x, y]) => itIdx.at(-1) >= x && itIdx.at(-1) <= y);
+          if (a !== b) c += 0.10;
+        }
+        return c;
       };
+      // best breaks with at most maxLines lines, no line wider than T: DP on (words used, lines used)
+      const best = (T, maxLines) => {
+        const INF = 1e9;
+        const D = Array.from({ length: maxLines + 1 }, () => new Array(N + 1).fill(INF));
+        const back = Array.from({ length: maxLines + 1 }, () => new Array(N + 1).fill(-1));
+        D[0][0] = 0;
+        for (let k = 1; k <= maxLines; k++) for (let j = 1; j <= N; j++) for (let i = j - 1; i >= 0; i--) {
+          if (span(i, j - 1) > T) break;
+          if (D[k - 1][i] >= INF) continue;
+          const v = D[k - 1][i] + lineCost(i, j - 1, T, j === N);
+          if (v < D[k][j]) { D[k][j] = v; back[k][j] = i; }
+        }
+        // the DP keeps local costs; the whole-set costs (short lines, italic phrase) are added for every line count
+        let pick = null;
+        for (let k = 1; k <= maxLines; k++) {
+          if (D[k][N] >= INF) continue;
+          const lines = []; for (let j = N, kk = k; kk > 0; kk--) { const i = back[kk][j]; lines.unshift([i, j - 1]); j = i; }
+          // lines left unused above the footer leave the card looking underfilled
+          const c = setCost(lines, T) + 0.025 * (maxLines - k);
+          if (!pick || c < pick.c) pick = { lines, c };
+        }
+        return pick;
+      };
+      const fitsAt = fs => { const T = M / fs, n = linesThatFit(fs); return n >= 1 ? best(T, Math.min(n, N)) : null; };
 
-      // the largest size that fits at all, with ordinary wrapping
+      // ---- the size: the largest at which the words fit at all, then the best weighed against size ----
       let lo = 3, hi = MAX;
-      if (layout(hi, 'wrap').fits) lo = hi;
-      else while (hi - lo > 0.005) { const mid = (lo + hi) / 2; if (layout(mid, 'wrap').fits) lo = mid; else hi = mid; }
+      if (fitsAt(hi)) lo = hi;
+      else while (hi - lo > 0.005) { const mid = (lo + hi) / 2; if (fitsAt(mid)) lo = mid; else hi = mid; }
       const top = lo;
-
-      // every candidate down to 88% of it, in two wrapping styles
-      const cands = [];
-      for (let fs = top; fs >= top * RANGE - 1e-9; fs *= 0.996) {
-        for (const mode of ['wrap', 'pretty']) {
-          const l = layout(fs, mode);
-          if (!l.fits) continue;
-          cands.push({ ...l, ...judge(l) });
+      let pick = null;
+      const forced = FORCE[tile.id];
+      if (forced) {
+        let k = 0; const lines = forced.map(n => [k, (k += n) - 1]);
+        if (k !== N) throw new Error(`forced breaks for ${tile.id} cover ${k} words, the saying has ${N}`);
+        const W = Math.max(...lines.map(([a, b]) => span(a, b)));
+        let fs = Math.min(MAX, M / W); while (linesThatFit(fs) < lines.length) fs *= 0.998;
+        pick = { fs, lines, c: setCost(lines, M / fs), forced: true };
+      } else {
+        for (let fs = top; fs >= top * RANGE - 1e-9; fs *= 0.996) {
+          const b = fitsAt(fs);
+          if (!b) continue;
+          const score = fs / top - b.c;
+          if (!pick || score > pick.score) pick = { fs, lines: b.lines, c: b.c, score };
         }
       }
-      const passing = cands.filter(c => c.pass).sort((a, b) => b.fs - a.fs);
-      let pick;
-      if (passing.length) {
-        // softer wishes, each worth a few percent of size: no article left at a line's end, the italic phrase whole
-        const worth = c => c.fs / passing[0].fs - 0.035 * c.articles - 0.025 * c.broken;
-        pick = passing.slice().sort((a, b) => worth(b) - worth(a))[0];
-      } else {
-        pick = cands.slice().sort((a, b) => (a.pen + 0.035 * a.articles + 2 * (1 - a.fs / top)) - (b.pen + 0.035 * b.articles + 2 * (1 - b.fs / top)))[0];
-      }
+
+      // ---- lay the pick out for real; step down if a line or the last baseline does not fit ----
+      const breaks = pick.lines.map(([a, b]) => b - a + 1);
+      let k = 0;
+      const parts = breaks.map(n => words.slice(k, k += n));
+      // rebuild the lines as the page will have them: one block per line, the italic kept
+      const escH = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+      const runHTML = ws => ws.map((w, i) => (i ? ' ' : '') + (w.it ? `<em>${escH(w.text)}</em>` : escH(w.text))).join('').replace(/<\/em> <em>/g, ' ');
+      p.innerHTML = parts.map(ws => `<span class="ln">${runHTML(ws)}</span>`).join(' ');
+      let fs = pick.fs;
+      const ok = () => {
+        card.style.setProperty('--fs', fs);
+        const u = card.getBoundingClientRect().width / 100, t = card.getBoundingClientRect().top;
+        return (p.getBoundingClientRect().bottom - t) / u <= BOTTOM && [...p.querySelectorAll('.ln')].every(l => l.scrollWidth <= p.clientWidth + 0.5);
+      };
+      while (!ok() && fs > 3) fs *= 0.997;
+
+      // ---- report ----
+      const ws = pick.lines.map(([a, b]) => span(a, b)), L = Math.max(...ws), why = [];
+      pick.lines.forEach(([a, b], i) => {
+        const last = i === pick.lines.length - 1;
+        if (!last && ARTICLE.test(bare(words[b].text))) why.push(`ends on "${bare(words[b].text)}"`);
+        if (!last && pick.lines.length > 1 && ws[i] < 0.5 * L) why.push('short line');
+        if (!last && a === b && ws[i] < 0.45 * (M / pick.fs)) why.push('lone word');
+        if (last && a > 0 && a === b) why.push('one-word last line');
+      });
+      const broken = itIdx.length > 0 && pick.lines.findIndex(([x, y]) => itIdx[0] >= x && itIdx[0] <= y) !== pick.lines.findIndex(([x, y]) => itIdx.at(-1) >= x && itIdx.at(-1) <= y);
+      if (broken && itW <= M / pick.fs) why.push('italic broken');
       sizes[tile.id] = {
-        fs: Math.floor(pick.fs * SAFETY * 100) / 100,
-        breaks: pick.lines.map(l => l.n),
-        pass: pick.pass, why: pick.why, broken: pick.broken,
-        top: Math.round(top * 100) / 100,
-        lines: pick.lines.map(l => l.words.map(w => w.text).join(' ')),
+        fs: Math.floor(fs * SAFETY * 100) / 100,
+        breaks, pass: !why.length, why: why.join(', '), broken, forced: !!pick.forced,
+        top: Math.round(top * 100) / 100, cost: Math.round(pick.c * 1000) / 1000,
+        lines: parts.map(ws => ws.map(w => w.text).join(' ')),
       };
     }
     out.textContent = JSON.stringify({ fonts, sizes });

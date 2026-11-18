@@ -47,6 +47,25 @@
     const [r, g, b] = [1, 3, 5].map(i => decode(parseInt(hex.slice(i, i + 2), 16) / 255));
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
+  // distance in OKLab between two sRGB hex colors: under SAME, two fields read as one color side by side
+  function oklab(hex) {
+    const [r, g, b] = [1, 3, 5].map(i => decode(parseInt(hex.slice(i, i + 2), 16) / 255));
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    return [0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s, 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s];
+  }
+  const distance = (a, b) => { const x = oklab(a), y = oklab(b); return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]); };
+  const SAME = 0.065;
+  const hueGap = (a, b) => { const d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; };
+  const isPaper = lch => lch[0] >= 0.85 && lch[1] <= 0.045;
+  // Do two cards side by side read as different? Their fields differ; or, both on undyed paper, their inks are
+  // colored and at least 40 degrees apart in hue (paper cards are told apart by their ink).
+  function differ(a, b) {
+    if (distance(a.field, b.field) >= SAME) return true;
+    if (!isPaper(a.fieldLch) || !isPaper(b.fieldLch)) return false;
+    return a.inkLch[1] > 0.05 && b.inkLch[1] > 0.05 && hueGap(a.inkLch[2], b.inkLch[2]) >= 40;
+  }
   function contrast(a, b) {
     const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
     return (x + 0.05) / (y + 0.05);
@@ -88,19 +107,32 @@
       : [[f.deep, f.c, f.h], [0.9, 0.07, f.near]],
     // a paper field with deep colored ink, to rest the eye
     quiet: f => [PAPER, [0.39, Math.min(f.c, 0.16), f.h]],
+    // added for walls of twenty-odd cards a theme, so neighbors never share a field: three more field lightnesses
+    // paper ink on a field halfway between the light and the deep one
+    mid: f => [[f.mid || (f.light + f.deep) / 2, f.c, f.h], PAPER],
+    // near-black ink on a field a step darker than the light one
+    shade: f => [[f.shade || f.light - 0.12, f.c, f.h], [0.19, Math.min(0.045, f.c * 0.35), f.h]],
+    // near-black ink on a field two steps darker
+    dusk: f => [[f.dusk || f.light - 0.26, f.c, f.h], [0.17, Math.min(0.045, f.c * 0.35), f.h]],
   };
+  // For the paper family (Enough): undyed paper, with the color in the ink, borrowed from the other families' deep
+  // pigments. 'ink-madder' is madder ink on the theme's paper; the fields alternate between it and the page-white PAPER.
+  const LENT = { madder: 'paper', malachite: 'light', aubergine: 'paper', turquoise: 'light', indigo: 'paper' };
+  for (const [k, field] of Object.entries(LENT)) {
+    SCHEMES['ink-' + k] = f => [field === 'paper' ? PAPER : [f.light, f.lightC || f.c, f.h], [0.37, Math.min(FAMILIES[k].c, 0.14), FAMILIES[k].h]];
+  }
 
   // ---- the themes, each with its family and the schemes its cards take, in order ----
   const THEMES = [
-    { name: 'Love',      slug: 'love',      family: 'madder',    variants: ['ink', 'deep', 'quiet', 'complement', 'tonal', 'neighbor'] },
-    { name: 'The self',  slug: 'self',      family: 'malachite', variants: ['deep', 'ink', 'complement', 'quiet', 'tonal', 'neighbor'] },
+    { name: 'Love',      slug: 'love',      family: 'madder',    variants: ['ink', 'deep', 'quiet', 'complement', 'tonal', 'neighbor', 'pale', 'mid'] },
+    { name: 'The self',  slug: 'self',      family: 'malachite', variants: ['deep', 'ink', 'complement', 'quiet', 'tonal', 'neighbor', 'pale', 'mid'] },
     { name: 'Patience',  slug: 'patience',  family: 'lapis',     variants: ['deep', 'ink', 'complement', 'pale', 'tonal', 'neighbor'] },
-    { name: 'Silence',   slug: 'silence',   family: 'indigo',    variants: ['deep', 'complement', 'ink', 'tonal', 'neighbor', 'quiet'] },
-    { name: 'Humility',  slug: 'humility',  family: 'saffron',   variants: ['ink', 'complement', 'pale', 'neighbor', 'quiet'] },
-    { name: 'Loss',      slug: 'loss',      family: 'aubergine', variants: ['deep', 'ink', 'tonal', 'quiet', 'complement', 'neighbor'] },
-    { name: 'The path',  slug: 'path',      family: 'turquoise', variants: ['ink', 'deep', 'neighbor', 'complement', 'tonal', 'quiet'] },
-    { name: 'Others',    slug: 'others',    family: 'vermilion', variants: ['ink', 'deep', 'complement', 'quiet', 'pale', 'neighbor'] },
-    { name: 'Enough',    slug: 'enough',    family: 'paper',     variants: ['ink', 'deep', 'complement', 'neighbor', 'pale'] },
+    { name: 'Silence',   slug: 'silence',   family: 'indigo',    variants: ['deep', 'complement', 'ink', 'tonal', 'neighbor', 'quiet', 'pale', 'mid'] },
+    { name: 'Humility',  slug: 'humility',  family: 'saffron',   variants: ['ink', 'complement', 'pale', 'neighbor', 'quiet', 'deep', 'tonal', 'shade'] },
+    { name: 'Loss',      slug: 'loss',      family: 'aubergine', variants: ['deep', 'ink', 'tonal', 'quiet', 'complement', 'neighbor', 'pale', 'mid'] },
+    { name: 'The path',  slug: 'path',      family: 'turquoise', variants: ['ink', 'deep', 'neighbor', 'complement', 'tonal', 'quiet', 'pale', 'mid'] },
+    { name: 'Others',    slug: 'others',    family: 'vermilion', variants: ['ink', 'deep', 'complement', 'quiet', 'pale', 'neighbor', 'tonal'] },
+    { name: 'Enough',    slug: 'enough',    family: 'paper',     variants: ['ink', 'complement', 'deep', 'ink-madder', 'shade', 'ink-malachite', 'neighbor', 'dusk', 'ink-aubergine', 'ink-turquoise', 'ink-indigo'] },
   ];
   const BY = {};
   THEMES.forEach(t => { BY[t.name] = t; BY[t.slug] = t; });
@@ -142,5 +174,5 @@
   }
   const variants = theme => BY[theme].variants.slice();
 
-  return { EDGE, maxChroma, isYellow, THEMES, FAMILIES, SCHEMES, MIN_CONTRAST, pair, variants, theme: n => BY[n], contrast, luminance, toHex, mapToGamut, oklchToLinear };
+  return { SAME, distance, differ, isPaper, EDGE, maxChroma, isYellow, THEMES, FAMILIES, SCHEMES, MIN_CONTRAST, pair, variants, theme: n => BY[n], contrast, luminance, toHex, mapToGamut, oklchToLinear };
 });

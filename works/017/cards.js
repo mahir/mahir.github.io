@@ -1,4 +1,4 @@
-/* No. 017 · the wall, the large view, recolor, filter and Save card. The cards themselves are in the HTML. */
+/* No. 017 · the sections, the large view, recolor and Save card. The cards themselves are in the HTML. */
 (() => {
   'use strict';
   const root = document.documentElement;
@@ -26,38 +26,107 @@
     for (let i = 0; i < 40 && overflows(card); i++) { fs = Math.round(fs * 0.97 * 100) / 100; card.style.setProperty('--fs', fs); }
   }
   const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-  fontsReady.then(() => tiles.forEach(t => refit(t.querySelector('.card'))));
-
-  // ---------- filter ----------
-  let shown = tiles;
-  const filter = document.querySelector('.filter');
-  filter.addEventListener('click', e => {
-    const b = e.target.closest('button');
-    if (!b) return;
-    filter.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-    const want = b.dataset.theme;
-    tiles.forEach(t => { t.hidden = !!want && t.dataset.theme !== want; });
-    document.getElementById('wall').classList.toggle('one', !!want);
-    shown = tiles.filter(t => !t.hidden);
+  // a card is checked when it first comes near the screen, so a long page costs nothing until it is read
+  fontsReady.then(() => {
+    if (!('IntersectionObserver' in window)) return tiles.forEach(t => refit(t.querySelector('.card')));
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      refit(e.target.querySelector('.card'));
+    }), { rootMargin: '600px 0px' });
+    tiles.forEach(t => io.observe(t));
   });
+
+  // ---------- sections: one row each, "Show all" for the rest ----------
+  const shown = tiles;           // Previous and Next walk every card, theme after theme
+  const sections = [...document.querySelectorAll('.theme')];
+  function setOpen(sec, on) {
+    const b = sec.querySelector('.more');
+    sec.classList.toggle('open', on);
+    if (!b) return;
+    b.setAttribute('aria-expanded', String(on));
+    b.textContent = on ? 'Show fewer' : `Show all ${b.dataset.n}`;
+  }
+  for (const sec of sections) {
+    const b = sec.querySelector('.more');
+    if (!b) continue;
+    b.hidden = false;
+    b.addEventListener('click', () => {
+      const on = !sec.classList.contains('open');
+      setOpen(sec, on);
+      // closing a long section from its foot: bring its heading back rather than leave the reader further down the page
+      if (!on && sec.getBoundingClientRect().top < 0) sec.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+    });
+  }
+  // a card that a closed section is hiding: open the section
+  function reveal(tile) {
+    const sec = tile.closest('.theme');
+    if (sec && !tile.querySelector('.card').getClientRects().length) setOpen(sec, true);
+  }
+
+  // the index of themes marks the section being read
+  const strip = document.querySelector('.jump ol');
+  const jump = [...document.querySelectorAll('.jump a')];
+  let ticking = false;
+  function mark() {
+    ticking = false;
+    const line = (document.querySelector('.jump')?.offsetHeight || 0) + 80;
+    let cur = null;
+    for (const sec of sections) if (sec.getBoundingClientRect().top <= line) cur = sec;
+    let changed = false;
+    for (const a of jump) {
+      const on = String(!!cur && a.getAttribute('href') === '#' + cur.id);
+      if (a.getAttribute('aria-current') !== on) { a.setAttribute('aria-current', on); changed = true; }
+    }
+    if (changed && strip && strip.scrollWidth > strip.clientWidth) follow();
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(mark); } }, { passive: true });
+  mark();
+  // the row of themes, when it is wider than the screen, fades at its cut edge until scrolled to the end
+  function edge() {
+    if (!strip) return;
+    strip.classList.toggle('over', strip.scrollWidth > strip.clientWidth + 1);
+    strip.classList.toggle('end', strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 2);
+  }
+  strip?.addEventListener('scroll', edge, { passive: true });
+  addEventListener('resize', edge);
+  fontsReady.then(edge);
+  // keep the marked theme in view in the row
+  function follow() {
+    const a = strip.querySelector('[aria-current="true"]');
+    if (!a) return;
+    const l = a.offsetLeft - strip.offsetLeft, r = l + a.offsetWidth;
+    if (l < strip.scrollLeft || r > strip.scrollLeft + strip.clientWidth - 40) strip.scrollTo({ left: Math.max(0, l - 24), behavior: reduce.matches ? 'auto' : 'smooth' });
+  }
 
   // ---------- color ----------
   function setColor(tile, variant) {
     const p = P.pair(tile.dataset.theme, variant);
     tile.dataset.variant = p.variant;
+    const edge = P.contrast(p.field, ground()) < EDGE_BELOW;
     for (const card of [tile.querySelector('.card'), current === tile && $('frame').querySelector('.card')]) {
       if (!card) continue;
       card.style.setProperty('--f', p.field);
       card.style.setProperty('--i', p.ink);
+      card.classList.toggle('edge', edge);
     }
     return p;
   }
-  const NAMES = { ink: 'ink on color', deep: 'paper on deep', tonal: 'tonal', pale: 'tonal, pale', complement: 'complement', neighbor: 'neighbor', quiet: 'quiet' };
+  // a card whose field is close to the page's ground gets a hairline edge (the generator bakes the same rule)
+  const EDGE_BELOW = 1.3;
+  let groundHex = null;
+  function ground() {
+    if (groundHex) return groundHex;
+    const v = getComputedStyle(root).getPropertyValue('--ground').trim();
+    return (groundHex = /^#[0-9a-f]{6}$/i.test(v) ? v : '#ebe6dc');
+  }
+  const NAMES = { ink: 'ink on color', deep: 'paper on deep', tonal: 'tonal', pale: 'tonal, pale', complement: 'complement', neighbor: 'neighbor', quiet: 'quiet', mid: 'paper on mid', shade: 'ink on shade', dusk: 'ink on dusk' };
   function describe(tile) {
     const t = P.theme(tile.dataset.theme), p = P.pair(t.name, tile.dataset.variant);
     const fam = P.FAMILIES[t.family].name;
     const i = t.variants.indexOf(p.variant) + 1;
-    return `${fam} · ${NAMES[p.variant]} · ${i} of ${t.variants.length} · ${p.field} / ${p.ink}`;
+    const name = NAMES[p.variant] || (p.variant.startsWith('ink-') ? `${P.FAMILIES[p.variant.slice(4)].name} ink on paper` : p.variant);
+    return `${fam} · ${name} · ${i} of ${t.variants.length} · ${p.field} / ${p.ink}`;
   }
 
   // ---------- the large view ----------
@@ -76,7 +145,8 @@
     const scheme = document.createElement('p');
     scheme.className = 'scheme'; scheme.id = 'scheme'; scheme.textContent = describe(tile);
     info.replaceChildren(src, scheme);
-    if (src.querySelector('[dir="rtl"]')) loadNaskh();
+    if (src.querySelector('[dir="rtl"]')) loadFont('Noto+Naskh+Arabic');
+    if (src.querySelector('[lang="pa-Guru"]')) loadFont('Noto+Serif+Gurmukhi');
     const i = shown.indexOf(tile);
     $('count').textContent = `${i + 1} of ${shown.length}`;
     $('prev').disabled = i <= 0;
@@ -91,7 +161,6 @@
   }
   function open(tile, push) {
     if (!tile) return;
-    if (!shown.includes(tile)) { filter.querySelector('button').click(); }
     const opening = !view.open;
     if (opening) { opener = tile.querySelector('.card'); view.showModal(); }
     show(tile);
@@ -109,7 +178,10 @@
     const t = current;
     current = null; frame.replaceChildren(); info.replaceChildren();
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-    (t ? t.querySelector('.card') : opener)?.focus({ preventScroll: false });
+    // back on the wall at the card last shown, its section opened if it was folded away
+    if (t) reveal(t);
+    const back = t ? t.querySelector('.card') : opener;
+    if (back) { back.focus({ preventScroll: true }); back.scrollIntoView({ block: 'nearest' }); }
   }
   view.addEventListener('close', closed);
   view.addEventListener('cancel', e => { e.preventDefault(); close(); });   // Esc
@@ -158,21 +230,26 @@
 
   // an address opens its card
   const byId = id => tiles.find(t => t.id === decodeURIComponent(id));
-  function route() {
+  function route(first) {
     const id = location.hash.slice(1), t = id && byId(id);
-    if (t) { if (t !== current) open(t, false); }
+    if (t) {
+      // arriving at a card's address: the wall behind is scrolled to that card, its section open
+      if (first === true) { reveal(t); t.scrollIntoView({ block: 'center' }); }
+      if (t !== current) open(t, false);
+    }
     else if (view.open) close();
   }
   addEventListener('popstate', route);
   addEventListener('hashchange', route);
-  if (location.hash) fontsReady.then(route);
+  if (location.hash) fontsReady.then(() => route(true));
 
-  let naskh = false;
-  function loadNaskh() {
-    if (naskh) return; naskh = true;
+  // a face for the original's script, fetched the first time a card needs it
+  const loaded = new Set();
+  function loadFont(family) {
+    if (loaded.has(family)) return; loaded.add(family);
     const l = document.createElement('link');
     l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400&display=swap';
+    l.href = `https://fonts.googleapis.com/css2?family=${family}:wght@400&display=swap`;
     document.head.append(l);
   }
 

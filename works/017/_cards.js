@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // node works/017/_cards.js [--no-fit]
 //
-// Writes the cards from sayings.json into index.html, between <!-- gen:cards --> and <!-- /gen:cards -->
-// (and the theme filter between <!-- gen:filter --> markers). Then it fits each saying: it opens _fit.html in the
+// Writes the cards from sayings.json into index.html, one section a theme, between <!-- gen:cards --> and
+// <!-- /gen:cards -->; the theme links between <!-- gen:nav --> markers and the lede, with its counts, between <!-- gen:lede -->. Then it fits each saying: it opens _fit.html in the
 // headless browser, which finds the largest size in cqw at which the saying stays above the footer, and writes
 // that number into the card as --fs. Running it twice changes nothing.
 'use strict';
@@ -17,6 +17,29 @@ const DIR = __dirname;
 const INDEX = path.join(DIR, 'index.html');
 const MAX_FS = 25;        // cqw: a five-word saying stops getting better past this
 const SAFETY = 0.985;     // leave a little room for other browsers' line breaking
+// Hand-set line breaks, by id: words per line. Only for a card the fitter's rules cannot get right; the size is then
+// the largest at which these lines fit. Each entry says why.
+const BREAKS = {
+  'junayd-love-with-a-motive': [2, 2, 3, 2, 3],              // no line ending on "the"
+  'daqqaq-silent-about-the-truth': [1, 2, 1, 3, 3],          // was "about the / truth is a / mute devil"
+  'ghazali-advice-is-easy': [2, 2, 3, 3],                    // "the hard part" kept together
+  'ruwaym-words-and-deeds': [3, 4, 5, 3, 4, 5],              // the two halves set as a pair
+  'ibn-ata-allah-free-and-slave': [3, 3, 3, 3, 4, 2],        // no line ending on "a"
+  'dhul-nun-most-worries': [2, 3, 3, 3, 1],                  // "worries are those" whole; the last word is long
+  'abu-uthman-fire-and-ashes': [2, 4, 3, 4, 3, 3],           // "gets off with ashes" whole
+  'rumi-water-runs-to-the-low': [3, 4, 2, 4, 4, 3, 3, 3],    // "make yourself low" whole
+  'rumi-less-by-dying': [4, 4, 3, 4, 3, 3, 3, 4],            // "ever less by dying" whole
+  'shabistari-sweep-the-heart': [3, 5, 3, 3, 4, 3],          // "the house of the heart" whole
+  'mmb-better-to-keep-silent': [3, 3, 4, 3, 4, 2, 4],        // the poet's name, Muhammad Bakhsh, on one line
+  'fudayl-the-hen': [3, 2, 3, 3, 3, 2, 3],                   // "mistreated his hen" whole
+};
+const LANGS = ['tr', 'fa', 'ar', 'pa', 'ur', 'sd', 'ps'];
+const BATCH = 40;         // cards a headless browser fits; the batches run side by side
+const PARALLEL = Math.max(1, Math.min(6, os.cpus().length - 1));
+// the page's ground, read from style.css: a card whose field is close to it gets a hairline edge
+const GROUND = (fs.readFileSync(path.join(DIR, 'style.css'), 'utf8').match(/--ground:\s*(#[0-9a-f]{6})/i) || [])[1];
+if (!GROUND) { console.error('works/017/_cards.js: no --ground hex in style.css'); process.exit(1); }
+const EDGE_BELOW = 1.3;   // contrast with the ground under which a card needs its edge
 
 // ---------- read and check the sayings ----------
 const sayings = JSON.parse(fs.readFileSync(path.join(DIR, 'sayings.json'), 'utf8'));
@@ -30,7 +53,8 @@ for (const [n, s] of sayings.entries()) {
   if (!P.theme(s.theme)) problems.push(`${where}: unknown theme "${s.theme}"`);
   if ((String(s.text).match(/\*/g) || []).length !== 2) problems.push(`${where}: text needs exactly one *phrase*`);
   if (!s.author) problems.push(`${where}: no author`);
-  if (s.lang && !['tr', 'fa', 'ar', 'pa', 'ur'].includes(s.lang)) problems.push(`${where}: lang "${s.lang}" is not tr, fa, ar, pa or ur`);
+  if (/^(theme|w|h)-/.test(s.id || '')) problems.push(`${where}: ids starting theme-, w- or h- belong to the page`);
+  if (s.lang && !LANGS.includes(s.lang)) problems.push(`${where}: lang "${s.lang}" is not one of ${LANGS.join(', ')}`);
   if (s.original && !s.lang) problems.push(`${where}: original text without lang`);
 }
 if (problems.length) { console.error(problems.join('\n')); process.exit(1); }
@@ -89,54 +113,43 @@ function linesHTML(text, breaks) {
 }
 const isArabicScript = s => /[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/.test(s);
 
-// ---------- colors: each card a deterministic variant of its theme's family ----------
-const byTheme = {};
-for (const s of sayings) (byTheme[s.theme] = byTheme[s.theme] || []).push(s);
-const cards = sayings.map(s => {
-  const t = P.theme(s.theme);
-  const k = byTheme[s.theme].indexOf(s);
-  const pair = P.pair(t.name, k % t.variants.length);
-  const fam = P.FAMILIES[t.family];
-  const hue = pair.fieldLch[1] < 0.05 ? 60 : pair.fieldLch[2];
-  return { s, t, pair, deep: pair.deep, warm: hue < 110 || hue > 340, words: plain(s.text).split(/\s+/).length, fam };
-});
-
-// ---------- order: themes interleave; neighbors alternate deep and light, warm and cool ----------
-function hash(str) { let h = 2166136261; for (const c of str) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return (h >>> 0) / 4294967296; }
-function order(list) {
-  const left = list.slice(), out = [];
-  // open on the card closest to the reference: deep lapis with paper ink
-  let first = left.findIndex(c => c.t.family === 'lapis' && c.pair.variant === 'deep');
-  if (first < 0) first = 0;
-  out.push(left.splice(first, 1)[0]);
-  const remaining = th => left.filter(c => c.t === th).length;
-  while (left.length) {
-    const i = out.length;
-    let best = null, bestScore = Infinity;
-    for (const c of left) {
-      const at = k => out[i - k];
-      let score = 0;
-      // the same theme beside or above (in a 3 or 4 column wall) reads as a block
-      for (const [k, w] of [[1, 10], [2, 3], [3, 7], [4, 7], [5, 2]]) if (at(k) && at(k).t === c.t) score += w;
-      // the same saying near itself
-      for (const k of [1, 2, 3, 4, 5]) if (at(k) && at(k).s.text === c.s.text) score += 6;
-      // deep and light: different from the left neighbor, mixed with the ones above
-      if (at(1) && at(1).deep === c.deep) score += 4;
-      if (at(3) && at(3).deep === c.deep) score += 1.5;
-      if (at(4) && at(4).deep === c.deep) score += 1.5;
-      if (at(1) && at(1).warm === c.warm) score += 2;
-      // long and short sayings alternate a little too
-      if (at(1) && (at(1).words > 15) === (c.words > 15)) score += 1;
-      // keep every theme spread through the wall rather than saving one for the end
-      score -= 0.9 * remaining(c.t);
-      score += hash(c.s.id + ':' + i) * 0.5;
-      if (score < bestScore) { bestScore = score; best = c; }
+// ---------- order and colors ----------
+// The wall is one section a theme, in the palette's theme order; inside a section the sayings keep the order of
+// sayings.json. Each card takes a variant of its theme so that it reads as a different color from the four
+// cards before it (its field, or, for two cards on undyed paper, its ink's hue; see Palette.differ): its neighbor in a row, and the card above it at two, three or four across. Among the variants
+// that allow, the one used least so far, then one that turns deep after light (or light after deep).
+const NEAR = 4;
+const byTheme = new Map(P.THEMES.map(t => [t, []]));
+for (const s of sayings) byTheme.get(P.theme(s.theme)).push(s);
+const sections = [];
+for (const [t, list] of byTheme) {
+  if (!list.length) continue;
+  const used = Object.fromEntries(t.variants.map(v => [v, 0]));
+  const pick = [];
+  // depth first, cheapest variant first; back up a card when the rule leaves none (it is not transitive on paper)
+  let steps = 0;
+  const place = k => {
+    if (k === list.length) return true;
+    if (++steps > 200000) throw new Error(`${t.name}: no color order found`);
+    const before = pick.slice(Math.max(0, k - NEAR)).map(v => P.pair(t.name, v));
+    const prev = before.at(-1);
+    const cost = v => used[v] * 2 + (prev && P.pair(t.name, v).deep === prev.deep ? 1 : 0) + t.variants.indexOf(v) * 0.01;
+    const ok = t.variants.filter(v => before.every(b => P.differ(P.pair(t.name, v), b))).sort((a, b) => cost(a) - cost(b));
+    for (const v of ok) {
+      pick.push(v); used[v]++;
+      if (place(k + 1)) return true;
+      pick.pop(); used[v]--;
     }
-    out.push(left.splice(left.indexOf(best), 1)[0]);
-  }
-  return out;
+    return false;
+  };
+  if (!place(0)) throw new Error(`${t.name}: no variant order keeps neighbors apart`);
+  const cards = list.map((s, k) => {
+    const pair = P.pair(t.name, pick[k]);
+    return { s, t, pair, deep: pair.deep, edge: P.contrast(pair.field, GROUND) < EDGE_BELOW, words: plain(s.text).split(/\s+/).length };
+  });
+  sections.push({ t, cards });
 }
-const wall = order(cards);
+const wall = sections.flatMap(x => x.cards);
 
 // ---------- markup ----------
 // Names and references: an apostrophe before a vowel is an ayn (Sa‘id, Nu‘aym), before a consonant an elision or a possessive (Abu’l, Ansari’s).
@@ -166,12 +179,15 @@ function tileHTML(c, fsz, breaks) {
   let orig = '';
   if (s.original) {
     const rtl = isArabicScript(s.original);
+    // the script, when the language alone does not say it: Punjabi is written in Shahmukhi (Arabic) or in Gurmukhi
+    const guru = /[\u0A00-\u0A7F]/.test(s.original);
+    const tag = s.lang === 'pa' ? (guru ? 'pa-Guru' : 'pa-Arab') : s.lang;
     const lines = s.original.trim().split(/\s+\/\s+|\n/).map(esc).join('<br>');
-    orig = `<p class="src-orig" lang="${s.lang}"${rtl ? ' dir="rtl"' : ''}>${lines}</p>`;
+    orig = `<p class="src-orig" lang="${tag}"${rtl ? ' dir="rtl"' : ''}>${lines}</p>`;
   }
   const lines = [
     `<p class="src-who">${s.grade === 'C' ? '<span class="src-attr">Attributed to</span> ' : ''}<span class="src-author"${nameLang}>${esc(translit(s.author))}</span>${s.dates ? ` <span class="src-dates">${esc(s.dates)}</span>` : ''}</p>`,
-    work && `<p class="src-work">${work}</p>`,
+    work && `<p class="src-work">${rtlRuns(work)}</p>`,
     orig,
     s.note && `<p class="src-note">${rtlRuns(esc(translit(smart(s.note).replace(/‘/g, '“').replace(/’(?=[\s,.;:)]|$)/g, '”'))))}</p>`,
     `<p class="src-theme">${esc(t.name)}</p>`,
@@ -179,7 +195,7 @@ function tileHTML(c, fsz, breaks) {
   ].filter(Boolean);
   return `<li class="tile" id="${s.id}" data-theme="${t.slug}" data-variant="${pair.variant}">
         <figure>
-          <a class="card" href="#${s.id}" style="--f:${pair.field};--i:${pair.ink};--fs:${fsz}">
+          <a class="card${c.edge ? ' edge' : ''}" href="#${s.id}" style="--f:${pair.field};--i:${pair.ink};--fs:${fsz}">
             <blockquote class="q"><p>${linesHTML(s.text, breaks)}</p></blockquote>
             <span class="ft" aria-hidden="true"><span>${esc(upper(s.author, s.lang))}</span><span>${esc(upper(t.name))}</span></span>
           </a>
@@ -189,11 +205,26 @@ function tileHTML(c, fsz, breaks) {
         </figure>
       </li>`;
 }
-function filterHTML() {
-  const used = P.THEMES.filter(t => cards.some(c => c.t === t));
-  return ['<button type="button" aria-pressed="true">All</button>']
-    .concat(used.map(t => `<button type="button" aria-pressed="false" data-theme="${t.slug}"><i aria-hidden="true" style="--sw:${P.pair(t.name, 0).field}"></i>${esc(t.name)}</button>`))
-    .join('\n      ');
+const NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+const count = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+function navHTML() {
+  return sections.map(({ t }) => `<li><a href="#theme-${t.slug}"><i aria-hidden="true" style="--sw:${P.pair(t.name, 0).field}"></i>${esc(t.name)}</a></li>`).join('\n        ');
+}
+function ledeHTML() {
+  return `<p class="lede">${count(wall.length, 'saying', 'sayings')} of Sufi poets and teachers, one to a card, in ${NUM[sections.length] || sections.length} themes. Each theme has its own color. Open a card for its source.</p>`;
+}
+function sectionHTML({ t, cards }, sizes, breaks) {
+  const n = cards.length;
+  return `      <section class="theme" id="theme-${t.slug}" aria-labelledby="h-${t.slug}">
+        <div class="th">
+          <h2 id="h-${t.slug}">${esc(t.name)}</h2>
+          <p class="th-n">${count(n, 'saying', 'sayings')}</p>
+        </div>
+        <ol class="wall" id="w-${t.slug}">
+${cards.map(c => '      ' + tileHTML(c, sizes[c.s.id] ?? 10, breaks[c.s.id])).join('\n')}
+        </ol>
+        <button type="button" class="more" aria-expanded="false" aria-controls="w-${t.slug}" data-n="${n}" hidden>Show all ${n}</button>
+      </section>`;
 }
 function fill(html, name, body, indent) {
   const re = new RegExp(`([ \\t]*)<!-- gen:${name} -->[\\s\\S]*?<!-- /gen:${name} -->`);
@@ -202,8 +233,9 @@ function fill(html, name, body, indent) {
 }
 function write(sizes, breaks) {
   let html = fs.readFileSync(INDEX, 'utf8');
-  html = fill(html, 'filter', '      ' + filterHTML(), '');
-  html = fill(html, 'cards', wall.map(c => '      ' + tileHTML(c, sizes[c.s.id] ?? 10, breaks[c.s.id])).join('\n'), '');
+  html = fill(html, 'lede', '    ' + ledeHTML());
+  html = fill(html, 'nav', '        ' + navHTML());
+  html = fill(html, 'cards', sections.map(x => sectionHTML(x, sizes, breaks)).join('\n'));
   fs.writeFileSync(INDEX, html);
 }
 
@@ -246,29 +278,48 @@ function serve() {
   });
   return new Promise(r => server.listen(0, '127.0.0.1', () => r(server)));
 }
+function fitBatch(bin, port, from, to) {
+  const url = `http://127.0.0.1:${port}/_fit.html?max=${MAX_FS}&safety=${SAFETY}&from=${from}&to=${to}&force=${encodeURIComponent(JSON.stringify(BREAKS))}`;
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'no017-'));
+  return new Promise((resolve, reject) => {
+    const p = spawn(bin, ['--no-sandbox', '--headless', '--hide-scrollbars', '--window-size=1400,1000', '--virtual-time-budget=60000', '--timeout=90000',
+      `--user-data-dir=${profile}`, '--dump-dom', url], { stdio: ['ignore', 'pipe', 'ignore'] });
+    let out = '';
+    const guard = setTimeout(() => { p.kill('SIGKILL'); reject(new Error(`headless browser timed out on cards ${from}-${to}`)); }, 120000);
+    p.stdout.on('data', d => { out += d; });
+    p.on('close', () => {
+      clearTimeout(guard);
+      fs.rmSync(profile, { recursive: true, force: true });
+      const m = out.match(/<pre id="out">([\s\S]*?)<\/pre>/);
+      if (!m) return reject(new Error(`the fit page produced nothing for cards ${from}-${to}`));
+      const res = JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
+      if (res.error) return reject(new Error('fit page: ' + res.error));
+      resolve(res);
+    });
+  });
+}
+// the cards in batches, a few headless browsers at a time
 async function fit() {
   const bin = chrome();
   if (!bin) throw new Error('no headless Chrome found (set CHROME=/path/to/chrome-headless-shell)');
   const server = await serve();
-  const url = `http://127.0.0.1:${server.address().port}/_fit.html?max=${MAX_FS}&safety=${SAFETY}`;
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'no017-'));
   try {
-    const dom = await new Promise((resolve, reject) => {
-      const p = spawn(bin, ['--no-sandbox', '--headless', '--hide-scrollbars', '--window-size=1400,1000', '--virtual-time-budget=60000', '--timeout=90000',
-        `--user-data-dir=${profile}`, '--dump-dom', url], { stdio: ['ignore', 'pipe', 'ignore'] });
-      let out = '';
-      const guard = setTimeout(() => { p.kill('SIGKILL'); reject(new Error('headless browser timed out')); }, 120000);
-      p.stdout.on('data', d => { out += d; });
-      p.on('close', () => { clearTimeout(guard); resolve(out); });
-    });
-    const m = dom.match(/<pre id="out">([\s\S]*?)<\/pre>/);
-    if (!m) throw new Error('the fit page produced nothing');
-    const res = JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
-    if (res.error) throw new Error('fit page: ' + res.error);
-    return res;
+    const jobs = [];
+    for (let from = 0; from < wall.length; from += BATCH) jobs.push([from, Math.min(wall.length, from + BATCH)]);
+    const all = { fonts: true, sizes: {} };
+    let next = 0;
+    const worker = async () => {
+      while (next < jobs.length) {
+        const [from, to] = jobs[next++];
+        const res = await fitBatch(bin, server.address().port, from, to);
+        all.fonts = all.fonts && res.fonts;
+        Object.assign(all.sizes, res.sizes);
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(PARALLEL, jobs.length) }, worker));
+    return all;
   } finally {
     server.close();
-    fs.rmSync(profile, { recursive: true, force: true });
   }
 }
 
@@ -286,7 +337,10 @@ async function fit() {
     if (!r.pass) weak.push(`${c.s.id} (${r.why})`);
   }
   write(sizes, breaks);
-  if (weak.length) console.log(`no rag passed every rule within 12% of the largest size, best kept: ${weak.join(', ')}`);
+  // --report <file>: every card's chosen lines and the rules it met, for reviewing the rag
+  const ri = process.argv.indexOf('--report');
+  if (ri > 0) fs.writeFileSync(process.argv[ri + 1], JSON.stringify(wall.map(c => ({ id: c.s.id, ...res.sizes[c.s.id] })), null, 1));
+  if (weak.length) console.log(`${weak.length} cards keep a fault (no better rag within 75% of the largest size): ${weak.join(', ')}`);
   report(before);
   const list = wall.map(c => ({ id: c.s.id, words: c.words, ...res.sizes[c.s.id] })).sort((a, b) => a.fs - b.fs);
   console.log(`sizes: ${list[0].fs} cqw (${list[0].id}, ${list[0].words} words) to ${list.at(-1).fs} cqw (${list.at(-1).id}, ${list.at(-1).words} words)`);

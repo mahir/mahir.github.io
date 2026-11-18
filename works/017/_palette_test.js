@@ -50,5 +50,19 @@ for (let a = 0; a < defaults.length; a++) for (let b = a + 1; b < defaults.lengt
     fail(`${P.THEMES[a].name} and ${P.THEMES[b].name} defaults are too close`);
 }
 
+// a wall of twenty-odd cards a theme needs five pairs that read as different (by field, or on paper by ink), so no card shares its field with
+// the four before it (its neighbor in a row, or above it at two, three or four across)
+for (const t of P.THEMES) {
+  const pairs = t.variants.map(v => P.pair(t.name, v));
+  // the largest set found by starting a greedy pass from each pair
+  let apart = [];
+  for (const start of pairs) {
+    const set = [start];
+    for (const p of pairs) if (set.every(q => q !== p && P.differ(p, q))) set.push(p);
+    if (set.length > apart.length) apart = set;
+  }
+  if (apart.length < 5) fail(`${t.name}: only ${apart.length} pairs that read as different side by side (need 5)`);
+}
+
 console.log(failures ? `\n${failures} failure(s)` : `\nAll ${P.THEMES.reduce((n, t) => n + t.variants.length, 0)} pairs pass.`);
 process.exit(failures ? 1 : 0);
