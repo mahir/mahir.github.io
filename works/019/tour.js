@@ -36,7 +36,7 @@ export function start(lab, opt = {}) {
       },
     },
     {
-      title: 'A space of tastes', focus: ['learned'], favorites: four,
+      title: 'A space of tastes', focus: ['learned'], favorites: four, map: true,
       say: () => `Learned taste never reads what a listing is. From ${W.counts.favorites.toLocaleString('en-US')} favorites it gives every listing a place, so that things favorited by the same shoppers sit together. The map shows two of its eight directions: the red dots are your favorites, the ring is you, the large dots are its ten.`,
     },
     {
@@ -60,6 +60,7 @@ export function start(lab, opt = {}) {
     lab.set({ as: 'you', favorites: s.favorites.slice() }, bar.hidden === false);
     if (s.select !== undefined) lab.select(s.select);
     lab.focus(s.focus);
+    lab.openMap(!!s.map);
     bar.innerHTML = `<p class="n" aria-label="Step ${at + 1} of ${steps.length}">${at + 1}<small>/${steps.length}</small></p><div><h2>${s.title}</h2><p class="say">${s.say()}</p></div><div class="go"><button type="button" data-go="-1"${at === 0 ? ' disabled' : ''}>Back</button><button type="button" class="next" data-go="1">${at === steps.length - 1 ? 'Done' : 'Next'}</button><button type="button" data-go="0">Skip</button><button type="button" class="more" aria-expanded="false">More</button></div>`;
     bar.classList.remove('open');
     bar.hidden = false; open.hidden = true;
@@ -67,6 +68,7 @@ export function start(lab, opt = {}) {
   function end() {
     bar.hidden = true; open.hidden = false;
     lab.focus(null);
+    lab.openMap(false);
   }
   bar.addEventListener('click', (e) => {
     const more = e.target.closest('.more');

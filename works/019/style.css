@@ -83,6 +83,29 @@ h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-varian
 .bars i.on { background: var(--you); }
 .bars i.hollow.on { background: none; box-shadow: inset 0 0 0 1.5px var(--you); }
 .inst canvas { display: block; width: 100%; height: 78px; border-radius: 4px; background: var(--wash); }
+/* the map: small in its column, with a way to enlarge it; large beside the column, or in place on a narrow window */
+.inst .grow { position: absolute; right: 4px; top: 4px; display: none; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 4px; background: var(--ground); cursor: pointer; }
+.inst .grow svg { width: 14px; height: 14px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.inst .grow:hover, .inst .grow[aria-expanded="true"] { background: var(--ink); }
+.inst .grow:hover svg, .inst .grow[aria-expanded="true"] svg { stroke: var(--ground); }
+.tip { position: absolute; z-index: 1; display: flex; align-items: center; gap: 8px; padding: 5px 11px 5px 5px; border-radius: 5px; background: var(--panel); color: var(--on-panel-soft); font-size: 12px; line-height: 1.3; white-space: nowrap; pointer-events: none; }
+.tip img { width: 34px; height: 34px; border-radius: 3px; }
+.tip span { display: grid; }
+.tip b { color: var(--on-panel); font-weight: 600; }
+.bigmap { display: none; }
+.bigmap canvas { display: block; width: 100%; aspect-ratio: 3 / 2; border-radius: 4px; background: var(--wash); cursor: crosshair; }
+.bigmap .key { margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px 18px; list-style: none; font-size: 12.5px; }
+.bigmap .key li { display: flex; align-items: center; gap: 7px; }
+.bigmap .key span { display: inline-flex; gap: 2px; flex: none; }
+.k-all i { width: 6px; height: 6px; border-radius: 50%; }
+.k-ten, .k-fav { width: 11px; height: 11px; border-radius: 50%; background: var(--ink); }
+.k-fav { background: var(--you); }
+.k-you { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--you); }
+.bigmap .about { max-width: 62ch; font-size: 12.5px; line-height: 1.4; color: var(--soft); text-wrap: pretty; }
+.bigmap .close { position: absolute; right: 16px; top: 16px; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; background: var(--ground); cursor: pointer; }
+.bigmap .close svg { width: 14px; height: 14px; fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
+.bigmap .close:hover { background: var(--ink); }
+.bigmap .close:hover svg { stroke: var(--ground); }
 .mix { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2px 8px; font-size: 12px; height: 100%; align-content: start; }
 .mix input[type="range"] { width: 100%; height: 17px; margin: 0; accent-color: var(--ink); }
 .mix label { display: contents; }
@@ -129,6 +152,11 @@ h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-varian
 @media (min-width: 1100px) {
   .js .feeds { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: auto auto auto auto; column-gap: var(--gap); }
   .feed { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+  /* the large map lies over the three columns to the left of Learned taste, from the instruments down */
+  .inst .grow { display: grid; }
+  .inst .cap .more { display: none; }   /* said by the large map's key instead */
+  .inst.has-map canvas { cursor: zoom-in; }
+  .bigmap { position: absolute; grid-column: 2 / 5; grid-row: 2 / 5; top: 14px; left: 0; right: 0; z-index: 3; display: grid; gap: 10px; padding: 10px 10px 13px; border-radius: 8px; background: var(--ground); box-shadow: 0 0 0 1px var(--line), 0 24px 46px -18px rgba(15, 26, 32, .5); }
 }
 /* seven shelves, each scrolling sideways */
 @media (max-width: 1099.98px) {
@@ -139,6 +167,9 @@ h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-varian
   .feed .line { max-width: 60ch; font-size: 13.5px; }
   .inst { max-width: 380px; }
   .inst.plain { display: none; }
+  .inst.has-map { max-width: 560px; height: auto; }
+  .inst.has-map canvas { height: auto; aspect-ratio: 3 / 2; cursor: crosshair; }
+  .inst.has-map .cap { position: static; margin-top: 7px; white-space: normal; }
   .meas { max-width: 380px; }
   .list { display: flex; gap: 12px; margin: 0 calc(-1 * var(--margin)); padding: 4px var(--margin) 8px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
   .list::-webkit-scrollbar { display: none; }

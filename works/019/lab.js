@@ -16,7 +16,7 @@ export const W = prepare(world);
 export const state = { favorites: [], weights: { ...WEIGHTS }, ads: true, as: 'you' };
 export let R = null;
 
-let hot = null, selected = null, mine = [];
+let hot = null, selected = null, mine = [], big = null;
 const seen = new Set();
 const els = {};
 const listeners = new Set();
@@ -29,6 +29,7 @@ const CAPS = {
   popular: 'Favorites of each of the ten', trending: 'Recent favorites. Hollow: lifted for being new',
   similar: 'Match with your favorites', shoppers: 'Votes from your favorites', explore: 'Fit with your taste. Hollow: a try',
 };
+const MAP = 'A map of the shop: listings favorited by the same shoppers sit together';
 const SLIDERS = [['taste', 'Taste'], ['popular', 'Popular'], ['fresh', 'Fresh'], ['variety', 'Variety']];
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -40,7 +41,11 @@ export function build() {
   feeds.innerHTML = FEEDS.map((f) => `<section class="feed" data-feed="${f.id}" aria-labelledby="h-${f.id}"><div class="head"><h2 id="h-${f.id}">${f.name}</h2><p class="line">${f.line}</p></div><div class="inst${f.id === 'learned' || f.id === 'blend' ? '' : ' plain'}"></div><div class="meas"></div><ol class="list"></ol></section>`).join('') + '<svg class="thread" aria-hidden="true"></svg>';
   for (const f of FEEDS) { const root = $(`[data-feed="${f.id}"]`, feeds); els[f.id] = { root, inst: $('.inst', root), meas: $('.meas', root), list: $('.list', root) }; }
   els.blend.inst.innerHTML = `<div class="mix">${SLIDERS.map(([k, name]) => `<label><span>${name}</span><input type="range" min="0" max="100" value="${Math.round(state.weights[k] * 100)}" data-w="${k}"></label>`).join('')}<label class="sell"><input type="checkbox" checked data-ads> Sell two places</label></div>`;
-  els.learned.inst.innerHTML = '<canvas role="img" aria-label="A map of the shop: listings favorited by the same shoppers sit together"></canvas><p class="cap"></p>';
+  els.learned.inst.classList.add('has-map');
+  els.learned.inst.innerHTML = `<canvas role="img" aria-label="${MAP}"></canvas><button type="button" class="grow" aria-expanded="false" aria-controls="bigmap" aria-label="Enlarge the map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg></button><p class="tip" hidden></p><p class="cap"></p>`;
+  const dots = [0, 4, 2].map((c) => `<i style="background:${COLORS[c].hex}"></i>`).join('');
+  feeds.insertAdjacentHTML('beforeend', `<div class="bigmap" id="bigmap" hidden><canvas role="img" aria-label="${MAP}"></canvas><p class="tip" hidden></p><ul class="key"><li><span class="k-all">${dots}</span>A listing, in its color</li><li><span class="k-ten"></span>Learned taste’s ten</li><li><span class="k-fav"></span>Your favorites</li><li><span class="k-you"></span>You</li></ul><p class="about">Two of the eight directions this feed learned. Listings favorited by the same shoppers sit together. Point at a dot to see the listing.</p><button type="button" class="close" aria-label="Close the map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`);
+  big = $('#bigmap');
 
   const you = $('#you');
   you.innerHTML = `<div class="tray-wrap"><span class="label">Your favorites</span><span class="tray"></span></div><div class="as" role="group" aria-label="Shop as"><span class="label">Shop as</span><button type="button" data-as="you">You</button>${W.shoppers.map((s) => `<button type="button" data-as="${s.name}">${s.name}</button>`).join('')}</div><button type="button" class="reset">Start over</button><p class="seen"></p>`;
@@ -68,9 +73,27 @@ export function build() {
     else if (b.dataset.as) set({ as: b.dataset.as, favorites: b.dataset.as === 'you' ? mine.slice() : W.shoppers.find((s) => s.name === b.dataset.as).favs.slice() });
     else if (b.classList.contains('reset')) { mine = []; select(null); set({ as: 'you', favorites: [], weights: { ...WEIGHTS }, ads: true }); }
   });
+  // the map: in its column it opens the large one; where it is already large, and in the large one, it finds listings
+  for (const cv of [$('canvas', els.learned.inst), $('canvas', big)]) {
+    const large = cv.parentNode === big, tip = $('.tip', cv.parentNode);
+    cv.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || (!large && wide.matches)) return;
+      const id = near(cv, e);
+      warm(id === null ? selected : id);
+      label(cv, tip, id);
+    });
+    cv.addEventListener('pointerleave', () => { label(cv, tip, null); warm(selected); });
+    cv.addEventListener('click', (e) => {
+      if (!large && wide.matches) { openMap(big.hidden); return; }
+      const id = near(cv, e);
+      if (id !== null && id !== selected) select(id);
+    });
+  }
+  $('.grow', els.learned.inst).addEventListener('click', () => openMap(big.hidden));
+  $('.close', big).addEventListener('click', () => openMap(false));
   const why = $('#why');
   why.addEventListener('click', (e) => { if (e.target.closest('.close')) select(null); else if (e.target.closest('.fav')) toggle(selected); });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && selected !== null) select(null); });
+  addEventListener('keydown', (e) => { if (e.key !== 'Escape') return; if (selected !== null) select(null); else openMap(false); });
   let wait = 0;
   addEventListener('resize', () => { clearTimeout(wait); wait = setTimeout(() => { map(); thread(); }, 80); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(thread);
@@ -95,6 +118,12 @@ export function select(id) {
   selected = id === selected ? null : id;
   warm(selected);
   why();
+}
+// The large map, beside its column. On narrow windows the map in the column is already large, and this shows nothing.
+export function openMap(on) {
+  big.hidden = !on;
+  $('.grow', els.learned.inst).setAttribute('aria-expanded', String(on));
+  if (on) map();
 }
 export function focus(ids) {
   $('#feeds').classList.toggle('focusing', !!ids);
@@ -147,7 +176,7 @@ function feed(f, move) {
 
   const m = measures(W, top);
   el.meas.innerHTML = `<div><b>${m.crafts}</b><span>${m.crafts === 1 ? 'craft' : 'crafts'}, ${m.colors} ${m.colors === 1 ? 'color' : 'colors'}</span></div><div><b>${m.favorites}</b><span>favorites, median</span></div><div><b>${m.days}</b><span>days listed, median</span></div>`;
-  if (f.id === 'learned') $('.cap', el.inst).textContent = r.fallback ? 'Nothing to go on yet. This is Most popular.' : 'Two of eight directions. Ring: you.';
+  if (f.id === 'learned') $('.cap', el.inst).innerHTML = r.fallback ? 'Nothing to go on yet. This is Most popular.' : 'Two of eight directions. Ring: you.<span class="more"> Red dots: your favorites. Large dots: this feed’s ten. Tap a dot to see the listing.</span>';
   else if (f.id !== 'blend') bars(f, r, top);
 }
 
@@ -213,25 +242,53 @@ function thread() {
 }
 
 // The map under Learned taste: every listing with a favorite, where the factorization put it.
+// A canvas's frame: how map units become its pixels, and how much larger than the column's map it draws.
+function frame(cv) {
+  const w = cv.clientWidth, h = cv.clientHeight, k = Math.min(2.2, Math.max(1, w / 260)), pad = 7 * k;
+  return { w, h, k, X: (x) => pad + (x / 1000) * (w - 2 * pad), Y: (y) => pad + (1 - y / 1000) * (h - 2 * pad) };
+}
 function map() {
-  const cv = $('canvas', els.learned.inst), w = cv.clientWidth, h = cv.clientHeight;
+  paint($('canvas', els.learned.inst));
+  if (big && !big.hidden) paint($('canvas', big));
+}
+function paint(cv) {
+  const { w, h, k, X, Y } = frame(cv);
   if (!w) return;
   const dpr = Math.min(2, devicePixelRatio || 1);
   cv.width = w * dpr; cv.height = h * dpr;
   const g = cv.getContext('2d');
   g.scale(dpr, dpr);
-  const X = (x) => 7 + (x / 1000) * (w - 14), Y = (y) => 7 + (1 - y / 1000) * (h - 14);
-  const dot = (l, rad, fill, alpha = 1) => { g.globalAlpha = alpha; g.fillStyle = fill; g.beginPath(); g.arc(X(l.x), Y(l.yy), rad, 0, 7); g.fill(); };
+  const dot = (l, rad, fill, alpha = 1) => { g.globalAlpha = alpha; g.fillStyle = fill; g.beginPath(); g.arc(X(l.x), Y(l.yy), rad * k, 0, 7); g.fill(); };
   // the page's own ink and its one accent
   const css = getComputedStyle(document.documentElement), ink = css.getPropertyValue('--ink').trim(), me1 = css.getPropertyValue('--you').trim();
-  for (const l of W.items) if (l.favs) dot(l, 1.3, COLORS[l.color].hex, 0.6);
+  for (const l of W.items) if (l.favs) dot(l, 1.3, COLORS[l.color].hex, k > 1 ? 0.75 : 0.6);
   const r = R.learned;
   if (!r.fallback) for (const id of r.order.slice(0, TOP)) dot(W.items[id], 2.6, ink);
   for (const id of state.favorites) if (W.items[id].favs) dot(W.items[id], 2.8, me1);
-  g.globalAlpha = 1; g.lineWidth = 1.75;
+  g.globalAlpha = 1; g.lineWidth = 1.75 * Math.min(k, 1.4);
   const me = place(W, state.favorites);
-  if (me) { g.strokeStyle = me1; g.beginPath(); g.arc(X(me.x), Y(me.y), 8, 0, 7); g.stroke(); }
-  if (hot !== null && W.items[hot].favs) { const l = W.items[hot]; g.strokeStyle = ink; g.beginPath(); g.arc(X(l.x), Y(l.yy), 5, 0, 7); g.stroke(); }
+  if (me) { g.strokeStyle = me1; g.beginPath(); g.arc(X(me.x), Y(me.y), 8 * k, 0, 7); g.stroke(); }
+  if (hot !== null && W.items[hot].favs) { const l = W.items[hot]; g.strokeStyle = ink; g.beginPath(); g.arc(X(l.x), Y(l.yy), 5 * k, 0, 7); g.stroke(); }
+}
+// The listing whose dot is under the pointer, or null.
+function near(cv, e) {
+  const { k, X, Y } = frame(cv), box = cv.getBoundingClientRect(), px = e.clientX - box.left, py = e.clientY - box.top;
+  let best = null, d = (9 * k) ** 2;
+  for (const l of W.items) {
+    if (!l.favs) continue;
+    const q = (X(l.x) - px) ** 2 + (Y(l.yy) - py) ** 2;
+    if (q < d) { d = q; best = l.id; }
+  }
+  return best;
+}
+// Its name, beside the dot.
+function label(cv, tip, id) {
+  if (id === null) { tip.hidden = true; return; }
+  const l = W.items[id], { w, X, Y } = frame(cv), x = X(l.x), y = Y(l.yy);
+  tip.innerHTML = `<img src="${url(l)}" alt=""><span><b>${esc(title(l))}</b>${esc(W.shops[l.shop])} · ${plural(l.favs, 'favorite')}</span>`;
+  tip.hidden = false;
+  tip.style.left = `${cv.offsetLeft + Math.max(0, Math.min(w - tip.offsetWidth, x - tip.offsetWidth / 2))}px`;
+  tip.style.top = `${cv.offsetTop + (y > tip.offsetHeight + 18 ? y - tip.offsetHeight - 12 : y + 14)}px`;
 }
 
 function why() {
