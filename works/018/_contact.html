@@ -26,6 +26,9 @@
 <script type="module">
 import { make, makeScene, classes } from './fleet.js';
 import * as K from './kit.js';
+// test hooks for the running gear: ?gear=<kind> forces the kind, ?variant=<name> the object
+const GEAR = await import('./classes/gear.js').catch(() => null);
+{ const q0 = new URLSearchParams(location.search); if (GEAR) { GEAR.test.gear = q0.get('gear') || null; GEAR.test.variant = q0.get('variant') || null; GEAR.test.gearVariant = q0.get('gv') || null; } }
 
 const q = new URLSearchParams(location.search);
 const W = +(q.get('w') || 560), H = +(q.get('h') || 380);

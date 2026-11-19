@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>No. 018 extras</title>
+<style>
+  html, body { margin: 0; background: #d9d8d2; color: #1b1a18; font: 11px/1.35 ui-monospace, Menlo, monospace; }
+  #grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+  figure { margin: 0; background: #e8e7e1; }
+  figcaption { padding: 4px 6px 6px; }
+  canvas { display: block; }
+  #err { color: #a00; white-space: pre-wrap; padding: 10px; }
+</style>
+</head>
+<body>
+<div id="err"></div>
+<div id="grid"></div>
+<script>
+  window.onerror = (m, s, l, c, e) => { document.getElementById('err').textContent += (e && e.stack || m) + '\n'; };
+  window.addEventListener('unhandledrejection', (e) => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });
+</script>
+<script type="module">
+// test page for classes/extras.js: every extra on its own (?only=speakers&w=600&h=420)
+import { makeScene } from './fleet.js';
+import * as X from './classes/extras.js';
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 360), H = +(q.get('h') || 280), DPR = Math.min(2.5, devicePixelRatio || 1);
+const WEIGHT = [0.38, 0.55, 0.8, 1.2];
+const SET = {
+  speakers: (M) => { M.setView(-50, 24); X.speakers(M, { w: 2.2, h: 1.5, n: 34, depth: 1.4 }); },
+  'speakers few': (M) => { M.setView(40, 28); X.speakers(M, { w: 1.6, h: 1.2, n: 8 }); },
+  windupKey: (M) => { M.setView(35, 25); M.box([-0.3, -0.8, -0.6], [0, 0.8, 0.6]); X.windupKey(M, { s: 1 }); },
+  organPipes: (M) => { M.setView(35, 22); X.organPipes(M, { n: 11, h: 3, w: 2.6 }); },
+  'organ rise': (M) => { M.setView(-40, 22); X.organPipes(M, { n: 7, h: 2.5, w: 1.6, shape: 'rise' }); },
+  weathervane: (M) => { M.setView(35, 25); X.weathervane(M, { h: 2 }); },
+  flag: (M) => { M.setView(35, 25); X.flag(M, { h: 3 }); },
+  streetLamp: (M) => { M.setView(35, 22); X.streetLamp(M, { h: 4, arms: 2 }); },
+  'lamp 0': (M) => { M.setView(35, 22); X.streetLamp(M, { h: 3.5, arms: 0 }); },
+  bell: (M) => { M.setView(35, 25); X.bell(M, { r: 0.5 }); },
+  umbrella: (M) => { M.setView(35, 30); X.umbrella(M, { r: 1.2 }); },
+  chimney: (M) => { M.setView(35, 25); X.chimney(M, { h: 2.5, w: 1.0 }); },
+  clothesline: (M) => { M.setView(30, 22); X.clothesline(M, { len: 4 }); },
+  birdhouse: (M) => { M.setView(35, 25); X.birdhouse(M, {}); },
+  mailbox: (M) => { M.setView(35, 25); X.mailbox(M, {}); },
+  periscope: (M) => { M.setView(35, 25); X.periscope(M, { h: 2 }); },
+  awning: (M) => { M.setView(35, 25); M.box([-0.3, -2, -2.5], [0, 2, 0.4]); X.awning(M, { w: 3, d: 1.4 }); },
+};
+const only = q.get('only');
+for (const [name, fn] of Object.entries(SET)) {
+  if (only && !name.includes(only)) continue;
+  const t = performance.now();
+  let d;
+  try { d = makeScene(fn, { w: W, h: H }, { seed: +(q.get('seed') || 7) }); } catch (e) { document.getElementById('err').textContent += name + ': ' + e.stack + '\n'; continue; }
+  const fig = document.createElement('figure');
+  const cv = document.createElement('canvas');
+  cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  const g = cv.getContext('2d'); g.scale(DPR, DPR); g.translate(W / 2, H / 2); g.lineCap = g.lineJoin = 'round';
+  for (const s of d.strokes) {
+    g.globalAlpha = s.pass === 0 ? 0.35 : s.w === 0 ? 0.75 : 1; g.lineWidth = WEIGHT[s.w];
+    g.setLineDash(s.dash === 'dash' ? [4, 3] : s.dash === 'chain' ? [9, 2.5, 1.5, 2.5] : []);
+    const p = s.pts; g.beginPath(); g.moveTo(p[0], p[1]); for (let i = 2; i < p.length; i += 2) g.lineTo(p[i], p[i + 1]); g.stroke();
+  }
+  fig.appendChild(cv);
+  const c = document.createElement('figcaption');
+  c.textContent = `${name}  ${d.stats.segments} seg  ${(performance.now() - t).toFixed(0)} ms`;
+  fig.appendChild(c);
+  document.getElementById('grid').appendChild(fig);
+}
+</script>
+</body>
+</html>

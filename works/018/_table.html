@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>No. 018 contact sheet</title>
+<style>
+  :root { --paper: #e8e7e1; --ink: #1b1a18; }
+  html, body { margin: 0; background: #d9d8d2; color: var(--ink); font: 11px/1.35 ui-monospace, Menlo, monospace; }
+  #grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+  figure { margin: 0; background: var(--paper); }
+  figcaption { padding: 4px 6px 6px; display: flex; gap: 4px 10px; flex-wrap: wrap; width: 0; min-width: 100%; box-sizing: border-box; }
+  figcaption b { font-weight: 600; }
+  canvas { display: block; }
+  #err { color: #a00; white-space: pre-wrap; padding: 10px; }
+</style>
+</head>
+<body>
+<div id="err"></div>
+<div id="grid"></div>
+<script>
+  window.onerror = (m, s, l, c, e) => { document.getElementById('err').textContent += (e && e.stack || m) + '\n'; };
+  window.addEventListener('unhandledrejection', (e) => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });
+</script>
+<script type="module">
+import { make, makeScene, classes } from './fleet.js';
+import * as K from './kit.js';
+// test hooks for the running gear: ?gear=<kind> forces the kind, ?variant=<name> the object
+const GEAR = await import('./classes/gear.js').catch(() => null);
+{ const q0 = new URLSearchParams(location.search); if (GEAR) { GEAR.test.gear = q0.get('gear') || null; GEAR.test.variant = q0.get('variant') || null; } }
+
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 560), H = +(q.get('h') || 380);
+const DPR = Math.min(2.5, window.devicePixelRatio || 1);
+const WEIGHT = [0.38, 0.55, 0.8, 1.2];
+const grid = document.getElementById('grid');
+
+function paint(d, w, h, label) {
+  const fig = document.createElement('figure');
+  const cv = document.createElement('canvas');
+  cv.width = Math.round(w * DPR); cv.height = Math.round(h * DPR);
+  cv.style.width = w + 'px'; cv.style.height = h + 'px';
+  const g = cv.getContext('2d');
+  g.scale(DPR, DPR);
+  g.fillStyle = '#e8e7e1'; g.fillRect(0, 0, w, h);
+  g.translate(w / 2, h / 2);
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  const showPass = q.get('pass') ? q.get('pass').split(',').map(Number) : null;
+  for (const s of d.strokes) {
+    if (showPass && !showPass.includes(s.pass)) continue;
+    g.strokeStyle = '#1b1a18';
+    g.globalAlpha = s.pass === 0 ? 0.35 : s.w === 0 ? 0.75 : 1;
+    g.lineWidth = WEIGHT[s.w];
+    g.setLineDash(s.dash === 'dash' ? [4, 3] : s.dash === 'chain' ? [9, 2.5, 1.5, 2.5] : []);
+    const p = s.pts;
+    g.beginPath();
+    g.moveTo(p[0], p[1]);
+    for (let i = 2; i < p.length; i += 2) g.lineTo(p[i], p[i + 1]);
+    g.stroke();
+  }
+  g.globalAlpha = 1; g.setLineDash([]);
+  if (q.has('callouts')) {
+    g.fillStyle = '#c33';
+    for (const c of d.callouts || []) { g.beginPath(); g.arc(c.x, c.y, 2.5, 0, 7); g.fill(); g.fillText(c.label + ' ' + c.qty, c.x + 4, c.y - 3); }
+  }
+  if (q.has('bbox') && d.bbox) { g.strokeStyle = '#c33'; g.lineWidth = 0.5; g.strokeRect(d.bbox.x0, d.bbox.y0, d.bbox.x1 - d.bbox.x0, d.bbox.y1 - d.bbox.y0); }
+  fig.appendChild(cv);
+  const cap = document.createElement('figcaption');
+  cap.innerHTML = label;
+  fig.appendChild(cap);
+  grid.appendChild(fig);
+}
+
+function caption(d) {
+  const m = d.meta || {};
+  const st = d.stats;
+  return `<b>${d.seed}</b> <span>${m.klass || ''}</span> <span>${m.name || ''} ${m.designation || ''}</span>
+    <span>${st.strokes} strokes / ${st.segments} seg</span> <span>${st.msMake.toFixed(0)} ms</span>
+    <span>${(d.pxPerMeter).toFixed(1)} px/m</span>` + (q.has('v') ? `<br><span>${m.brief}</span> <span>${(m.specs || []).map((s) => s.join(' ')).join(' · ')}</span><br><span>${d.callouts.map((c) => c.label + ' ' + c.qty).join(' · ')}</span>` : '');
+}
+
+
+const GEARM = await import('./classes/gear.js');
+const cls = q.get('class') || 'tableware';
+const objs = (q.get('objs') || 'teapot').split(',');
+const kinds = (q.get('kinds') || 'wheels,tracks,legs,rotors,balloons,floats,wings,rails').split(',');
+const seed = +(q.get('seed') || 300);
+for (const o of objs) for (const [i, k] of kinds.entries()) {
+  GEARM.test.variant = o; GEARM.test.gear = k;
+  try { const d = make(seed + i, { w: W, h: H }, { klass: cls }); paint(d, W, H, caption(d)); }
+  catch (e) { document.getElementById('err').textContent += o + ' ' + k + ': ' + e.stack + '\n'; }
+}
+</script></body></html>

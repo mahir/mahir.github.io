@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>No. 018 wear test</title>
+<style>html,body{margin:0;background:#d9d8d2;font:10px ui-monospace,Menlo,monospace}#g{display:flex;flex-wrap:wrap;gap:6px;padding:6px}figure{margin:0;background:#e8e7e1}canvas{display:block}#err{color:#a00;white-space:pre-wrap}</style></head>
+<body><div id="err"></div><div id="g"></div>
+<script>window.onerror=(m,s,l,c,e)=>{document.getElementById('err').textContent+=(e&&e.stack||m)+'\n';};</script>
+<script type="module">
+// test page for footwear and appliance: ?class=footwear&v=pump,boot&k=wheels,rotors&seed=1&w=360&h=250
+import { make } from './fleet.js';
+import * as G from './classes/gear.js';
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 360), H = +(q.get('h') || 250), seed = +(q.get('seed') || 1);
+const vs = (q.get('v') || '').split(','), ks = (q.get('k') || 'wheels').split(',');
+const WT = [0.38, 0.55, 0.8, 1.2], DPR = 2;
+for (const v of vs) for (const k of ks) {
+  G.test.variant = v; G.test.gear = k;
+  const d = make(seed, { w: W, h: H }, { klass: q.get('class') });
+  const cv = document.createElement('canvas'); cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  const g = cv.getContext('2d'); g.scale(DPR, DPR); g.fillStyle = '#e8e7e1'; g.fillRect(0, 0, W, H); g.translate(W / 2, H / 2); g.lineCap = g.lineJoin = 'round';
+  for (const s of d.strokes) { g.globalAlpha = s.pass === 0 ? 0.35 : s.w === 0 ? 0.75 : 1; g.lineWidth = WT[s.w]; g.setLineDash(s.dash === 'dash' ? [4, 3] : s.dash === 'chain' ? [9, 2.5, 1.5, 2.5] : []); const p = s.pts; g.beginPath(); g.moveTo(p[0], p[1]); for (let i = 2; i < p.length; i += 2) g.lineTo(p[i], p[i + 1]); g.stroke(); }
+  g.globalAlpha = 1; g.setLineDash([]); g.fillStyle = '#000'; g.fillText(`${v} / ${k}: ${d.meta.klass}`, -W / 2 + 4, H / 2 - 5);
+  const f = document.createElement('figure'); f.appendChild(cv); document.getElementById('g').appendChild(f);
+}
+</script></body></html>

@@ -10,7 +10,7 @@
 import { Model, mulberry32, hashSeed, setFont, D2R } from './geom.js';
 import { render, bounds } from './hlr.js';
 import * as K from './kit.js';
-import { word, thou, mm } from './words.js';
+import { word, thou, mm, fitBrief, oneOf } from './words.js';
 export { word, thou, mm };
 
 let strokeText = null;
@@ -24,7 +24,13 @@ const CLASS_FILES = ['lander',
   'locomotive', 'monorail', 'railcrane',
   'airship', 'gyrocopter', 'tiltrotor', 'hovercraft', 'balloon',
   'tug', 'hydrofoil', 'bathyscaphe', 'catamaran',
-  'rocket', 'station', 'spaceplane'];
+  'rocket', 'station', 'spaceplane',
+  // the odd ones: things that are not vehicles, on running gear from classes/gear.js
+  'footwear', 'appliance', 'furniture', 'instrument', 'tableware', 'oddment', 'tower', 'pavilion',
+  'excess', 'graft'];
+// The plain kinds above come up less often than the odd ones (each class's own weight times this).
+const PLAIN = 0.5;
+const PLAIN_IDS = new Set(CLASS_FILES.slice(0, 21));
 export const classes = (await Promise.all(CLASS_FILES.map((id) =>
   import(`./classes/${id}.js`).then((m) => m.default, (e) => { console.warn(`class ${id} did not load`, e); return null; })))).filter(Boolean);
 
@@ -65,9 +71,10 @@ export function pickClass(seed, only) {
   const list = pool.length ? pool : classes;
   const r = mulberry32(hashSeed('class', seed));
   let t = 0;
-  for (const c of list) t += c.weight ?? 1;
+  const wt = (c) => (c.weight ?? 1) * (PLAIN_IDS.has(c.id) ? PLAIN : 1);
+  for (const c of list) t += wt(c);
   let x = r() * t;
-  for (const c of list) { x -= c.weight ?? 1; if (x <= 0) return c; }
+  for (const c of list) { x -= wt(c); if (x <= 0) return c; }
   return list[list.length - 1];
 }
 
@@ -80,12 +87,13 @@ export function make(seed, box, opts = {}) {
   const name = NAMES[Math.floor(nr() * NAMES.length)];
   const des = d.vocab.designation || designation(nr);
   const v = d.vocab;
-  let klass = [v.place, v.job, v.form].filter(Boolean).join(' ');
+  // a class may give the whole line (vocab.klass) and its own series (vocab.family)
+  let klass = v.klass || [v.place, v.job, v.form].filter(Boolean).join(' ');
   if (klass.length > 34) klass = [v.job, v.form].filter(Boolean).join(' ');
   const specs = [['LENGTH', mm(d.size.length) + ' MM'], ['HEIGHT', mm(d.size.height) + ' MM'], ...(v.specs || [])].slice(0, 6);
   d.meta = {
-    name, designation: des, klass: klass.slice(0, 34), brief: (v.brief || '').slice(0, 78), specs,
-    family: cls.family, klassId: cls.id,
+    name, designation: des, klass: klass.slice(0, 34), brief: oneOf(fitBrief(v.brief || '')), specs,
+    family: v.family || cls.family, klassId: cls.id,
   };
   d.stats.msMake = performance.now() - t0;
   delete d.vocab; delete d.size;
