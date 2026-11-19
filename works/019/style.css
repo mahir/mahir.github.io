@@ -1,0 +1,214 @@
+/* No. 019 · One shop, seven feeds
+   The listings are warm, hand-made things; the page around them is the machine that sorts them.
+   So the pictures carry all the color, the page is cool and exact, and one vermilion marks you:
+   your favorites, the listing under your hand, your place on the map. */
+:root {
+  --ground: #f3f5f4; --ink: #0f1a20; --soft: #56646b; --line: rgba(15, 26, 32, .2); --wash: rgba(15, 26, 32, .06);
+  --you: #e2391b; --you-ink: #c22c11;
+  --panel: #0f1a20; --on-panel: #f3f5f4; --on-panel-soft: #a3b0b3; --on-panel-line: rgba(243, 245, 244, .18); --on-panel-wash: rgba(243, 245, 244, .1);
+  --chip: #f7f8f7; --chip-ink: #0f1a20; --sold: #e0a52c;
+  --face: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --margin: clamp(16px, 2.2vw, 32px); --gap: 14px;
+  --out: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--soft) var(--ground); }
+body { background: var(--ground); color: var(--ink); font: 400 15px/1.45 var(--face); font-stretch: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+::selection { background: var(--you); color: #fff; }
+:focus-visible { outline: 2px solid var(--you); outline-offset: 2px; }
+button { font: inherit; color: inherit; }
+h1, h2, p, ol, dl, dd { margin: 0; }
+ol { padding: 0; }
+[hidden] { display: none !important; }
+/* the narrow cut of the face: names, numerals, anything that has to fit a column */
+h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-variant-numeric: tabular-nums; }
+
+/* ---------- the top: a way home, and what this is ---------- */
+.top { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) var(--margin) 0; }
+.back, .tour-open { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px; border: 1px solid var(--line); border-radius: 17px; background: none; color: inherit; text-decoration: none; font-weight: 500; font-size: 13.5px; white-space: nowrap; cursor: pointer; }
+.back:hover, .tour-open:hover { background: var(--wash); }
+.work { font-size: 13.5px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.work span { color: var(--ink); font-weight: 600; margin-right: 6px; }
+.tour-open { margin-left: auto; }
+
+.lede { padding: clamp(28px, 5vw, 60px) var(--margin) clamp(22px, 3vw, 36px); }
+.lede h1 { font-weight: 700; font-size: clamp(52px, 9.2vw, 96px); line-height: .9; letter-spacing: -.012em; text-wrap: balance; }
+.lede p { margin-top: 18px; font-size: clamp(15px, 1.3vw, 18px); line-height: 1.5; color: var(--soft); max-width: 66ch; text-wrap: pretty; }
+
+/* ---------- the tour: one bar that stays in view and drives the lab ---------- */
+.tour { position: sticky; top: 8px; z-index: 5; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 20px; margin: 0 var(--margin) 22px; padding: 14px 14px 14px 20px; border-radius: 10px; background: var(--panel); color: var(--on-panel); box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .35); }
+.tour .n { font-weight: 700; font-size: 30px; line-height: 1; white-space: nowrap; }
+.tour .n small { font-size: 15px; font-weight: 500; color: var(--on-panel-soft); margin-left: 3px; }
+.tour h2 { font-weight: 700; font-size: 24px; line-height: 1.05; }
+.tour .say { margin-top: 4px; font-size: 13.5px; line-height: 1.45; color: var(--on-panel); opacity: .86; max-width: 100ch; text-wrap: pretty; }
+.tour .go { display: flex; gap: 6px; }
+.tour button { height: 36px; padding: 0 15px; border-radius: 18px; border: 1px solid var(--on-panel-line); background: none; font-weight: 500; font-size: 13.5px; cursor: pointer; white-space: nowrap; }
+.tour button:hover { background: var(--on-panel-wash); }
+.tour button.next { background: var(--you); border-color: var(--you); color: #fff; font-weight: 600; }
+.tour button.next:hover { background: var(--you-ink); border-color: var(--you-ink); }
+.tour button:disabled { opacity: .35; cursor: default; }
+.tour button.more { display: none; }
+.tour :focus-visible, .why :focus-visible { outline-color: var(--on-panel); }
+
+/* ---------- you: favorites, whose shoes, how much of the shop you have been shown ---------- */
+.you { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding: 0 var(--margin) 24px; font-size: 13.5px; }
+.you .label { color: var(--soft); margin-right: 9px; }
+.tray-wrap { display: flex; align-items: center; }
+.tray { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; min-height: 40px; }
+.tray button { position: relative; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 5px; overflow: hidden; background: var(--wash); cursor: pointer; box-shadow: 0 0 0 2px var(--you); }
+.tray img { display: block; width: 100%; height: 100%; }
+.tray button::after { content: ''; position: absolute; inset: 0; background: rgba(15, 26, 32, .66) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7L7 17'/%3E%3C/svg%3E") center / 18px no-repeat; opacity: 0; transition: opacity .15s; }
+.tray button:hover::after, .tray button:focus-visible::after { opacity: 1; }
+.tray .none { color: var(--soft); }
+.as { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.as button, .reset { height: 32px; padding: 0 12px; border: 1px solid var(--line); border-radius: 16px; background: none; font-size: 13px; font-weight: 500; cursor: pointer; }
+.as button:hover, .reset:hover { background: var(--wash); }
+.as button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--ground); }
+.seen { margin-left: auto; color: var(--soft); }
+.seen b { color: var(--ink); font-weight: 700; font-size: 19px; margin: 0 1px; }
+
+/* ---------- the feeds ---------- */
+.feeds { position: relative; padding: 0 var(--margin); }
+.feed .head { container-type: inline-size; padding-top: 11px; border-top: 3px solid var(--ink); }
+.feed h2 { font-weight: 700; font-size: clamp(19px, 13.4cqw, 30px); line-height: 1; white-space: nowrap; }
+.feed .line { margin-top: 7px; font-size: 12.5px; line-height: 1.4; color: var(--soft); text-wrap: pretty; }
+.inst { position: relative; height: 96px; margin: 14px 0 0; }
+.inst .cap { position: absolute; left: 0; right: 0; bottom: 0; font-size: 11px; line-height: 1.2; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inst .none { display: grid; align-content: center; height: 78px; padding: 0 10px; border: 1px dashed var(--line); border-radius: 4px; font-size: 12.5px; line-height: 1.35; color: var(--soft); }
+.bars { display: flex; align-items: flex-end; gap: 3px; height: 78px; }
+.bars i { flex: 1; min-height: 2px; background: var(--ink); transition: height .6s var(--out); }
+.bars i.hollow { background: none; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.bars i.on { background: var(--you); }
+.bars i.hollow.on { background: none; box-shadow: inset 0 0 0 1.5px var(--you); }
+.inst canvas { display: block; width: 100%; height: 78px; border-radius: 4px; background: var(--wash); }
+.mix { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2px 8px; font-size: 12px; height: 100%; align-content: start; }
+.mix input[type="range"] { width: 100%; height: 17px; margin: 0; accent-color: var(--ink); }
+.mix label { display: contents; }
+.mix .sell { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.mix .sell input { margin: 0; accent-color: var(--ink); }
+
+.meas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0 14px; padding: 9px 0 10px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.meas div { display: grid; gap: 2px; align-content: start; }
+.meas b { font-weight: 700; font-size: 24px; line-height: 1; }
+.meas span { font-size: 11px; line-height: 1.2; color: var(--soft); }
+
+.list { display: grid; gap: 16px; list-style: none; }
+.card { position: relative; min-width: 0; }
+.card .pick { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 5px; background: none; cursor: pointer; text-align: left; }
+.card img { display: block; width: 100%; aspect-ratio: 1; border-radius: 5px; background: var(--wash); }
+.card .tag { position: absolute; left: 6px; bottom: 6px; height: 21px; padding: 0 8px; border-radius: 3px; background: var(--chip-ink); color: var(--chip); font-weight: 600; font-size: 11px; line-height: 21px; }
+.card .tag:empty { display: none; }
+.card .tag[data-tag="ad"] { background: var(--sold); color: var(--chip-ink); }
+.card .tag[data-tag="try"] { background: var(--chip); color: var(--chip-ink); box-shadow: inset 0 0 0 1.5px var(--chip-ink); }
+.heart { position: absolute; right: 6px; top: 6px; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 50%; background: var(--chip); cursor: pointer; transition: transform .2s var(--out); }
+.heart:hover { transform: scale(1.12); }
+.heart:active { transform: scale(.9); }
+.heart svg { width: 15px; height: 15px; fill: none; stroke: var(--chip-ink); stroke-width: 1.9; stroke-linejoin: round; }
+.heart:hover svg { stroke: var(--you); }
+.card .txt { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 8px; align-items: start; min-height: 56px; margin-top: 8px; }
+.card .rank { min-width: 15px; font-weight: 700; font-size: 30px; line-height: .86; }
+.card .t { font-size: 13px; font-weight: 500; line-height: 1.28; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.card .s { margin-top: 2px; font-size: 12px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* borrowed from Most popular: there, but not this feed's own */
+.card.lent img { filter: saturate(.15); opacity: .45; }
+.card.lent .txt { opacity: .5; }
+.card.hot .pick { outline: 3px solid var(--you); outline-offset: 2px; }
+.card.hot .rank { color: var(--you-ink); }
+
+.thread { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 2; }
+.thread path { fill: none; stroke: var(--you); stroke-width: 2; stroke-linecap: round; }
+.thread circle { fill: var(--you); }
+
+/* the tour asks you to look at some feeds: the others step back */
+.feed { transition: opacity .5s var(--out); }
+.feeds.focusing .feed:not(.focus) { opacity: .28; }
+
+/* seven columns side by side, their parts lined up row by row */
+@media (min-width: 1100px) {
+  .js .feeds { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: auto auto auto auto; column-gap: var(--gap); }
+  .feed { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+}
+/* seven shelves, each scrolling sideways */
+@media (max-width: 1099.98px) {
+  .js .feeds { display: flex; flex-direction: column; }
+  .feeds.focusing .feed.focus { order: -1; }   /* the feeds a tour step is about come first */
+  .feed { margin-bottom: 38px; }
+  .feed h2 { font-size: 30px; }
+  .feed .line { max-width: 60ch; font-size: 13.5px; }
+  .inst { max-width: 380px; }
+  .inst.plain { display: none; }
+  .meas { max-width: 380px; }
+  .list { display: flex; gap: 12px; margin: 0 calc(-1 * var(--margin)); padding: 4px var(--margin) 8px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .list::-webkit-scrollbar { display: none; }
+  .card { flex: 0 0 clamp(138px, 34vw, 190px); scroll-snap-align: start; scroll-margin-left: var(--margin); }
+  .thread { display: none; }
+}
+@media (pointer: coarse) { .heart { width: 38px; height: 38px; } .heart svg { width: 17px; height: 17px; } .as button, .reset { height: 38px; padding: 0 14px; } }
+
+/* ---------- why: one listing, feed by feed ---------- */
+.why { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 8px 32px; max-height: min(56vh, 470px); overflow: auto; padding: 20px var(--margin) max(20px, env(safe-area-inset-bottom)); border-radius: 12px 12px 0 0; background: var(--panel); color: var(--on-panel); box-shadow: 0 -14px 40px -10px rgba(0, 0, 0, .4); overscroll-behavior: contain; scrollbar-color: var(--on-panel-soft) var(--panel); }
+.why .thing { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-content: start; }
+.why .thing img { width: 96px; height: 96px; border-radius: 5px; }
+.why h2 { font-weight: 700; font-size: 24px; line-height: 1.04; text-wrap: balance; }
+.why .facts { margin-top: 7px; font-size: 12.5px; line-height: 1.45; color: var(--on-panel-soft); }
+.why .fav { margin-top: 11px; display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px 0 12px; border-radius: 17px; border: 1px solid var(--on-panel-line); background: none; font-size: 13px; font-weight: 500; cursor: pointer; }
+.why .fav svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.9; }
+.why .fav[aria-pressed="true"] svg { fill: var(--you); stroke: var(--you); }
+.why .fav:hover { background: var(--on-panel-wash); }
+.why ol { list-style: none; display: grid; padding-right: 44px; align-content: start; }
+.why li { display: grid; grid-template-columns: 138px 78px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--on-panel-line); font-size: 13px; line-height: 1.4; }
+.why li:first-child { border-top: 0; padding-top: 0; }
+.why li b { font-weight: 600; }
+.why li .place { font-weight: 700; font-size: 20px; line-height: 1; color: var(--on-panel-soft); white-space: nowrap; }
+.why li.in .place { color: var(--on-panel); }
+.why li .text { text-wrap: pretty; }
+.why li:not(.in) .text, .why li:not(.in) b { color: var(--on-panel-soft); }
+.why .close { position: absolute; right: calc(var(--margin) - 4px); top: 14px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: var(--on-panel-wash); cursor: pointer; }
+.why .close svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.why .close:hover { background: var(--on-panel-line); }
+body.has-why { padding-bottom: min(56vh, 470px); }
+
+@media (max-width: 760px) {
+  /* the bar stays in view, three lines of it; "More" opens the rest */
+  .tour { grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; padding: 12px 12px 12px 14px; margin-bottom: 18px; }
+  .tour .n { font-size: 24px; align-self: start; padding-top: 1px; }
+  .tour h2 { font-size: 22px; }
+  .tour .say { font-size: 13px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+  .tour.open .say { display: block; }
+  .tour .go { grid-column: 1 / -1; margin-top: 8px; }
+  .tour button { height: 38px; }
+  .tour button.more { display: block; margin-left: auto; border-color: transparent; padding: 0 8px; text-decoration: underline; text-underline-offset: 3px; }
+  .why { grid-template-columns: minmax(0, 1fr); max-height: 58vh; padding-top: 16px; }
+  .why .thing { grid-template-columns: 64px minmax(0, 1fr); padding-right: 44px; }
+  .why .thing img { width: 64px; height: 64px; }
+  .why h2 { font-size: 21px; }
+  .why ol { padding-right: 0; margin-top: 6px; }
+  .why li { grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; }
+  .why li .place { font-size: 18px; }
+  .why li .text { grid-column: 1 / -1; }
+  body.has-why { padding-bottom: 58vh; }
+  .seen { margin-left: 0; }
+}
+
+/* ---------- the notes under the lab, and the page without scripts ---------- */
+.notes { margin-top: clamp(56px, 8vw, 112px); padding: 0 var(--margin); }
+.notes > h2 { font-weight: 700; font-size: clamp(36px, 5vw, 60px); line-height: .95; }
+.notes dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 26px 28px; margin-top: 26px; }
+.notes dt { font-weight: 700; font-size: 26px; line-height: 1; padding-top: 11px; border-top: 3px solid var(--ink); }
+.notes dd { margin-top: 8px; font-size: 14.5px; line-height: 1.5; color: var(--soft); text-wrap: pretty; }
+.notes .fine { margin-top: 34px; max-width: 72ch; font-size: 14.5px; line-height: 1.5; color: var(--soft); text-wrap: pretty; }
+.foot { padding: 44px var(--margin) max(28px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--soft); }
+.foot a { color: inherit; text-underline-offset: 3px; }
+
+.no-js .feeds { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 26px 28px; }
+.plain h2 { font-weight: 700; font-size: 28px; line-height: 1; padding-top: 11px; border-top: 3px solid var(--ink); }
+.plain p { margin-top: 7px; font-size: 13.5px; color: var(--soft); }
+.plain ol { margin-top: 12px; padding-left: 1.7em; font-size: 13.5px; line-height: 1.55; font-variant-numeric: tabular-nums; }
+
+/* stills and share images: the lab alone */
+.bare .top, .bare .lede, .bare .tour, .bare .you, .bare .notes, .bare .foot { display: none; }
+.bare .feeds { padding-top: var(--margin); }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }

@@ -82,6 +82,10 @@ window.Works = (() => {
       n: 18, title: 'Imaginary vehicles, drawn to scale', date: '2026-11-18', medium: 'Generative canvas drawing',
       about: 'A drafting table that does not stop: it invents a vehicle, letters its name and purpose, and draws it in ink, line by line, as an old technical illustration with a parts list and a title block, then turns to a fresh sheet; a teapot under a wing, a grand piano on legs, a lighthouse on pontoons, a car with forty loudspeakers, and plainer things such as landers, locomotives and tugs, each sheet numbered so it can be opened again.',
     },
+    {
+      n: 19, title: 'One shop, seven feeds', date: '2026-11-20', medium: 'Interactive SVG and simulated data',
+      about: 'An imaginary shop of 1,200 handmade things, each drawn in code and favorited by 2,500 shoppers who never existed, sorted by seven recommenders side by side, from a count of favorites to a space of tastes learned from them; favorite a listing and every feed sorts itself again, and open one to read why each feed put it where it did.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');

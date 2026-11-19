@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>No. 019 · every listing</title>
+<style>
+  body { margin: 24px; background: #f3efe6; color: #25221d; font: 13px/1.35 ui-sans-serif, system-ui, sans-serif; }
+  h1 { font-size: 14px; font-weight: 600; margin: 0 0 4px; } p { margin: 0 0 18px; color: #6b655b; }
+  a { color: inherit; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--w, 150px), 1fr)); gap: 18px 14px; }
+  figure { margin: 0; } img { display: block; width: 100%; aspect-ratio: 1; border-radius: 6px; }
+  figcaption { margin-top: 6px; } figcaption b { display: block; font-weight: 500; } figcaption span { color: #6b655b; }
+</style>
+</head>
+<body>
+<h1>No. 019 · the shop's listings</h1>
+<p id="what"></p>
+<div class="grid" id="grid"></div>
+<script type="module">
+// Tooling, not published. ?craft=mug  ?surface=speckled  ?color=rust  ?shop=12  ?n=120  ?from=0  ?w=110  ?top (most favorited first)
+import { world } from './world.js';
+import { prepare } from './recs.js';
+import { url } from './draw.js';
+import { CRAFTS, SURFACES, COLORS, title, price } from './vocab.js';
+const q = new URLSearchParams(location.search);
+const W = prepare(world);
+let items = W.items.filter((l) => (!q.get('craft') || CRAFTS[l.craft].id === q.get('craft')) && (!q.get('surface') || SURFACES[l.surface] === q.get('surface')) && (!q.get('color') || COLORS[l.color].id === q.get('color')) && (!q.get('shop') || l.shop === +q.get('shop')));
+if (q.has('top')) items.sort((a, b) => b.favs - a.favs);
+const from = +q.get('from') || 0, n = +q.get('n') || 96;
+if (q.get('w')) document.documentElement.style.setProperty('--w', q.get('w') + 'px');
+document.getElementById('what').innerHTML = `${items.length} of ${W.N} listings, showing ${from + 1} to ${Math.min(items.length, from + n)}. ` + CRAFTS.map((c) => `<a href="?craft=${c.id}">${c.plural}</a>`).join(' · ') + ' · <a href="?">all</a>';
+document.getElementById('grid').innerHTML = items.slice(from, from + n).map((l) => `<figure><img src="${url(l)}" alt=""><figcaption><b>${title(l)}</b><span>${W.shops[l.shop]} · ${price(l.price)} · ${l.favs} ♥</span></figcaption></figure>`).join('');
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>
