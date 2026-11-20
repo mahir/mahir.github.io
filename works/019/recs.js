@@ -2,6 +2,8 @@
 //
 //   const W = prepare(world)                      once
 //   const R = rank(W, { favorites, weights, ads })  -> { popular: { order, fallback, padFrom, tags }, ... }
+//   rank(W, state, 'explore')                     -> the same, with only that feed and the ones it draws on
+//   derive(W)                                     after changing the listings' favorites, ages or factors
 //   explain(W, state, R, 'shoppers', id)          -> one sentence, with the numbers that put it there
 //   measures(W, ids)                              -> what a top ten is made of
 //
@@ -48,9 +50,18 @@ export function solve(A, b) {
   for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let k = r + 1; k < n; k++) s -= M[r][k] * x[k]; x[r] = s / (M[r][r] || 1e-12); }
   return x;
 }
-function hash(...xs) {
-  let h = 2166136261 >>> 0;
-  for (const x of xs) { const s = String(x); for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } h ^= 0x9e37; h = Math.imul(h, 2246822519) >>> 0; }
+// A number in 0..1 from any values, the same every time. stir() takes one value in, so a hash of (a, b) for
+// many b can start from the hash of a.
+const HASH0 = 2166136261 >>> 0;
+function stir(h, x) {
+  const s = String(x);
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  h ^= 0x9e37;
+  return Math.imul(h, 2246822519) >>> 0;
+}
+export function hash(...xs) {
+  let h = HASH0;
+  for (const x of xs) h = stir(h, x);
   return (h >>> 0) / 4294967296;
 }
 const median = (a) => { const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
@@ -71,13 +82,20 @@ export function prepare(raw) {
     const of = items.filter((l) => l.craft === c).sort((a, b) => a.price - b.price);
     of.forEach((l, n) => { l.tier = Math.min(2, Math.floor((3 * n) / of.length)); });
   }
-  // each shop's standing: the favorites its older listings average
-  const shopAvg = raw.shops.map((_, s) => { const of = items.filter((l) => l.shop === s && l.age > NEW_DAYS); return of.length ? of.reduce((a, l) => a + l.favs, 0) / of.length : 0; });
-  const k = items[0].y.length;
-  const YtY = Array.from({ length: k }, (_, a) => Array.from({ length: k }, (_, b) => items.reduce((s, l) => s + l.y[a] * l.y[b], 0)));
-  const maxFavs = Math.max(...items.map((l) => l.favs));
+  const W = { N, k: items[0].y.length, today: raw.today, items, shops: raw.shops, counts: raw.counts, tour: raw.tour, shoppers: raw.shoppers };
+  return derive(W);
+}
 
-  const W = { N, k, today: raw.today, items, shops: raw.shops, shopAvg, YtY, maxFavs, counts: raw.counts, tour: raw.tour, shoppers: raw.shoppers };
+// What the feeds read off the listings as a whole. prepare() ends with it; forward.js calls it again each
+// night, after a day of favorites has changed the counts, the ages and the taste space.
+export function derive(W) {
+  const { items, k } = W;
+  // each shop's standing: the favorites its older listings average
+  const shopAvg = W.shopAvg = W.shops.map(() => 0), shopN = W.shops.map(() => 0);
+  for (const l of items) if (l.age > NEW_DAYS) { shopAvg[l.shop] += l.favs; shopN[l.shop]++; }
+  shopAvg.forEach((v, s) => { shopAvg[s] = shopN[s] ? v / shopN[s] : 0; });
+  W.YtY = Array.from({ length: k }, (_, a) => Array.from({ length: k }, (_, b) => items.reduce((s, l) => s + l.y[a] * l.y[b], 0)));
+  W.maxFavs = Math.max(...items.map((l) => l.favs));
   W.pop = items.map((l) => l.favs);
   // A new listing has no favorites to count, so it is lifted for a week: most on its first day, and more
   // if its shop's other listings are liked. The lift is sized so that a good shop's new listing lands about fourth.
@@ -89,10 +107,10 @@ export function prepare(raw) {
 }
 
 // ---------------------------------------------------------------- comparing listings by what they are
-export function alike(a, b) {
-  let s = 0;
-  for (const [key, w] of ATTRS) if (a[key] === b[key]) s += w * w;
-  return s / ATTR_NORM;
+const [A_CRAFT, A_SURFACE, A_COLOR, A_FORM, A_ACCENT, A_TIER, A_SHOP] = ATTRS.map(([, w]) => w * w);
+export function alike(a, b) {   // written out, in the order of ATTRS: the feeds call this more than anything else
+  return ((a.craft === b.craft ? A_CRAFT : 0) + (a.surface === b.surface ? A_SURFACE : 0) + (a.color === b.color ? A_COLOR : 0) + (a.form === b.form ? A_FORM : 0)
+    + (a.accent === b.accent ? A_ACCENT : 0) + (a.tier === b.tier ? A_TIER : 0) + (a.shop === b.shop ? A_SHOP : 0)) / ATTR_NORM;
 }
 // The average of the favorites, attribute by attribute: "62% mugs, 38% rugs; 75% speckled…"
 function profile(W, favorites) {
@@ -106,7 +124,9 @@ function profile(W, favorites) {
   p.norm = Math.sqrt(norm);
   return p;
 }
-const cosine = (p, l) => { let dot = 0; for (const [key, w] of ATTRS) dot += w * w * (p[key].get(l[key]) || 0); return dot / (p.norm * Math.sqrt(ATTR_NORM)); };
+const ATTR_LEN = Math.sqrt(ATTR_NORM);
+const cosine = (p, l) => (A_CRAFT * (p.craft.get(l.craft) || 0) + A_SURFACE * (p.surface.get(l.surface) || 0) + A_COLOR * (p.color.get(l.color) || 0) + A_FORM * (p.form.get(l.form) || 0)
+  + A_ACCENT * (p.accent.get(l.accent) || 0) + A_TIER * (p.tier.get(l.tier) || 0) + A_SHOP * (p.shop.get(l.shop) || 0)) / (p.norm * ATTR_LEN);
 
 // ---------------------------------------------------------------- rank
 function sorted(W, scores, favSet, keep = () => true) {
@@ -115,7 +135,11 @@ function sorted(W, scores, favSet, keep = () => true) {
   return ids.sort((a, b) => scores[b] - scores[a] || W.items[a].tie - W.items[b].tie);
 }
 
-export function rank(W, state) {
+// What a feed draws on besides itself. Any of them may also fall back to Most popular, which is sorted when asked for.
+const NEEDS = { explore: ['learned'], blend: ['popular', 'trending', 'similar', 'shoppers', 'learned'] };
+
+export function rank(W, state, only) {
+  const want = (f) => !only || only === f || (NEEDS[only] || []).includes(f);
   const favorites = state.favorites || [];
   const favSet = new Set(favorites);
   const weights = { ...WEIGHTS, ...(state.weights || {}) };
@@ -123,13 +147,18 @@ export function rank(W, state) {
   const cold = favorites.length === 0;
   const R = {};
 
-  R.popular = { order: sorted(W, W.pop, favSet), scores: W.pop };
-  R.trending = { order: sorted(W, W.trend, favSet), scores: W.trend, tags: {} };
-  for (const id of R.trending.order.slice(0, TOP)) if (items[id].age <= NEW_DAYS) R.trending.tags[id] = 'new';
-  const fallback = () => ({ order: R.popular.order, scores: W.pop, fallback: true });
+  let popular0 = null;
+  const pop = () => popular0 || (popular0 = { order: sorted(W, W.pop, favSet), scores: W.pop });
+  if (want('popular')) R.popular = pop();
+  if (want('trending')) {
+    R.trending = { order: sorted(W, W.trend, favSet), scores: W.trend, tags: {} };
+    for (const id of R.trending.order.slice(0, TOP)) if (items[id].age <= NEW_DAYS) R.trending.tags[id] = 'new';
+  }
+  const fallback = () => ({ order: pop().order, scores: W.pop, fallback: true });
 
   // Similar items: the cosine between a listing and the average of the favorites
-  if (cold) R.similar = fallback();
+  if (!want('similar')) R.similar = null;
+  else if (cold) R.similar = fallback();
   else {
     const p = profile(W, favorites);
     const scores = items.map((l) => cosine(p, l));
@@ -137,38 +166,42 @@ export function rank(W, state) {
   }
 
   // Shoppers like you: each favorite votes for its co-favorited neighbors, by cosine over shoppers
-  if (cold) R.shoppers = fallback();
+  if (!want('shoppers')) R.shoppers = null;
+  else if (cold) R.shoppers = fallback();
   else {
     const scores = new Array(N).fill(0);
     for (const i of favorites) for (const { id: j, co } of items[i].nb) scores[j] += co / Math.sqrt(items[i].favs * items[j].favs);
     const found = sorted(W, scores, favSet, (i) => scores[i] > 0);
     const has = new Set(found);
     // too few shoppers in common to fill the feed: the rest is Most popular, and says so
-    R.shoppers = { order: found.concat(R.popular.order.filter((id) => !has.has(id))), scores, padFrom: found.length, fallback: found.length === 0 };
+    R.shoppers = { order: found.concat(pop().order.filter((id) => !has.has(id))), scores, padFrom: found.length, fallback: found.length === 0 };
   }
 
   // Learned taste: fit the shopper's vector to their favorites with the listings fixed, then take dot products
-  const x = cold ? null : foldIn(W, favorites);
-  if (!x) R.learned = fallback();
+  const x = cold || !want('learned') ? null : foldIn(W, favorites);
+  if (!want('learned')) R.learned = null;
+  else if (!x) R.learned = fallback();
   else {
     const scores = items.map((l) => dot(x, l.y));
-    R.learned = { order: sorted(W, scores, favSet), scores, x, typical: median(scores) };
+    let typical;
+    R.learned = { order: sorted(W, scores, favSet), scores, x, get typical() { return typical === undefined ? (typical = median(scores)) : typical; } };
   }
 
   // one number for "does this suit the shopper", 0..1, from whichever personal feeds have something to say
-  const top = (r) => (r.fallback ? 0 : Math.max(1e-9, r.scores[r.order[0]]));
+  const top = (r) => (!r || r.fallback ? 0 : Math.max(1e-9, r.scores[r.order[0]]));
   const tops = { similar: 1, shoppers: top(R.shoppers), learned: top(R.learned) };
-  const taste = items.map((_, i) => {
-    let s = 0, n = 0;
-    for (const f of ['similar', 'shoppers', 'learned']) if (!R[f].fallback) { s += Math.max(0, Math.min(1, R[f].scores[i] / tops[f])); n++; }
-    return n ? s / n : 0;
-  });
   const popular = items.map((l) => Math.log(1 + l.favs) / Math.log(1 + W.maxFavs));
-  const fresh = items.map((l) => Math.exp(-l.age / 21));
-
-  R.explore = explore(W, favorites, favSet, R.learned.fallback ? popular : R.learned.scores.map((s) => Math.max(0, s / tops.learned)));
-  R.blend = blend(W, R, favSet, { taste, popular, fresh }, weights, state.ads !== false);
-  R.parts = { taste, popular, fresh, weights };
+  if (want('explore')) R.explore = explore(W, favorites, favSet, R.learned.fallback ? popular : R.learned.scores.map((s) => Math.max(0, s / tops.learned)));
+  if (want('blend')) {
+    const taste = items.map((_, i) => {
+      let s = 0, n = 0;
+      for (const f of ['similar', 'shoppers', 'learned']) if (!R[f].fallback) { s += Math.max(0, Math.min(1, R[f].scores[i] / tops[f])); n++; }
+      return n ? s / n : 0;
+    });
+    const fresh = items.map((l) => Math.exp(-l.age / 21));
+    R.blend = blend(W, R, favSet, { taste, popular, fresh }, weights, state.ads !== false);
+    R.parts = { taste, popular, fresh, weights };
+  }
   return R;
 }
 
@@ -202,34 +235,42 @@ function explore(W, favorites, favSet, rel) {
   const favItems = favorites.map((id) => items[id]);
   const favCrafts = new Set(favItems.map((l) => l.craft));
   const everyCraft = favCrafts.size === CRAFTS.length;
-  const key = favorites.slice().sort((a, b) => a - b).join('.');
+  const seed = stir(HASH0, favorites.slice().sort((a, b) => a - b).join('.'));   // the same tries for the same favorites
   const byRel = sorted(W, rel, favSet);
   const pool = byRel.slice(0, 240);
   const picked = [], tags = {}, why = {};
   const resembles = (l, set, weight = 1) => { let m = 0; for (const o of set) m = Math.max(m, weight * alike(l, o)); return m; };
+  // how much each candidate resembles the favorites does not change from place to place, and how much it
+  // resembles the picks so far only grows: both are kept, not worked out again for every place
+  const likeFavs = pool.map((id) => resembles(items[id], favItems, 0.6)), likePicks = pool.map(() => 0);
+  let open = null;                                   // a try's score before its resemblance to the other tries
 
   for (let slot = 0; slot < TOP + 2; slot++) {
-    const chosen = picked.map((id) => items[id]);
     let best = -1, bestScore = -Infinity;
     if (TRY_SLOTS.includes(slot)) {
-      const tries = chosen.filter((l) => tags[l.id]);
+      const tries = picked.filter((id) => tags[id]).map((id) => items[id]);
+      if (!open) open = items.map((l) => 0.4 * rel[l.id] + 1 / Math.sqrt(1 + l.favs / 4) + (l.age <= NEW_DAYS ? 0.1 : 0) + 0.35 * (stir(seed, l.id) / 4294967296));
       for (const l of items) {
         if (favSet.has(l.id) || picked.includes(l.id)) continue;
         if (!everyCraft && favCrafts.has(l.craft)) continue;
-        const s = 0.4 * rel[l.id] + 1 / Math.sqrt(1 + l.favs / 4) + (l.age <= NEW_DAYS ? 0.1 : 0) + 0.35 * hash(key, l.id) - 0.6 * resembles(l, tries);
+        const s = open[l.id] - 0.6 * resembles(l, tries);
         if (s > bestScore) { bestScore = s; best = l.id; }
       }
       if (best >= 0) tags[best] = 'try';
     } else {
-      for (const id of pool) {
+      for (let n = 0; n < pool.length; n++) {
+        const id = pool[n];
         if (picked.includes(id)) continue;
-        const l = items[id];
-        const s = 0.6 * rel[id] - 0.4 * Math.max(resembles(l, favItems, 0.6), resembles(l, chosen));
+        const s = 0.6 * rel[id] - 0.4 * Math.max(likeFavs[n], likePicks[n]);
         if (s > bestScore) { bestScore = s; best = id; }
       }
       if (best >= 0) why[best] = picked.length;
     }
-    if (best >= 0) picked.push(best);
+    if (best >= 0) {
+      picked.push(best);
+      const l = items[best];
+      for (let n = 0; n < pool.length; n++) { const a = alike(items[pool[n]], l); if (a > likePicks[n]) likePicks[n] = a; }
+    }
   }
   const has = new Set(picked);
   return { order: picked.concat(byRel.filter((id) => !has.has(id))), scores: rel, tags, why };
@@ -253,16 +294,17 @@ function blend(W, R, favSet, parts, weights, ads) {
   }
   const organic = [], cost = {};
   const pool = [...cand].filter((id) => !sold.includes(id)).sort((a, b) => base[b] - base[a] || items[a].tie - items[b].tie);
+  const likePicks = pool.map(() => 0);               // how much each candidate resembles the picks so far
   for (let n = 0; n < TOP + 2 && n < pool.length; n++) {
-    const chosen = organic.map((id) => items[id]);
     let best = -1, bestScore = -Infinity, bestCost = 0;
-    for (const id of pool) {
+    for (let c = 0; c < pool.length; c++) {
+      const id = pool[c];
       if (organic.includes(id)) continue;
-      let m = 0; for (const o of chosen) m = Math.max(m, alike(items[id], o));
-      const s = base[id] - w.variety * 0.5 * m;
+      const m = likePicks[c], s = base[id] - w.variety * 0.5 * m;
       if (s > bestScore) { bestScore = s; best = id; bestCost = w.variety * 0.5 * m; }
     }
     organic.push(best); cost[best] = bestCost;
+    for (let c = 0; c < pool.length; c++) { const a = alike(items[pool[c]], items[best]); if (a > likePicks[c]) likePicks[c] = a; }
   }
   const order = organic.slice(), tags = {};
   sold.forEach((id, n) => { order.splice(Math.min(AD_SLOTS[n], order.length), 0, id); tags[id] = 'ad'; });

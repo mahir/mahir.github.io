@@ -19,11 +19,11 @@ body { background: var(--ground); color: var(--ink); font: 400 15px/1.45 var(--f
 ::selection { background: var(--you); color: #fff; }
 :focus-visible { outline: 2px solid var(--you); outline-offset: 2px; }
 button { font: inherit; color: inherit; }
-h1, h2, p, ol, dl, dd { margin: 0; }
+h1, h2, h3, p, ol, dl, dd { margin: 0; }
 ol { padding: 0; }
 [hidden] { display: none !important; }
 /* the narrow cut of the face: names, numerals, anything that has to fit a column */
-h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-variant-numeric: tabular-nums; }
+h1, h2, h3, .n, .rank, .meas b, .place, dt, .seen b, .most b, .day b { font-stretch: 62%; font-variant-numeric: tabular-nums; }
 
 /* ---------- the top: a way home, and what this is ---------- */
 .top { display: flex; align-items: center; gap: 12px; padding: max(14px, env(safe-area-inset-top)) var(--margin) 0; }
@@ -71,8 +71,8 @@ h1, h2, .n, .rank, .meas b, .place, dt, .seen b { font-stretch: 62%; font-varian
 
 /* ---------- the feeds ---------- */
 .feeds { position: relative; padding: 0 var(--margin); }
-.feed .head { container-type: inline-size; padding-top: 11px; border-top: 3px solid var(--ink); }
-.feed h2 { font-weight: 700; font-size: clamp(19px, 13.4cqw, 30px); line-height: 1; white-space: nowrap; }
+.feed .head, .copy .head { container-type: inline-size; padding-top: 11px; border-top: 3px solid var(--ink); }
+.feed h2, .copy h3 { font-weight: 700; font-size: clamp(19px, 13.4cqw, 30px); line-height: 1; white-space: nowrap; }
 .feed .line { margin-top: 7px; font-size: 12.5px; line-height: 1.4; color: var(--soft); text-wrap: pretty; }
 .inst { position: relative; height: 96px; margin: 14px 0 0; }
 .inst .cap { position: absolute; left: 0; right: 0; bottom: 0; font-size: 11px; line-height: 1.2; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -223,6 +223,40 @@ body.has-why { padding-bottom: min(56vh, 470px); }
   .seen { margin-left: 0; }
 }
 
+/* ---------- the shop run forward: seven copies, a grid of every listing in each ---------- */
+.forward { margin-top: clamp(56px, 8vw, 112px); padding: 0 var(--margin); }
+.forward > h2 { font-weight: 700; font-size: clamp(36px, 5vw, 60px); line-height: .95; }
+.forward .how { margin-top: 16px; max-width: 70ch; font-size: clamp(15px, 1.3vw, 18px); line-height: 1.5; color: var(--soft); text-wrap: pretty; }
+.run .bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin-top: 24px; }
+.run .go, .run .again { height: 40px; padding: 0 18px; border: 1px solid var(--ink); border-radius: 20px; background: var(--ink); color: var(--ground); font-size: 14.5px; font-weight: 600; cursor: pointer; }
+.run .again { background: none; border-color: var(--line); color: var(--ink); font-weight: 500; }
+@media (hover: hover) { .run .go:hover { background: var(--soft); border-color: var(--soft); } .run .again:hover { background: var(--wash); } }
+.run .go:disabled { opacity: .5; cursor: default; }
+.run .day { margin-left: 6px; color: var(--soft); font-variant-numeric: tabular-nums; }
+.run .day b { color: var(--ink); font-weight: 700; font-size: 26px; line-height: 1; margin: 0 2px; }
+.run .sum { min-height: 3em; margin-top: 14px; max-width: 86ch; font-size: 15px; line-height: 1.5; text-wrap: pretty; }
+.copies { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 30px var(--gap); margin-top: 22px; }
+.copy { min-width: 0; }
+.copy .grid { position: relative; margin-top: 14px; }
+.copy canvas { display: block; }
+.copy .meas { margin-bottom: 10px; }
+.most { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; min-height: 76px; list-style: none; }
+.most li { display: grid; gap: 4px; align-content: start; }
+.most img { display: block; width: 100%; aspect-ratio: 1; border-radius: 4px; background: var(--wash); }
+.most b { font-weight: 700; font-size: 19px; line-height: 1; }
+.run .key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin-top: 12px; font-size: 13px; color: var(--soft); }
+.run .key span { display: inline-flex; align-items: center; gap: 7px; }
+.run .key i { width: 11px; height: 11px; background: var(--ink); }
+.run .key .k0 { opacity: .055; }
+.run .key .k1 { opacity: .16; }
+.run .key .k3 { width: 16px; height: 2px; }
+.js .ran { display: none; }
+.ran { margin-top: 20px; max-width: 76ch; font-size: 14.5px; line-height: 1.5; }
+.ran ul { margin: 10px 0 0; padding-left: 1.2em; color: var(--soft); }
+.ran li { margin-top: 5px; }
+.ran b { color: var(--ink); font-weight: 600; }
+@media (min-width: 1100px) { .copies { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+
 /* ---------- the notes under the lab, and the page without scripts ---------- */
 .notes { margin-top: clamp(56px, 8vw, 112px); padding: 0 var(--margin); }
 .notes > h2 { font-weight: 700; font-size: clamp(36px, 5vw, 60px); line-height: .95; }
@@ -239,7 +273,7 @@ body.has-why { padding-bottom: min(56vh, 470px); }
 .plain ol { margin-top: 12px; padding-left: 1.7em; font-size: 13.5px; line-height: 1.55; font-variant-numeric: tabular-nums; }
 
 /* stills and share images: the lab alone */
-.bare .top, .bare .lede, .bare .tour, .bare .you, .bare .notes, .bare .foot { display: none; }
+.bare .top, .bare .lede, .bare .tour, .bare .you, .bare .forward, .bare .notes, .bare .foot { display: none; }
 .bare .feeds { padding-top: var(--margin); }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }

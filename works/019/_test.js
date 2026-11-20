@@ -8,7 +8,9 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { build, P, TASTES } from './_world.js';
+import { build, P, TASTES, crowdOf, month, monthHtml } from './_world.js';
+import { begin, advance, outcome, nearest, RUN } from './forward.js';
+import { crowd } from './shoppers.js';
 import { prepare, rank, explain, measures, FEEDS, TOP } from './recs.js';
 import { world } from './world.js';
 import { title } from './vocab.js';
@@ -132,6 +134,45 @@ const shared = (a, b) => a.filter((id) => b.includes(id)).length;
   for (const f of Object.keys(hit)) hit[f] /= n;
   ok(hit.shoppers > 0.75 && hit.learned > 0.75, 'the collaborative feeds recommend from a shopper’s own tastes', JSON.stringify(hit));
   note(`share of a top ten from the shopper's two tastes, over ${n} shoppers: similar ${hit.similar.toFixed(2)}, shoppers like you ${hit.shoppers.toFixed(2)}, learned taste ${hit.learned.toFixed(2)}`);
+}
+
+// --- the shop run forward
+{
+  const made = crowdOf(truth);
+  ok(Object.keys(made).length === Object.keys(crowd).length && Object.keys(made).every((k) => JSON.stringify(crowd[k]) === JSON.stringify(made[k])), 'shoppers.js is what _world.js builds now', 'run node works/019/_world.js');
+  const size = readFileSync(join(dir, 'shoppers.js')).length;
+  ok(size < 300 * 1024, 'shoppers.js is under 300 KB', `${(size / 1024).toFixed(0)} KB`);
+  ok(crowd.f.length === P.shoppers && crowd.taste.length === N && crowd.q.length === N && crowd.t.length === 2 * P.shoppers, 'it has every shopper and every listing');
+
+  // the neighbors forward.js rebuilds each night are the ones the shop ships, when nothing has happened yet
+  const co = new Uint16Array(N * N), copy = prepare(raw);
+  for (const f of crowd.f) for (let a = 0; a < f.length; a++) for (let b = a + 1; b < f.length; b++) { co[f[a] * N + f[b]]++; co[f[b] * N + f[a]]++; }
+  nearest(co, copy.items);
+  ok(copy.items.every((l, i) => JSON.stringify(l.nb) === JSON.stringify(W.items[i].nb)), 'rebuilding the co-favorite neighbors from the shoppers gives the shipped ones');
+
+  // two days, twice: the same shoppers, the same favorites
+  const two = () => { const s = begin(raw, crowd); while (s.day < 2) advance(s, 5); return s.worlds.map((wd) => [wd.total, ...wd.gained]); };
+  ok(JSON.stringify(two()) === JSON.stringify(two()), 'running the shop forward twice gives the same two days, however the work is sliced');
+
+  const sim = month(raw, crowd), out = Object.fromEntries(sim.worlds.map((wd) => [wd.feed, outcome(sim, wd)]));
+  ok(sim.day === RUN.days && sim.worlds.every((wd) => wd.visits === RUN.days * RUN.visits && wd.daily.length === RUN.days), `a month is ${RUN.days} days of ${RUN.visits} visits in every copy`);
+  for (const wd of sim.worlds) {
+    const gained = wd.gained.reduce((a, b) => a + b, 0);
+    ok(gained === wd.total && wd.daily.reduce((a, b) => a + b, 0) === wd.total, `${wd.feed}: the favorites given add up`, `${gained}, ${wd.total}`);
+    ok(wd.W.items.every((l) => l.favs === sim.before[l.id] + wd.gained[l.id] && l.age === W.items[l.id].age + RUN.days), `${wd.feed}: every listing's count is what it had plus what it gained`);
+    ok(wd.favs.every((f, u) => new Set(f).size === f.length && f.length >= crowd.f[u].length), `${wd.feed}: no shopper favorited a listing twice`);
+    ok([...wd.gained].every((g, id) => !g || wd.shown[id] >= g), `${wd.feed}: nothing was favorited without being shown`);
+  }
+  // what the section is there to show
+  const feeds = Object.keys(out);
+  ok(feeds.every((f) => f === 'popular' || out[f].shown > out.popular.shown), 'Most popular shows the fewest listings', feeds.map((f) => `${f} ${out[f].shown}`).join(', '));
+  ok(feeds.every((f) => f === 'similar' || out[f].shown < out.similar.shown), 'Similar items shows the most');
+  ok(['shoppers', 'learned', 'explore', 'blend'].every((f) => out[f].favorites > out.similar.favorites && out.similar.favorites > out.popular.favorites), 'the four feeds that learn from shoppers earn more favorites than Similar items, and Similar items more than Most popular');
+  ok(out.popular.top > 0.95 && out.similar.top < sim.held, 'Most popular gives nearly everything to the top tenth; Similar items gives it less than it already held', `${out.popular.top.toFixed(2)}, ${out.similar.top.toFixed(2)}, held ${sim.held.toFixed(2)}`);
+  ok(out.explore.shown > out.learned.shown && out.explore.favorites < out.learned.favorites, 'Explore shows more of the shop than Learned taste, and earns fewer favorites for it');
+  const html = readFileSync(join(dir, 'index.html'), 'utf8');
+  ok(html.includes(monthHtml(sim)), 'the month in index.html, for readers without scripts, is this month', 'run node works/019/_world.js');
+  for (const f of feeds) note(`a month of ${f.padEnd(9)} ${String(out[f].favorites).padStart(5)} favorites, ${String(out[f].shown).padStart(5)} listings shown, ${String(out[f].got).padStart(4)} favorited, ${Math.round(out[f].top * 100)}% to the top tenth`);
 }
 
 console.log(`${failed ? 'FAILED' : 'ok'}  ${passed} checks passed${failed ? `, ${failed} failed` : ''}`);

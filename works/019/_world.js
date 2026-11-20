@@ -3,7 +3,8 @@
 //
 // Builds the shop for No. 019 and writes it to world.js: the listings, the shops, and what the rankers
 // need that can only be learned from every shopper's favorites (each listing's nearest neighbors by
-// co-favorites, and its place in the learned taste space). The shoppers themselves are not shipped.
+// co-favorites, and its place in the learned taste space). The shoppers themselves go to shoppers.js, which
+// the page fetches only to run the shop forward. It also runs that month once, for readers without scripts.
 //
 // Everything is seeded, so the same parameters always give the same shop. Change P and run it again.
 // It is tooling: the page must never import it (Jekyll does not publish files that start with "_").
@@ -12,7 +13,8 @@ import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { CRAFTS, SURFACES, COLORS, craftIndex, surfaceIndex, colorIndex, title } from './vocab.js';
-import { solve, prepare, rank, alike, TOP } from './recs.js';
+import { solve, prepare, rank, alike, TOP, FEEDS } from './recs.js';
+import { begin, advance, outcome, RUN } from './forward.js';
 
 export const P = {
   seed: 19,
@@ -306,6 +308,50 @@ function pca2(Y) {
   return out;
 }
 
+// ---------------------------------------------------------------- the crowd, for running the shop forward
+// What forward.js needs that the page does not: every shopper's two tastes and favorites, and for each listing
+// the taste it belongs to (-1: none) and how much shoppers take to it, times 100. The page loads it only when
+// the visitor runs the shop forward.
+export function crowdOf(truth) {
+  const taste = truth.L.map(() => -1);
+  truth.LOOKS.forEach((lk) => { for (const id of truth.pools[lk.n]) taste[id] = lk.taste; });
+  return {
+    t: truth.shoppers.flatMap((sh) => [sh.t1, sh.t2]),
+    f: truth.shoppers.map((sh) => sh.favorites.slice()),
+    taste,
+    q: truth.L.map((l) => Math.round(l.q * 100)),
+  };
+}
+function writeCrowd(crowd, dir) {
+  const js = `// shoppers.js: the shoppers of No. 019. Written by _world.js; do not edit by hand.
+// t: each shopper's first and second taste.   f: each shopper's favorites, oldest first.
+// taste: the taste each listing belongs to (-1: none).   q: each listing's appeal, times 100.
+export const crowd = {
+t: ${JSON.stringify(crowd.t)},
+taste: ${JSON.stringify(crowd.taste)},
+q: ${JSON.stringify(crowd.q)},
+f: ${'[\n' + crowd.f.map((r) => JSON.stringify(r)).join(',\n') + '\n]'},
+};
+`;
+  writeFileSync(join(dir, 'shoppers.js'), js);
+  return js.length;
+}
+
+// The shop run forward for a month under each feed, and what came of it as plain text, for readers without scripts.
+export function month(raw, crowd, days = RUN.days) {
+  const sim = begin(raw, crowd);
+  while (sim.day < days) advance(sim);
+  return sim;
+}
+export function monthHtml(sim) {
+  const n = (x) => x.toLocaleString('en-US');
+  const rows = sim.worlds.map((wd, i) => {
+    const o = outcome(sim, wd);
+    return `        <li><b>${FEEDS[i].name}</b> earned ${n(o.favorites)} favorites and showed ${n(o.shown)} of the ${n(sim.N)} listings. ${Math.round(o.top * 100)}% of those favorites went to listings already in the top tenth.</li>`;
+  });
+  return `      <p>As the run starts, the ${n(sim.tenth.size)} most favorited listings hold ${Math.round(sim.held * 100)}% of all favorites. After ${sim.day} days:</p>\n      <ul>\n${rows.join('\n')}\n      </ul>`;
+}
+
 // ---------------------------------------------------------------- write
 function write(raw, dir) {
   const rows = (a) => '[\n' + a.map((r) => JSON.stringify(r)).join(',\n') + '\n]';
@@ -331,7 +377,7 @@ xy: ${JSON.stringify(raw.xy)},
 }
 
 // The two feeds that are the same for everyone, as plain lists, for readers without scripts.
-function writeHtml(raw, dir) {
+function writeHtml(raw, dir, crowd) {
   const file = join(dir, 'index.html');
   if (!existsSync(file)) return false;
   const W = prepare(raw);
@@ -343,6 +389,7 @@ function writeHtml(raw, dir) {
     if (re.test(html)) html = html.replace(re, `$1\n${items}\n        $2`);
   }
   html = html.replace(/(<!-- gen:count -->)[\s\S]*?(<!-- \/gen:count -->)/g, `$1${raw.L.length.toLocaleString('en-US')}$2`);
+  html = html.replace(/(<!-- gen:forward -->)[\s\S]*?(<!-- \/gen:forward -->)/, (_, a, b) => `${a}\n${monthHtml(month(raw, crowd))}\n      ${b}`);
   writeFileSync(file, html);
   return true;
 }
@@ -357,6 +404,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   console.log(`tour: first "${title(truth.L[raw.tour.first])}" (${truth.L[raw.tour.first].favs}), fresh "${title(truth.L[raw.tour.fresh])}"`);
   console.log('shoppers:', raw.shoppers.map((s) => `${s.name} ${s.favs.length}`).join(', '));
   if (process.argv.includes('--dry')) process.exit(0);
-  const bytes = write(raw, dir);
-  console.log(`world.js: ${(bytes / 1024).toFixed(0)} KB${writeHtml(raw, dir) ? '; index.html lists refreshed' : ''}`);
+  const bytes = write(raw, dir), crowd = crowdOf(truth);
+  console.log(`world.js: ${(bytes / 1024).toFixed(0)} KB`);
+  console.log(`shoppers.js: ${(writeCrowd(crowd, dir) / 1024).toFixed(0)} KB`);
+  if (writeHtml(raw, dir, crowd)) console.log('index.html: the two plain lists and the month run forward refreshed');
 }

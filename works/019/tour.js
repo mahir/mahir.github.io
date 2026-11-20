@@ -1,9 +1,10 @@
-// tour.js: six steps through the lab. Each step sets the lab's state through the same calls a visitor's
+// tour.js: seven steps through the page, six of them in the lab. Each step sets the lab's state through the same calls a visitor's
 // taps make, so nothing in the tour is staged: the feeds on screen are what the rankers return.
 // The sentences quote the lab's own numbers, so they stay true when the shop is rebuilt.
 
 import { measures, explain, FEEDS, TOP } from './recs.js';
 import { CRAFTS, title } from './vocab.js';
+import { RUN } from './forward.js';
 
 const $ = (s) => document.querySelector(s);
 const list = (a) => (a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
@@ -48,7 +49,11 @@ export function start(lab, opt = {}) {
     },
     {
       title: 'The blend', focus: ['blend'], favorites: four,
-      say: () => 'A shop’s front page is a mix. The blend takes candidates from the other feeds, scores each with the weights under its name, spaces out look-alikes, and sells its second and seventh places to the shop that bids the most for a listing that fits you. Move the sliders, then the shop is yours.',
+      say: () => 'A shop’s front page is a mix. The blend takes candidates from the other feeds, scores each with the weights under its name, spaces out look-alikes, and sells its second and seventh places to the shop that bids the most for a listing that fits you. Move the sliders and it sorts again.',
+    },
+    {
+      title: 'A month on', focus: null, favorites: four, go: '#forward',
+      say: () => `Until now the shop stood still. But shoppers can only favorite what they are shown, so a feed also decides what gets favorited next. Below are seven copies of the shop, each run by one feed for ${RUN.days} days. Press Run a month and compare them. Then the shop is yours.`,
     },
   ];
 
@@ -80,7 +85,9 @@ export function start(lab, opt = {}) {
     if (go !== 0) bar.querySelector('.next')?.focus({ preventScroll: true });
     // bring the bar to the top of the window, so the feeds it talks about are under it and the panel
     // that step five opens does not cover it; once it is stuck there this does nothing
-    const y = bar.getBoundingClientRect().top + scrollY - 8;
+    // a step about another part of the page goes there instead, and the bar follows, since it sticks
+    const to = !bar.hidden && steps[at].go ? $(steps[at].go) : null;
+    const y = to ? to.getBoundingClientRect().top + scrollY - bar.offsetHeight - 28 : bar.getBoundingClientRect().top + scrollY - 8;
     if (go !== 0 && !bar.hidden && Math.abs(scrollY - y) > 4) scrollTo({ top: y, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   });
   open.addEventListener('click', () => show(0));
