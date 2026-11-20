@@ -86,6 +86,10 @@ window.Works = (() => {
       n: 19, title: 'One shop, seven feeds', date: '2026-11-20', medium: 'Interactive SVG and simulated data',
       about: 'An imaginary shop of 1,200 handmade things, each drawn in code and favorited by 2,500 shoppers who never existed, sorted by seven recommenders side by side, from a count of favorites to a space of tastes learned from them; favorite a listing and every feed sorts itself again, and open one to read why each feed put it where it did.',
     },
+    {
+      n: 20, title: 'A language nobody speaks', date: '2026-11-21', medium: 'Generative language, canvas writing and Web Audio',
+      about: 'A page that makes up a whole language each time it opens: its sounds, a script of its own that a pen writes out, words built from other words, a way of counting and a grammar; change one English sentence and whatever changes in the language is written in red, with a note on which real languages do the same, from Turkish to Tok Pisin; type a name to see it written, hear the sentence said, and keep the number to open the same language again.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');

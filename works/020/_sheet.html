@@ -1,0 +1,55 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>020 scripts</title>
+<style>
+  body { margin: 16px; background: #f4efe4; font: 12px/1.3 ui-monospace, Menlo, monospace; color: #222; }
+  .grid { display: grid; grid-template-columns: repeat(var(--cols, 4), 1fr); gap: 14px; }
+  .card { background: #fbf8f1; border: 1px solid #d8d0bf; padding: 10px; overflow: hidden; }
+  canvas { display: block; margin: 6px 0; }
+  .err { color: #b00; white-space: pre-wrap; }
+</style>
+<div class="grid" id="g"></div>
+<script type="module">
+// a contact sheet of scripts: ?from=1&n=24  ?family=joined  ?kind=abugida  ?cols=4  ?size=30
+import { makeLanguage } from './language.js';
+import { layout, paint } from './script.js';
+import { START, TALE } from './english.js';
+const q = new URLSearchParams(location.search);
+const from = +q.get('from') || 1; const n = +q.get('n') || 24; const fam = q.get('family'); const kind = q.get('kind');
+const size = +q.get('size') || 30;
+const cols = +q.get('cols') || 4;
+document.documentElement.style.setProperty('--cols', cols);
+const g = document.getElementById('g');
+const canvasFor = (laid, pad = 14) => {
+  const dpr = 2;
+  const c = document.createElement('canvas');
+  c.width = Math.ceil((laid.w + pad * 2) * dpr); c.height = Math.ceil((laid.h + pad * 2) * dpr);
+  c.style.width = (laid.w + pad * 2) + 'px'; c.style.height = (laid.h + pad * 2) + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  paint(ctx, laid, { x: pad, y: pad, hot: (r) => r === 'not' || r === 'obj.n' });
+  return c;
+};
+let shown = 0;
+for (let s = from; shown < n && s < from + 4000; s++) {
+  let L;
+  try { L = makeLanguage(s); } catch (e) { const d = document.createElement('div'); d.className = 'card err'; d.textContent = s + ' ' + e.stack; g.append(d); shown++; continue; }
+  if (fam && L.script.family !== fam) continue;
+  if (kind && L.script.kind !== kind) continue;
+  shown++;
+  const card = document.createElement('div'); card.className = 'card';
+  try {
+    const S = L.script;
+    card.append(`${s} · ${L.name} · ${S.family}/${S.kind} · ${S.dir}${S.boustro ? ' ox' : ''} · ${S.sep} · ${S.pen.kind}`);
+    const W = Math.floor((innerWidth - 32 - 14 * (cols - 1)) / cols) - 50;
+    const vertical = S.dir === 'down';
+    card.append(canvasFor(layout(S, S.compose([{ segs: L.nameSegs }], null), { size: size * 2, max: vertical ? 300 : W })));
+    const out = L.say({ ...START, not: true });
+    card.append(canvasFor(layout(S, S.compose(out.words, out.end), { size, max: vertical ? 260 : W })));
+    card.append(out.words.map((w) => L.ph.rom(w.segs)).join(' '));
+    const letters = S.chart.list ? S.chart.list.map((x) => ({ segs: x.segs })) : S.chart.rows.slice(0, 4).flatMap((r) => r.cells.map((c) => ({ segs: c })));
+    card.append(canvasFor(layout(S, letters.map((w) => ({ cells: S.wordCells(w.segs), space: 0.5 })), { size: size * 0.8, max: vertical ? 200 : W })));
+  } catch (e) { const d = document.createElement('div'); d.className = 'err'; d.textContent = e.stack; card.append(d); }
+  g.append(card);
+}
+document.documentElement.dataset.ready = '1';
+</script>
