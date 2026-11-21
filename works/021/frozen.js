@@ -1,0 +1,9 @@
+// One sky, kept: Open-Meteo's answer for Sapporo at 2026-11-21T11:45 local time. The page falls back to it when
+// Open-Meteo does not answer, and the picture and table for readers without scripts are made from it
+// (node works/021/_static.js). Data: Open-Meteo, CC BY 4.0.
+(function (root) {
+  'use strict';
+  const FROZEN = {"town":"Sapporo","answer":{"elevation":26,"timezone":"Asia/Tokyo","timezone_abbreviation":"GMT+9","current":{"time":"2026-11-21T11:45","temperature_2m":1.6,"relative_humidity_2m":82,"snowfall":0.14,"weather_code":85},"hourly":{"time":["2026-11-21T11:00"],"temperature_1000hPa":[1.6],"temperature_975hPa":[-0.1],"temperature_950hPa":[-1.8],"temperature_925hPa":[-3.8],"temperature_900hPa":[-5.6],"temperature_850hPa":[-8.8],"temperature_800hPa":[-11.7],"temperature_700hPa":[-19.2],"temperature_600hPa":[-28.2],"temperature_500hPa":[-37.6],"temperature_400hPa":[-45.2],"temperature_300hPa":[-51.5],"relative_humidity_1000hPa":[82],"relative_humidity_975hPa":[85],"relative_humidity_950hPa":[87],"relative_humidity_925hPa":[94],"relative_humidity_900hPa":[95],"relative_humidity_850hPa":[91],"relative_humidity_800hPa":[79],"relative_humidity_700hPa":[78],"relative_humidity_600hPa":[68],"relative_humidity_500hPa":[56],"relative_humidity_400hPa":[32],"relative_humidity_300hPa":[12],"geopotential_height_1000hPa":[87],"geopotential_height_975hPa":[290.46],"geopotential_height_950hPa":[498],"geopotential_height_925hPa":[710],"geopotential_height_900hPa":[925],"geopotential_height_850hPa":[1371],"geopotential_height_800hPa":[1838],"geopotential_height_700hPa":[2846],"geopotential_height_600hPa":[3972],"geopotential_height_500hPa":[5255],"geopotential_height_400hPa":[6767.9],"geopotential_height_300hPa":[8650]}}};
+  if (typeof module !== 'undefined' && module.exports) module.exports = FROZEN;
+  else root.SnowFrozen = FROZEN;
+})(typeof self !== 'undefined' ? self : this);

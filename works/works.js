@@ -90,6 +90,10 @@ window.Works = (() => {
       n: 20, title: 'A language nobody speaks', date: '2026-11-21', medium: 'Generative language, canvas writing and Web Audio',
       about: 'A page that makes up a whole language each time it opens: its sounds, a script of its own that a pen writes out, words built from other words, a way of counting and a grammar; change one English sentence and whatever changes in the language is written in red, with a note on which real languages do the same, from Turkish to Tok Pisin; type a name to see it written, hear the sentence said, and keep the number to open the same language again.',
     },
+    {
+      n: 21, title: 'A snowflake, on its way down', date: '2026-11-22', medium: 'Live weather data, WebGL and a cellular automaton',
+      about: 'A page that finds a town where it is snowing this hour, reads the temperature and humidity of the air above it, and grows one snow crystal by falling through that air: a plate where it is cold and thin, ferns where it is wet near −15°, so the crystal is a record of that sky; drag it back up the rail of heights and let it fall again, point at a piece of ice to see where it froze, or try another of 48 towns.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
