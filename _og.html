@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Homepage · share image (build only)</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fragment+Mono&display=block" rel="stylesheet">
+<style>
+  /* Build only: /og.jpg is a screenshot of this page at 1200 x 630 (Jekyll does not publish a file that starts with "_").
+     The homepage at night, led by the photograph: it fills the left half at full height and fades into the page's
+     ground, and the name and role line stand to its right in the homepage's type. */
+  :root {
+    --bg: #06070b; --ink: #e2e6eb; --faint: rgba(226, 230, 235, .58);
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif; --mono: "Fragment Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; margin: 0; overflow: hidden; background: var(--bg); color: var(--ink); }
+  body { position: relative; font: 400 16px/1.5 var(--sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  .photo { position: absolute; left: 0; top: 0; width: 630px; height: 630px; object-fit: cover; }
+  /* the photo's right edge fades into the ground, and its foot darkens a little */
+  .veil {
+    position: absolute; left: 0; top: 0; width: 640px; height: 630px;
+    background: linear-gradient(90deg, transparent 45%, var(--bg) 99%), linear-gradient(0deg, rgba(6, 7, 11, .55), transparent 40%);
+  }
+  .id { position: absolute; left: 610px; right: 60px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  h1 { margin: 0 0 26px; font-stretch: 125%; font-weight: 300; font-size: 78px; line-height: 1; letter-spacing: -.035em; white-space: nowrap; }
+  h1 b { font-weight: 640; }
+  .role { margin: 0; font-stretch: 105%; font-size: 27px; line-height: 1.3; letter-spacing: -.005em; }
+  .role span { display: block; }
+  .foot { position: absolute; left: 610px; bottom: 54px; font: 400 13px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+</style>
+</head>
+<body>
+<img class="photo" src="/portrait.jpg" alt="">
+<div class="veil"></div>
+<div class="id">
+  <h1>Mahir <b>Yavuz</b></h1>
+  <p class="role"><span>Engineering and product leader.</span> <span>Teacher and advisor.</span> <span>Turning data into products since&nbsp;1998.</span></p>
+</div>
+<div class="foot">mahiryavuz.com</div>
+</body>
+</html>
