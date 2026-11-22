@@ -52,6 +52,26 @@ const onSheet = ch.cuts.filter((c) => c.sheet);
 assert(onSheet.length >= 2, 'loops cut off on the sheet: ' + onSheet.length);
 assert(Math.max(...run.stats.winding) > 1.6 && run.stats.winding[0] < 1.1, 'it starts nearly straight and winds');
 
+// its width changes along it, within bounds, and the sheet's water is as wide as the river says
+let narrow = 9, wide = 0;
+for (let i = 0; i < ch.n; i++) {
+  assert(ch.w[i] >= 0.6 - 1e-9 && ch.w[i] <= P.widest + 1e-9, 'a width of ' + ch.w[i]);
+  if (ch.x[i] > 0 && ch.x[i] < C.long) { narrow = Math.min(narrow, ch.w[i]); wide = Math.max(wide, ch.w[i]); }
+}
+assert(wide - narrow > 0.3, 'the river is between ' + narrow.toFixed(2) + ' and ' + wide.toFixed(2) + ' wide');
+const waterAt = (px, py) => { const c = Math.floor(px * C.per), r = Math.floor((py + C.wide / 2) * C.per); if (c < 0 || r < 0 || c >= sh.cols || r >= sh.rows) return null; const v = sh.visits(c, r); return v.length > 0 && v[v.length - 1].to === looks; };
+let edges = 0, right = 0;
+for (let i = 6; i < ch.n - 6; i += 4) {
+  if (ch.x[i] < 3 || ch.x[i] > C.long - 3) continue;
+  const tx = ch.x[i + 1] - ch.x[i - 1], ty = ch.y[i + 1] - ch.y[i - 1], l = Math.hypot(tx, ty);
+  for (const side of [-1, 1]) {
+    const inside = waterAt(ch.x[i] - side * ty / l * ch.w[i] * 0.35, ch.y[i] + side * tx / l * ch.w[i] * 0.35);
+    if (inside === null) continue;
+    edges++; if (inside) right++;
+  }
+}
+assert(edges > 30 && right / edges > 0.97, 'water where the river is wide: ' + right + ' of ' + edges);
+
 // hard ground is slow to cut, and so is a cut-off loop once its clay has set
 assert(C.hard.length > 0, 'the kept river has hard ground to show');
 const k = C.hard[0];
@@ -64,12 +84,12 @@ while (late.year < loop.year + C.set / 2) late.step();
 const half = late.soft(loop.x[mid], loop.y[mid]);
 assert(fresh > 0.95 && half < fresh && half >= C.plug, 'clay sets in a loop: ' + fresh.toFixed(2) + ' then ' + half.toFixed(2));
 
-// index.html says the fastest bank anywhere moves about a sixteenth of a width a year
+// index.html says the fastest bank anywhere moves about a twentieth of a width a year
 let fastest = 0;
 P.cols = 384; P.rows = 240;
 for (let s = 1; s <= 60; s++) { const r = River.Run(s); r.more(); fastest = Math.max(fastest, r.channel.fastest); }
 P.cols = 1536; P.rows = 960;
-assert(fastest > 0.04 && fastest < 0.075, 'fastest bank, widths a year: ' + fastest);
+assert(fastest > 0.035 && fastest < 0.065, 'fastest bank, widths a year: ' + fastest);
 
 // every cell's visits are in order, and none overlap
 let most = 0, ponds = 0;

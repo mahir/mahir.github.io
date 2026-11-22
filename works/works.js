@@ -96,7 +96,7 @@ window.Works = (() => {
     },
     {
       n: 22, title: 'A river, and where it has been', date: '2026-11-23', medium: 'WebGL and a river simulation',
-      about: 'A river seen from above that moves across its valley for 2,000 years, eating its outer banks and cutting off its own loops, and inks the ground it leaves in the color of that century, the way Harold Fisk’s 1944 maps of the Mississippi show its old courses; drag the years back along the rail, point at a piece of ground to see when the river left it and where it ran that year, or open another river: every number from 1 to 99,999 draws one of its own, broad or small, slow or restless, in a valley with its own shape and its own patches of hard ground.',
+      about: 'A river seen from above that moves across its valley for 2,000 years, eating its outer banks, widening at its quickest bends and cutting off its own loops, and inks the ground it leaves in the color of that century, the way Harold Fisk’s 1944 maps of the Mississippi show its old courses; drag the years back along the rail, point at a piece of ground to see when the river left it and where it ran that year, or open another river: every number from 1 to 99,999 draws one of its own, broad or small, slow or restless, in a valley with its own shape and its own patches of hard ground.',
     },
   ];
 

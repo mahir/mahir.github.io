@@ -18,7 +18,7 @@ function table() {
   }
   return [
     '<table>',
-    `<caption>River No. ${KEPT}. ${River.describe(C)} The sheet is ${C.long} of its widths long. Its length is given in lengths of its valley. Loops cut off on the sheet, in order, in years ${cuts.map(fmt).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</caption>`,
+    `<caption>River No. ${KEPT}. ${River.describe(C)} The sheet is ${C.long} of its usual widths long. Its length is given in lengths of its valley. Loops cut off on the sheet, in order, in years ${cuts.map(fmt).join(', ').replace(/, ([^,]*)$/, ' and $1')}.</caption>`,
     '<thead><tr><th>Year</th><th>Length</th><th>Loops cut off so far</th></tr></thead>',
     '<tbody>', ...rows, '</tbody>', '</table>',
   ].join('\n');

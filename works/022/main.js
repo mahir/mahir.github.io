@@ -63,7 +63,7 @@
     shown = r;
     painter.sheet(r.sheet, r.C);
     cuts = r.channel.cuts.filter((c) => c.sheet).map((c) => c.year);
-    $('status').textContent = `No. ${seed}. ${River.describe(r.C)} The sheet is ${r.C.long} of its widths long.`;
+    $('status').textContent = `No. ${seed}. ${River.describe(r.C)} The sheet is ${r.C.long} of its usual widths long.`;
     rule();
     $('again').disabled = false;
     probe = null; hide();

@@ -270,7 +270,7 @@
         "@id": "https://mahiryavuz.com/#website"
       },
       "image": "https://mahiryavuz.com/works/022/og.jpg",
-      "description": "A river seen from above that moves across its valley for 2,000 years, eating its outer banks and cutting off its own loops, and inks the ground it leaves in the color of that century, the way Harold Fisk’s 1944 maps of the Mississippi show its old courses; drag the years back along the rail, point at a piece of ground to see when the river left it and where it ran that year, or open another river: every number from 1 to 99,999 draws one of its own, broad or small, slow or restless, in a valley with its own shape and its own patches of hard ground.",
+      "description": "A river seen from above that moves across its valley for 2,000 years, eating its outer banks, widening at its quickest bends and cutting off its own loops, and inks the ground it leaves in the color of that century, the way Harold Fisk’s 1944 maps of the Mississippi show its old courses; drag the years back along the rail, point at a piece of ground to see when the river left it and where it ran that year, or open another river: every number from 1 to 99,999 draws one of its own, broad or small, slow or restless, in a valley with its own shape and its own patches of hard ground.",
       "artMedium": "WebGL and a river simulation"
     },
     {
@@ -312,7 +312,7 @@
       <div class="where">
         <p class="status" id="status" role="status">This is a kept river: No. 3, in its year 2,000. With scripts on, the page runs a new river and plays its years.</p>
         <h2 class="year" id="year">Year 2,000</h2>
-        <p class="scalebar"><span class="scale" id="scale"></span><span>ten widths of the river</span></p>
+        <p class="scalebar"><span class="scale" id="scale"></span><span>ten of the river’s usual widths</span></p>
       </div>
 
       <div class="map">
@@ -359,8 +359,8 @@
       <div class="in">
         <div>
           <h2>What this is</h2>
-          <p>A river seen from above, in its valley. Each year every part of the river moves a little, toward the outside of its bend. The ground it gives up is inked in the color of the century in which it left, and printed paler as it ages. When the two sides of a loop come together, the river takes the short way; the loop keeps its water for a while and then closes up.</p>
-          <p>Nothing is stored. The number in the address is where the chance comes from, and it decides two things. One is the river’s character: how big it is on the sheet, how far upstream its bends take their lead from, how fast its banks move, how soon it cuts a loop off, the shape of its valley, and where the ground is hard. The other is the few low bends it starts with. The rest follows from the rule, and the same number always draws the same river.</p>
+          <p>A river seen from above, in its valley. Each year every part of the river moves a little, toward the outside of its bend. It is widest where its banks are moving fastest, and narrow where they are held. The ground it gives up is inked in the color of the century in which it left, and printed paler as it ages. When the two sides of a loop come together, the river takes the short way; the loop keeps its water for a while and then closes up.</p>
+          <p>Nothing is stored. The number in the address is where the chance comes from, and it decides two things. One is the river’s character: how big it is on the sheet, how far upstream its bends take their lead from, how fast its banks move, how much it widens at its bends, how soon it cuts a loop off, the shape of its valley, and where the ground is hard. The other is the few low bends it starts with. The rest follows from the rule, and the same number always draws the same river.</p>
         </div>
         <div>
           <h2>Fisk’s maps</h2>
@@ -370,13 +370,14 @@
         <div>
           <h2>The rule</h2>
           <p>It is the model of Alan Howard and Thomas Knutson, <a href="https://doi.org/10.1029/WR020i011p01659">“Sufficient conditions for river meandering: A simulation approach”</a>, 1984. A bank moves faster the tighter its bend, and fastest where the bend’s radius is about three widths of the river; in a tighter bend than that it slows again. And a bend is not moved by its own shape alone: each point moves by an average of the bends upstream of it, the near ones counting most. That second part is what makes bends lean downstream and grow into loops. The paper’s title says what it found: these two things are enough.</p>
+          <p>A river is not the same width all along. Where one bank is cut away faster than the other can build out behind it, the river widens. Esther Eke and others <a href="https://doi.org/10.1017/jfm.2014.556">modeled that in 2014</a>, and note that rivers which are wider at their bends tend to be the ones that move fastest. Here the width at each place leans toward what the bank’s speed there asks for, so a river swells at its quick bends and draws in where a wall, hard ground or a straight reach holds it.</p>
           <p>The ground is not all alike. A cut-off loop fills with fine clay, and set clay is slow to cut: Fisk reported in 1947 that such plugs hold the Mississippi’s bends back, and Tao Sun and others put them into <a href="https://doi.org/10.1029/96WR00998">a model like this one</a> in 1996. So here a river’s old loops get in the way of its new ones. Some valleys also start with patches of hard ground, which a bank cuts at a tenth of the usual rate.</p>
           <p>The whole 2,000 years are worked out in about a second when the page opens. What you watch is that record played back, which is why the years can be dragged back along the rail, and why pointing at a piece of ground can say when the river left it.</p>
         </div>
         <div>
           <h2>What it leaves out</h2>
-          <p>Floods. The short cuts a river makes across the inside of a bend, which Fisk’s sheets mark as chute cut-offs: here a loop is cut off when its two sides come within a set distance, which for most rivers means touching. And a river that gives up its whole course for a new one, as the Mississippi has done.</p>
-          <p>The paper’s own text could not be opened while this page was made. The rule here follows its abstract and <a href="https://github.com/zsylvester/meanderpy">meanderpy</a>, Zoltán Sylvester’s open program built on it, from which the two weights (−1 on a point’s own bend, 2.5 on the bends upstream) are taken. The rest are this page’s choices: how fast a tight bend slows, how long a cut-off loop holds water (about 400 years at its middle), how long its clay takes to set (150 years) and how slow it then is to cut (a fifth of the usual rate), and the range each river’s character is drawn from. So is the clock: the years are years because the fastest bank on any of these rivers moves about a sixteenth of the river’s width in one, and most move far less.</p>
+          <p>Floods. Islands and bars. The short cuts a river makes across the inside of a bend, which Fisk’s sheets mark as chute cut-offs: here a loop is cut off when its two sides come within a set distance, which for most rivers means touching. And a river that gives up its whole course for a new one, as the Mississippi has done.</p>
+          <p>The paper’s own text could not be opened while this page was made. The rule here follows its abstract and <a href="https://github.com/zsylvester/meanderpy">meanderpy</a>, Zoltán Sylvester’s open program built on it, from which the two weights (−1 on a point’s own bend, 2.5 on the bends upstream) are taken. The rest are this page’s choices: how fast a tight bend slows, how much wider a fast bank makes the river (at most about twice its usual width), how long a cut-off loop holds water (about 400 years at its middle), how long its clay takes to set (150 years) and how slow it then is to cut (a fifth of the usual rate), and the range each river’s character is drawn from. So is the clock: the years are years because the fastest bank on any of these rivers moves about a twentieth of the river’s usual width in one, and most move far less.</p>
         </div>
         <div class="wide">
           <h2>One river, kept</h2>
@@ -384,7 +385,7 @@
           <div class="scroll">
 <!-- river -->
 <table>
-<caption>River No. 3. A broad river in its valley with three patches of hard ground. The sheet is 62 of its widths long. Its length is given in lengths of its valley. Loops cut off on the sheet, in order, in years 1,103, 1,362, 1,387, 1,479.</caption>
+<caption>River No. 3. A broad river in its valley with three patches of hard ground. The sheet is 62 of its usual widths long. Its length is given in lengths of its valley. Loops cut off on the sheet, in order, in years 1,033, 1,347, 1,372, 1,874.</caption>
 <thead><tr><th>Year</th><th>Length</th><th>Loops cut off so far</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>1.0</td><td>0</td></tr>
@@ -392,12 +393,12 @@
 <tr><td>400</td><td>1.3</td><td>0</td></tr>
 <tr><td>600</td><td>1.8</td><td>0</td></tr>
 <tr><td>800</td><td>2.4</td><td>0</td></tr>
-<tr><td>1,000</td><td>3.1</td><td>0</td></tr>
+<tr><td>1,000</td><td>2.8</td><td>0</td></tr>
 <tr><td>1,200</td><td>2.9</td><td>1</td></tr>
 <tr><td>1,400</td><td>2.8</td><td>3</td></tr>
-<tr><td>1,600</td><td>2.7</td><td>4</td></tr>
-<tr><td>1,800</td><td>2.5</td><td>4</td></tr>
-<tr><td>2,000</td><td>2.8</td><td>4</td></tr>
+<tr><td>1,600</td><td>2.7</td><td>3</td></tr>
+<tr><td>1,800</td><td>2.9</td><td>3</td></tr>
+<tr><td>2,000</td><td>2.6</td><td>4</td></tr>
 </tbody>
 </table>
 <!-- /river -->

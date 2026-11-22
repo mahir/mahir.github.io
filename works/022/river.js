@@ -37,6 +37,7 @@
     stiff: 0.1,      // and how fast it cuts the hard ground a valley starts with
     bend: 9.5,       // a river's bends come about this many widths apart, divided by alpha
     pace: 1,         // see kl in character()
+    widest: 2.1,     // a river is never drawn wider than this many of its usual widths
   };
 
   // a small seeded generator (mulberry32)
@@ -103,6 +104,8 @@
       const rx = lam * (0.16 + 0.34 * r()), px = C.long * (0.06 + 0.88 * r()), [top, bottom] = walls(C, px);
       C.hard.push([px, (top + bottom) / 2 + (top - bottom) / 2 * 0.7 * (r() * 2 - 1), rx, rx * (0.4 + 0.6 * r()), r() * Math.PI]);
     }
+    // how much the river widens where its banks move fast: 0 would be the same width everywhere
+    C.swell = 0.5 + 0.7 * r();
     return C;
   }
 
@@ -111,11 +114,13 @@
     const size = C.long <= 62 ? 'A broad river' : C.long >= 98 ? 'A small river' : 'A river';
     const has = [];
     if (C.alpha <= 0.62) has.push('long, sweeping bends'); else if (C.alpha >= 1.02) has.push('tight bends');
+    if (C.swell >= 0.97) has.push('wide bends');
     if (C.age <= 1.65) has.push('slow banks'); else if (C.age >= 2.45) has.push('restless banks');
     const quick = C.neck > 1.6 ? (has.length ? ', quick to cut its loops off,' : ' that is quick to cut its loops off,') : '';
     const valley = C.half <= 0.8 * C.lam ? 'a narrow valley' : C.half >= 1.9 * C.lam ? 'a wide valley' : 'its valley';
     const n = Math.min(4, C.hard.length), hard = n ? ` with ${['', 'one patch', 'two patches', 'three patches', 'four patches'][n]} of hard ground` : '';
-    return `${size}${has.length ? ' with ' + has.join(' and ') : ''}${quick} in ${valley}${hard}.`;
+    const list = has.length > 2 ? has.slice(0, -1).join(', ') + ' and ' + has[has.length - 1] : has.join(' and ');
+    return `${size}${has.length ? ' with ' + list : ''}${quick} in ${valley}${hard}.`;
   }
 
   // the valley's two walls at a place along it: [upper, lower], measured from the sheet's middle line
@@ -134,6 +139,9 @@
     let x = new Float64Array(cap), y = new Float64Array(cap);
     let nx = new Float64Array(cap), ny = new Float64Array(cap);
     let r0 = new Float64Array(cap), r1 = new Float64Array(cap), ds = new Float64Array(cap);
+    // how wide the river is at each point, in its usual widths: it starts at its narrowest
+    const rest = 1 - 0.25 * C.swell;
+    let wd = new Float64Array(cap).fill(rest), nw = new Float64Array(cap);
 
     // down the middle of its valley, nearly: a few long, low waves of chance
     const waves = [];
@@ -148,8 +156,9 @@
       y[i] = (a + b) / 2 + C.rough * (C.lam / 13) * v / total * 2 * smooth(0, 8, s) * smooth(0, 8, span - s);
     }
 
-    // a grid of cells one neck wide, to find reaches that have come together
-    const gx0 = -C.lead - 20, gy0 = -C.wide / 2 - 10, gw = Math.ceil((span + 40) / C.neck), gh = Math.ceil((C.wide + 20) / C.neck);
+    // a grid of cells as wide as the farthest two reaches can be and still count as touching
+    const reachOf = C.neck * C.widest;
+    const gx0 = -C.lead - 20, gy0 = -C.wide / 2 - 10, gw = Math.ceil((span + 40) / reachOf), gh = Math.ceil((C.wide + 20) / reachOf);
     const head = new Int32Array(gw * gh);
     let next = new Int32Array(cap);
     // and a grid of half-width cells that remembers where a cut-off loop lies, and since when
@@ -181,6 +190,7 @@
       const bigger = (a) => { const b = new Float64Array(cap); b.set(a); return b; };
       x = bigger(x); y = bigger(y); nx = new Float64Array(cap); ny = new Float64Array(cap);
       r0 = new Float64Array(cap); r1 = new Float64Array(cap); ds = new Float64Array(cap);
+      wd = bigger(wd); nw = new Float64Array(cap);
       next = new Int32Array(cap);
     }
 
@@ -214,20 +224,29 @@
       for (let i = 1; i < n - 1; i++) {
         const tx = x[i + 1] - x[i - 1], ty = y[i + 1] - y[i - 1], l = Math.hypot(tx, ty) || 1;
         const sign = r1[i] < 0 ? -1 : 1, ox = sign * ty / l, oy = -sign * tx / l;
-        // the bank being cut is three quarters of a width that way: how soft is it there?
-        let go = Math.abs(r1[i]) * soft(x[i] + ox * 0.75, y[i] + oy * 0.75);
+        // the bank being cut is a quarter of a width beyond the water's edge that way: how soft is it there?
+        const edge = wd[i] * 0.5;
+        let go = Math.abs(r1[i]) * soft(x[i] + ox * (edge + 0.25), y[i] + oy * (edge + 0.25));
         // the valley's walls: a bank cutting toward one slows to nothing
         if (oy !== 0) {
           const [a, b] = walls(C, x[i]);
-          go *= smooth(0, 3, oy > 0 ? a - y[i] : y[i] - b);
+          go *= smooth(0, 3, (oy > 0 ? a - y[i] : y[i] - b) - (edge - 0.5));
         }
         if (go > fastest) fastest = go;
+        // the river widens where a bank is cut faster than the far bank can build out, and
+        // narrows again where it is held: it leans toward the width that its speed asks for
+        const want = rest + 1.3 * C.swell * smooth(0, 0.24 * C.kl, go);
+        nw[i] = wd[i] + (want - wd[i]) * Math.min(1, dt * C.kl / 3);
         nx[i] = x[i] + ox * go * dt;
         ny[i] = y[i] + oy * go * dt;
         const ci = clayAt(x[i], y[i]);
         if (ci >= 0) clay[ci] = -1;       // where the river runs, it has taken the clay away
       }
       for (let i = 1; i < n - 1; i++) { x[i] = nx[i]; y[i] = ny[i]; }
+      // and its width changes smoothly along it
+      for (let i = 1; i < n - 1; i++) wd[i] = Math.min(C.widest, Math.max(0.6, nw[i]));
+      for (let i = 1; i < n - 1; i++) nw[i] = wd[i] + 0.22 * (wd[i - 1] - 2 * wd[i] + wd[i + 1]);
+      for (let i = 1; i < n - 1; i++) wd[i] = nw[i];
       // take out kinks a point or two long, which the rule above cannot see
       const q = C.iron;
       for (let i = 2; i < n - 2; i++) {
@@ -241,7 +260,7 @@
     // two have closed up
     function space() {
       let m = 0;
-      nx[m] = x[0]; ny[m] = y[0]; m++;
+      nx[m] = x[0]; ny[m] = y[0]; nw[m] = wd[0]; m++;
       for (let i = 1; i < n; i++) {
         const px = nx[m - 1], py = ny[m - 1];
         const d = Math.hypot(x[i] - px, y[i] - py);
@@ -255,33 +274,35 @@
             nx[m] = (-x[i0] + 9 * x[i - 1] + 9 * x[i] - x[i3]) / 16;
             ny[m] = (-y[i0] + 9 * y[i - 1] + 9 * y[i] - y[i3]) / 16;
           } else { nx[m] = (px + x[i]) / 2; ny[m] = (py + y[i]) / 2; }
+          nw[m] = (nw[m - 1] + wd[i]) / 2;
           m++;
         }
         if (m + 1 >= cap) return false;
-        nx[m] = x[i]; ny[m] = y[i]; m++;
+        nx[m] = x[i]; ny[m] = y[i]; nw[m] = wd[i]; m++;
       }
-      for (let i = 0; i < m; i++) { x[i] = nx[i]; y[i] = ny[i]; }
+      for (let i = 0; i < m; i++) { x[i] = nx[i]; y[i] = ny[i]; wd[i] = nw[i]; }
       n = m;
       return true;
     }
 
-    // find the first place two reaches touch, and take the short way
+    // find the first place two reaches touch, and take the short way. Two points touch when
+    // they are within C.neck of the mean of the river's widths at them, and the river runs
+    // some way between them: a tight bend is not a neck.
     function cut() {
-      // two points close together are a neck only if the river runs some way between them
-      const near = C.neck * C.neck, far = (3 + 2.2 * C.neck) / C.h;
       for (let again = 0; again < 8; again++) {
         head.fill(-1);
         let a = -1, b = -1;
         for (let i = 0; i < n && a < 0; i++) {
-          const cx = Math.max(0, Math.min(gw - 1, Math.floor((x[i] - gx0) / C.neck)));
-          const cy = Math.max(0, Math.min(gh - 1, Math.floor((y[i] - gy0) / C.neck)));
-          let best = near;
+          const cx = Math.max(0, Math.min(gw - 1, Math.floor((x[i] - gx0) / reachOf)));
+          const cy = Math.max(0, Math.min(gh - 1, Math.floor((y[i] - gy0) / reachOf)));
+          let best = 1;
           for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
             const gx = cx + dx, gy = cy + dy;
             if (gx < 0 || gy < 0 || gx >= gw || gy >= gh) continue;
             for (let j = head[gy * gw + gx]; j >= 0; j = next[j]) {
-              if (i - j <= far) continue;
-              const d = (x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]);
+              const near = C.neck * (wd[i] + wd[j]) / 2;
+              if (i - j <= (3 + 2.2 * near) / C.h) continue;
+              const d = ((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j])) / (near * near);
               if (d < best) { best = d; a = j; b = i; }
             }
           }
@@ -289,21 +310,24 @@
           next[i] = head[cell]; head[cell] = i;
         }
         if (a < 0) break;
-        cuts.push({ year, x: Float32Array.from(x.subarray(a, b + 1)), y: Float32Array.from(y.subarray(a, b + 1)) });
+        cuts.push({ year, x: Float32Array.from(x.subarray(a, b + 1)), y: Float32Array.from(y.subarray(a, b + 1)), w: Float32Array.from(wd.subarray(a, b + 1)) });
         // clay begins to settle in the loop left behind, away from its two ends
-        for (let i = a + 4; i < b - 3; i++) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-          if (dx && dy) continue;
-          const ci = clayAt(x[i] + dx * 0.5, y[i] + dy * 0.5);
-          if (ci >= 0) clay[ci] = year;
+        for (let i = a + 4; i < b - 3; i++) {
+          const R = Math.ceil(wd[i]);
+          for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+            if (dx * dx + dy * dy > R * R) continue;
+            const ci = clayAt(x[i] + dx * 0.5, y[i] + dy * 0.5);
+            if (ci >= 0) clay[ci] = year;
+          }
         }
-        x.copyWithin(a + 1, b, n); y.copyWithin(a + 1, b, n);
+        x.copyWithin(a + 1, b, n); y.copyWithin(a + 1, b, n); wd.copyWithin(a + 1, b, n);
         n -= b - a - 1;
       }
     }
 
     return {
       C,
-      get n() { return n; }, get x() { return x; }, get y() { return y; },
+      get n() { return n; }, get x() { return x; }, get y() { return y; }, get w() { return wd; },
       get year() { return year; }, get length() { return length; }, cuts, soft,
       // the most any point has moved in a year
       get fastest() { return fastest; },
@@ -376,14 +400,15 @@
       }
     }
 
-    // the channel as a ribbon `half` widths to each side of the line through (x, y)
-    function ribbon(x, y, n, half) {
+    // the channel as a ribbon: at each point of the line through (x, y), `part` of half the
+    // river's width there to each side
+    function ribbon(x, y, w, n, part) {
       const per = C.per, oy = C.wide / 2;
       let lx = 0, ly = 0, rx = 0, ry = 0;
       for (let i = 0; i < n; i++) {
         const i0 = i > 0 ? i - 1 : 0, i1 = i < n - 1 ? i + 1 : n - 1;
         const tx = x[i1] - x[i0], ty = y[i1] - y[i0], l = Math.hypot(tx, ty) || 1;
-        const ox = -ty / l * half, oyv = tx / l * half;
+        const half = 0.5 * w[i] * part, ox = -ty / l * half, oyv = tx / l * half;
         const Lx = (x[i] + ox) * per, Ly = (y[i] + oyv + oy) * per, Rx = (x[i] - ox) * per, Ry = (y[i] - oyv + oy) * per;
         if (i > 0 && !(Math.max(Lx, Rx, lx, rx) < 0 || Math.min(Lx, Rx, lx, rx) > cols || Math.max(Ly, Ry, ly, ry) < 0 || Math.min(Ly, Ry, ly, ry) > rows)) {
           tri(lx, ly, Lx, Ly, Rx, Ry);
@@ -397,14 +422,14 @@
       cols, rows,
       get head() { return head; }, get pool() { return pool; },
       // the river as it is at this look
-      stamp(n, x, y, points) {
+      stamp(n, x, y, w, points) {
         look = n; prev = n === 0 ? NONE : n - 1; marking = false;
-        ribbon(x, y, points, 0.5);
+        ribbon(x, y, w, points, 1);
       },
       // a loop just cut off: mark its cells, in bands from the banks to the middle
-      abandon(n, x, y) {
+      abandon(n, x, y, w) {
         look = n; marking = true;
-        for (band = 1; band <= C.fill; band++) ribbon(x, y, x.length, 0.5 * (C.fill - band + 1) / C.fill);
+        for (band = 1; band <= C.fill; band++) ribbon(x, y, w, x.length, (C.fill - band + 1) / C.fill);
         marking = false;
       },
       // after the last look: close every visit, and gather each cell's visits together
@@ -437,7 +462,7 @@
     const stats = { winding: new Float32Array(looks + 1), cuts: new Uint16Array(looks + 1) };
     let cutsDone = 0, onSheet = 0;
     const inSheet = (c) => { for (let i = 0; i < c.x.length; i++) if (c.x[i] > 0 && c.x[i] < C.long && Math.abs(c.y[i]) < C.wide / 2) return true; return false; };
-    sheet.stamp(0, ch.x, ch.y, ch.n);
+    sheet.stamp(0, ch.x, ch.y, ch.w, ch.n);
     stats.winding[0] = ch.winding;
     return {
       seed, C, channel: ch, sheet, stats, looks,
@@ -453,10 +478,10 @@
             const c = ch.cuts[cutsDone++];
             c.sheet = inSheet(c);
             if (c.sheet) onSheet++;
-            sheet.abandon(n, c.x, c.y);
+            sheet.abandon(n, c.x, c.y, c.w);
           }
           if (ch.year % C.every === 0) {
-            sheet.stamp(n, ch.x, ch.y, ch.n);
+            sheet.stamp(n, ch.x, ch.y, ch.w, ch.n);
             stats.winding[n] = ch.winding; stats.cuts[n] = onSheet;
           }
           if (ch.year >= C.years) { sheet.finish(); return false; }
