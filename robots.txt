@@ -17,14 +17,15 @@
 User-agent: *
 # Content Signals (contentsignals.org): yes to search and to answering with these pages, no to training on them.
 Content-Signal: search=yes, ai-input=yes, ai-train=no
-Allow: /
 # Lecture decks, kept out of search until they are updated. Each deck's own page says noindex, and a crawler has to
-# be let in to read that, so only those pages are open; the slides' text under them stays closed.
-Disallow: /llms/
+# be let in to read that, so only those pages are open; the slides' text under them stays closed. The narrow lines
+# come first for crawlers that stop at the first line that fits.
 Allow: /llms/$
-Disallow: /pm/
+Disallow: /llms/
 Allow: /pm/$
 Allow: /pm/*/$
+Disallow: /pm/
+Allow: /
 
 # Training and bulk collection. GPTBot (OpenAI), ClaudeBot (Anthropic), meta-externalagent (Meta), Amazonbot (Amazon)
 # and MistralAI-Training (Mistral) gather pages for model training; each company answers questions through a
