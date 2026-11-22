@@ -92,11 +92,40 @@ Most crawlers, and almost all AI ones, read the HTML without running JavaScript.
 
 - the structured data (JSON-LD) in every page: who Mahir is and every profile that is his, the site, the list of works, each work, and the breadcrumb trail to it
 - the short bio, today's work and a plain list of works in the HTML of `/`; visitors with JavaScript see today's work and the list drawn again for their own day
-- `/sitemap.xml` and `/llms.txt`
+- `/sitemap.xml`, `/llms.txt` and `/feed.xml`, an Atom feed of the experiments that are up, for feed readers
 
 The facts about Mahir that the build writes (role, bio, short bio, profiles, photo, talks and press) live at the top of `_build.py`; change them there and run it again. The bios name examples, not every school, show or talk. Talks and press go to search engines as pieces about Mahir, never among his profiles. The homepage's title, description, role line and the Elsewhere links are written in `/index.html` itself. Works dated after today are left out of all of this until the day comes. Running it twice changes nothing.
 
 Not published, though they stay in the repository: these notes, `llms/CLAUDE.md` and the old Kaleidoscope project (see `/_config.yml`). The lecture decks under `/llms/` and `/pm/` are published but kept out of search engines until they are updated: each deck's page (`/llms/`, `/pm/`, `/pm/v1/` and so on) carries `<meta name="robots" content="noindex">`, and `/robots.txt` lets crawlers read those pages only, so the slides' text stays closed. A new deck page needs the same `noindex` line in its `<head>`; a blocked page can still be listed in search results by its address alone, which is why the pages are open and say `noindex` themselves. Addresses that don't exist get `/404.html`.
+
+## Bots and AI agents
+
+The rule is Mahir's (22 Nov 2026): he doesn't want bots, but an assistant should have the facts when someone asks it about him. So `/robots.txt` sorts crawlers by what they do with a page.
+
+- **Welcome:** search engines, the search indexes of AI assistants, and the fetchers an assistant sends when a person asks it something. These are how ChatGPT, Claude, Perplexity, Gemini, Copilot, Siri and Alexa answer a question about Mahir with what this site says. They are not named in the rules, so they follow the first group.
+- **Told to stay out:** crawlers that gather pages to train models or to build bulk copies of the web. Each is named in the second group, and a third gives the same answer to every company that reads the shared training signal.
+
+Before changing it:
+
+- A crawler that is named stops reading the first group. Name one only to turn it away, or repeat the lecture-deck lines in its group.
+- Google-Extended stays allowed on purpose. It is one switch for two things, training Gemini and letting the Gemini app answer from these pages, and here the answer matters more. Google Search, AI Overviews and AI Mode don't use it: they follow Googlebot, and Search Console has its own setting for them ("Search generative AI control"), which should stay on.
+- Bing has no crawler of its own for Copilot. Don't add `noarchive` or `nocache` to a page: Bing reads both as "keep this out of Copilot".
+- `robots.txt` is a request. The crawlers named there say they follow it, and GitHub Pages can't stop one that doesn't. The domain's DNS is at Cloudflare, so its proxy and its AI-crawler blocking could enforce the same split. That is not turned on.
+- Names and what they stand for change. Each one was read on its owner's own documentation page on 22 Nov 2026. Read it there again before adding or removing one, and give the comment at the top of `robots.txt` the new date.
+
+Assistants read what search engines read: the HTML, the structured data and `/llms.txt`. Nothing on the site is written only for them, and `/llms.txt` says in a sentence what they may use it for.
+
+## Telling search engines about a new page
+
+Google finds new pages through the sitemap. Bing, Yandex and the other IndexNow search engines can be told directly, and Bing is what Copilot answers from. The daily Action does it when a work goes up: `works/_indexnow.py` waits until the pages are live, then sends the ones the sitemap dates today.
+
+After publishing anything else by hand, such as a new entry on `/press/`, send it yourself once it is live:
+
+```sh
+python3 works/_indexnow.py https://mahiryavuz.com/press/
+```
+
+The file at the root named with 32 letters and digits, ending `.txt`, is the key that proves the list came from this site. It is meant to be public. Keep it.
 
 ## Preview a day
 

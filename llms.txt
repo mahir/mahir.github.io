@@ -4,6 +4,8 @@
 
 Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations and Ads at Etsy, co-founder and CTO of Topos, Director of Data Science at R/GA and Senior Researcher at Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including Nike, SAP, Siemens, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia University, the University of Pennsylvania, Pratt, the University of Art and Design Linz and Istanbul Bilgi University, with guest lectures at MIT, NYU and SVA. At Columbia Engineering he lectures on Business Applications of LLMs and Product Management with AI. His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company Innovation Festival. He publishes a new data visualization every day at casualdata.com.
 
+Assistants are welcome to read, quote and link these pages to answer questions about Mahir. They are not offered for training models; https://mahiryavuz.com/robots.txt says which crawlers that covers.
+
 ## Experiments
 
 - [No. 021 · A snowflake, on its way down](https://mahiryavuz.com/works/021/) (22 Nov 2026): A page that finds a town where it is snowing this hour, reads the temperature and humidity of the air above it, and grows one snow crystal by falling through that air: a plate where it is cold and thin, ferns where it is wet near −15°, so the crystal is a record of that sky; drag it back up the rail of heights and let it fall again, point at a piece of ice to see where it froze, or try another of 48 towns.

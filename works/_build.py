@@ -6,7 +6,7 @@
 Writes the parts of the pages between <!-- gen:NAME --> and <!-- /gen:NAME --> markers: on the homepage, the
 short bio, today's work and the list of works, which visitors with JavaScript see redrawn for their own day, and
 the latest posts from Mahir's Substack; on /press/, the list of talks, podcasts, press, papers and projects; in every
-page, the structured data. Also writes /sitemap.xml and /llms.txt.
+page, the structured data. Also writes /sitemap.xml, /feed.xml and /llms.txt.
 
 "Today" is New York's date. A GitHub Action (.github/workflows/daily.yml) runs this just after midnight
 there, so a work dated ahead is featured on its day. Substack refuses GitHub's servers, so there the posts already
@@ -31,6 +31,12 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = 'https://mahiryavuz.com'
 ZONE = ZoneInfo('America/New_York')
 
+# Where his work has been exhibited, where he has spoken and where he has lectured as a guest: examples, not every one.
+# The long bio says them, and so does /press/ above its list, since many left no page to link.
+SHOWN = 'His work has been shown at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere'
+SPOKEN = ('he has spoken at events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and '
+          'the Fast Company Innovation Festival')
+GUEST_LECTURES = 'guest lectures at MIT, NYU and SVA'
 ROLE = 'Engineering and product leader. Teacher and advisor. Turning data into products since 1998.'
 BIO = (
     'Head of Engineering at AirOps. Before that, Mahir was Head of Engineering for Search, Recommendations '
@@ -38,11 +44,9 @@ BIO = (
     'Ars Electronica Futurelab in Linz, and his teams have taken on data problems for companies including '
     'Nike, SAP, Siemens, PwC, Google and Microsoft. He has taught since 2003, at schools including Columbia '
     'University, the University of Pennsylvania, Pratt, the University of Art and Design Linz and Istanbul Bilgi '
-    'University, with guest lectures at MIT, NYU and SVA. At Columbia Engineering he lectures on Business '
-    'Applications of LLMs and Product Management with AI. His work has been shown '
-    'at the Ars Electronica Festival, SIGGRAPH, ISEA, the Istanbul Biennial and elsewhere, and he has spoken at '
-    'events such as TEDx Istanbul and Vienna, Microsoft Build, Google Cloud Next, Visualized and the Fast Company '
-    'Innovation Festival. He publishes a new data visualization every day at casualdata.com.'
+    f'University, with {GUEST_LECTURES}. At Columbia Engineering he lectures on Business '
+    f'Applications of LLMs and Product Management with AI. {SHOWN}, and {SPOKEN}. '
+    'He publishes a new data visualization every day at casualdata.com.'
 )
 AIROPS = 'https://www.airops.com/'
 ETSY = 'https://www.etsy.com/'
@@ -480,6 +484,8 @@ def main():
 
     # /press/: every talk, podcast, article, paper and project, and the same list for search engines
     every = [p for _, _, group in RECORD for p in newest_first_pieces(group)]
+    fill('press/index.html', 'context', f'<p class="context">{e(SHOWN)}, and {e(SPOKEN)}. He has given '
+         f'{e(GUEST_LECTURES)}. The ones with a page of their own are listed here.</p>')
     fill('press/index.html', 'press', press_page())
     fill('press/index.html', 'ld', ld(
         WEBSITE, PERSON,
@@ -499,12 +505,42 @@ def main():
         + ''.join(f'  <url><loc>{loc}</loc><lastmod>{mod}</lastmod></url>\n' for loc, mod in entries)
         + '</urlset>\n')
 
+    # feed.xml (Atom): the experiments that are up, newest first, for feed readers and anything else that follows feeds.
+    # Each entry is dated noon UTC on its day, which is that same day in New York.
+    stamp = lambda day: f'{day}T12:00:00Z'
+    feed = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        '  <title>Mahir Yavuz · Experiments</title>',
+        f'  <subtitle>{e(ROLE)}</subtitle>',
+        f'  <link href="{SITE}/feed.xml" rel="self" type="application/atom+xml"/>',
+        f'  <link href="{SITE}/" rel="alternate" type="text/html"/>',
+        f'  <id>{SITE}/</id>',
+        f'  <updated>{stamp(newest_first[0]["date"] if newest_first else today)}</updated>',
+        f'  <author><name>Mahir Yavuz</name><uri>{SITE}/</uri></author>',
+    ]
+    for w in newest_first:
+        feed += [
+            '  <entry>',
+            f'    <title>No. {number(w)} · {e(w["title"])}</title>',
+            f'    <link href="{url(w)}" rel="alternate" type="text/html"/>',
+            f'    <link href="{url(w)}og.jpg" rel="enclosure" type="image/jpeg"/>',
+            f'    <id>{url(w)}</id>',
+            f'    <published>{stamp(w["date"])}</published>',
+            f'    <updated>{stamp(w["date"])}</updated>',
+            *([f'    <summary>{e(w["about"])}</summary>'] if w.get('about') else []),
+            '  </entry>',
+        ]
+    (ROOT / 'feed.xml').write_text('\n'.join(feed + ['</feed>', '']))
+
     # llms.txt (llmstxt.org): the same facts as plain text for AI assistants
     lines = [
         '# Mahir Yavuz', '',
         f'> {ROLE} Head of Engineering at AirOps. The homepage has his bio and his experiments, a new one some '
         'days, with the latest on view; every experiment has its own page.', '',
         BIO, '',
+        'Assistants are welcome to read, quote and link these pages to answer questions about Mahir. They are not '
+        f'offered for training models; {SITE}/robots.txt says which crawlers that covers.', '',
         '## Experiments', '',
         *[f'- [No. {number(w)} · {w["title"]}]({url(w)}) ({nice_date(w["date"])}): {w.get("about", "")}'.rstrip(': ')
           for w in newest_first],
@@ -527,7 +563,7 @@ def main():
     (ROOT / 'llms.txt').write_text('\n'.join(lines))
 
     print(f'{len(live)} of {len(works)} works are up as of {today} in New York; on view: '
-          f'No. {number(live[-1]) if live else "none"}; refreshed the pages, sitemap.xml and llms.txt')
+          f'No. {number(live[-1]) if live else "none"}; refreshed the pages, sitemap.xml, feed.xml and llms.txt')
 
 
 if __name__ == '__main__':

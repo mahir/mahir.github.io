@@ -1,4 +1,22 @@
+# mahiryavuz.com
+#
+# Who may read this site, in one rule: anything that answers a person's question is welcome; anything that only
+# collects the pages is not.
+#
+#   Welcome   search engines, the search indexes of AI assistants, and the fetchers an assistant sends when someone
+#             asks it about Mahir. They are not named below, so they follow the first group:
+#             Googlebot, Bingbot, Applebot, DuckDuckBot, DuckAssistBot, OAI-SearchBot, ChatGPT-User, Claude-SearchBot,
+#             Claude-User, PerplexityBot, Perplexity-User, Amzn-SearchBot, Amzn-User, meta-webindexer,
+#             meta-externalfetcher, MistralAI-Index, MistralAI-User, YouBot.
+#   Not       crawlers that gather pages to train models or to build bulk copies of the web. They are named in the
+#             second group, and the third says the same to every company that reads the shared signal.
+#
+# Each name was checked against its owner's own documentation on 22 Nov 2026. See works/README.md, "Bots and AI
+# agents", before changing this file: a crawler that is named here stops reading the first group.
+
 User-agent: *
+# Content Signals (contentsignals.org): yes to search and to answering with these pages, no to training on them.
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 # Lecture decks, kept out of search until they are updated. Each deck's own page says noindex, and a crawler has to
 # be let in to read that, so only those pages are open; the slides' text under them stays closed.
@@ -7,5 +25,31 @@ Allow: /llms/$
 Disallow: /pm/
 Allow: /pm/$
 Allow: /pm/*/$
+
+# Training and bulk collection. GPTBot (OpenAI), ClaudeBot (Anthropic), meta-externalagent (Meta), Amazonbot (Amazon)
+# and MistralAI-Training (Mistral) gather pages for model training; each company answers questions through a
+# different crawler, which stays welcome. Applebot-Extended is Apple's switch for training and does not affect Siri
+# or Spotlight. CCBot (Common Crawl) builds an open copy of the web that others train on. Bytespider (ByteDance) has
+# no documentation of its own.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: meta-externalagent
+User-agent: Amazonbot
+User-agent: MistralAI-Training
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Bytespider
+Disallow: /
+
+# The shared signal for "do not train on this" (IETF draft-kelley-aipref-training-preference-signal), which
+# Anthropic reads now and Microsoft, Google and OpenAI have said they will.
+User-agent: __usage_ai-training
+Disallow: /
+
+# Google-Extended is one switch for two things: training Gemini, and letting the Gemini app answer from these pages.
+# It stays on so that Gemini can answer questions about Mahir, and it is named so that Google does not read the
+# group above as turning it off. It has no effect on Google Search.
+User-agent: Google-Extended
+Allow: /
 
 Sitemap: https://mahiryavuz.com/sitemap.xml

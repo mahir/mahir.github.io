@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Mahir Yavuz · Experiments</title>
+  <subtitle>Engineering and product leader. Teacher and advisor. Turning data into products since 1998.</subtitle>
+  <link href="https://mahiryavuz.com/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://mahiryavuz.com/" rel="alternate" type="text/html"/>
+  <id>https://mahiryavuz.com/</id>
+  <updated>2026-11-22T12:00:00Z</updated>
+  <author><name>Mahir Yavuz</name><uri>https://mahiryavuz.com/</uri></author>
+  <entry>
+    <title>No. 021 · A snowflake, on its way down</title>
+    <link href="https://mahiryavuz.com/works/021/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/021/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/021/</id>
+    <published>2026-11-22T12:00:00Z</published>
+    <updated>2026-11-22T12:00:00Z</updated>
+    <summary>A page that finds a town where it is snowing this hour, reads the temperature and humidity of the air above it, and grows one snow crystal by falling through that air: a plate where it is cold and thin, ferns where it is wet near −15°, so the crystal is a record of that sky; drag it back up the rail of heights and let it fall again, point at a piece of ice to see where it froze, or try another of 48 towns.</summary>
+  </entry>
+  <entry>
+    <title>No. 020 · A language nobody speaks</title>
+    <link href="https://mahiryavuz.com/works/020/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/020/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/020/</id>
+    <published>2026-11-21T12:00:00Z</published>
+    <updated>2026-11-21T12:00:00Z</updated>
+    <summary>A page that makes up a whole language each time it opens: its sounds, a script of its own that a pen writes out, words built from other words, a way of counting and a grammar; change one English sentence and whatever changes in the language is written in red, with a note on which real languages do the same, from Turkish to Tok Pisin; type a name to see it written, hear the sentence said, and keep the number to open the same language again.</summary>
+  </entry>
+  <entry>
+    <title>No. 019 · One shop, seven feeds</title>
+    <link href="https://mahiryavuz.com/works/019/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/019/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/019/</id>
+    <published>2026-11-20T12:00:00Z</published>
+    <updated>2026-11-20T12:00:00Z</updated>
+    <summary>An imaginary shop of 1,200 handmade things, each drawn in code and favorited by 2,500 shoppers who never existed, sorted by seven recommenders side by side, from a count of favorites to a space of tastes learned from them; favorite a listing and every feed sorts itself again, and open one to read why each feed put it where it did.</summary>
+  </entry>
+  <entry>
+    <title>No. 018 · Imaginary vehicles, drawn to scale</title>
+    <link href="https://mahiryavuz.com/works/018/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/018/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/018/</id>
+    <published>2026-11-18T12:00:00Z</published>
+    <updated>2026-11-18T12:00:00Z</updated>
+    <summary>A drafting table that does not stop: it invents a vehicle, letters its name and purpose, and draws it in ink, line by line, as an old technical illustration with a parts list and a title block, then turns to a fresh sheet; a teapot under a wing, a grand piano on legs, a lighthouse on pontoons, a car with forty loudspeakers, and plainer things such as landers, locomotives and tugs, each sheet numbered so it can be opened again.</summary>
+  </entry>
+  <entry>
+    <title>No. 017 · Sufi sayings, card by card</title>
+    <link href="https://mahiryavuz.com/works/017/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/017/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/017/</id>
+    <published>2026-11-17T12:00:00Z</published>
+    <updated>2026-11-17T12:00:00Z</updated>
+    <summary>More than two hundred sayings of Sufi poets and teachers, from Rabia to Bulleh Shah, each set large on a card in the color of its theme, nine themes from love to loss; open a card for its source and its original words, recolor it, or save it as a picture.</summary>
+  </entry>
+  <entry>
+    <title>No. 016 · A coffee, ordered by color</title>
+    <link href="https://mahiryavuz.com/works/016/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/016/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/016/</id>
+    <published>2026-11-16T12:00:00Z</published>
+    <updated>2026-11-16T12:00:00Z</updated>
+    <summary>A mokka on a Viennese coffee-house table: pour milk until it looks like the coffee you drink every day, stir, and a card of coffee colors shows your shade and what to ask for in Vienna, from a Schwarzer to a Kaffee verkehrt.</summary>
+  </entry>
+  <entry>
+    <title>No. 015 · Cities, two by two</title>
+    <link href="https://mahiryavuz.com/works/015/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/015/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/015/</id>
+    <published>2026-11-15T12:00:00Z</published>
+    <updated>2026-11-15T12:00:00Z</updated>
+    <summary>Two cities side by side at one scale, each street colored by the compass direction it runs: a grid shows as a single color and a city whose streets point every way as every color, with a compass of directions and the junctions counted for each; London against New York, or any two of twelve.</summary>
+  </entry>
+  <entry>
+    <title>No. 014 · Cities, step by step</title>
+    <link href="https://mahiryavuz.com/works/014/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/014/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/014/</id>
+    <published>2026-11-14T12:00:00Z</published>
+    <updated>2026-11-14T12:00:00Z</updated>
+    <summary>Fifteen minutes on foot from one spot in each of twelve cities, drawn at one scale: the streets light up as the walker reaches them, against the ring a straight line would reach; open a city and drag the map to start somewhere else.</summary>
+  </entry>
+  <entry>
+    <title>No. 013 · Turkish, suffix by suffix</title>
+    <link href="https://mahiryavuz.com/works/013/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/013/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/013/</id>
+    <published>2026-11-13T12:00:00Z</published>
+    <updated>2026-11-13T12:00:00Z</updated>
+    <summary>A Turkish word grows a suffix at each tap, from Çekoslovakya to 44 letters, while the English under it grows from one word into a sentence; four words to build, and a change of root changes the vowels of every suffix.</summary>
+  </entry>
+  <entry>
+    <title>No. 012 · Ebru, sheet by sheet</title>
+    <link href="https://mahiryavuz.com/works/012/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/012/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/012/</id>
+    <published>2026-11-12T12:00:00Z</published>
+    <updated>2026-11-12T12:00:00Z</updated>
+    <summary>A marbler’s tray seen from above: drop the colors, draw them back and forth, comb them, then lay a sheet of paper on the water and keep the sheet as a picture.</summary>
+  </entry>
+  <entry>
+    <title>No. 011 · A piano, tuned by ear</title>
+    <link href="https://mahiryavuz.com/works/011/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/011/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/011/</id>
+    <published>2026-11-11T12:00:00Z</published>
+    <updated>2026-11-11T12:00:00Z</updated>
+    <summary>One octave of a grand piano’s strings, each a little flat, tuned in the tuner’s own order: turn the lever on a pin until the beat between two notes slows to the right pace, then move to the next string.</summary>
+  </entry>
+  <entry>
+    <title>No. 010 · The S&amp;P 500, by weight</title>
+    <link href="https://mahiryavuz.com/works/010/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/010/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/010/</id>
+    <published>2026-11-09T12:00:00Z</published>
+    <updated>2026-11-09T12:00:00Z</updated>
+    <summary>Every company’s share of the S&amp;P 500 from 1995 to 2026, stacked by rank: the twenty largest drawn one by one as they rise and fall, with all 500 a click away.</summary>
+  </entry>
+  <entry>
+    <title>No. 009 · The midterm tide</title>
+    <link href="https://mahiryavuz.com/works/009/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/009/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/009/</id>
+    <published>2026-11-04T12:00:00Z</published>
+    <updated>2026-11-04T12:00:00Z</updated>
+    <summary>Every US midterm since 1790 set against 2026: what the record said before the vote, the results as they were called, and state-by-state maps since 1978.</summary>
+  </entry>
+  <entry>
+    <title>No. 008 · Philosophy, mind to mind</title>
+    <link href="https://mahiryavuz.com/works/008/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/008/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/008/</id>
+    <published>2026-11-03T12:00:00Z</published>
+    <updated>2026-11-03T12:00:00Z</updated>
+    <summary>Who drew on whom in 2,600 years of philosophy, from Thales to Judith Butler, as one chart that plays its own lines through time; tap a thinker to light their lineage.</summary>
+  </entry>
+  <entry>
+    <title>No. 007 · Iznik, plate by plate</title>
+    <link href="https://mahiryavuz.com/works/007/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/007/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/007/</id>
+    <published>2026-10-31T12:00:00Z</published>
+    <updated>2026-10-31T12:00:00Z</updated>
+    <summary>Ottoman Iznik dishes painted on a 3D plate in workshop order, outline, cobalt, turquoise, green and red, then glazed, a new pattern every time.</summary>
+  </entry>
+  <entry>
+    <title>No. 006 · New York, interlocked</title>
+    <link href="https://mahiryavuz.com/works/006/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/006/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/006/</id>
+    <published>2026-10-30T12:00:00Z</published>
+    <updated>2026-10-30T12:00:00Z</updated>
+    <summary>New York neighborhoods drawn stroke by stroke in nested block letters, short letters held in the arms of tall ones, in pairs of colors after Josef Albers, a new name every 15 seconds.</summary>
+  </entry>
+  <entry>
+    <title>No. 005 · The year in relief</title>
+    <link href="https://mahiryavuz.com/works/005/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/005/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/005/</id>
+    <published>2026-10-29T12:00:00Z</published>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <summary>A well-known S&amp;P 500 company’s last year of closing prices as a mountain range, a new company every visit, with the weather set by how the year went.</summary>
+  </entry>
+  <entry>
+    <title>No. 004 · Istanbul, piece by piece</title>
+    <link href="https://mahiryavuz.com/works/004/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/004/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/004/</id>
+    <published>2026-10-28T12:00:00Z</published>
+    <updated>2026-10-28T12:00:00Z</updated>
+    <summary>An isometric Istanbul where the Bosphorus, the Golden Horn and the Marmara meet, rebuilt landmark by landmark as each one raises its neighborhood.</summary>
+  </entry>
+  <entry>
+    <title>No. 003 · Manhattan sundial</title>
+    <link href="https://mahiryavuz.com/works/003/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/003/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/003/</id>
+    <published>2026-10-27T12:00:00Z</published>
+    <updated>2026-10-27T12:00:00Z</updated>
+    <summary>An abstract model of Manhattan lit by the sun where it stands over New York at this minute; drag through the day and the year, or jump to the next Manhattanhenge.</summary>
+  </entry>
+  <entry>
+    <title>No. 002 · Self-portrait in type</title>
+    <link href="https://mahiryavuz.com/works/002/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/002/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/002/</id>
+    <published>2026-10-26T12:00:00Z</published>
+    <updated>2026-10-26T12:00:00Z</updated>
+    <summary>The original homepage as a full screen of type: the page’s own text runs across it as one line, wound in a spiral from an eye, and sets a face that turns toward the pointer; click to spill the type and wind it again from there, or type to set it in your own words.</summary>
+  </entry>
+  <entry>
+    <title>No. 001 · Self-portrait in latent space</title>
+    <link href="https://mahiryavuz.com/works/001/" rel="alternate" type="text/html"/>
+    <link href="https://mahiryavuz.com/works/001/og.jpg" rel="enclosure" type="image/jpeg"/>
+    <id>https://mahiryavuz.com/works/001/</id>
+    <published>2026-10-26T12:00:00Z</published>
+    <updated>2026-10-26T12:00:00Z</updated>
+    <summary>A career as a cloud of points that searches itself under the cursor and gathers into a face when the name is clicked.</summary>
+  </entry>
+</feed>
