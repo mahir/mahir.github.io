@@ -94,6 +94,10 @@ window.Works = (() => {
       n: 21, title: 'A snowflake, on its way down', date: '2026-11-22', medium: 'Live weather data, WebGL and a cellular automaton',
       about: 'A page that finds a town where it is snowing this hour, reads the temperature and humidity of the air above it, and grows one snow crystal by falling through that air: a plate where it is cold and thin, ferns where it is wet near −15°, so the crystal is a record of that sky; drag it back up the rail of heights and let it fall again, point at a piece of ice to see where it froze, or try another of 48 towns.',
     },
+    {
+      n: 22, title: 'A river, and where it has been', date: '2026-11-23', medium: 'WebGL and a river simulation',
+      about: 'A river seen from above that moves across its valley for 2,000 years, eating its outer banks and cutting off its own loops, and inks the ground it leaves in the color of that century, the way Harold Fisk’s 1944 maps of the Mississippi show its old courses; drag the years back along the rail, point at a piece of ground to see when the river left it and where it ran that year, or open another river: every number from 1 to 99,999 draws one of its own, broad or small, slow or restless, in a valley with its own shape and its own patches of hard ground.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');
