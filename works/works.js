@@ -100,7 +100,7 @@ window.Works = (() => {
     },
     {
       n: 23, title: 'Six thousand tastes, narrowing', date: '2026-11-26', medium: 'WebGL simulation and Web Audio',
-      about: 'Six thousand made-up shoppers on a map of taste and a feed that shows each of them six things a month, run for twenty years and drawn as a long exposure, every shopper a thin line in the color of where their taste started, so that where a crowd from all over the map is drawn together its colors add up to white; put yourself in the crowd and see where the feed takes you and where you would have gone searching on your own, put up a new thing and see whether anyone is ever shown it, change how the feed leans or shake it for a year, and set the same crowd searching beside it: every number from 1 to 99,999 is a world of its own, in camps, rings or lines, with a big catalog or a small one and sellers quick or slow to copy what sells.',
+      about: 'Six thousand made-up shoppers and a feed that shows each of them six things a month, run for twenty years and drawn as a long exposure; put yourself in the crowd and see where the feed takes you, and where you would have gone searching on your own.',
     },
   ];
 
