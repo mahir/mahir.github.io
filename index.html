@@ -601,20 +601,18 @@
   .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
   .list a {
     display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; align-items: baseline; column-gap: 1rem;
-    padding: 1.15rem 0; border-bottom: 1px solid var(--hair);
+    padding: .95rem 0; border-bottom: 1px solid var(--hair);
   }
   .list .n { color: var(--faint); }
   .list .t {
-    font-stretch: 112%; font-weight: 400; font-size: clamp(1.25rem, 2.6vw, 1.7rem); line-height: 1.15; letter-spacing: -.015em;
+    font-stretch: 112%; font-weight: 400; font-size: clamp(1.1rem, 1.9vw, 1.3rem); line-height: 1.15; letter-spacing: -.015em;
     transition: color .25s ease;
   }
   .list .d { color: var(--faint); text-align: right; }
   .list a:hover .t, .list a:focus-visible .t { color: var(--accent); }
   .list a:focus-visible { outline-offset: -1px; }
   .empty { padding: 1.15rem 0; color: var(--dim); border-bottom: 1px solid var(--hair); }
-  /* posts: the date leads, and the titles are set smaller than the experiments' */
-  .posts a { padding: .95rem 0; }
-  .posts .t { font-size: clamp(1.1rem, 1.9vw, 1.3rem); }
+  /* the experiments and the posts are set alike: the work on view carries the weight */
   .head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: .9rem; }
   .head .label { margin: 0; }
 
