@@ -1,0 +1,30 @@
+<!doctype html>
+<!-- dev only (not published): for a city and a second, what each layer is redrawing every frame.
+     _diag.html?city=paris&at=4,4.5   finished-but-waiting marks are held back by an earlier, longer one -->
+<meta charset="utf-8"><title>diag</title><pre id="out"></pre>
+<script type="module">
+  import { Press } from './print.js';
+  const q = new URLSearchParams(location.search);
+  const { city } = await import(`./cities/${q.get('city')}.js`);
+  const plate = city.build();
+  const cv = document.createElement('canvas'); cv.width = 1400; cv.height = 1750;
+  const press = new Press(plate, cv);
+  const rows = [];
+  for (const T of q.get('at').split(',').map(Number)) {
+    press.frame(T);
+    rows.push(`t=${T}`);
+    for (const ly of press.layers) {
+      const { marks, lives } = ly.L;
+      let active = 0, waiting = 0, cost = 0; let holder = null;
+      for (let i = ly.done; i < marks.length; i++) {
+        const m = marks[i]; if (T <= m.t) continue;
+        active++; if (T >= m.t + m.d) waiting++;
+        const a = performance.now(); for (let k = 0; k < 3; k++) press.paint(press.ctx, m, T, false, ly.L); cost += (performance.now() - a) / 3;
+      }
+      if (ly.done < marks.length) { const m = marks[ly.done]; if (T > m.t) holder = `held by #${ly.done} t=${m.t.toFixed(2)} d=${m.d.toFixed(2)} ${m.reveal}`; }
+      let lc = 0; for (const m of lives) if (T > m.t) { const a = performance.now(); press.paint(press.ctx, m, T, true, ly.L); lc += performance.now() - a; }
+      if (active || lc > 0.3) rows.push(`  ${(ly.L.name || '?').padEnd(12)} active ${String(active).padStart(4)} waiting ${String(waiting).padStart(4)} cost ${cost.toFixed(1)}ms lives ${lc.toFixed(1)}ms ${holder || ''}`);
+    }
+  }
+  document.getElementById('out').textContent = rows.join('\n'); document.title = 'done';
+</script>

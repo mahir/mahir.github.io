@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- dev only (not published): every city's finished poster side by side.
+     _sheet.html            all of them
+     _sheet.html?at=7       all of them at that second
+     _sheet.html?from=12&n=12   twelve of them from the thirteenth (a hundred at once is too many canvases)
+     _sheet.html?ids=lima,oslo   just those -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>No. 024 · contact sheet</title>
+<style>
+  html, body { margin: 0; background: #2a2a2a; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 16px; }
+  canvas { width: 100%; display: block; box-shadow: 0 6px 18px rgba(0,0,0,.4); }
+  #err { color: #fff; font: 13px monospace; white-space: pre-wrap; padding: 8px; }
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<div id="err"></div>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { CITIES } from './cities/index.js';
+  import { ready } from './_dev.js';
+  const q = new URLSearchParams(location.search);
+  const at = q.get('at');
+  const from = +(q.get('from') || 0), n = +(q.get('n') || 12);
+  const ids = q.get('ids') ? q.get('ids').split(',') : CITIES.slice(from, from + n).map((c) => c.id);
+  for (const id of ids) {
+    try {
+      const city = await ready(id);
+      const cv = document.createElement('canvas');
+      cv.width = 640; cv.height = 800; cv.title = id;
+      document.getElementById('grid').appendChild(cv);
+      const plate = city.build();
+      const pr = new Press(plate, cv); pr.frame(at != null ? +at : plate.end + 30); pr.dispose();
+    } catch (e) {
+      document.getElementById('err').textContent += `${id}: ${e.message}\n`;
+    }
+  }
+  document.title = 'done';
+</script>
+</body>
+</html>

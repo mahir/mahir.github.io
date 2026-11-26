@@ -102,6 +102,10 @@ window.Works = (() => {
       n: 23, title: 'Six thousand tastes, narrowing', date: '2026-11-26', medium: 'WebGL simulation and Web Audio',
       about: 'Six thousand made-up shoppers and a feed that shows each of them six things a month, run for twenty years and drawn as a long exposure; put yourself in the crowd and see where the feed takes you, and where you would have gone searching on your own.',
     },
+    {
+      n: 24, title: 'Cities, in print', date: '2026-11-27', medium: 'Canvas drawing and animation',
+      about: 'City posters drawn on the page one after another, each in about fifteen seconds and each in a print tradition of its own: New York as an engraved bird’s-eye view from above the harbor, Tokyo as a woodblock print at dusk, Paris as a gouache travel poster, London as a linocut, Kraków as a Polish School poster, Baku as a woven rug, Lagos as a record sleeve, and on around the world, every one with its own inks and its own type; the sky and the water come first, then the city from the far end to the near, then the boats, the lettering and the frame, and after a while the next sheet slides over it.',
+    },
   ];
 
   const pad = (x, w) => String(x).padStart(w, '0');

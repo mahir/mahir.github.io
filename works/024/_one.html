@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- dev only (not published): one city, alone, for checks.
+     _one.html?city=paris            the finished poster
+     _one.html?city=paris&at=6.5     the poster at that second
+     _one.html?city=paris&play       play it from the start -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>No. 024 · one city</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #333; overflow: hidden; }
+  canvas { display: block; position: absolute; }
+  #err { position: fixed; left: 8px; top: 8px; color: #fff; font: 14px monospace; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="err"></div>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { ready } from './_dev.js';
+  const q = new URLSearchParams(location.search);
+  const id = q.get('city') || 'new-york';
+  try {
+    if (q.get('font')) {
+      const l = document.createElement('link'); l.rel = 'stylesheet';
+      l.href = `https://fonts.googleapis.com/css2?${q.get('font')}&display=swap`; document.head.appendChild(l);
+      await new Promise((r) => { l.onload = r; l.onerror = r; });
+    }
+    const city = await ready(id);
+    document.body.style.background = city.wall || '#333';
+    const plate = city.build();
+    const cv = document.getElementById('cv');
+    const k = Math.min(innerWidth / W, innerHeight / H);
+    cv.style.width = `${W * k}px`; cv.style.height = `${H * k}px`;
+    cv.style.left = `${(innerWidth - W * k) / 2}px`; cv.style.top = `${(innerHeight - H * k) / 2}px`;
+    cv.width = Math.round(W * k * Math.min(2, devicePixelRatio)); cv.height = Math.round(cv.width * H / W);
+    const press = new Press(plate, cv);
+    document.title = `${city.name} · end ${plate.end.toFixed(1)}s`;
+    if (q.has('play')) {
+      const t0 = performance.now();
+      const tick = () => { press.frame((performance.now() - t0) / 1000); requestAnimationFrame(tick); };
+      tick();
+    } else {
+      press.frame(q.has('at') ? +q.get('at') : plate.end + 30);
+    }
+  } catch (e) {
+    document.getElementById('err').textContent = `${e.message}\n${e.stack}`;
+    console.error(e);
+  }
+</script>
+</body>
+</html>

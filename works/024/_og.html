@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- dev only (not published): the page og.jpg is rendered from, 1200 × 630.
+     Three finished posters on New York's wall. -->
+<meta charset="utf-8"><title>og</title>
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: radial-gradient(ellipse at 50% 45%, #33404f, #1c242e 80%); }
+  canvas { position: absolute; box-shadow: 0 14px 36px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.3); }
+</style>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { ready } from './_dev.js';
+  const ids = (new URLSearchParams(location.search).get('ids') || 'tokyo,new-york,paris').split(',');
+  const spots = [{ x: 150, y: 70, h: 500, r: -3 }, { x: 600, y: 35, h: 560, r: 0 }, { x: 1050, y: 70, h: 500, r: 3 }];
+  for (const [k, id] of [[0, ids[0]], [2, ids[2]], [1, ids[1]]]) {
+    const city = await ready(id);
+    const s = spots[k], w = s.h * W / H;
+    const cv = document.createElement('canvas'); cv.width = Math.round(w * 2); cv.height = Math.round(s.h * 2);
+    Object.assign(cv.style, { left: `${s.x - w / 2}px`, top: `${s.y}px`, width: `${w}px`, height: `${s.h}px`, transform: `rotate(${s.r}deg)` });
+    document.body.appendChild(cv);
+    const plate = city.build(); new Press(plate, cv).frame(plate.end + 30);
+  }
+  document.title = 'done';
+</script>

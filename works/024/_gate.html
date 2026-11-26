@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- dev only (not published): the checks one city must pass, for _gate.js.
+     _gate.html?id=lima   writes a JSON report into #out -->
+<meta charset="utf-8"><title>gate</title>
+<pre id="out"></pre>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { ready } from './_dev.js';
+  const id = new URLSearchParams(location.search).get('id');
+  const rep = { id, problems: [], notes: {} };
+  const errors = [];
+  addEventListener('error', (e) => errors.push(String(e.message)));
+  addEventListener('unhandledrejection', (e) => errors.push(String(e.reason && e.reason.message || e.reason)));
+
+  // every font set and the text set in it, so each can be checked against the faces that loaded
+  const used = new Map();
+  const P = CanvasRenderingContext2D.prototype, O = OffscreenCanvasRenderingContext2D?.prototype;
+  for (const proto of [P, O].filter(Boolean)) {
+    for (const fn of ['fillText', 'strokeText', 'measureText']) {
+      const f = proto[fn];
+      proto[fn] = function (text, ...rest) {
+        const k = this.font; if (!used.has(k)) used.set(k, new Set());
+        for (const ch of String(text)) used.get(k).add(ch);
+        return f.call(this, text, ...rest);
+      };
+    }
+  }
+
+  const GENERIC = /^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-serif|ui-sans-serif|ui-monospace)$/i;
+  const family = (font) => font.replace(/^((italic|oblique|normal|bold|bolder|lighter|small-caps|condensed|expanded|\d{3}|[\d.]+(px|pt|em|rem)(\/[\d.]+\w*)?)\s+)+/i, '').split(',')[0].trim().replace(/^["']|["']$/g, '');
+
+  function pixels(plate, t, w) {
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = Math.round(w * H / W);
+    const pr = new Press(plate, cv); pr.frame(t);
+    const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data;
+    pr.dispose(); return d;
+  }
+  const differ = (a, b) => { let n = 0; for (let i = 0; i < a.length; i += 4) if (Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]) > 6) n++; return n / (a.length / 4); };
+
+  try {
+    const city = await ready(id, 8000);
+    if (city.id !== id) rep.problems.push(`its id is "${city.id}", the file is ${id}.js`);
+    for (const k of ['name', 'wall', 'alt', 'google', 'fonts', 'build']) if (!city[k]) rep.problems.push(`no ${k}`);
+    if (city.alt && /\.$/.test(city.alt)) rep.problems.push('alt ends with a period (the page adds one)');
+    if (city.wall && !/^#[0-9a-f]{6}$/i.test(city.wall)) rep.problems.push(`wall "${city.wall}" is not #rrggbb`);
+    // lowercase only: a proper name keeps its own spelling (Harbour Centre, National Arts Theatre)
+    const brit = city.alt && city.alt.match(/\b(colour|favour|centre|grey|storey|theatre|metre|neighbour)s?\b/);
+    if (brit) rep.problems.push(`alt has the British spelling "${brit[0]}"`);
+
+    const t0 = performance.now(); const plate = city.build(); rep.notes.buildMs = Math.round(performance.now() - t0);
+    rep.notes.end = +plate.end.toFixed(2);
+    if (!(plate.end >= 11 && plate.end <= 17)) rep.problems.push(`draws for ${plate.end.toFixed(1)} s (should be 11 to 17)`);
+    const layers = plate.order.map((n) => plate.layers[n]);
+    rep.notes.marks = layers.reduce((a, L) => a + L.marks.length, 0);
+    rep.notes.lives = layers.reduce((a, L) => a + L.lives.length, 0);
+    if (rep.notes.marks < 40) rep.problems.push(`only ${rep.notes.marks} marks: is it all there?`);
+
+    // how much is being redrawn at once, and how much is finished but held back by an earlier, longer mark
+    let peak = 0, peakAt = 0, held = 0, heldAt = 0;
+    for (let t = 0; t <= plate.end; t += 0.1) {
+      let active = 0, waiting = 0;
+      for (const L of layers) {
+        let i = 0; while (i < L.marks.length && t >= L.marks[i].t + L.marks[i].d) i++;
+        for (let j = i; j < L.marks.length; j++) { const m = L.marks[j]; if (t > m.t) { active++; if (t >= m.t + m.d) waiting++; } }
+      }
+      if (active > peak) { peak = active; peakAt = t; }
+      if (waiting > held) { held = waiting; heldAt = t; }
+    }
+    rep.notes.peakActive = `${peak} at ${peakAt.toFixed(1)}s`;
+    rep.notes.peakHeld = `${held} at ${heldAt.toFixed(1)}s`;
+    // (these are notes, not failures: a small mark costs little. _bench.html times the frames.)
+
+    // the same moment reached two ways: one press played frame by frame up to it, another
+    // jumping straight there. Anything random at draw time (even from a generator made at
+    // build time) comes out different. Live marks are drawn from the time alone, so they agree.
+    const stepped = (pl, t, w) => {
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = Math.round(w * H / W);
+      const pr = new Press(pl, cv);
+      for (let u = 0; u < t; u += 1 / 15) pr.frame(u);
+      pr.frame(t);
+      const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; pr.dispose(); return d;
+    };
+    const pl2 = city.build();
+    const mid = plate.end * 0.6, fin = plate.end + 2;
+    const a = stepped(pl2, mid, 400), b = pixels(city.build(), mid, 400);
+    const c = pixels(plate, fin, 400), d2 = stepped(city.build(), fin, 400);
+    rep.notes.flickerMid = +differ(a, b).toFixed(4); rep.notes.flickerEnd = +differ(c, d2).toFixed(4);
+    for (const [k, v] of [['while drawing', rep.notes.flickerMid], ['finished', rep.notes.flickerEnd]]) {
+      if (v > 0.002) rep.problems.push(`${(v * 100).toFixed(2)}% of the poster ${k} differs between playing it and jumping to it (random numbers inside a draw function?)`);
+    }
+
+    // a blank-ish poster is a broken poster
+    let colors = new Set(); for (let i = 0; i < c.length; i += 40) colors.add((c[i] >> 4) << 8 | (c[i + 1] >> 4) << 4 | (c[i + 2] >> 4));
+    rep.notes.colors = colors.size; if (colors.size < 40) rep.problems.push(`only ${colors.size} colors in the finished poster`);
+
+    // every font set must have come from the city's own link, with every character in it
+    pixels(plate, plate.end + 5, 800);
+    await document.fonts.ready;
+    const fams = new Set(); for (const f of document.fonts) if (f.status === 'loaded') fams.add(f.family.replace(/["']/g, ''));
+    rep.notes.fonts = [];
+    for (const [font, chars] of used) {
+      const fam = family(font);
+      if (!fam || GENERIC.test(fam)) { if (fam && GENERIC.test(fam) && chars.size) rep.notes.fonts.push(`generic: ${font}`); continue; }
+      const text = [...chars].join('');
+      if (!fams.has(fam)) { rep.problems.push(`font "${fam}" (${font}) did not load: is it in google?`); continue; }
+      if (!document.fonts.check(font, text)) {
+        // try to load what is missing, then ask again
+        await document.fonts.load(font, text).catch(() => null);
+        if (!document.fonts.check(font, text)) rep.problems.push(`${font} lacks some of "${text.slice(0, 40)}"`);
+      }
+      rep.notes.fonts.push(font);
+    }
+  } catch (e) {
+    rep.problems.push(`throws: ${e.message}`);
+  }
+  for (const e of errors) rep.problems.push(`error: ${e}`);
+  document.getElementById('out').textContent = JSON.stringify(rep);
+  document.title = 'done';
+</script>

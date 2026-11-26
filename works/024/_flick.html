@@ -1,0 +1,24 @@
+<!doctype html>
+<!-- dev only (not published): where a poster differs between being played and being jumped to.
+     _flick.html?city=amsterdam&at=16   red marks the pixels that differ -->
+<meta charset="utf-8"><title>flick</title><style>body{margin:0;background:#222}canvas{width:800px}</style>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { ready } from './_dev.js';
+  const q = new URLSearchParams(location.search);
+  const city = await ready(q.get('city'));
+  const w = 800, h = Math.round(w * H / W);
+  const mk = () => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; return cv; };
+  const A = mk(), B = mk();
+  const pl = city.build(); const t = q.has('at') ? +q.get('at') : pl.end + 2;
+  const pa = new Press(pl, A); for (let u = 0; u < t; u += 1 / 15) pa.frame(u); pa.frame(t);
+  new Press(city.build(), B).frame(t);
+  const a = A.getContext('2d').getImageData(0, 0, w, h), b = B.getContext('2d').getImageData(0, 0, w, h);
+  let n = 0;
+  for (let i = 0; i < a.data.length; i += 4) {
+    const d = Math.abs(a.data[i] - b.data[i]) + Math.abs(a.data[i + 1] - b.data[i + 1]) + Math.abs(a.data[i + 2] - b.data[i + 2]);
+    if (d > 6) { n++; a.data[i] = 255; a.data[i + 1] = 0; a.data[i + 2] = 0; } else { a.data[i] = a.data[i] * .4 + 150; a.data[i + 1] = a.data[i + 1] * .4 + 150; a.data[i + 2] = a.data[i + 2] * .4 + 150; }
+  }
+  A.getContext('2d').putImageData(a, 0, 0); document.body.appendChild(A);
+  document.title = `done ${n}`;
+</script>

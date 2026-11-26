@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- dev only (not published): a city's finished poster, small, for the index.
+     _thumbs.js opens this headless and writes the picture to thumbs/<id>.webp -->
+<html lang="en">
+<head><meta charset="utf-8"><title>No. 024 · thumb</title></head>
+<body>
+<pre id="out"></pre>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { ready } from './_dev.js';
+  const q = new URLSearchParams(location.search);
+  const id = q.get('id');
+  const tw = +(q.get('w') || 240), th = Math.round(tw * H / W);
+  const out = document.getElementById('out');
+  try {
+    const city = await ready(id);
+    // drawn at twice the size, then halved, so fine line stays fine
+    const big = document.createElement('canvas');
+    big.width = tw * 2; big.height = th * 2;
+    const press = new Press(city.build(), big);
+    press.frame(press.plate.end + 60);
+    const small = document.createElement('canvas');
+    small.width = tw; small.height = th;
+    const c = small.getContext('2d');
+    c.imageSmoothingQuality = 'high';
+    c.drawImage(big, 0, 0, tw, th);
+    out.textContent = small.toDataURL('image/webp', +(q.get('q') || 0.8));
+  } catch (e) { out.textContent = 'ERR ' + e.message; }
+</script>
+</body>
+</html>

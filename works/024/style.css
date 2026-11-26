@@ -1,0 +1,128 @@
+/* No. 024: a poster on a wall; the page chrome is small and quiet around it */
+:root {
+  --paper: #e8e7e1; --ink: #1b1a18; --soft: #5d5b55; --line: rgba(27, 26, 24, .24);
+  --chip: rgba(236, 235, 229, .9);
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: #26303f; color: var(--ink); overflow: hidden;
+  font: 400 16px/1.4 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--ink); color: var(--paper); }
+
+/* the wall: its color follows the city; two sheets stacked, the new one slides in over the old */
+.wall { position: fixed; inset: 0; overflow: hidden; background: var(--wall, #26303f); transition: background-color 1.6s ease; }
+.wall::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, rgba(255,255,255,.07), rgba(0,0,0,.28) 78%); }
+.sheet { position: absolute; z-index: 1; will-change: transform, opacity;
+  box-shadow: 0 2px 3px rgba(0,0,0,.18), 0 26px 60px -18px rgba(0,0,0,.55); }
+.sheet canvas { display: block; width: 100%; height: 100%; }
+.sheet[hidden] { display: none; }
+.sheet.enter { transform: translate3d(70vw, 3vh, 0) rotate(4deg); opacity: 1; }
+.sheet.in { transition: transform 1.25s cubic-bezier(.2, .75, .2, 1); transform: none; }
+.sheet.leave { transition: transform 1.2s cubic-bezier(.55, .05, .6, .2), opacity 1.2s ease-in, filter 1.2s;
+  transform: translate3d(-12vw, 1vh, 0) scale(.94) rotate(-2deg); opacity: 0; }
+.sheet.top { z-index: 2; }
+.wall img.still { position: absolute; left: 50%; top: 50%; height: min(86vh, 112vw); transform: translate(-50%, -50%); }
+.nojs { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 32rem; margin: 0; padding: 12px 14px;
+  background: var(--chip); border-radius: 3px; font-size: .95rem; }
+
+/* the cities: at the foot, the one on the wall between a step back and a step on;
+   its name opens the index of them all. One row high however many cities there are. */
+.pick { position: fixed; z-index: 4; left: 50%; transform: translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 2px; }
+.pick button { appearance: none; cursor: pointer; border: 0; background: none; color: rgba(255,255,255,.78);
+  font: 500 .68rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; border-radius: 99px;
+  padding: 8px 12px; transition: color .25s, background-color .25s; white-space: nowrap; }
+.pick button:hover, .pick button[aria-expanded="true"] { color: #fff; background: rgba(255,255,255,.1); }
+.pick .step { font-size: 1.05rem; padding: 4px 11px 6px; }
+.pick .here { min-width: 13.5rem; }
+.pick .count { margin-left: .9em; color: rgba(255,255,255,.45); letter-spacing: .08em; }
+.pick button:focus-visible, .index button:focus-visible { outline: 2px solid rgba(255,255,255,.9); outline-offset: 1px; }
+
+.index { position: fixed; z-index: 5; left: 50%; transform: translateX(-50%); bottom: calc(max(12px, env(safe-area-inset-bottom)) + 40px);
+  width: min(74rem, calc(100vw - 28px)); max-height: min(78vh, 52rem); overflow: auto; overscroll-behavior: contain;
+  padding: 14px; border-radius: 6px; background: rgba(18, 18, 20, .9);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 20px 50px -20px rgba(0,0,0,.6); }
+.index[hidden] { display: none; }
+/* every poster, small: a wall of them */
+.index ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); min-width: 0; gap: 14px 10px; }
+.index button { appearance: none; cursor: pointer; display: block; width: 100%; text-align: left; border: 0; background: none;
+  padding: 4px; border-radius: 3px; color: rgba(255,255,255,.72); font: 500 .62rem/1.25 var(--sans);
+  letter-spacing: .1em; text-transform: uppercase; }
+.index img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; margin-bottom: 7px; border-radius: 1px;
+  box-shadow: 0 6px 14px -8px rgba(0,0,0,.8); transition: transform .2s ease; }
+.index span { display: block; padding: 0 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.index button:hover { color: #fff; }
+.index button:hover img { transform: translateY(-2px); }
+.index button[aria-current="true"] { color: #fff; background: rgba(240,236,226,.14); }
+.index button[aria-current="true"] img { outline: 2px solid rgba(240,236,226,.92); outline-offset: 2px; }
+
+/* the way back to the other works: a pill, with the work's label beside it */
+.nav { position: fixed; z-index: 4; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left));
+  display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; max-width: calc(100% - 200px); pointer-events: none; }
+.nav > * { pointer-events: auto; }
+.back { color: var(--ink); text-decoration: none; padding: 8px 13px; border: 1px solid var(--line); border-radius: 99px;
+  background: var(--chip); font-size: .7rem; font-weight: 600; line-height: 1; letter-spacing: .14em; text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(27, 26, 24, .1); transition: border-color .2s; white-space: nowrap; }
+.back:hover { border-color: var(--ink); }
+.nav .label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+  padding: 5px 8px; background: rgba(236, 235, 229, .72); border-radius: 3px; }
+
+/* the label and, beside it, the button that opens a few lines about the work */
+.nav .title { display: flex; align-items: center; gap: 6px; }
+.info { appearance: none; cursor: pointer; color: var(--ink); background: var(--chip); border: 1px solid var(--line);
+  border-radius: 99px; padding: 6px 10px; font: 600 .7rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  transition: border-color .2s, background-color .2s; white-space: nowrap; }
+.info:hover { border-color: var(--ink); }
+.info[aria-expanded="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.info .glyph { display: none; text-transform: none; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: .85rem; letter-spacing: 0; }
+.card { position: fixed; z-index: 5; left: max(14px, env(safe-area-inset-left)); top: 56px; width: min(23rem, calc(100% - 28px));
+  padding: 14px 16px 15px; background: rgba(240, 239, 233, .97); border: 1px solid var(--line); border-radius: 4px;
+  box-shadow: 0 10px 30px -12px rgba(27, 26, 24, .4); font-size: .9rem; line-height: 1.5; color: var(--ink); }
+.card[hidden] { display: none; }
+.card p { margin: 0; }
+.card p + p { margin-top: .7em; }
+
+/* controls, top right */
+.controls { position: fixed; z-index: 4; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
+  display: flex; gap: 6px; }
+.controls button { appearance: none; cursor: pointer; color: var(--ink); background: var(--chip); border: 1px solid var(--line);
+  border-radius: 99px; padding: 8px 12px; font: 600 .7rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(27, 26, 24, .1); transition: border-color .2s, background-color .2s; -webkit-user-select: none; user-select: none; }
+.controls button:hover { border-color: var(--ink); }
+.controls button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.back:focus-visible, .controls button:focus-visible, .info:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* the hold: a hairline along the foot of the window */
+.hold { position: fixed; z-index: 3; left: 0; right: 0; bottom: 0; height: 2px; pointer-events: none; }
+.hold i { display: block; height: 100%; background: rgba(255, 255, 255, .28); transform-origin: 0 0; transform: scaleX(0); }
+
+.bare .nav, .bare .controls, .bare .hold, .bare .card, .bare .pick, .bare .index { display: none !important; }
+.bare .wall::after { display: none; }
+.still .hold { display: none; }
+
+@media (max-width: 720px) {
+  /* the label goes under the pill, the controls stay top right */
+  .nav { flex-direction: column; align-items: flex-start; max-width: calc(100% - 28px); gap: 6px; }
+  .nav .label { font-size: .7rem; letter-spacing: .08em; padding: 4px 7px; }
+  /* phones: the number is dropped from the label and About becomes a small round i */
+  .nav .label .no { display: none; }
+  .info { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; }
+  .info .word { display: none; }
+  .info .glyph { display: block; }
+  .controls { gap: 4px; }
+  .controls button { padding: 8px 9px; font-size: .7rem; letter-spacing: .1em; }
+  .controls .png { display: none; }
+}
+@media (max-width: 720px) {
+  .pick .here { min-width: 0; padding: 8px 8px; }
+  .index ol { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 8px; }
+  .index { padding: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet.enter { transform: none; opacity: 0; }
+  .sheet.in { transition: opacity .8s ease; opacity: 1; }
+  .sheet.leave { transition: opacity .8s ease; transform: none; }
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

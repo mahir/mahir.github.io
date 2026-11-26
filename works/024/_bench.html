@@ -1,0 +1,33 @@
+<!doctype html>
+<!-- dev only (not published): time every frame of every city's draw. Result in the title and #out. -->
+<meta charset="utf-8"><title>bench</title>
+<pre id="out"></pre>
+<script type="module">
+  import { Press, W, H } from './print.js';
+  import { CITIES } from './cities/index.js';
+  import { ready } from './_dev.js';
+  const px = +(new URLSearchParams(location.search).get('px') || 1400);
+  const rows = [];
+  const only = new URLSearchParams(location.search).get('only');
+  // ?only= may name cities not yet in the order
+  for (const id of only ? only.split(',') : CITIES.map((c) => c.id)) {
+    const city = await ready(id);
+    const t0 = performance.now(); const plate = city.build(); const tb = performance.now() - t0;
+    const cv = document.createElement('canvas'); cv.width = px; cv.height = Math.round(px * H / W);
+    const t1 = performance.now(); const press = new Press(plate, cv); const tp = performance.now() - t1;
+    const ts = [], slow = [];
+    for (let t = 0; t < plate.end + 3; t += 1 / 60) {
+      const a = performance.now(); press.frame(t); cv.getContext('2d').getImageData(0, 0, 1, 1); ts.push(performance.now() - a);
+      if (ts[ts.length - 1] > 16) slow.push(t);
+    }
+    // the seconds the slow frames fall in, as "second:count"
+    const by = {}; slow.forEach((t) => { const k = Math.floor(t); by[k] = (by[k] || 0) + 1; });
+    const where = Object.entries(by).map(([k, n]) => `${k}:${n}`).join(' ');
+    ts.sort((a, b) => a - b);
+    const hold = ts.length ? ts[Math.floor(ts.length * 0.5)] : 0;
+    press.dispose();
+    rows.push(`${city.id.padEnd(14)} build ${tb.toFixed(0).padStart(4)}ms press ${tp.toFixed(0).padStart(4)}ms  frames ${ts.length}  median ${hold.toFixed(1)}  p95 ${ts[Math.floor(ts.length * 0.95)].toFixed(1)}  max ${ts[ts.length - 1].toFixed(1)}  >16ms ${ts.filter((x) => x > 16).length}  at ${where}`);
+    document.getElementById('out').textContent = rows.join('\n');
+  }
+  document.title = 'done';
+</script>
