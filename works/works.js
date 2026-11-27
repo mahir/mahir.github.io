@@ -104,7 +104,7 @@ window.Works = (() => {
     },
     {
       n: 24, title: 'Cities, in print', date: '2026-11-27', medium: 'Canvas drawing and animation',
-      about: 'City posters drawn on the page one after another, each in about fifteen seconds and each in a print tradition of its own: New York as an engraved bird’s-eye view from above the harbor, Tokyo as a woodblock print at dusk, Paris as a gouache travel poster, London as a linocut, Kraków as a Polish School poster, Baku as a woven rug, Lagos as a record sleeve, and on around the world, every one with its own inks and its own type; the sky and the water come first, then the city from the far end to the near, then the boats, the lettering and the frame, and after a while the next sheet slides over it.',
+      about: 'A hundred city posters drawn on the page one after another, each in a print tradition of its own: New York as an engraving, Tokyo as a woodblock, Kraków as a Polish School poster; watch one print itself, or open the wall of them all and pick a city.',
     },
   ];
 
